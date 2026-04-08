@@ -1,0 +1,59 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-query-engine
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-query-engine"
+description: "Auto-generated skill from test-query-engine"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_query_engine.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "test_query_engine_plain_text_reply"
+  - "test_query_engine_executes_tool_calls"
+  - "test_query_engine_allows_unbounded_turns_when_max_turns_is_none"
+  - "test_query_engine_surfaces_retry_status_events"
+  - "test_query_engine_respects_pre_tool_hook_blocks"
+  - "test_query_engine_executes_ask_user_tool"
+  - "test_query_engine_applies_path_rules_to_relative_read_file_targets"
+  - "test_query_engine_applies_path_rules_to_write_file_targets_in_full_auto"
+
+dependencies:
+  - "__future__"
+  - "dataclasses"
+  - "openharness.api.client"
+  - "openharness.api.usage"
+  - "openharness.config.settings"
+  - "openharness.engine.messages"
+  - "openharness.engine.query_engine"
+  - "openharness.engine.stream_events"
+  - "openharness.hooks"
+  - "openharness.hooks.loader"
+  - "openharness.hooks.schemas"
+  - "openharness.permissions"
+  - "openharness.tools"
+  - "pathlib"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

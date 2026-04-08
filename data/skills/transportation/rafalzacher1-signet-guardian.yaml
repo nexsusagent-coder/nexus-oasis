@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_signet_guardian
+name: signet-guardian
+slug: rafalzacher1-signet-guardian
+description: Payment guard middleware for AI agents.
+category: transportation
+metadata:
+  author: rafalzacher1
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/rafalzacher1-signet-guardian
+created_at: 2026-04-06T18:20:51.725083204+00:00
+updated_at: 2026-04-06T18:20:51.725083204+00:00
+hash: 2ffb7141904ed822fe218a21f6561334cda9ec6129f4592f604c7c3f5e05bd83
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

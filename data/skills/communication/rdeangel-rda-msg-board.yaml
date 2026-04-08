@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_rda_msg_board
+name: rda-msg-board
+slug: rdeangel-rda-msg-board
+description: Send scrolling text messages to RDA MSG Board via HTTP/JSON.
+category: communication
+metadata:
+  author: rdeangel
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/rdeangel-rda-msg-board
+created_at: 2026-04-06T18:20:43.892751247+00:00
+updated_at: 2026-04-06T18:20:43.892751247+00:00
+hash: 6ff4e6e825f22138cf243987e20f1b8ee0bbdee306ea6432750c7d414c21e9fd
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_geepers_etymology
+name: geepers-etymology
+slug: lukeslp-geepers-etymology
+description: Look up word etymology, historical sound changes, language family trees, and word evolution.
+category: search-research
+metadata:
+  author: lukeslp
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/lukeslp-geepers-etymology
+created_at: 2026-04-06T18:20:50.122918006+00:00
+updated_at: 2026-04-06T18:20:50.122918006+00:00
+hash: 510110515a0d485f1350856a5e434c9cab896897f444c36d0285caeec8dfbb25
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

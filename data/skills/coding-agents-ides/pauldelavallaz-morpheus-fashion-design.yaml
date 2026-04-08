@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_morpheus_fashion_design
+name: morpheus-fashion-design
+slug: pauldelavallaz-morpheus-fashion-design
+description: Generate professional advertising images with AI models holding/wearing products.  ✅ USE.
+category: coding-agents-ides
+metadata:
+  author: pauldelavallaz
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/pauldelavallaz-morpheus-fashion-design
+created_at: 2026-04-06T18:20:41.540697725+00:00
+updated_at: 2026-04-06T18:20:41.540697725+00:00
+hash: 7bb595f468b572cc3b68c50475971c62fe14f6278743ec20a79e39cbd4dc0416
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

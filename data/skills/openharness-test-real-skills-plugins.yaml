@@ -1,0 +1,73 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-real-skills-plugins
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-real-skills-plugins"
+description: "============================================================"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_real_skills_plugins.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "*args"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "timeout"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_env"
+  - "_run_oh"
+  - "test_install_real_skills"
+  - "test_real_skills_loaded"
+  - "test_real_skill_content_quality"
+  - "test_skill_tool_with_real_skill"
+  - "test_skills_in_prompt_with_real"
+  - "test_model_uses_real_skill"
+  - "test_install_real_plugins"
+  - "test_real_plugins_loaded"
+  - "test_plugin_commands_discovered"
+  - "test_plugin_hook_structure"
+  - "test_commit_command_content"
+  - "test_real_model_with_plugins"
+  - "main"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "json"
+  - "os"
+  - "pathlib"
+  - "shutil"
+  - "subprocess"
+  - "sys"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

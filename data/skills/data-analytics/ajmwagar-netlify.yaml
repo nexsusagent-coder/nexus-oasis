@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_data_analytics_netlify
+name: netlify
+slug: ajmwagar-netlify
+description: Use the Netlify CLI (netlify) to create/link Netlify sites and set up CI/CD.
+category: data-analytics
+metadata:
+  author: ajmwagar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- data-analytics
+dependencies: []
+source_url: https://clawskills.sh/skills/ajmwagar-netlify
+created_at: 2026-04-06T18:20:44.149204181+00:00
+updated_at: 2026-04-06T18:20:44.149204181+00:00
+hash: 50f07f6d9e56ccbe79ecc9a5c8913f7e98b0a2ea3f1f4d4c0e8061e3b5798aa7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

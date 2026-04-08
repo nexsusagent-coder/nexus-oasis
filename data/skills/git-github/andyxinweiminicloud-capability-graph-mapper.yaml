@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_capability_graph_mapper
+name: capability-graph-mapper
+slug: andyxinweiminicloud-capability-graph-mapper
+description: Helps map the composite permission surface across AI agent skill dependency chains.
+category: git-github
+metadata:
+  author: andyxinweiminicloud
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/andyxinweiminicloud-capability-graph-mapper
+created_at: 2026-04-06T18:20:45.899277923+00:00
+updated_at: 2026-04-06T18:20:45.899277923+00:00
+hash: 5e35845f4bae82fa73c1379c6bcbe4a46848be1597256630df7d8d507da75180
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

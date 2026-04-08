@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_system_resource_monitor
+name: system-resource-monitor
+slug: passersss-system-resource-monitor
+description: A clean, reliable system resource monitor for CPU load, RAM, Swap, and Disk usage.
+category: coding-agents-ides
+metadata:
+  author: passersss
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/passersss-system-resource-monitor
+created_at: 2026-04-06T18:20:42.815160434+00:00
+updated_at: 2026-04-06T18:20:42.815160434+00:00
+hash: 031c2b8617784c41de6f680ebc4b00616052733faf44f2f1007c73af0eaa9ea7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

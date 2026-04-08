@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_native_hubspot
+name: native-hubspot
+slug: codeninja23-native-hubspot
+description: Query and manage HubSpot CRM data via the HubSpot API.
+category: devops-cloud
+metadata:
+  author: codeninja23
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/codeninja23-native-hubspot
+created_at: 2026-04-06T18:20:45.033901550+00:00
+updated_at: 2026-04-06T18:20:45.033901550+00:00
+hash: 35880a9607240eaa90a5c78ede8b199afad2f226480f041126b3f2f064570540
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

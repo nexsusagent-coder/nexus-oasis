@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_menuvision
+name: menuvision
+slug: ademczuk-menuvision
+description: Build beautiful HTML photo menus from restaurant URLs, PDFs, or photos using Gemini Vision and AI image generation.
+category: web-frontend-dev
+metadata:
+  author: ademczuk
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/ademczuk-menuvision
+created_at: 2026-04-06T18:20:53.433759415+00:00
+updated_at: 2026-04-06T18:20:53.433759415+00:00
+hash: 078687155025d7d0b5bad30706d6e320eed721fc5eb897d897adb5a4c7e20fc9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

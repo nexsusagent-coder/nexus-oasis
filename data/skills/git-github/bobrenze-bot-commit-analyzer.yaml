@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_commit_analyzer
+name: commit-analyzer
+slug: bobrenze-bot-commit-analyzer
+description: Analyzes git commit patterns to monitor autonomous.
+category: git-github
+metadata:
+  author: bobrenze
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/bobrenze-bot-commit-analyzer
+created_at: 2026-04-06T18:20:45.939335416+00:00
+updated_at: 2026-04-06T18:20:45.939335416+00:00
+hash: 7d42d094327ca3f996219bae1d13b82de3376e6089f29ae1348bff253d0bb819
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

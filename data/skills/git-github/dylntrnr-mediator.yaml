@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_mediator
+name: mediator
+slug: dylntrnr-mediator
+description: Intercept and filter communications from difficult contacts.
+category: git-github
+metadata:
+  author: dylntrnr
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/dylntrnr-mediator
+created_at: 2026-04-06T18:20:46.250258448+00:00
+updated_at: 2026-04-06T18:20:46.250258448+00:00
+hash: 382e3f166161c33c423807de8587bd89a1c967156073599bee4c05d92e4621ef
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

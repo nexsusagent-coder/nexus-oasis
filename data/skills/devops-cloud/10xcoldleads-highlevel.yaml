@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_highlevel
+name: highlevel
+slug: 10xcoldleads-highlevel
+description: Connect your AI assistant to GoHighLevel CRM via the official API v2.
+category: devops-cloud
+metadata:
+  author: 10xcoldleads
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/10xcoldleads-highlevel
+created_at: 2026-04-06T18:20:44.821553811+00:00
+updated_at: 2026-04-06T18:20:44.821553811+00:00
+hash: 45c8cb8c9a58487c9bb5f42a50b2982768f62ff4d4ad556ea743214013d8c1bb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

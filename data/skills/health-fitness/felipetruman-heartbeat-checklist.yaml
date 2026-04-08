@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_health_fitness_heartbeat_checklist
+name: heartbeat-checklist
+slug: felipetruman-heartbeat-checklist
+description: Run these checks periodically (2-4x daily).
+category: health-fitness
+metadata:
+  author: felipetruman
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- health-fitness
+dependencies: []
+source_url: https://clawskills.sh/skills/felipetruman-heartbeat-checklist
+created_at: 2026-04-06T18:20:46.697363593+00:00
+updated_at: 2026-04-06T18:20:46.697363593+00:00
+hash: 2eef25c98b3d9669d6d9c9ef7b4f75b07874bf043f4573e07109e66a3be3fa40
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

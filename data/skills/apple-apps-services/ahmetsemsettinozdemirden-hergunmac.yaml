@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_apple_apps_services_hergunmac
+name: hergunmac
+slug: ahmetsemsettinozdemirden-hergunmac
+description: Access AI-powered football match predictions.
+category: apple-apps-services
+metadata:
+  author: ahmetsemsettinozdemirden
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- apple-apps-services
+dependencies: []
+source_url: https://clawskills.sh/skills/ahmetsemsettinozdemirden-hergunmac
+created_at: 2026-04-06T18:20:36.772710092+00:00
+updated_at: 2026-04-06T18:20:36.772710092+00:00
+hash: 60b6c22f5d6cee49f2715a707a08450b2857380eb314ea7f6a9215bd1dd169f9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

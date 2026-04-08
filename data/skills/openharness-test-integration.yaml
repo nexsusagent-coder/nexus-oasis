@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-integration
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-integration"
+description: "Auto-generated skill from test-integration"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_integration.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "test_load_mcp_server_configs_merges_plugins"
+  - "test_mcp_tools_are_registered"
+
+dependencies:
+  - "__future__"
+  - "dataclasses"
+  - "openharness.config.settings"
+  - "openharness.mcp.config"
+  - "openharness.mcp.types"
+  - "openharness.plugins.schemas"
+  - "openharness.plugins.types"
+  - "openharness.tools"
+  - "openharness.tools.base"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

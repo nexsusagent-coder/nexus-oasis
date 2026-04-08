@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_security_passwords_hash_toolkit
+name: hash-toolkit
+slug: raghulpasupathi-hash-toolkit
+description: Content hashing for deduplication with MD5, SHA256, and perceptual hashing.
+category: security-passwords
+metadata:
+  author: raghulpasupathi
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- security-passwords
+dependencies: []
+source_url: https://clawskills.sh/skills/raghulpasupathi-hash-toolkit
+created_at: 2026-04-06T18:20:50.845650470+00:00
+updated_at: 2026-04-06T18:20:50.845650470+00:00
+hash: 58302cd243413d37fdc69520c54f614ecb2d57d5b3ec73c837584a61ca8ce0ab
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

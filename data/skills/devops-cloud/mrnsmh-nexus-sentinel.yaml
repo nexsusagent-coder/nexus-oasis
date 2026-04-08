@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_nexus_sentinel
+name: nexus-sentinel
+slug: mrnsmh-nexus-sentinel
+description: Nexus-Sentinel est un agent SRE autonome.
+category: devops-cloud
+metadata:
+  author: mrnsmh
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/mrnsmh-nexus-sentinel
+created_at: 2026-04-06T18:20:45.084880986+00:00
+updated_at: 2026-04-06T18:20:45.084880986+00:00
+hash: fc54923aee79518ef109918e7a314cd2be6db2969dad1b0ca6d1ec11bc5129ed
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

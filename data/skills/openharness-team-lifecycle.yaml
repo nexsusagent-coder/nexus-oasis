@@ -1,0 +1,156 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-team-lifecycle
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-team-lifecycle"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "team_lifecycle.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_file"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "pane_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "pane_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmux_pane_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "agent_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "sanitize_name"
+  - "sanitize_agent_name"
+  - "_team_file_path"
+  - "get_team_file_path"
+  - "read_team_file"
+  - "write_team_file"
+  - "read_team_file_async"
+  - "write_team_file_async"
+  - "remove_teammate_from_team_file"
+  - "add_hidden_pane_id"
+  - "remove_hidden_pane_id"
+  - "remove_member_from_team"
+  - "remove_member_by_agent_id"
+  - "set_member_mode"
+  - "sync_teammate_mode"
+  - "set_multiple_member_modes"
+  - "set_member_active"
+  - "register_team_for_session_cleanup"
+  - "unregister_team_for_session_cleanup"
+  - "_kill_orphaned_teammate_panes"
+  - "cleanup_session_teams"
+  - "_destroy_worktree"
+  - "cleanup_team_directories"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "dataclasses"
+  - "json"
+  - "openharness.swarm.mailbox"
+  - "openharness.swarm.types"
+  - "os"
+  - "pathlib"
+  - "re"
+  - "shutil"
+  - "subprocess"
+  - "time"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

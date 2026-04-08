@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_notes_pkm_anki_connect
+name: anki-connect
+slug: gyroninja-anki-connect
+description: Interact with Anki flashcard decks via the AnkiConnect REST API.
+category: notes-pkm
+metadata:
+  author: gyroninja
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- notes-pkm
+dependencies: []
+source_url: https://clawskills.sh/skills/gyroninja-anki-connect
+created_at: 2026-04-06T18:20:48.370274417+00:00
+updated_at: 2026-04-06T18:20:48.370274417+00:00
+hash: 1d327f1d56fabf10f857492ab36ca55406f6a82e0272a0071d30ed56a5461531
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,119 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-loader
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-loader"
+description: "Auto-generated skill from loader"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "loader.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "plugin_dir"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "settings"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "enabled_plugins"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "bool]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "plugin_root"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "get_user_plugins_dir"
+  - "get_project_plugins_dir"
+  - "_find_manifest"
+  - "discover_plugin_paths"
+  - "load_plugins"
+  - "load_plugin"
+  - "_load_plugin_skills"
+  - "_load_plugin_hooks"
+  - "_load_plugin_hooks_structured"
+  - "_load_plugin_mcp"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "logging"
+  - "openharness.config.paths"
+  - "openharness.plugins.schemas"
+  - "openharness.plugins.types"
+  - "openharness.skills.loader"
+  - "openharness.skills.types"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

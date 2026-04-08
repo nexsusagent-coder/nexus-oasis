@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_apple_apps_services_skill_email_management
+name: skill-email-management
+slug: latisen-skill-email-management
+description: Expert email management assistant for Apple.
+category: apple-apps-services
+metadata:
+  author: latisen
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- apple-apps-services
+dependencies: []
+source_url: https://clawskills.sh/skills/latisen-skill-email-management
+created_at: 2026-04-06T18:20:36.840996324+00:00
+updated_at: 2026-04-06T18:20:36.840996324+00:00
+hash: d5cec9f727c66a0159ff549c1f650aa5486bd16cc7f6755e960c4088fd3a97cb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

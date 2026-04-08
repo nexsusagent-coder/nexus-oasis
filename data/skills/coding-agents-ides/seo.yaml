@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_seo
+name: seo
+slug: seo
+description: Audit, plan, and implement SEO improvements across technical SEO, on-page optimization, structured data, Core Web Vitals, and content strategy. Use when the user wants better search visibility, SEO remediation, schema markup, sitemap/robots work, or keyword mapping.
+category: coding-agents-ides
+metadata:
+  author: everything-claude-code
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- ecc
+- claude-code
+dependencies: []
+created_at: 2026-04-06T18:20:55.985018335+00:00
+updated_at: 2026-04-06T18:20:55.985018335+00:00
+hash: 37c98210d8aa1fca75862902cda906d96e072e8f6ebb9baccc5dba9f5df9d439
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

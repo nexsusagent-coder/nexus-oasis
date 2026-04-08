@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_soul_memory
+name: soul-memory
+slug: kingofqin2026-soul-memory
+description: Intelligent memory management system for AI agents - 8 modules + OpenClaw Plugin integration, with heartbeat.
+category: coding-agents-ides
+metadata:
+  author: kingofqin2026
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/kingofqin2026-soul-memory
+created_at: 2026-04-06T18:20:42.698288316+00:00
+updated_at: 2026-04-06T18:20:42.698288316+00:00
+hash: cee4e30b7111edcdf1dfa9a76284eb42c6ecc51d85c7cb66dd20597456aabdbf
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

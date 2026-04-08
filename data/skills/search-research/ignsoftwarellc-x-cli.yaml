@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_x_cli
+name: x-cli
+slug: ignsoftwarellc-x-cli
+description: Full-featured X/Twitter toolkit — read, search, post, interact, DMs, lists, polls, trends.
+category: search-research
+metadata:
+  author: ignsoftwarellc
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/ignsoftwarellc-x-cli
+created_at: 2026-04-06T18:20:50.686247708+00:00
+updated_at: 2026-04-06T18:20:50.686247708+00:00
+hash: 6a6499e90784e2c6ba4c447eea58b55acef094a1549f25e87f42a04593d5374e
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

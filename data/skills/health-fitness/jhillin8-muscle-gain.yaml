@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_health_fitness_muscle_gain
+name: muscle-gain
+slug: jhillin8-muscle-gain
+description: Track muscle building with weight progression, protein tracking.
+category: health-fitness
+metadata:
+  author: jhillin8
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- health-fitness
+dependencies: []
+source_url: https://clawskills.sh/skills/jhillin8-muscle-gain
+created_at: 2026-04-06T18:20:46.742497178+00:00
+updated_at: 2026-04-06T18:20:46.742497178+00:00
+hash: 1e0659ea185b124e06d47986359d2ef598fdcac5fa7a5e30335f5e4647d591ba
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

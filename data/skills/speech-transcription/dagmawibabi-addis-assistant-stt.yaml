@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_speech_transcription_addis_assistant_stt
+name: addis-assistant-stt
+slug: dagmawibabi-addis-assistant-stt
+description: Provides Speech-to-Text (STT) and text.
+category: speech-transcription
+metadata:
+  author: dagmawibabi
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- speech-transcription
+dependencies: []
+source_url: https://clawskills.sh/skills/dagmawibabi-addis-assistant-stt
+created_at: 2026-04-06T18:20:51.280704291+00:00
+updated_at: 2026-04-06T18:20:51.280704291+00:00
+hash: c1919b94e9f48243a4acdb93eb4bc7d018c76b179024a223e2452bde972d1dfb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_2nd_brain
+name: 2nd-brain
+slug: coderaven-2nd-brain
+description: Personal knowledge base for capturing and retrieving information about people, places, restaurants, games, tech.
+category: coding-agents-ides
+metadata:
+  author: coderaven
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/coderaven-2nd-brain
+created_at: 2026-04-06T18:20:39.240335258+00:00
+updated_at: 2026-04-06T18:20:39.240335258+00:00
+hash: 53a8cd6368a236bfc722c5dad4438c90400e4c7c9781a5e4ea7eb90ef7128254
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

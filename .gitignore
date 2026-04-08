@@ -1,0 +1,208 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT OS .gitignore
+#  The Operating System That Thinks
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENSITIVE FILES - NEVER PUSH TO GITHUB
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Environment & Secrets (CRITICAL)
+.env
+.env.*
+*.env
+secrets/
+.secrets/
+credentials/
+*.pem
+*.key
+!*.key.example
+
+# API Keys
+config/api_keys.json
+config/secrets.toml
+config/production.toml
+*.secret
+tokens/
+api_keys/
+
+# V-GATE Configuration
+vgate/config/*.toml
+vgate/*.key
+vgate_tokens.json
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  BUILD ARTIFACTS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Rust
+target/
+**/*.rs.bk
+*.pdb
+Cargo.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+.eggs/
+*.egg-info/
+*.egg
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Binary files
+*.o
+*.so
+*.exe
+*.dll
+*.dylib
+*.a
+*.lib
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  IDE & EDITORS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  DATABASES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+data/*.db
+data/*.sqlite
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  LOGS & CACHE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+*.log
+logs/
+*.log.*
+.cache/
+.cache_*/
+*.cache
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  OS FILES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  TEMPORARY FILES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  LARGE FILES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Archives
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Media (use Git LFS)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+
+# Memory dumps
+*.dmp
+*.core
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  EXTERNAL REPOS (integrations, tools, etc.)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Integration repos (8.3GB+ total)
+integrations/
+
+# External tool repos
+tools/google-api-python-client/
+tools/gemini-cli/
+tools/google-cli/
+
+# Core external repos
+core/io/lightpanda/
+core/research/autoresearch/
+core/research/mindsearch/
+core/research/nanogpt/
+
+# Temp repos
+data/temp_repos/
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT SPECIFIC
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Memory & Sessions
+data/memory/
+data/sessions/
+data/checkpoints/
+data/cache/
+
+# V-GATE encrypted
+vgate_keys/
+*.encrypted
+
+# Coverage
+coverage/
+.coverage
+*.lcov
+.nyc_output/
+
+# Documentation builds
+docs/_build/
+site/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test binary
+test_ipv6
+
+# Keep empty directories
+!.gitkeep

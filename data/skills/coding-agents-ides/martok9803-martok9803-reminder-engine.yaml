@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_martok9803_reminder_engine
+name: martok9803-reminder-engine
+slug: martok9803-martok9803-reminder-engine
+description: Create, list, cancel, and snooze reminders using OpenClaw cron jobs (one-shot or recurring)
+category: coding-agents-ides
+metadata:
+  author: martok9803
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/martok9803-martok9803-reminder-engine
+created_at: 2026-04-06T18:20:41.447301084+00:00
+updated_at: 2026-04-06T18:20:41.447301084+00:00
+hash: 4840fccd3044a7a2d1c22d6c5e4e3f8def202073293542bad0a07797a8d57aaf
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

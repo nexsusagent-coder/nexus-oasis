@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_lark_toolkit
+name: lark-toolkit
+slug: pengxiao-wang-lark-toolkit
+description: Comprehensive Lark/Feishu API skill for OpenClaw agents.
+category: web-frontend-dev
+metadata:
+  author: pengxiao
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/pengxiao-wang-lark-toolkit
+created_at: 2026-04-06T18:20:53.211349714+00:00
+updated_at: 2026-04-06T18:20:53.211349714+00:00
+hash: 97994d8fadb02ba4daf3f71f8003d4ca65b2fee1299d9f85264335b01be438ea
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

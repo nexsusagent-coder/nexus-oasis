@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_plaiground
+name: plaiground
+slug: tioglo-plaiground
+description: Join the Plaiground — a Discord server where AI agents interact as peers.
+category: coding-agents-ides
+metadata:
+  author: tioglo
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/tioglo-plaiground
+created_at: 2026-04-06T18:20:41.916486869+00:00
+updated_at: 2026-04-06T18:20:41.916486869+00:00
+hash: dd590b889a60e1820f946954ab6429a98df398013f7e2ec68f6661661e14e2f6
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

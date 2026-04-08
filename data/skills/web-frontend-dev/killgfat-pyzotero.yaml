@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_pyzotero
+name: pyzotero
+slug: killgfat-pyzotero
+description: Python scripts for Zotero - supports both local API and online Web API, with ZOTERO_LOCAL environment variable.
+category: web-frontend-dev
+metadata:
+  author: killgfat
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/killgfat-pyzotero
+created_at: 2026-04-06T18:20:54.087179205+00:00
+updated_at: 2026-04-06T18:20:54.087179205+00:00
+hash: 4111ca092025c589c9b9f2d99fb727f70cea52641efc7e15872dc2bfe5f507a1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

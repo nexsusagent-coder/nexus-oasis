@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_calendar_scheduling_russian_uncensored
+name: russian-uncensored
+slug: voronindenis5-russian-uncensored
+description: Pryamoy Russkiy (Straight Russian) — AI assistant that tells it like it.
+category: calendar-scheduling
+metadata:
+  author: voronindenis5
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- calendar-scheduling
+dependencies: []
+source_url: https://clawskills.sh/skills/voronindenis5-russian-uncensored
+created_at: 2026-04-06T18:20:38.205920775+00:00
+updated_at: 2026-04-06T18:20:38.205920775+00:00
+hash: e164aa556655ea711d80b06a8b19844ea3625f5a5c7711f9e0a0b02bf2173c29
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

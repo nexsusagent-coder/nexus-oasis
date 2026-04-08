@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_oee_ai_cost_tracker
+name: oee-ai-cost-tracker
+slug: odinbot33-oee-ai-cost-tracker
+description: '> by Odin''s Eye Enterprises — Ancient Wisdom.'
+category: web-frontend-dev
+metadata:
+  author: odinbot33
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/odinbot33-oee-ai-cost-tracker
+created_at: 2026-04-06T18:20:53.739312803+00:00
+updated_at: 2026-04-06T18:20:53.739312803+00:00
+hash: 7ab29b3575b6fc2bc3a14b49d057d26794953bfbc57ca111f478aad200ed20b7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

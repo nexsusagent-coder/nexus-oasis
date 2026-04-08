@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_chart_image
+name: chart-image
+slug: dannyshmueli-chart-image
+description: Generate publication-quality chart images from data.
+category: image-video-gen
+metadata:
+  author: dannyshmueli
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/dannyshmueli-chart-image
+created_at: 2026-04-06T18:20:47.055065900+00:00
+updated_at: 2026-04-06T18:20:47.055065900+00:00
+hash: 1ba6c5351edb5279581e29cc41c14f950fc90b4ca8c20f56b1f54714e108196f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

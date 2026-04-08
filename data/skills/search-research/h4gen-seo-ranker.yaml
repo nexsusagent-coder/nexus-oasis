@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_seo_ranker
+name: seo-ranker
+slug: h4gen-seo-ranker
+description: Meta-skill for end-to-end SEO auditing and on-page optimization by orchestrating brave-search, summarize.
+category: search-research
+metadata:
+  author: h4gen
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/h4gen-seo-ranker
+created_at: 2026-04-06T18:20:50.548894734+00:00
+updated_at: 2026-04-06T18:20:50.548894734+00:00
+hash: 038f88d2effaacdc70b29663719a7ef043f8b063eb8545c2c07c35e99e59ea8f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

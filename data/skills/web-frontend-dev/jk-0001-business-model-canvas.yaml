@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_business_model_canvas
+name: business-model-canvas
+slug: jk-0001-business-model-canvas
+description: Build, fill, stress-test, and iterate.
+category: web-frontend-dev
+metadata:
+  author: jk
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/jk-0001-business-model-canvas
+created_at: 2026-04-06T18:20:52.287749986+00:00
+updated_at: 2026-04-06T18:20:52.287749986+00:00
+hash: 486c28d0a8127e72ba38eb2efb4c542a38f4df84ea936d251dabb34f9e9cc454
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

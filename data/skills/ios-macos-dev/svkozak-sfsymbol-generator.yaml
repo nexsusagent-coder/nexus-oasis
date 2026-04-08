@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_ios_macos_dev_sfsymbol_generator
+name: sfsymbol-generator
+slug: svkozak-sfsymbol-generator
+description: Generate an Xcode SF Symbol asset catalog .symbolset.
+category: ios-macos-dev
+metadata:
+  author: svkozak
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- ios-macos-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/svkozak-sfsymbol-generator
+created_at: 2026-04-06T18:20:47.581113751+00:00
+updated_at: 2026-04-06T18:20:47.581113751+00:00
+hash: 7d5841b6e6bac4864d8b1d6dcaecea4fc9d9cfa8b177924939a10d0d8afa0cf2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

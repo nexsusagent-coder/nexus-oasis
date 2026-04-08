@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_telegram_pairing_send_code_to_every_start
+name: telegram-pairing-send-code-to-every-start
+slug: crazypeace-telegram-pairing-send-code-to-every-start
+description: Modify OpenClaw's Telegram pairing logic so unapproved users receive pairing codes on every /start message.
+category: coding-agents-ides
+metadata:
+  author: crazypeace
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/crazypeace-telegram-pairing-send-code-to-every-start
+created_at: 2026-04-06T18:20:42.847031415+00:00
+updated_at: 2026-04-06T18:20:42.847031415+00:00
+hash: 00980c8469a04c19d4126335572764a4cfac3f7b414858a9bc73fc56b529b726
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

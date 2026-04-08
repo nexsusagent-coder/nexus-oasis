@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_ai_hunter_pro
+name: ai-hunter-pro
+slug: traprapitalianazional-dev-ai-hunter-pro
+description: A high-performance automation agent that turns global trends into viral social media posts for X (Twitter)
+category: browser-automation
+metadata:
+  author: traprapitalianazional
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/traprapitalianazional-dev-ai-hunter-pro
+created_at: 2026-04-06T18:20:36.931695634+00:00
+updated_at: 2026-04-06T18:20:36.931695634+00:00
+hash: db2954e71bb3175f7549b223849cb83194e0528664b1a1194bea90aa51fb9d83
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_igpt_email_ask
+name: igpt-email-ask
+slug: sammy-spk-igpt-email-ask
+description: Secure, per-user-isolated email reasoning and analysis via the iGPT Context Engine API.
+category: search-research
+metadata:
+  author: sammy
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/sammy-spk-igpt-email-ask
+created_at: 2026-04-06T18:20:50.189057347+00:00
+updated_at: 2026-04-06T18:20:50.189057347+00:00
+hash: 91dfd7c5d2ee8578f24ead73ce70423ce4438be203787d1c52ee9ea3102cd9a2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

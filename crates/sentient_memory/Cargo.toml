@@ -1,0 +1,55 @@
+[package]
+name = "sentient_memory"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio.workspace = true
+
+# Database
+rusqlite.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# IDs
+uuid.workspace = true
+
+# Errors
+thiserror.workspace = true
+
+# Logging
+log.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Vector operations & math
+ndarray = "0.16"
+
+# Tokenization for embeddings
+tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
+
+# HTTP client for embedding API
+reqwest = { version = "0.12", features = ["json"] }
+
+# Parallel processing
+rayon = "1.10"
+
+# Fuzzy matching
+strsim = "0.11"
+
+# Regular expressions
+regex = "1.10"
+
+# Async traits
+async-trait = "0.1"
+
+[features]
+default = ["native-tls"]
+native-tls = ["reqwest/native-tls"]
+rustls = ["reqwest/rustls-tls"]

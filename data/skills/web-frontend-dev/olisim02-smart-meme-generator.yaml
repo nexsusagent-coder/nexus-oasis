@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_smart_meme_generator
+name: smart-meme-generator
+slug: olisim02-smart-meme-generator
+description: AI-powered meme generator that creates perfect, context-aware memes from any topic or situation.
+category: web-frontend-dev
+metadata:
+  author: olisim02
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/olisim02-smart-meme-generator
+created_at: 2026-04-06T18:20:54.399500545+00:00
+updated_at: 2026-04-06T18:20:54.399500545+00:00
+hash: 5cf0edd60522064c124d717d97557b0e0902b361c5e33cf6fb67e508e258bc7c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

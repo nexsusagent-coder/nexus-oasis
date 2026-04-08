@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_security_passwords_domain_trust_check
+name: domain-trust-check
+slug: jamesouttake-domain-trust-check
+description: Check any URL for phishing, malware, brand abuse, and scams before visiting. Powered by the Outtake Trust API.
+category: security-passwords
+metadata:
+  author: jamesouttake
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- security-passwords
+dependencies: []
+source_url: https://clawskills.sh/skills/jamesouttake-domain-trust-check
+created_at: 2026-04-06T18:20:50.806547107+00:00
+updated_at: 2026-04-06T18:20:50.806547107+00:00
+hash: afbf52326a2869af293abef76bfb72dbf11bed4039420ff9594a6a2757dab48c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

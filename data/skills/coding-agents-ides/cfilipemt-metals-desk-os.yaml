@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_metals_desk_os
+name: metals-desk-os
+slug: cfilipemt-metals-desk-os
+description: Institutional Desk-Level Fully Automated Trading OS for XAU/USD and XAG/USD.
+category: coding-agents-ides
+metadata:
+  author: cfilipemt
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/cfilipemt-metals-desk-os
+created_at: 2026-04-06T18:20:41.484543547+00:00
+updated_at: 2026-04-06T18:20:41.484543547+00:00
+hash: 3b9790c8b11db56d95bad51039c50de4bb48df26aa54ac39aa7eb5c3664ae23c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

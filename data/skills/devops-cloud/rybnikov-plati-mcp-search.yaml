@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_plati_mcp_search
+name: plati-mcp-search
+slug: rybnikov-plati-mcp-search
+description: Find cheapest reliable subscription offers from Plati using the local MCP server.
+category: devops-cloud
+metadata:
+  author: rybnikov
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/rybnikov-plati-mcp-search
+created_at: 2026-04-06T18:20:45.219306731+00:00
+updated_at: 2026-04-06T18:20:45.219306731+00:00
+hash: 1d8cf150f74c8eb7d72b0991d850741833856c722e93ce8ee6565d882803ac32
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

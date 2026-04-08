@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_deepseek_reasoner_lite_agent
+name: deepseek-reasoner-lite-agent
+slug: teamolab-deepseek-reasoner-lite-agent
+description: 'You are DeepSeek-R1-Agent，an effective content creator. # `current_date: $DATE$`.'
+category: unknown
+metadata:
+  author: teamolab
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/teamolab-deepseek-reasoner-lite-agent
+created_at: 2026-04-06T18:20:36.384384873+00:00
+updated_at: 2026-04-06T18:20:36.384384873+00:00
+hash: b3cd73f335b1bf44c07f8b5e53bfd542ae896c2ab8bf29306a46a67c71fbb3c8
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

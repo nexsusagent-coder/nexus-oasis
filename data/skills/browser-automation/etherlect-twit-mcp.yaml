@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_twit_mcp
+name: twit-mcp
+slug: etherlect-twit-mcp
+description: Real-time X/Twitter data via x402 micropayments.
+category: browser-automation
+metadata:
+  author: etherlect
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/etherlect-twit-mcp
+created_at: 2026-04-06T18:20:37.868967205+00:00
+updated_at: 2026-04-06T18:20:37.868967205+00:00
+hash: 5b23486251cf6fcccefb7200a25c363d9c62c97d55403a0735669df350b26227
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

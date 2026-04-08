@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_picqer_fulfillment
+name: picqer-fulfillment
+slug: johnmcgucki-picqer-fulfillment
+description: JSON-only API for dashboard data.
+category: unknown
+metadata:
+  author: johnmcgucki
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/johnmcgucki-picqer-fulfillment
+created_at: 2026-04-06T18:20:36.549104756+00:00
+updated_at: 2026-04-06T18:20:36.549104756+00:00
+hash: 5b0271e9e63bc50143ab84ce45cfc74458b20612a5ab6828acb5460cbe570c6c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

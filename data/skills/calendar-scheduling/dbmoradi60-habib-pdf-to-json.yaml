@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_calendar_scheduling_habib_pdf_to_json
+name: habib-pdf-to-json
+slug: dbmoradi60-habib-pdf-to-json
+description: Extract structured data from construction PDFs.
+category: calendar-scheduling
+metadata:
+  author: dbmoradi60
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- calendar-scheduling
+dependencies: []
+source_url: https://clawskills.sh/skills/dbmoradi60-habib-pdf-to-json
+created_at: 2026-04-06T18:20:38.126252099+00:00
+updated_at: 2026-04-06T18:20:38.126252099+00:00
+hash: dd80413aa72a05d032b1b9b9200afa9c732fb3cf147dd369bcff0e4b78a7ea6c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

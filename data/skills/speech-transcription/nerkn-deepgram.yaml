@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_speech_transcription_deepgram
+name: deepgram
+slug: nerkn-deepgram
+description: — command-line interface for Deepgram speech-to-text.
+category: speech-transcription
+metadata:
+  author: nerkn
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- speech-transcription
+dependencies: []
+source_url: https://clawskills.sh/skills/nerkn-deepgram
+created_at: 2026-04-06T18:20:51.336101839+00:00
+updated_at: 2026-04-06T18:20:51.336101839+00:00
+hash: 902eb066fbe4a1c49a98ae1a134a51eca0d7b76868a90333cb952c2285d7e092
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

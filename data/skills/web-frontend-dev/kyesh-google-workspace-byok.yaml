@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_google_workspace_byok
+name: google-workspace-byok
+slug: kyesh-google-workspace-byok
+description: Google Calendar and Gmail integration using your own GCP project credentials (BYoK — Bring Your Own Key)
+category: web-frontend-dev
+metadata:
+  author: kyesh
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/kyesh-google-workspace-byok
+created_at: 2026-04-06T18:20:52.919475139+00:00
+updated_at: 2026-04-06T18:20:52.919475139+00:00
+hash: 4774504540cb2c5398fc70458ae87751d0051e79bf4409fc39ce65967261053a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

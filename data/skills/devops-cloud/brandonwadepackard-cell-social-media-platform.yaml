@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_social_media_platform
+name: social-media-platform
+slug: brandonwadepackard-cell-social-media-platform
+description: Build a plugin-based social media management platform with multi-platform publishing, content calendar, brand.
+category: devops-cloud
+metadata:
+  author: brandonwadepackard
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/brandonwadepackard-cell-social-media-platform
+created_at: 2026-04-06T18:20:45.419579866+00:00
+updated_at: 2026-04-06T18:20:45.419579866+00:00
+hash: 806974f6c15ceb0c59765c957452b648b4081eba6e00671d03da4de17d49cb63
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_lobster_bio_dev
+name: lobster-bio-dev
+slug: cewinharhar-lobster-bio-dev
+description: Develop, extend, and contribute to Lobster AI — the multi-agent bioinformatics engine.
+category: coding-agents-ides
+metadata:
+  author: cewinharhar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/cewinharhar-lobster-bio-dev
+created_at: 2026-04-06T18:20:41.357856415+00:00
+updated_at: 2026-04-06T18:20:41.357856415+00:00
+hash: 9e3837b52dc9003ef9a4c2ece3db043c7952cae40d0da3437e990cc73633f25f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

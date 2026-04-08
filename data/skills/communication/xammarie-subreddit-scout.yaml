@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_subreddit_scout
+name: subreddit-scout
+slug: xammarie-subreddit-scout
+description: Find high-fit subreddits for a product, summarize rules, and suggest value-first posting angles.
+category: communication
+metadata:
+  author: xammarie
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/xammarie-subreddit-scout
+created_at: 2026-04-06T18:20:43.953681328+00:00
+updated_at: 2026-04-06T18:20:43.953681328+00:00
+hash: 2b2bae0faa6422a4324c40bfc8dd622f2cd1dbdf345bb19fc0bd2e1d8905d75f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

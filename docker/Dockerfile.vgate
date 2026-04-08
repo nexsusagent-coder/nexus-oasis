@@ -1,0 +1,54 @@
+# ─── ASENA V-GATE DOCKERFILE ───
+# Production-ready Vekil Sunucu container
+
+# Build stage
+FROM rust:1.75-slim-bookworm AS builder
+
+WORKDIR /build
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy manifests
+COPY Cargo.toml Cargo.lock ./
+COPY crates ./crates
+
+# Build release binary
+RUN cargo build --release --bin asena-vgate -p asena_vgate 2>/dev/null || \
+    cargo build --release --bin asena -p asena_cli
+
+# Runtime stage
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN useradd -r -s /bin/false asena
+
+# Copy binary
+COPY --from=builder /build/target/release/asena /app/asena
+
+# Create directories
+RUN mkdir -p /data && chown -R asena:asena /app /data
+
+# Switch to non-root user
+USER asena
+
+# Expose port
+EXPOSE 1071
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=20s \
+    CMD curl -f http://localhost:1071/health || exit 1
+
+# Run V-GATE server
+CMD ["./asena", "vgate", "start", "--listen", "0.0.0.0:1071"]

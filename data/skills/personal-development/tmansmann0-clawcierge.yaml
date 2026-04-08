@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_personal_development_clawcierge
+name: clawcierge
+slug: tmansmann0-clawcierge
+description: '> Your Personal Concierge for the AI Age 🦀.'
+category: personal-development
+metadata:
+  author: tmansmann0
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- personal-development
+dependencies: []
+source_url: https://clawskills.sh/skills/tmansmann0-clawcierge
+created_at: 2026-04-06T18:20:48.965299011+00:00
+updated_at: 2026-04-06T18:20:48.965299011+00:00
+hash: 3c4df250b6654320a11c9f72cde894b2c3061bc3f5da247cfc42896a87560241
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

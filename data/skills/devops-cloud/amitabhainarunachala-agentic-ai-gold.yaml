@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_agentic_ai_gold
+name: agentic-ai-gold
+slug: amitabhainarunachala-agentic-ai-gold
+description: The only agent framework that improves itself while you sleep.
+category: devops-cloud
+metadata:
+  author: amitabhainarunachala
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/amitabhainarunachala-agentic-ai-gold
+created_at: 2026-04-06T18:20:44.290510857+00:00
+updated_at: 2026-04-06T18:20:44.290510857+00:00
+hash: d8ab1f82e4c44f5a21ac6b44031b8a58140aed73e19d3f54fea758e777bba98a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

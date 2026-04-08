@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_lifi_crosschain
+name: lifi-crosschain
+slug: rhlsthrm-lifi-crosschain
+description: Cross-chain token swaps and bridges via the LI.FI protocol.
+category: unknown
+metadata:
+  author: rhlsthrm
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/rhlsthrm-lifi-crosschain
+created_at: 2026-04-06T18:20:36.459278157+00:00
+updated_at: 2026-04-06T18:20:36.459278157+00:00
+hash: 6c7ff9e8a92605bbbfb995ab634c623a0f357e8a3c738b4dec344ec4e26bc1f3
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

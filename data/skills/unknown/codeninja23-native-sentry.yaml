@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_native_sentry
+name: native-sentry
+slug: codeninja23-native-sentry
+description: Read Sentry issues, events, and production errors via the Sentry REST API.
+category: unknown
+metadata:
+  author: codeninja23
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/codeninja23-native-sentry
+created_at: 2026-04-06T18:20:36.527425490+00:00
+updated_at: 2026-04-06T18:20:36.527425490+00:00
+hash: 6c7885ae16f0d2c5b4c533a0dbfd4541e2fe39f60cc04033c5d3009797271acd
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

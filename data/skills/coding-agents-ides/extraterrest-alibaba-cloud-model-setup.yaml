@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_alibaba_cloud_model_setup
+name: alibaba-cloud-model-setup
+slug: extraterrest-alibaba-cloud-model-setup
+description: Configure OpenClaw (including historical Moltbot/Clawdbot paths) to use Alibaba Cloud Model Studio through a strict.
+category: coding-agents-ides
+metadata:
+  author: extraterrest
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/extraterrest-alibaba-cloud-model-setup
+created_at: 2026-04-06T18:20:39.618863602+00:00
+updated_at: 2026-04-06T18:20:39.618863602+00:00
+hash: 472f266f029cc34a65b1ea99afaabc7fae636d1a6f02104550ce7254e26fb94b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

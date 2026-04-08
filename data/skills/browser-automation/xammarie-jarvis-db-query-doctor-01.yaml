@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_jarvis_db_query_doctor_01
+name: jarvis-db-query-doctor-01
+slug: xammarie-jarvis-db-query-doctor-01
+description: Diagnose slow SQL and rewrite queries for safer performance.
+category: browser-automation
+metadata:
+  author: xammarie
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/xammarie-jarvis-db-query-doctor-01
+created_at: 2026-04-06T18:20:37.341063869+00:00
+updated_at: 2026-04-06T18:20:37.341063869+00:00
+hash: a8a3a5f0237f00c3c2b30608225ab05f0ed22486ccacf23f7e0f5d9617236737
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

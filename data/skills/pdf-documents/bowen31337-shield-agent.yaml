@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_pdf_documents_shield_agent
+name: shield-agent
+slug: bowen31337-shield-agent
+description: Autonomous DeFi smart contract vulnerability scanner.
+category: pdf-documents
+metadata:
+  author: bowen31337
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- pdf-documents
+dependencies: []
+source_url: https://clawskills.sh/skills/bowen31337-shield-agent
+created_at: 2026-04-06T18:20:48.866787289+00:00
+updated_at: 2026-04-06T18:20:48.866787289+00:00
+hash: 93b2c923529e810b8f35ead9daecfeceefeded7a0c79d770aa2c27719e1d1fb0
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

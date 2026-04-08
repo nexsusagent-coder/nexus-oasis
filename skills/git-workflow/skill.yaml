@@ -1,0 +1,54 @@
+# ASENA Skill: git-workflow
+# OpenClaw & oh-my-codex pattern'inden adapte
+
+name: git-workflow
+version: "1.0.0"
+description: "Gelişmiş Git iş akışı yönetimi: branch, commit, PR, merge conflict çözümü"
+author: "ASENA_CORE"
+category: development
+
+permissions:
+  file_read: true
+  file_write: true
+  bash_execute: true
+  network_access: false
+  
+parameters:
+  action:
+    type: string
+    required: true
+    enum: [commit, branch, pr, merge, rebase, conflict-resolve, history]
+    description: "Git işlemi"
+  message:
+    type: string
+    required: false
+    description: "Commit mesajı (commit için)"
+  branch_name:
+    type: string
+    required: false
+    description: "Branch adı"
+  base_branch:
+    type: string
+    required: false
+    default: "main"
+    description: "Hedef branch"
+
+tools:
+  - bash
+  - read_file
+  - edit_file
+  
+output_format:
+  type: structured
+  schema:
+    success: boolean
+    message: string
+    changes: list
+    
+rate_limit:
+  requests_per_minute: 30
+  
+metadata:
+  tags: [git, version-control, workflow, automation]
+  priority: high
+  hot_reload: true

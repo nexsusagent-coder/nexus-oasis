@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_calendar_scheduling_feishu_whiteboard
+name: feishu-whiteboard
+slug: autogame-17-feishu-whiteboard
+description: Allows creating and manipulating Feishu Whiteboards.
+category: calendar-scheduling
+metadata:
+  author: autogame
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- calendar-scheduling
+dependencies: []
+source_url: https://clawskills.sh/skills/autogame-17-feishu-whiteboard
+created_at: 2026-04-06T18:20:38.088346087+00:00
+updated_at: 2026-04-06T18:20:38.088346087+00:00
+hash: a39a55b2cb775de4cd36110e99b775d34aca54a5c7c92552c763bc4313a59e45
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

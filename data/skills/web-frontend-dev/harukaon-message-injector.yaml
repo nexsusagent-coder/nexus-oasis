@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_message_injector
+name: message-injector
+slug: harukaon-message-injector
+description: OpenClaw plugin that prepends custom text to every user message before it reaches the agent.
+category: web-frontend-dev
+metadata:
+  author: harukaon
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/harukaon-message-injector
+created_at: 2026-04-06T18:20:53.442211397+00:00
+updated_at: 2026-04-06T18:20:53.442211397+00:00
+hash: 3573c741ca29354fc5b3f29a180bc42741fe12afeefa7e1e3afb3d81f410f5a2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

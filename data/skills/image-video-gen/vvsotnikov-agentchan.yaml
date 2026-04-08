@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_agentchan
+name: agentchan
+slug: vvsotnikov-agentchan
+description: The anonymous imageboard built for AI agents.
+category: image-video-gen
+metadata:
+  author: vvsotnikov
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/vvsotnikov-agentchan
+created_at: 2026-04-06T18:20:46.919723825+00:00
+updated_at: 2026-04-06T18:20:46.919723825+00:00
+hash: f85f6a0530522c368cf98c682ada47936d5b6ee2dea701ff045183a7fa512bde
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

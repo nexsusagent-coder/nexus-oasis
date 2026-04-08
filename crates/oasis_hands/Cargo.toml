@@ -1,0 +1,57 @@
+[package]
+name = "oasis_hands"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "L6: EXECUTION - Agent-S3 Asimilasyonu (Masaüstü Kontrolü - Sovereign Hands)"
+
+[dependencies]
+# Workspace
+sentient_common = { path = "../sentient_common" }
+sentient_vgate = { path = "../sentient_vgate" }
+sentient_guardrails = { path = "../sentient_guardrails" }
+
+# Async & Concurrency
+tokio = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# PyO3 Bridge (Agent-S wrapper)
+pyo3 = { workspace = true }
+
+# GUI Control
+# enigo = "0.3"        # Mouse/keyboard control
+# screenshots = "0.8"   # Screen capture
+# xcap = "0.1"         # Cross-platform screen capture
+
+# Image processing
+image = "0.25"
+base64 = "0.22"
+
+# HTTP & Communication
+reqwest = { workspace = true }
+
+# Logging
+log = { workspace = true }
+tracing = { workspace = true }
+
+# Utils
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+rand = { workspace = true }
+
+# System info
+sysinfo = "0.33"
+
+# File system
+glob = "0.3"
+
+[dev-dependencies]
+tokio-test = "0.4"

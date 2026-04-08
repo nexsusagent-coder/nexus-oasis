@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_trilium
+name: trilium
+slug: mtbf999-trilium
+description: Work with Trilium Notes (notebook app) and automate via Trilium Notes ETAPI.
+category: devops-cloud
+metadata:
+  author: mtbf999
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/mtbf999-trilium
+created_at: 2026-04-06T18:20:45.597687625+00:00
+updated_at: 2026-04-06T18:20:45.597687625+00:00
+hash: f36413d431b1cb841afdd7afa48a53c48f938a50cff6ec1e9ab46b6384d5de2a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

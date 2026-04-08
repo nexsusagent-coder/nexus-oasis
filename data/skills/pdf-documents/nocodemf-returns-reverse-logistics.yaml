@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_pdf_documents_returns_reverse_logistics
+name: returns-reverse-logistics
+slug: nocodemf-returns-reverse-logistics
+description: Codified expertise for returns authorisation, receipt and inspection, disposition decisions, refund processing.
+category: pdf-documents
+metadata:
+  author: nocodemf
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- pdf-documents
+dependencies: []
+source_url: https://clawskills.sh/skills/nocodemf-returns-reverse-logistics
+created_at: 2026-04-06T18:20:48.844522462+00:00
+updated_at: 2026-04-06T18:20:48.844522462+00:00
+hash: 2d165e428066a4422108cf78c1a8196b6e6091a13cd96a8ee5ba222cfc6dd0ec
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

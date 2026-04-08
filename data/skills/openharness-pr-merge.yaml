@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-pr-merge
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: mixed
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-pr-merge"
+description: "This skill should be used when the user asks to "merge a PR", "review and merge pull requests", "integrate external contributions", "handle PR conflicts", "cherry-pick from a PR", or needs to merge GitHub PRs while maximizing contributor attribution."
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "SKILL.md"
+    language: "mixed"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "gh pr list --repo OWNER/REPO --state open \
+  --json number,title,author,additions,deletions,mergeable"
+  - "gh pr merge NUMBER --repo OWNER/REPO --squash \
+  --subject "feat: description (#NUMBER)""
+  - "git fetch origin pull/NUMBER/head:pr-NUMBER
+git merge pr-NUMBER --no-edit
+# Resolve conflicts keeping both sides where possible
+git add -A && git commit --no-edit"
+  - "gh pr diff NUMBER --repo OWNER/REPO | \
+  git apply --exclude='path/to/skip.py' --exclude='CHANGELOG.md'
+git commit --author="Author Name <author@email>" \
+  -m "feat: description (#NUMBER)
+
+Cherry-picked from PR #NUMBER. Excluded: file.py (already implemented).""
+  - "gh pr close NUMBER --repo OWNER/REPO \
+  --comment "Fixed via PR #OTHER. Thank you for the contribution!""
+  - "python -m ruff check src/ tests/    # lint
+python -m pytest tests/ -q          # unit tests
+git push origin main                # push"
+
+dependencies:
+  - "version:0.1.0"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

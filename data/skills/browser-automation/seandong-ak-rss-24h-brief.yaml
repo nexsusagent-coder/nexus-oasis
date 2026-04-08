@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_ak_rss_24h_brief
+name: ak-rss-24h-brief
+slug: seandong-ak-rss-24h-brief
+description: Read RSS/Atom feeds from an OPML list, fetch articles from the last N hours, and generate a Chinese categorized.
+category: browser-automation
+metadata:
+  author: seandong
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/seandong-ak-rss-24h-brief
+created_at: 2026-04-06T18:20:36.944113908+00:00
+updated_at: 2026-04-06T18:20:36.944113908+00:00
+hash: e393660e467117628bb82d62913f17a0ef4d2ffea18db6e60d05ff6e7be25112
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_mh_healthcheck
+name: mh-healthcheck
+slug: mohdalhashemi98-hue-mh-healthcheck
+description: Host security hardening and risk-tolerance configuration for OpenClaw deployments.
+category: coding-agents-ides
+metadata:
+  author: mohdalhashemi98
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/mohdalhashemi98-hue-mh-healthcheck
+created_at: 2026-04-06T18:20:41.490803839+00:00
+updated_at: 2026-04-06T18:20:41.490803839+00:00
+hash: 9dbaeeb1f72c60f166938177ee0a52a37979af4891b96cc1409df98d299de8a9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

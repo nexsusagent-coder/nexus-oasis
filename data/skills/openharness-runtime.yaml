@@ -1,0 +1,110 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-runtime
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-runtime"
+description: "Auto-generated skill from runtime"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "runtime.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "settings"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "messages"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "limit"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "messages"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "bundle"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "bundle"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_resolve_api_client_from_settings"
+  - "build_runtime"
+  - "start_runtime"
+  - "close_runtime"
+  - "_last_user_text"
+  - "_truncate"
+  - "_format_pending_tool_results"
+  - "sync_app_state"
+  - "refresh_runtime_client"
+  - "handle_line"
+  - "_render_command_result"
+
+dependencies:
+  - "__future__"
+  - "dataclasses"
+  - "json"
+  - "openharness.api.client"
+  - "openharness.api.codex_client"
+  - "openharness.api.copilot_client"
+  - "openharness.api.openai_client"
+  - "openharness.api.provider"
+  - "openharness.bridge"
+  - "openharness.commands"
+  - "openharness.config"
+  - "openharness.config.settings"
+  - "openharness.engine"
+  - "openharness.engine.messages"
+  - "openharness.engine.query"
+  - "openharness.engine.stream_events"
+  - "openharness.hooks"
+  - "openharness.hooks.hot_reload"
+  - "openharness.keybindings"
+  - "openharness.mcp.client"
+  - "openharness.mcp.config"
+  - "openharness.permissions"
+  - "openharness.plugins"
+  - "openharness.prompts"
+  - "openharness.services.session_backend"
+  - "openharness.state"
+  - "openharness.tools"
+  - "pathlib"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

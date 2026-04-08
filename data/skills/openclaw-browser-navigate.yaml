@@ -1,0 +1,47 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openclaw-browser-navigate
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openclaw
+# Dil: typescript
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openclaw-browser-navigate"
+description: "Tarayıcıda sayfa gezinme ve otomasyon"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "browser"
+    source_repo: "openclaw"
+    source_file: "navigate.ts"
+    language: "typescript"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "url"
+    type: "string"
+    required: true
+    default: null
+    description: "Hedef URL"
+  - name: "wait_for"
+    type: "string"
+    required: false
+    default: "load"
+    description: "Bekleme koşulu"
+
+commands:
+  - "navigate(url, options)"
+
+dependencies:
+  - "puppeteer"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

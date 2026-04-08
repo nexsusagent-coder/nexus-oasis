@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_brave_api_search
+name: brave-api-search
+slug: broedkrummen-brave-api-search
+description: Real-time web search and AI-powered answers using the official Brave Search API.
+category: web-frontend-dev
+metadata:
+  author: broedkrummen
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/broedkrummen-brave-api-search
+created_at: 2026-04-06T18:20:52.226357177+00:00
+updated_at: 2026-04-06T18:20:52.226357177+00:00
+hash: 3ea56f7e8b2b87c8f37f9d14ad1b5efecc66d4b470752260d56bbf64dde4b597
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

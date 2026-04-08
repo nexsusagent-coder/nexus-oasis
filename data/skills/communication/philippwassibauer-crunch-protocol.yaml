@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_crunch_protocol
+name: crunch-protocol
+slug: philippwassibauer-crunch-protocol
+description: Natural language interface for Crunch Protocol CLI.
+category: communication
+metadata:
+  author: philippwassibauer
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/philippwassibauer-crunch-protocol
+created_at: 2026-04-06T18:20:43.586793867+00:00
+updated_at: 2026-04-06T18:20:43.586793867+00:00
+hash: aef9e07f9307962108cb871326a91efbe6b2aac0787f6c5011d8d205563da531
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

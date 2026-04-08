@@ -1,0 +1,120 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-cron
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-cron"
+description: "Auto-generated skill from cron"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "cron.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "jobs"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "Any]]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "expression"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "expression"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "base"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "job"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "Any]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "enabled"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "success"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "load_cron_jobs"
+  - "save_cron_jobs"
+  - "validate_cron_expression"
+  - "next_run_time"
+  - "upsert_cron_job"
+  - "delete_cron_job"
+  - "get_cron_job"
+  - "set_job_enabled"
+  - "mark_job_run"
+
+dependencies:
+  - "__future__"
+  - "croniter"
+  - "datetime"
+  - "json"
+  - "openharness.config.paths"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

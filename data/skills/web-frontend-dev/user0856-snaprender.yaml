@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_snaprender
+name: snaprender
+slug: user0856-snaprender
+description: Give your agent eyes on the web — screenshot any URL as an image file.
+category: web-frontend-dev
+metadata:
+  author: user0856
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/user0856-snaprender
+created_at: 2026-04-06T18:20:54.411161140+00:00
+updated_at: 2026-04-06T18:20:54.411161140+00:00
+hash: 3fbc175277dab1a283f21b0fe4936410a6a2d07eeec36d5e18becf593daac04c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: true
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_loopuman_human_tasks
+name: loopuman-human-tasks
+slug: seesayearn-boop-loopuman-human-tasks
+description: Give your AI agent access to real human workers.
+category: productivity-tasks
+metadata:
+  author: seesayearn
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/seesayearn-boop-loopuman-human-tasks
+created_at: 2026-04-06T18:20:49.463303312+00:00
+updated_at: 2026-04-06T18:20:49.463303312+00:00
+hash: b328cea0e9e93eb33964f709f17d7c4fe26ae7e3e93d34ae8a904e5090df2173
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

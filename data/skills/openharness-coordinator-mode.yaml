@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-coordinator-mode
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-coordinator-mode"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "coordinator_mode.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "n"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "xml"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "session_mode"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "get_team_registry"
+  - "format_task_notification"
+  - "parse_task_notification"
+  - "is_coordinator_mode"
+  - "match_session_mode"
+  - "get_coordinator_tools"
+  - "get_coordinator_user_context"
+  - "get_coordinator_system_prompt"
+
+dependencies:
+  - "__future__"
+  - "dataclasses"
+  - "os"
+  - "re"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

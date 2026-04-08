@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_message_parser
+name: message-parser
+slug: vishalgojha-message-parser
+description: Parse raw WhatsApp exports (TXT or JSON) into normalized message objects with `timestamp`, `sender`, and `content`.
+category: search-research
+metadata:
+  author: vishalgojha
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/vishalgojha-message-parser
+created_at: 2026-04-06T18:20:50.329869523+00:00
+updated_at: 2026-04-06T18:20:50.329869523+00:00
+hash: 6b3fe6a1a222a1e1da386f033ce6545c567b219881982308b66142ddf6bd702d
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

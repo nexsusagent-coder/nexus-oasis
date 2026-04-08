@@ -1,0 +1,25 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  📊 SENTIENT Analysis Skill
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[skill]
+name = "analysis"
+version = "0.1.0"
+description = "Veri analizi ve görselleştirme"
+author = "SENTIENT Team"
+category = "data"
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_python = { path = "../../crates/sentient_python" }
+polars = "0.36"
+plotters = "0.3"
+
+[config]
+max_dataset_size = 100000
+output_formats = ["json", "csv", "markdown", "html"]
+visualization_enabled = true
+
+[triggers]
+keywords = ["analiz", "analyze", "veri", "data", "istatistik"]
+patterns = ["^analiz[:\\s]+(.+)$", "^analyze[:\\s]+(.+)$"]

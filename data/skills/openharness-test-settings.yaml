@@ -1,0 +1,43 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-settings
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-settings"
+description: "Auto-generated skill from test-settings"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "filesystem"
+    source_repo: "openharness"
+    source_file: "test_settings.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "test_normalize_anthropic_model_name_matches_hermes_behavior"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "openharness.auth.storage"
+  - "openharness.config.settings"
+  - "pathlib"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

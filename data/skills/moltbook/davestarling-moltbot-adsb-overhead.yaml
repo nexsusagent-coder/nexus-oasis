@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_moltbook_moltbot_adsb_overhead
+name: moltbot-adsb-overhead
+slug: davestarling-moltbot-adsb-overhead
+description: Notify when aircraft are overhead.
+category: moltbook
+metadata:
+  author: davestarling
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- moltbook
+dependencies: []
+source_url: https://clawskills.sh/skills/davestarling-moltbot-adsb-overhead
+created_at: 2026-04-06T18:20:48.284184409+00:00
+updated_at: 2026-04-06T18:20:48.284184409+00:00
+hash: 062a27eb43139d15a8f3f3e60b2949b1b46bb7b91d66f429caedfc9e2fc2255a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

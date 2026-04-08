@@ -1,0 +1,56 @@
+# ASENA Skill: debug-helper
+# OpenHarness & lisa-agentic pattern'inden adapte
+
+name: debug-helper
+version: "1.0.0"
+description: "AI destekli hata ayıklama: log analizi, stack trace çözümleme, fix önerisi"
+author: "ASENA_CORE"
+category: development
+
+permissions:
+  file_read: true
+  file_write: true
+  bash_execute: true
+  network_access: false
+  
+parameters:
+  error_type:
+    type: string
+    required: true
+    enum: [compile, runtime, logic, memory, network]
+    description: "Hata türü"
+  error_message:
+    type: string
+    required: true
+    description: "Hata mesajı veya stack trace"
+  code_context:
+    type: string
+    required: false
+    description: "İlgili kod parçası"
+  language:
+    type: string
+    required: false
+    default: "rust"
+
+tools:
+  - read_file
+  - grep_tool
+  - bash
+  - web_search
+  
+output_format:
+  type: structured
+  schema:
+    root_cause: string
+    fix_suggestion: string
+    code_patch: string
+    confidence: integer
+    
+rate_limit:
+  requests_per_minute: 20
+  max_tokens: 8000
+
+metadata:
+  tags: [debug, error, fix, development]
+  priority: critical
+  hot_reload: true

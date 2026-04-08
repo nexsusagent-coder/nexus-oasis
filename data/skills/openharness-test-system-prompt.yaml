@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-system-prompt
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-system-prompt"
+description: "Auto-generated skill from test-system-prompt"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_system_prompt.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "**overrides"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+
+commands:
+  - "_make_env"
+  - "test_build_system_prompt_contains_environment"
+  - "test_build_system_prompt_no_git"
+  - "test_build_system_prompt_git_no_branch"
+  - "test_build_system_prompt_custom_prompt"
+  - "test_build_system_prompt_default_includes_base"
+
+dependencies:
+  - "__future__"
+  - "openharness.prompts.environment"
+  - "openharness.prompts.system_prompt"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

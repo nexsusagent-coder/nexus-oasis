@@ -1,0 +1,91 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-agent-definitions
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-agent-definitions"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_agent_definitions.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_agent_definition_required_fields"
+  - "test_agent_definition_with_tools"
+  - "test_agent_definition_invalid_source"
+  - "test_get_builtin_returns_expected_names"
+  - "test_builtin_agents_have_descriptions"
+  - "test_builtin_explore_has_tools"
+  - "test_builtin_general_purpose_has_all_tools"
+  - "test_parse_frontmatter_with_valid_yaml"
+  - "test_parse_frontmatter_missing_delimiter_returns_empty"
+  - "test_parse_frontmatter_unclosed_returns_empty"
+  - "test_parse_frontmatter_strips_quotes"
+  - "test_load_agents_dir_empty_dir"
+  - "test_load_agents_dir_nonexistent"
+  - "test_load_agents_dir_single_file"
+  - "test_load_agents_dir_file_with_tools"
+  - "test_load_agents_dir_falls_back_to_stem_for_name"
+  - "test_load_agents_dir_with_model_and_permissions"
+  - "test_load_agents_dir_skips_unreadable_files"
+
+dependencies:
+  - "__future__"
+  - "openharness.coordinator.agent_definitions"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

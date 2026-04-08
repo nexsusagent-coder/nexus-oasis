@@ -1,0 +1,44 @@
+[package]
+name = "sentient_zk_mcp"
+version.workspace = true
+edition.workspace = true
+description = "SENTIENT ZK-MCP - Zero-Knowledge Proofs for MCP Protocol"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# IDs
+uuid.workspace = true
+
+# Errors
+thiserror.workspace = true
+anyhow.workspace = true
+
+# Logging
+log.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Crypto
+blake3 = "1.5"
+sha2 = "0.10"
+rand.workspace = true
+
+# Math for ZK
+num-bigint = "0.4"
+num-traits = "0.2"
+
+# Concurrency
+parking_lot.workspace = true
+
+[features]
+default = []
+groth16 = []  # Enable Groth16 SNARKs (requires arkworks)

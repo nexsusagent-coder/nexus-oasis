@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_og_board_individual
+name: og-board-individual
+slug: jatin-31-og-board-individual
+description: 'Use when you need to work with tasks: view tasks, list tasks, update task status, add blockers, artifacts, and worklogs.'
+category: productivity-tasks
+metadata:
+  author: jatin
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/jatin-31-og-board-individual
+created_at: 2026-04-06T18:20:49.505381326+00:00
+updated_at: 2026-04-06T18:20:49.505381326+00:00
+hash: 6af731098371e187bb1e2630b50268e4be8cb86b67304250cd1a17dd2513aeec
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

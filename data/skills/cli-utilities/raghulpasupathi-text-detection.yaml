@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_text_detection
+name: text-detection
+slug: raghulpasupathi-text-detection
+description: Skills for analyzing and detecting AI-generated text content.
+category: cli-utilities
+metadata:
+  author: raghulpasupathi
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/raghulpasupathi-text-detection
+created_at: 2026-04-06T18:20:39.091216968+00:00
+updated_at: 2026-04-06T18:20:39.091216968+00:00
+hash: aee53a9948aa52b7a37c4cc476ebcbbeaa4f11ae4951848df894131f51daa244
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

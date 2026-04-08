@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_pyx_scan
+name: pyx-scan
+slug: fysoul17-pyx-scan
+description: Check whether an AI agent skill is safe before installing or using it.
+category: search-research
+metadata:
+  author: fysoul17
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/fysoul17-pyx-scan
+created_at: 2026-04-06T18:20:50.480316102+00:00
+updated_at: 2026-04-06T18:20:50.480316102+00:00
+hash: 4108d4511616d19e047d529f83c8237b03d6606cf43a2c04860432c257b61aa9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

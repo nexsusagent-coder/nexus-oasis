@@ -1,0 +1,21 @@
+[package]
+name = "sentient_local"
+version = "4.0.0"
+edition = "2021"
+description = "SENTIENT Local LLM Integration - Gemma 4 Kernel, Ollama, GPT4All"
+authors = ["SENTIENT Core Team"]
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+async-trait = "0.1"
+reqwest = { workspace = true }
+thiserror = "1.0"
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+[lib]
+name = "sentient_local"
+path = "src/lib.rs"

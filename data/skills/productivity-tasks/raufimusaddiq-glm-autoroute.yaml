@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_glm_autoroute
+name: glm-autoroute
+slug: raufimusaddiq-glm-autoroute
+description: Binary model routing for ZAI GLM models - lightweight vs heavyweight tasks.
+category: productivity-tasks
+metadata:
+  author: raufimusaddiq
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/raufimusaddiq-glm-autoroute
+created_at: 2026-04-06T18:20:49.417770028+00:00
+updated_at: 2026-04-06T18:20:49.417770028+00:00
+hash: 8c5e2701c2705e39a456782517531d57c5159371bc9c606a92d6f49f8d18fe87
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

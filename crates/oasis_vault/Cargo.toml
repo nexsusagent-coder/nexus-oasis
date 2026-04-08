@@ -1,0 +1,45 @@
+[package]
+name = "oasis_vault"
+version.workspace = true
+edition.workspace = true
+description = "OASIS Vault - Secure Secrets Manager with Creusot Contracts"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+oasis_core = { path = "../oasis_core" }
+
+# Async runtime
+tokio.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# IDs
+uuid.workspace = true
+
+# Errors
+thiserror.workspace = true
+anyhow.workspace = true
+
+# Logging
+log.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Crypto
+aes-gcm = "0.10"
+argon2 = "0.5"
+blake3 = "1.5"
+hex = "0.4"
+rand.workspace = true
+zeroize = "1.8"
+base64 = "0.22"
+
+# Concurrency
+parking_lot.workspace = true
+
+[features]
+default = []
+hardware_security = []  # Enable HSM support

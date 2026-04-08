@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_agent_lightning
+name: agent-lightning
+slug: olmmlo-cmd-agent-lightning
+description: Microsoft Research's agent training framework.
+category: search-research
+metadata:
+  author: olmmlo
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/olmmlo-cmd-agent-lightning
+created_at: 2026-04-06T18:20:49.770768122+00:00
+updated_at: 2026-04-06T18:20:49.770768122+00:00
+hash: 24e5f0ea54ce039ebc9f85b7fa796c9cb52d2cf31d6d4405eaf71eb7c8d1871b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

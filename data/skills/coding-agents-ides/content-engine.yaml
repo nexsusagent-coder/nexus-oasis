@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_content_engine
+name: content-engine
+slug: content-engine
+description: Create platform-native content systems for X, LinkedIn, TikTok, YouTube, newsletters, and repurposed multi-platform campaigns. Use when the user wants social posts, threads, scripts, content calendars, or one source asset adapted cleanly across platforms.
+category: coding-agents-ides
+metadata:
+  author: everything-claude-code
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- ecc
+- claude-code
+dependencies: []
+created_at: 2026-04-06T18:20:56.112729876+00:00
+updated_at: 2026-04-06T18:20:56.112729876+00:00
+hash: 391fc2b98f5b3583c9a093ba103070ca0088372d237a0af48f6a933262da0ad8
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_health_fitness_crunch_coordinate
+name: crunch-coordinate
+slug: philippwassibauer-crunch-coordinate
+description: Use when managing Crunch coordinators, competitions (crunches), rewards, checkpoints, staking, or cruncher accounts.
+category: health-fitness
+metadata:
+  author: philippwassibauer
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- health-fitness
+dependencies: []
+source_url: https://clawskills.sh/skills/philippwassibauer-crunch-coordinate
+created_at: 2026-04-06T18:20:46.578472505+00:00
+updated_at: 2026-04-06T18:20:46.578472505+00:00
+hash: 2a94100d86f6963797b8bc41b7f4ebd62d772851caaaf2ecc58dc148798cdba3
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

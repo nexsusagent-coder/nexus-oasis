@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_sovereign_api_mock_generator
+name: sovereign-api-mock-generator
+slug: ryudi84-sovereign-api-mock-generator
+description: Generates mock API servers from OpenAPI specs or examples.
+category: devops-cloud
+metadata:
+  author: ryudi84
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/ryudi84-sovereign-api-mock-generator
+created_at: 2026-04-06T18:20:45.450606177+00:00
+updated_at: 2026-04-06T18:20:45.450606177+00:00
+hash: fca679bab6c3e466f7361199fc5b9d668d887effd70874f793bacee1b071f7b4
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_gm3_alertworthy_feed
+name: gm3-alertworthy-feed
+slug: bigbadman-lab-gm3-alertworthy-feed
+description: Read-only access to the GM3 Alertworthy feed, providing real-time token market data for analysis agents.
+category: unknown
+metadata:
+  author: bigbadman
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/bigbadman-lab-gm3-alertworthy-feed
+created_at: 2026-04-06T18:20:36.425999306+00:00
+updated_at: 2026-04-06T18:20:36.425999306+00:00
+hash: 89a7e5e8475988fc5d417c38874d40c28b0efe64357ce2c48e01f8403c66ef3b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

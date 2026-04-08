@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_dub_links_api
+name: dub-links-api
+slug: ferminrp-dub-links-api
+description: Integrates Dub Links API endpoints to create, update, delete, retrieve, list, count, and run bulk operations.
+category: web-frontend-dev
+metadata:
+  author: ferminrp
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/ferminrp-dub-links-api
+created_at: 2026-04-06T18:20:52.681832703+00:00
+updated_at: 2026-04-06T18:20:52.681832703+00:00
+hash: e6730e94fe34335ceed9c7b8f26efeca6a8d5ff0024ba0206eae54984f498610
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

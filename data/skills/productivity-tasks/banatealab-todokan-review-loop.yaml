@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_todokan_review_loop
+name: todokan-review-loop
+slug: banatealab-todokan-review-loop
+description: Process Todokan task and thought boards with a review-loop workflow.
+category: productivity-tasks
+metadata:
+  author: banatealab
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/banatealab-todokan-review-loop
+created_at: 2026-04-06T18:20:49.666273318+00:00
+updated_at: 2026-04-06T18:20:49.666273318+00:00
+hash: 73003635d667ab3b29cbb24f2eeee82708b3cc4d3f9c42779e3d7e8aba1a0f03
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

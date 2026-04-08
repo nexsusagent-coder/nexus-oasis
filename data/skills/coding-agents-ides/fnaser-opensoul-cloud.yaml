@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_opensoul_cloud
+name: opensoul-cloud
+slug: fnaser-opensoul-cloud
+description: Share anonymized OpenClaw configurations with the OpenSoul community.
+category: coding-agents-ides
+metadata:
+  author: fnaser
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/fnaser-opensoul-cloud
+created_at: 2026-04-06T18:20:41.781521095+00:00
+updated_at: 2026-04-06T18:20:41.781521095+00:00
+hash: f1814db2cb8636461c9bad313daf67749db6fc6d6786af5b91d8b3f70c1629c1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

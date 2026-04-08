@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_pdf_documents_attendance_sheet
+name: attendance-sheet
+slug: gykdly-attendance-sheet
+description: Generate professional attendance sheets in xlsx format from employee work information.
+category: pdf-documents
+metadata:
+  author: gykdly
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- pdf-documents
+dependencies: []
+source_url: https://clawskills.sh/skills/gykdly-attendance-sheet
+created_at: 2026-04-06T18:20:48.628743581+00:00
+updated_at: 2026-04-06T18:20:48.628743581+00:00
+hash: 399c18e727670dc220f5bfe42faba59e1d7f9160c47c0968db61f2c4cb36ccb5
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_tuebingen_weather_graphics
+name: tuebingen-weather-graphics
+slug: zopyx-tuebingen-weather-graphics
+description: Generate and send a 5-day Tübingen weather graphic (PNG) from open-meteo.com.
+category: image-video-gen
+metadata:
+  author: zopyx
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/zopyx-tuebingen-weather-graphics
+created_at: 2026-04-06T18:20:47.492830893+00:00
+updated_at: 2026-04-06T18:20:47.492830893+00:00
+hash: 6b8a77838d1a13890017649e63277ebe7a44d675c8944f6ffd9c2eed21225775
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

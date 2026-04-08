@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_4to1_planner
+name: 4to1-planner
+slug: qingxuantang-4to1-planner
+description: AI planning coach using the 4To1 Method™ — turn 4-year vision into daily action.
+category: productivity-tasks
+metadata:
+  author: qingxuantang
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/qingxuantang-4to1-planner
+created_at: 2026-04-06T18:20:49.084078740+00:00
+updated_at: 2026-04-06T18:20:49.084078740+00:00
+hash: 918ec35c39ceb4266b67e6f2675f605a6b76323a6f3652003db82b04c00b44f7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

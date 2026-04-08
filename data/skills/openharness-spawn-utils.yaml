@@ -1,0 +1,46 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-spawn-utils
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-spawn-utils"
+description: "Environment variable to override the teammate command"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "filesystem"
+    source_repo: "openharness"
+    source_file: "spawn_utils.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "get_teammate_command"
+  - "build_inherited_cli_flags"
+  - "build_inherited_env_vars"
+  - "is_tmux_available"
+  - "is_inside_tmux"
+
+dependencies:
+  - "__future__"
+  - "os"
+  - "shlex"
+  - "shutil"
+  - "sys"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

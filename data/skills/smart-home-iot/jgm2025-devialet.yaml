@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_smart_home_iot_devialet
+name: devialet
+slug: jgm2025-devialet
+description: Control Devialet Phantom speakers via HTTP API.
+category: smart-home-iot
+metadata:
+  author: jgm2025
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- smart-home-iot
+dependencies: []
+source_url: https://clawskills.sh/skills/jgm2025-devialet
+created_at: 2026-04-06T18:20:51.170805596+00:00
+updated_at: 2026-04-06T18:20:51.170805596+00:00
+hash: fa386d7b8c52d3d886744471472c1f48d81847aa863a03464a47ec14821b7f10
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

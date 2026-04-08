@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_pdf_documents_json_repair_kit
+name: json-repair-kit
+slug: wanng-ide-json-repair-kit
+description: Repair malformed JSON files by normalizing them through Node.js evaluation.
+category: pdf-documents
+metadata:
+  author: wanng
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- pdf-documents
+dependencies: []
+source_url: https://clawskills.sh/skills/wanng-ide-json-repair-kit
+created_at: 2026-04-06T18:20:48.770446618+00:00
+updated_at: 2026-04-06T18:20:48.770446618+00:00
+hash: ede5e36362ecd1bdd429da3c61fdddda8c18a660f8196c59620f11dba1f964c2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

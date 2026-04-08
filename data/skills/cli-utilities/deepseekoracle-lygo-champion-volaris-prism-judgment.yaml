@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_lygo_champion_volaris_prism_judgment
+name: lygo-champion-volaris-prism-judgment
+slug: deepseekoracle-lygo-champion-volaris-prism-judgment
+description: LYGO root champion persona helper (VΩLARIS, Prism of Judgment)
+category: cli-utilities
+metadata:
+  author: deepseekoracle
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/deepseekoracle-lygo-champion-volaris-prism-judgment
+created_at: 2026-04-06T18:20:38.880023299+00:00
+updated_at: 2026-04-06T18:20:38.880023299+00:00
+hash: 1d640b908eb5579f280bb1e0b0327260eda8fcfe578f6525d594e19d0a1d62b2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

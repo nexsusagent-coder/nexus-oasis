@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_recite
+name: recite
+slug: rivradev-recite
+description: AI-driven receipt bookkeeping via the Recite Vision API.
+category: cli-utilities
+metadata:
+  author: rivradev
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/rivradev-recite
+created_at: 2026-04-06T18:20:38.945133410+00:00
+updated_at: 2026-04-06T18:20:38.945133410+00:00
+hash: 62b7128ea4328b9fe441858044fe4019cf340a7f08c0116247d95b262703de38
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

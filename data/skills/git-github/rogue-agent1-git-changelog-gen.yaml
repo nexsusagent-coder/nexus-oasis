@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_git_changelog_gen
+name: git-changelog-gen
+slug: rogue-agent1-git-changelog-gen
+description: Generate changelogs from git commits.
+category: git-github
+metadata:
+  author: rogue
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/rogue-agent1-git-changelog-gen
+created_at: 2026-04-06T18:20:46.092166046+00:00
+updated_at: 2026-04-06T18:20:46.092166046+00:00
+hash: 42cbb5b1ab4b83b66f3bdfa1b31dd55f3410db3dca542909f08befa2b41aa21a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

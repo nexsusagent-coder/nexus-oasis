@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_session_guard
+name: session-guard
+slug: bowen31337-session-guard
+description: Prevents and recovers from OpenClaw session bloat and context loss.
+category: coding-agents-ides
+metadata:
+  author: bowen31337
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/bowen31337-session-guard
+created_at: 2026-04-06T18:20:42.410436681+00:00
+updated_at: 2026-04-06T18:20:42.410436681+00:00
+hash: fed5a998e951dfc93cef35aadb6d6b6dd1c1e2d3e08c6c59c61bda01bf96d565
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_sovereign_test_generator
+name: sovereign-test-generator
+slug: ryudi84-sovereign-test-generator
+description: Analyzes codebases and generates comprehensive test suites.
+category: web-frontend-dev
+metadata:
+  author: ryudi84
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/ryudi84-sovereign-test-generator
+created_at: 2026-04-06T18:20:54.476166731+00:00
+updated_at: 2026-04-06T18:20:54.476166731+00:00
+hash: 7962aff941170049cc1bf26990f24b281019ebfe6232299c681a23bf92694cd9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

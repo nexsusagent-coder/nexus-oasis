@@ -1,0 +1,60 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-command-flows
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-command-flows"
+description: "Auto-generated skill from test-command-flows"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_command_flows.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "root"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_build_context"
+  - "_write_fixture_plugin"
+  - "test_command_flow_for_memory_modes_and_tasks"
+  - "test_plugin_command_lifecycle_flow"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "openharness.commands.registry"
+  - "openharness.config.settings"
+  - "openharness.engine.messages"
+  - "openharness.engine.query_engine"
+  - "openharness.permissions"
+  - "openharness.state"
+  - "openharness.tools"
+  - "pathlib"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

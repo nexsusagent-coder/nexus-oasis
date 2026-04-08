@@ -1,0 +1,154 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-team-lifecycle
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-team-lifecycle"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_team_lifecycle.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "agent_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "manager"
+  - "_make_member"
+  - "test_team_member_round_trip"
+  - "test_team_member_default_status"
+  - "test_team_file_round_trip"
+  - "test_team_file_load_missing_raises"
+  - "test_create_team_persists_to_disk"
+  - "test_create_team_duplicate_raises"
+  - "test_get_team_returns_none_for_missing"
+  - "test_get_team_returns_team_file"
+  - "test_delete_team_removes_from_disk"
+  - "test_delete_nonexistent_team_raises"
+  - "test_list_teams_empty_initially"
+  - "test_list_teams_returns_all_sorted"
+  - "test_add_member_persists"
+  - "test_add_member_replaces_existing"
+  - "test_remove_member"
+  - "test_remove_nonexistent_member_raises"
+  - "test_add_member_to_nonexistent_team_raises"
+
+dependencies:
+  - "__future__"
+  - "openharness.swarm.team_lifecycle"
+  - "pathlib"
+  - "pytest"
+  - "time"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

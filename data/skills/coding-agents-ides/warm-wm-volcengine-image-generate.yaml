@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_volcengine_image_generate
+name: volcengine-image-generate
+slug: warm-wm-volcengine-image-generate
+description: Using volcengine image_generate.py script to generate image, need to provide clear and specific `prompt`.
+category: coding-agents-ides
+metadata:
+  author: warm
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 3
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/warm-wm-volcengine-image-generate
+created_at: 2026-04-06T18:20:43.238018613+00:00
+updated_at: 2026-04-06T18:20:43.238018613+00:00
+hash: 235b72ade6a39db33e0c4cd0ac1b3cf4729fa92503b72c3fda01d389c904495f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_autofillin
+name: autofillin
+slug: leohan123123-autofillin
+description: Automated web form filling and file uploading skill.
+category: browser-automation
+metadata:
+  author: leohan123123
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/leohan123123-autofillin
+created_at: 2026-04-06T18:20:37.000296507+00:00
+updated_at: 2026-04-06T18:20:37.000296507+00:00
+hash: 8db0e60d6393f1483dfe822d4fd34f18d68848d6989574abddcd88f100f9e5eb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: true
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

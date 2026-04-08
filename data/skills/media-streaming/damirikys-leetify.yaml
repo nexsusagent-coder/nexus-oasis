@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_media_streaming_leetify
+name: leetify
+slug: damirikys-leetify
+description: Get CS2 player statistics, match analysis, and gameplay insights from Leetify API.
+category: media-streaming
+metadata:
+  author: damirikys
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- media-streaming
+dependencies: []
+source_url: https://clawskills.sh/skills/damirikys-leetify
+created_at: 2026-04-06T18:20:48.010179490+00:00
+updated_at: 2026-04-06T18:20:48.010179490+00:00
+hash: 4450acf2216a096fed3874701046c183ef651f411203cf2555a14aad56a984cf
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

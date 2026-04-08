@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_playwright_mcp_1_0_0
+name: playwright-mcp-1-0-0
+slug: itsjustfred-playwright-mcp-1-0-0
+description: Browser automation via Playwright MCP server.
+category: web-frontend-dev
+metadata:
+  author: itsjustfred
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/itsjustfred-playwright-mcp-1-0-0
+created_at: 2026-04-06T18:20:53.961111785+00:00
+updated_at: 2026-04-06T18:20:53.961111785+00:00
+hash: 3cc7557d11be24040d80361ba3663f841278d091d502af59107dc47c4eabb247
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

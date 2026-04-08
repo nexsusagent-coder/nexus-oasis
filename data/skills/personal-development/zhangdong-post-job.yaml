@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_personal_development_post_job
+name: post-job
+slug: zhangdong-post-job
+description: Post free job ads to 20+ job boards such as LinkedIn, Indeed, Ziprecruiter etc. to receive applicant resumes via email.
+category: personal-development
+metadata:
+  author: zhangdong
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- personal-development
+dependencies: []
+source_url: https://clawskills.sh/skills/zhangdong-post-job
+created_at: 2026-04-06T18:20:49.060012641+00:00
+updated_at: 2026-04-06T18:20:49.060012641+00:00
+hash: 64ae39d019fa280bd9e096874b0a35de7704cd4ba8d81e759a286c5a4ec26d34
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

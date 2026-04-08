@@ -1,0 +1,41 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-indexx
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: typescript
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-indexx"
+description: "Auto-generated skill from indexx"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "index.tsx"
+    language: "typescript"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "restoreCursor ="
+
+dependencies:
+  - "ink;"
+  - "node:fs;"
+  - "node:tty;"
+  - "react;"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

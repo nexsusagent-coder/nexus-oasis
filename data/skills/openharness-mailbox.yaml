@@ -1,0 +1,120 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-mailbox
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-mailbox"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "mailbox.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "agent_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "sender"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "recipient"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "content"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "sender"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "recipient"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "msg"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "msg"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "msg"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "msg"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "get_team_dir"
+  - "get_agent_mailbox_dir"
+  - "_make_message"
+  - "create_user_message"
+  - "create_shutdown_request"
+  - "create_idle_notification"
+  - "create_permission_request_message"
+  - "create_permission_response_message"
+  - "create_sandbox_permission_request_message"
+  - "create_sandbox_permission_response_message"
+  - "is_permission_request"
+  - "is_permission_response"
+  - "is_sandbox_permission_request"
+  - "is_sandbox_permission_response"
+  - "write_to_mailbox"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "dataclasses"
+  - "json"
+  - "openharness.swarm.lockfile"
+  - "os"
+  - "pathlib"
+  - "time"
+  - "typing"
+  - "uuid"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

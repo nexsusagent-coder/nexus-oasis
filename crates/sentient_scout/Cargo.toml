@@ -1,0 +1,36 @@
+[package]
+name = "sentient_scout"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+log.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+
+# HTTP & Scraping
+reqwest.workspace = true
+scraper = "0.22"  # HTML parsing
+select = "0.6"    # CSS selectors
+url = "2"
+base64 = "0.22"
+sha2 = "0.10"
+regex.workspace = true
+
+# Anti-detection
+fastrand = "2"
+parking_lot.workspace = true
+async-trait.workspace = true
+
+# Rate limiting
+governor = "0.8"
+nonzero_ext = "0.3"
+
+[dev-dependencies]
+tokio-test = "0.4"

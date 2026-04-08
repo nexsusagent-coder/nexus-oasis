@@ -1,0 +1,71 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-adapter
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-adapter"
+description: "Auto-generated skill from test-adapter"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "filesystem"
+    source_repo: "openharness"
+    source_file: "test_adapter.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_build_sandbox_runtime_config_maps_settings"
+  - "test_sandbox_availability_reports_native_windows_unsupported"
+  - "test_wrap_command_for_sandbox_returns_original_when_disabled"
+  - "test_wrap_command_for_sandbox_writes_settings_file"
+  - "test_wrap_command_for_sandbox_raises_when_required"
+  - "test_create_shell_subprocess_preserves_exit_code_with_sandbox"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "json"
+  - "openharness.config.settings"
+  - "openharness.sandbox.adapter"
+  - "openharness.utils.shell"
+  - "pathlib"
+  - "pytest"
+  - "shutil"
+  - "tempfile"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-discord
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-discord"
+description: "Auto-generated skill from discord"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "discord.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  []
+
+dependencies:
+  - "asyncio"
+  - "httpx"
+  - "json"
+  - "logging"
+  - "openharness.channels.bus.events"
+  - "openharness.channels.bus.queue"
+  - "openharness.channels.impl.base"
+  - "openharness.config.schema"
+  - "openharness.utils.helpers"
+  - "pathlib"
+  - "typing"
+  - "websockets"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

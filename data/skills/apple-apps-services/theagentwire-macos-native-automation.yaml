@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_apple_apps_services_macos_native_automation
+name: macos-native-automation
+slug: theagentwire-macos-native-automation
+description: Hardware-level mouse, keyboard & dialog automation on macOS via CGEvent + AppleScript.
+category: apple-apps-services
+metadata:
+  author: theagentwire
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- apple-apps-services
+dependencies: []
+source_url: https://clawskills.sh/skills/theagentwire-macos-native-automation
+created_at: 2026-04-06T18:20:36.796050300+00:00
+updated_at: 2026-04-06T18:20:36.796050300+00:00
+hash: c601f795cb5a2e3130061950631cbd3699e6984c010928733c2b7248d59abb09
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

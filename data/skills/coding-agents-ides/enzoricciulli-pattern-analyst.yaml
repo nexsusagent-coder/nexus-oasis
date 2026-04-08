@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_pattern_analyst
+name: pattern-analyst
+slug: enzoricciulli-pattern-analyst
+description: Analyze interactions to identify patterns in what Enzo shares, why he shares it, and how it connects to his goals.
+category: coding-agents-ides
+metadata:
+  author: enzoricciulli
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/enzoricciulli-pattern-analyst
+created_at: 2026-04-06T18:20:41.844717675+00:00
+updated_at: 2026-04-06T18:20:41.844717675+00:00
+hash: 7c6b37df1522449f90a849f31ce2b6fea521c34450761eda4af608f5200cb38f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

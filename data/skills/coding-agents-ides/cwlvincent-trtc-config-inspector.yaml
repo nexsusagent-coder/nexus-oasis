@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_trtc_config_inspector
+name: trtc-config-inspector
+slug: cwlvincent-trtc-config-inspector
+description: TRTC SDK configuration inspection and analysis tool.
+category: coding-agents-ides
+metadata:
+  author: cwlvincent
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/cwlvincent-trtc-config-inspector
+created_at: 2026-04-06T18:20:43.008050877+00:00
+updated_at: 2026-04-06T18:20:43.008050877+00:00
+hash: 0cf57559a7cba180284d1809282434c99044164776453e18b7caca82460dd4c5
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

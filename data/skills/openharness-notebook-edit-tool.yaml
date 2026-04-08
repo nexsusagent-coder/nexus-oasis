@@ -1,0 +1,80 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-notebook-edit-tool
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-notebook-edit-tool"
+description: "Auto-generated skill from notebook-edit-tool"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "notebook_edit_tool.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "base"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "candidate"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "create_if_missing"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cell_type"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "source"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_resolve_path"
+  - "_load_notebook"
+  - "_empty_cell"
+  - "_normalize_source"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "openharness.tools.base"
+  - "pathlib"
+  - "pydantic"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

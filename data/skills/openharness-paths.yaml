@@ -1,0 +1,51 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-paths
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-paths"
+description: "Auto-generated skill from paths"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "paths.py"
+    language: "python"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "get_project_memory_dir"
+  - "get_memory_entrypoint"
+
+dependencies:
+  - "__future__"
+  - "hashlib"
+  - "openharness.config.paths"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

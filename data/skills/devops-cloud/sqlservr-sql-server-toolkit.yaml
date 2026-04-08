@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_sql_server_toolkit
+name: sql-server-toolkit
+slug: sqlservr-sql-server-toolkit
+description: Command-line toolkit for Microsoft SQL Server.
+category: devops-cloud
+metadata:
+  author: sqlservr
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/sqlservr-sql-server-toolkit
+created_at: 2026-04-06T18:20:45.469190183+00:00
+updated_at: 2026-04-06T18:20:45.469190183+00:00
+hash: 8f8a28fa35a29e3e293e299f194a83d8163bf7345537ff63a3901b544885db26
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

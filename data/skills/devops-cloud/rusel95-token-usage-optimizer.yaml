@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_token_usage_optimizer
+name: token-usage-optimizer
+slug: rusel95-token-usage-optimizer
+description: Maximize your Claude Code subscription value with smart usage monitoring and burn rate optimization.
+category: devops-cloud
+metadata:
+  author: rusel95
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/rusel95-token-usage-optimizer
+created_at: 2026-04-06T18:20:45.580864849+00:00
+updated_at: 2026-04-06T18:20:45.580864849+00:00
+hash: 5afc4d540941c94c6d0e1db1dec3dbc08010b74bd54e60eec7e8b8cd6984d2f5
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

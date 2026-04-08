@@ -1,0 +1,51 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-voice-mode
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-voice-mode"
+description: "Auto-generated skill from voice-mode"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "voice_mode.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "enabled"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "toggle_voice_mode"
+  - "inspect_voice_capabilities"
+
+dependencies:
+  - "__future__"
+  - "dataclasses"
+  - "openharness.api.provider"
+  - "shutil"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_health_fitness_arc_skill_sandbox
+name: arc-skill-sandbox
+slug: trypto1019-arc-skill-sandbox
+description: Test untrusted skills in an isolated environment before installing.
+category: health-fitness
+metadata:
+  author: trypto1019
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- health-fitness
+dependencies: []
+source_url: https://clawskills.sh/skills/trypto1019-arc-skill-sandbox
+created_at: 2026-04-06T18:20:46.541029842+00:00
+updated_at: 2026-04-06T18:20:46.541029842+00:00
+hash: ec9ec7736acc8da37b0b0120277d3d7c763e77a2e8329929886b0b5fd9642323
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

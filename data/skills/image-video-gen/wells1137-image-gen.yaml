@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_image_gen
+name: image-gen
+slug: wells1137-image-gen
+description: Generate images using multiple AI models — Midjourney (via Legnext.ai), Flux, SDXL, Nano Banana (Gemini)
+category: image-video-gen
+metadata:
+  author: wells1137
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/wells1137-image-gen
+created_at: 2026-04-06T18:20:47.250437263+00:00
+updated_at: 2026-04-06T18:20:47.250437263+00:00
+hash: bbdeda1030d9ff075625879ded9399d4e9368d08b4964aace822da437a96e09b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

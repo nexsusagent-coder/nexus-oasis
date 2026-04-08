@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_find_slills
+name: find-slills
+slug: rumengkai-find-slills
+description: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X".
+category: cli-utilities
+metadata:
+  author: rumengkai
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/rumengkai-find-slills
+created_at: 2026-04-06T18:20:38.753665866+00:00
+updated_at: 2026-04-06T18:20:38.753665866+00:00
+hash: 518207319bc0b16e0a190c4c469fe0524236a8548b11213acff95b922fee8b98
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

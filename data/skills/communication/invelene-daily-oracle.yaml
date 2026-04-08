@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_daily_oracle
+name: daily-oracle
+slug: invelene-daily-oracle
+description: A background agent that generates a daily life prediction by analyzing local data and social signals.
+category: communication
+metadata:
+  author: invelene
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/invelene-daily-oracle
+created_at: 2026-04-06T18:20:43.621129708+00:00
+updated_at: 2026-04-06T18:20:43.621129708+00:00
+hash: fd1339ed6e9082f63f3544b0902a9a48a7c599ed8f720bc7839de7c059ec68b1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

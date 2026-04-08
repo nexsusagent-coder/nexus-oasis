@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_neuralink_decoder
+name: neuralink-decoder
+slug: aadipapp-neuralink-decoder
+description: Simulates and decodes neural spike activity into cursor movement (BCI).
+category: coding-agents-ides
+metadata:
+  author: aadipapp
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/aadipapp-neuralink-decoder
+created_at: 2026-04-06T18:20:41.638400717+00:00
+updated_at: 2026-04-06T18:20:41.638400717+00:00
+hash: 6b7c86cf392f7226cf0e738bf6c6c8a95c1851fe4728a37fa86eca67cd6358f1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

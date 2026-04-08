@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_geo_blocking
+name: geo-blocking
+slug: raghulpasupathi-geo-blocking
+description: Skills for geographic restrictions and regional compliance.
+category: image-video-gen
+metadata:
+  author: raghulpasupathi
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/raghulpasupathi-geo-blocking
+created_at: 2026-04-06T18:20:47.192659824+00:00
+updated_at: 2026-04-06T18:20:47.192659824+00:00
+hash: c266c3a8195c9cafeeb0497701c3e584b00e8e34206d7577da104a4ebc74d235
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

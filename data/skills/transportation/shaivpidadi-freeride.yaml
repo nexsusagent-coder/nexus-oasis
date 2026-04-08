@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_freeride
+name: freeride
+slug: shaivpidadi-freeride
+description: Manages free AI models from OpenRouter for OpenClaw.
+category: transportation
+metadata:
+  author: shaivpidadi
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/shaivpidadi-freeride
+created_at: 2026-04-06T18:20:51.601427764+00:00
+updated_at: 2026-04-06T18:20:51.601427764+00:00
+hash: b7e857d53e56b58cf26576c1bab1d8fc8c5ba702059a2eb5d98830f4c0af51b6
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

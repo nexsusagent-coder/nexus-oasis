@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_marketing_sales_blog_to_kindle
+name: blog-to-kindle
+slug: ainekomacx-blog-to-kindle
+description: Scrape blogs/essay sites and compile into Kindle-friendly.
+category: marketing-sales
+metadata:
+  author: ainekomacx
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- marketing-sales
+dependencies: []
+source_url: https://clawskills.sh/skills/ainekomacx-blog-to-kindle
+created_at: 2026-04-06T18:20:47.669703380+00:00
+updated_at: 2026-04-06T18:20:47.669703380+00:00
+hash: fc4bf25e0416b04bb8d8dce8751ea4cca2521c1059467ae2df9107a890d53534
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

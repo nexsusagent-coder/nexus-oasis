@@ -1,0 +1,42 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openclaw-file-read
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openclaw
+# Dil: typescript
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openclaw-file-read"
+description: "Dosya okuma ve içerik çıkarma"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "filesystem"
+    source_repo: "openclaw"
+    source_file: "read.ts"
+    language: "typescript"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "path"
+    type: "string"
+    required: true
+    default: null
+    description: "Dosya yolu"
+
+commands:
+  - "readFile(path)"
+
+dependencies:
+  - "fs-extra"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_epistemic_council
+name: epistemic-council
+slug: su-ariel-epistemic-council
+description: Use this skill for all Epistemic Council pipeline operations.
+category: devops-cloud
+metadata:
+  author: su
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/su-ariel-epistemic-council
+created_at: 2026-04-06T18:20:44.724199288+00:00
+updated_at: 2026-04-06T18:20:44.724199288+00:00
+hash: b2c4ee441083f4d499b99471db820cb775fe8acd6948c8eaae987a7261eb7eab
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

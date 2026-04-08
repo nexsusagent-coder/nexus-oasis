@@ -1,0 +1,42 @@
+[package]
+name = "sentient_anomaly"
+version.workspace = true
+edition.workspace = true
+description = "SENTIENT Anomaly Detection - Real-time Security Monitoring with Prometheus"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# IDs
+uuid.workspace = true
+
+# Errors
+thiserror.workspace = true
+anyhow.workspace = true
+
+# Logging
+log.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Metrics
+prometheus = "0.13"
+
+# Math
+statrs = "0.17"
+
+# Concurrency
+parking_lot.workspace = true
+crossbeam.workspace = true
+
+[features]
+default = []
+prometheus_export = []

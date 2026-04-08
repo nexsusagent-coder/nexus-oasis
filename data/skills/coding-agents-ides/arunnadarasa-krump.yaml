@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_krump
+name: krump
+slug: arunnadarasa-krump
+description: A dance skill designed to teach OpenClaw agents the fundamentals of Krump, including its history, fam system.
+category: coding-agents-ides
+metadata:
+  author: arunnadarasa
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/arunnadarasa-krump
+created_at: 2026-04-06T18:20:41.279444869+00:00
+updated_at: 2026-04-06T18:20:41.279444869+00:00
+hash: fd3fa2e2f22485f05c20aec3cb200343baa98db06872c32d5f9834ae94a8ae3e
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_cal_com_automation
+name: cal-com-automation
+slug: sohamganatra-cal-com-automation
+description: Automate Cal.com tasks via Rube MCP (Composio)
+category: browser-automation
+metadata:
+  author: sohamganatra
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/sohamganatra-cal-com-automation
+created_at: 2026-04-06T18:20:37.064162867+00:00
+updated_at: 2026-04-06T18:20:37.064162867+00:00
+hash: 894ba4add4be1ea59fdb59dfdea37c050b0300d72e224f1e9aa7a2d28855cb6f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_personal_development_zenplus_health
+name: zenplus-health
+slug: ollieparsley-zenplus-health
+description: Workplace wellness for stress, anxiety, and burnout - mindfulness exercises, breathing techniques, mood check-ins.
+category: personal-development
+metadata:
+  author: ollieparsley
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- personal-development
+dependencies: []
+source_url: https://clawskills.sh/skills/ollieparsley-zenplus-health
+created_at: 2026-04-06T18:20:49.072719945+00:00
+updated_at: 2026-04-06T18:20:49.072719945+00:00
+hash: 13e8a6f65c3a8278c7f0bb2fa3c4c9f3e98033d84b35b64eb9314f115ff22402
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

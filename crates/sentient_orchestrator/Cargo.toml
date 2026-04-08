@@ -1,0 +1,30 @@
+[package]
+name = "sentient_orchestrator"
+version.workspace = true
+edition.workspace = true
+description = "SENTIENT Agent Loop & Orchestrator — Otonom görev döngüsü & Dynamic Routing v4.0.0"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+sentient_vgate = { path = "../sentient_vgate" }
+sentient_memory = { path = "../sentient_memory" }
+sentient_graph = { path = "../sentient_graph" }
+sentient_sandbox = { path = "../sentient_sandbox" }
+sentient_scout = { path = "../sentient_scout" }
+sentient_forge = { path = "../sentient_forge" }
+sentient_research = { path = "../sentient_research" }
+sentient-settings = { path = "../sentient_settings" }
+
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+log.workspace = true
+anyhow.workspace = true
+async-trait = "0.1"
+futures = "0.3"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+parking_lot = "0.12"
+
+[dev-dependencies]
+env_logger.workspace = true

@@ -1,0 +1,72 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-copilot-auth
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-copilot-auth"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "copilot_auth.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "enterprise_url"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "token"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "enterprise_url"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "copilot_api_base"
+  - "_auth_file_path"
+  - "save_copilot_auth"
+  - "load_copilot_auth"
+  - "load_github_token"
+  - "clear_github_token"
+  - "request_device_code"
+  - "poll_for_access_token"
+
+dependencies:
+  - "__future__"
+  - "dataclasses"
+  - "httpx"
+  - "json"
+  - "logging"
+  - "openharness.config.paths"
+  - "pathlib"
+  - "time"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

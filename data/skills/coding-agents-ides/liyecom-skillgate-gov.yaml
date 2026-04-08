@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_skillgate_gov
+name: skillgate-gov
+slug: liyecom-skillgate-gov
+description: 'Supply-chain governance for OpenClaw skills: scan, assess, quarantine/restore.'
+category: coding-agents-ides
+metadata:
+  author: liyecom
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/liyecom-skillgate-gov
+created_at: 2026-04-06T18:20:42.576237805+00:00
+updated_at: 2026-04-06T18:20:42.576237805+00:00
+hash: 993d65854c3df44c3dd0c884ed38a65019452536d2f199da460cd06cfc835127
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

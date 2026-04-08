@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_dj_set_ripper
+name: dj-set-ripper
+slug: robinnnnn-dj-set-ripper
+description: Download individual songs from a DJ set or mix.
+category: coding-agents-ides
+metadata:
+  author: robinnnnn
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/robinnnnn-dj-set-ripper
+created_at: 2026-04-06T18:20:40.633506327+00:00
+updated_at: 2026-04-06T18:20:40.633506327+00:00
+hash: 58f463be5dca531d89cd7a69777c28d61997f115b8e42ec40dde4f951b20391a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

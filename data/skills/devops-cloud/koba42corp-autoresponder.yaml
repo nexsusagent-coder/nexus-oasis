@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_autoresponder
+name: autoresponder
+slug: koba42corp-autoresponder
+description: Monitor iMessage/SMS conversations and auto-respond based.
+category: devops-cloud
+metadata:
+  author: koba42corp
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/koba42corp-autoresponder
+created_at: 2026-04-06T18:20:44.432981403+00:00
+updated_at: 2026-04-06T18:20:44.432981403+00:00
+hash: 1f1dba436eef57c9d5db4e2c0213365168d80765193288f7e3c41d1902b0ce30
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

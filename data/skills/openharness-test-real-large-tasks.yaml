@@ -1,0 +1,146 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-real-large-tasks
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-real-large-tasks"
+description: "===================================================================="
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_real_large_tasks.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "system_prompt"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd=None"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "hook_executor=None"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "max_tokens=4096"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "max_turns=DEFAULT_MAX_TURNS"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "events"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "a"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "b"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "a"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "b"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "a"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "b"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "a"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "b"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "data"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "data"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "data"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "make_engine"
+  - "collect"
+  - "task_security_audit_with_hooks"
+  - "task_coordinator_code_review"
+  - "task_migration_plan_with_memory"
+  - "task_bugfix_in_worktree"
+  - "add"
+  - "subtract"
+  - "multiply"
+  - "divide"
+  - "test_all"
+  - "task_full_pipeline"
+  - "task_refactor_with_session"
+  - "handle_create_user"
+  - "handle_update_user"
+  - "handle_create_admin"
+  - "main"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "openharness.config.settings"
+  - "os"
+  - "pathlib"
+  - "pytest"
+  - "sys"
+  - "tempfile"
+  - "time"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

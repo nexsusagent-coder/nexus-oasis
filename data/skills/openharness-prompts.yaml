@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-prompts
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-prompts"
+description: "Auto-generated skill from prompts"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "prompts.py"
+    language: "python"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_read_text"
+  - "build_ohmo_system_prompt"
+
+dependencies:
+  - "__future__"
+  - "ohmo.memory"
+  - "ohmo.workspace"
+  - "openharness.memory"
+  - "openharness.prompts.system_prompt"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

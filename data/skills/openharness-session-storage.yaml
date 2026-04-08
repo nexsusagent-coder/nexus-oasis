@@ -1,0 +1,81 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-session-storage
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-session-storage"
+description: "Auto-generated skill from session-storage"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "session_storage.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "limit"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "session_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "get_project_session_dir"
+  - "save_session_snapshot"
+  - "load_session_snapshot"
+  - "list_session_snapshots"
+  - "load_session_by_id"
+  - "export_session_markdown"
+
+dependencies:
+  - "__future__"
+  - "hashlib"
+  - "json"
+  - "openharness.api.usage"
+  - "openharness.config.paths"
+  - "openharness.engine.messages"
+  - "pathlib"
+  - "time"
+  - "typing"
+  - "uuid"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

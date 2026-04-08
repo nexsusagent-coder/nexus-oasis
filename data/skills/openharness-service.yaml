@@ -1,0 +1,84 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-service
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-service"
+description: "Auto-generated skill from service"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "service.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "start_gateway_process"
+  - "stop_gateway_process"
+  - "gateway_status"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "contextlib"
+  - "logging"
+  - "ohmo.gateway.bridge"
+  - "ohmo.gateway.config"
+  - "ohmo.gateway.models"
+  - "ohmo.gateway.runtime"
+  - "ohmo.workspace"
+  - "openharness.channels.bus.queue"
+  - "openharness.channels.impl.manager"
+  - "os"
+  - "pathlib"
+  - "signal"
+  - "subprocess"
+  - "sys"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

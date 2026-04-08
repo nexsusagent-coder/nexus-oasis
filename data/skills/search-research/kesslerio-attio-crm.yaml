@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_attio_crm
+name: attio-crm
+slug: kesslerio-attio-crm
+description: Manage Attio CRM records (companies, people, deals, tasks, notes).
+category: search-research
+metadata:
+  author: kesslerio
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/kesslerio-attio-crm
+created_at: 2026-04-06T18:20:49.867506184+00:00
+updated_at: 2026-04-06T18:20:49.867506184+00:00
+hash: eef806d99044c079c0d2251fe6b6818a9b796c5df359d7746d8fc5e28228fa1b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

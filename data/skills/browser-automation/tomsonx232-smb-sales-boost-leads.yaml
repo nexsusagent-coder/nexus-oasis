@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_smb_sales_boost_leads
+name: smb-sales-boost-leads
+slug: tomsonx232-smb-sales-boost-leads
+description: Query and manage leads from the SMB Sales Boost B2B lead database.
+category: browser-automation
+metadata:
+  author: tomsonx232
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/tomsonx232-smb-sales-boost-leads
+created_at: 2026-04-06T18:20:37.740187161+00:00
+updated_at: 2026-04-06T18:20:37.740187161+00:00
+hash: b14f07219f7330e2e7dffc7ca8e27eb6a4c7605ca631f4ea649a000a9d8ec20c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

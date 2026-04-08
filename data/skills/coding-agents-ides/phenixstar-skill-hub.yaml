@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_skill_hub
+name: skill-hub
+slug: phenixstar-skill-hub
+description: OpenClaw skill discovery, security vetting & install.
+category: coding-agents-ides
+metadata:
+  author: phenixstar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/phenixstar-skill-hub
+created_at: 2026-04-06T18:20:42.515170095+00:00
+updated_at: 2026-04-06T18:20:42.515170095+00:00
+hash: 6ad458e016b51ee8a9b1ca8521223b85d01beb37a7ea4c90df0eae5ec6d7babb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

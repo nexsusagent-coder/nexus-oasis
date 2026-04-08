@@ -1,0 +1,37 @@
+[package]
+name = "oasis_manus"
+version = "0.1.0"
+edition = "2021"
+authors = ["SENTIENT Team"]
+license = "MIT"
+description = "L5: EXECUTION - OpenManus Asimilasyonu - Docker izole kod çalıştırma"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+sentient_vgate = { path = "../sentient_vgate" }
+
+# Async
+tokio = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Docker API
+bollard = "0.18"
+
+# Utilities
+uuid = { workspace = true }
+log = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+regex = "1.10"
+url = "2.5"
+rand = "0.8"
+base64 = "0.22"
+bytes = "1"
+
+[dev-dependencies]
+tokio-test = "0.4"

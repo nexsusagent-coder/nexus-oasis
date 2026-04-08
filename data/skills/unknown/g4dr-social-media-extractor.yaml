@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_social_media_extractor
+name: social-media-extractor
+slug: g4dr-social-media-extractor
+description: This skill enables Claude to extract public data from **Instagram**, **TikTok**, and **Reddit**.
+category: unknown
+metadata:
+  author: g4dr
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/g4dr-social-media-extractor
+created_at: 2026-04-06T18:20:36.608873747+00:00
+updated_at: 2026-04-06T18:20:36.608873747+00:00
+hash: 707c0ae91631e066fc572dae0c3ebf201ce5c32eee756169b97712eae2e29efb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

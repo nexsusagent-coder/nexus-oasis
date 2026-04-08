@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_tweet_summarizer_lite
+name: tweet-summarizer-lite
+slug: franciscobuiltdat-tweet-summarizer-lite
+description: Fetch and summarize single tweets from Twitter/X.
+category: git-github
+metadata:
+  author: franciscobuiltdat
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/franciscobuiltdat-tweet-summarizer-lite
+created_at: 2026-04-06T18:20:46.472035819+00:00
+updated_at: 2026-04-06T18:20:46.472035819+00:00
+hash: 507bd3ef98598bcab01c9e790faf836252a5a467b1907bc6c514a872f33f5e3f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

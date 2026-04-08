@@ -1,0 +1,42 @@
+# ─── ASENA PROMETHEUS CONFIG ───
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'asena-monitor'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  # ─── ASENA Gateway Metrics ───
+  - job_name: 'asena-gateway'
+    static_configs:
+      - targets: ['gateway:8080']
+    metrics_path: '/metrics'
+
+  # ─── ASENA V-GATE Metrics ───
+  - job_name: 'asena-vgate'
+    static_configs:
+      - targets: ['vgate:1071']
+    metrics_path: '/metrics'
+
+  # ─── Prometheus Self-Monitoring ───
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # ─── Node Exporter (sistem metrikleri) ───
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # ─── cAdvisor (container metrikleri) ───
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']

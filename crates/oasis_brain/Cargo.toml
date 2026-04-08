@@ -1,0 +1,26 @@
+[package]
+name = "oasis_brain"
+version = "4.0.0"
+edition = "2021"
+description = "OASIS Brain - SENTIENT OS Autonomous Thinking Module with Gemma 4"
+authors = ["SENTIENT Core Team"]
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+log = { workspace = true }
+async-trait = "0.1"
+thiserror = "1.0"
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+# Internal dependencies
+sentient_local = { path = "../sentient_local" }
+sentient_memory = { path = "../sentient_memory" }
+sentient_common = { path = "../sentient_common" }
+
+[lib]
+name = "oasis_brain"
+path = "src/lib.rs"

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_rag_eval
+name: rag-eval
+slug: jonathanjing-rag-eval
+description: Evaluate your RAG pipeline quality using Ragas metrics (faithfulness, answer relevancy, context precision).
+category: coding-agents-ides
+metadata:
+  author: jonathanjing
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/jonathanjing-rag-eval
+created_at: 2026-04-06T18:20:42.066018748+00:00
+updated_at: 2026-04-06T18:20:42.066018748+00:00
+hash: 1675daffba35360a3f4c152ee5b5b4277758002663d5569ba3b1ff1f7a397a82
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

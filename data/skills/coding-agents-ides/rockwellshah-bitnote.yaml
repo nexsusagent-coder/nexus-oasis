@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_bitnote
+name: bitnote
+slug: rockwellshah-bitnote
+description: Decentralized encrypted memory for agents—truly own your secrets, identity, and memories.
+category: coding-agents-ides
+metadata:
+  author: rockwellshah
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/rockwellshah-bitnote
+created_at: 2026-04-06T18:20:39.910100289+00:00
+updated_at: 2026-04-06T18:20:39.910100289+00:00
+hash: 6fca536e153c7def8e02675bd049b326f69bb68b1f04bbf49ccb28fb443fdc51
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

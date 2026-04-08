@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_rollhub_affiliate
+name: rollhub-affiliate
+slug: rollhub-dev-rollhub-affiliate
+description: Earn crypto promoting provably fair AI casino.
+category: image-video-gen
+metadata:
+  author: rollhub
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/rollhub-dev-rollhub-affiliate
+created_at: 2026-04-06T18:20:47.442350906+00:00
+updated_at: 2026-04-06T18:20:47.442350906+00:00
+hash: ff7eef4b19db600a2d1d8b5516c0df64047a776c4ef07d32bed76ae877929613
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

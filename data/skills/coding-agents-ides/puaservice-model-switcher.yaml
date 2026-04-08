@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_model_switcher
+name: model-switcher
+slug: puaservice-model-switcher
+description: Automatically switch between fast (haiku) and powerful (sonnet) models based on task complexity.
+category: coding-agents-ides
+metadata:
+  author: puaservice
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/puaservice-model-switcher
+created_at: 2026-04-06T18:20:41.529353141+00:00
+updated_at: 2026-04-06T18:20:41.529353141+00:00
+hash: 3eb23c2ba2a75f33908f51cce9cc0fde2197867929ed4a9c61076f9310959adb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

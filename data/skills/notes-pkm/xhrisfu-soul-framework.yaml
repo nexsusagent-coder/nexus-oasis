@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_notes_pkm_soul_framework
+name: soul-framework
+slug: xhrisfu-soul-framework
+description: A blueprint for giving AI agents a consistent, deep, and opinionated personality.
+category: notes-pkm
+metadata:
+  author: xhrisfu
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- notes-pkm
+dependencies: []
+source_url: https://clawskills.sh/skills/xhrisfu-soul-framework
+created_at: 2026-04-06T18:20:48.582112546+00:00
+updated_at: 2026-04-06T18:20:48.582112546+00:00
+hash: 75a88888d0f4b2dd0ef72630fcb3b89eb3397bd1de80e47dde2ef5a859f6cec6
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

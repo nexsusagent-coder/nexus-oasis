@@ -1,0 +1,58 @@
+# ─── ASENA V-GATE SERVICE ───
+# NEXUS OASIS AI Operating System - Vekil Sunucu
+# API Anahtarı Yönetimi, Guardrails, Rate Limiting
+# Port: 1071
+#
+# Kurulum:
+#   sudo cp deploy/asena-vgate.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable asena-vgate
+#   sudo systemctl start asena-vgate
+
+[Unit]
+Description=ASENA V-GATE - Vekil Sunucu (API Proxy)
+Documentation=https://github.com/nexus-oasis/asena
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/ASENA_CORE
+
+# Ortam değişkenleri (.env dosyasından yüklenir)
+EnvironmentFile=/root/ASENA_CORE/.env
+
+# V-GATE test/monitoring servisi
+ExecStart=/bin/bash -c 'while true; do /root/ASENA_CORE/target/release/asena vgate test; sleep 60; done'
+
+# Yeniden başlatma ayarları
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Kaynak limitleri
+LimitNOFILE=32768
+LimitNPROC=1024
+MemoryMax=1G
+CPUQuota=100%
+
+# Güvenlik ayarları
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+
+# Log ayarları
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=asena-vgate
+
+# Timeout ayarları
+TimeoutStartSec=30
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

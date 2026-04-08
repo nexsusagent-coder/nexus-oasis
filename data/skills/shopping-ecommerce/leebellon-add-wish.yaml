@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_shopping_ecommerce_add_wish
+name: add-wish
+slug: leebellon-add-wish
+description: Save any product to a universal wishlist.
+category: shopping-ecommerce
+metadata:
+  author: leebellon
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- shopping-ecommerce
+dependencies: []
+source_url: https://clawskills.sh/skills/leebellon-add-wish
+created_at: 2026-04-06T18:20:50.996444069+00:00
+updated_at: 2026-04-06T18:20:50.996444069+00:00
+hash: 7c68ba29ffe3bb750468d37e29340c0ba0fa346f964e3a4fbf1cb6198829f8ea
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

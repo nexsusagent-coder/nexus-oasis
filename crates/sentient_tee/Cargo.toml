@@ -1,0 +1,41 @@
+[package]
+name = "sentient_tee"
+version.workspace = true
+edition.workspace = true
+description = "SENTIENT TEE - Trusted Execution Environment (AMD SEV-SNP / Intel TDX)"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# IDs
+uuid.workspace = true
+
+# Errors
+thiserror.workspace = true
+anyhow.workspace = true
+
+# Logging
+log.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Crypto
+sha2 = "0.10"
+blake3 = "1.5"
+hex = "0.4"
+
+# Concurrency
+parking_lot.workspace = true
+
+[features]
+default = []
+sev-snp = []  # AMD SEV-SNP support
+tdx = []      # Intel TDX support

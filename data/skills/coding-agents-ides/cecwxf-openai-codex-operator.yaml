@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_openai_codex_operator
+name: openai-codex-operator
+slug: cecwxf-openai-codex-operator
+description: Run OpenAI Codex CLI from OpenClaw for coding tasks in a target project directory.
+category: coding-agents-ides
+metadata:
+  author: cecwxf
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/cecwxf-openai-codex-operator
+created_at: 2026-04-06T18:20:41.741325231+00:00
+updated_at: 2026-04-06T18:20:41.741325231+00:00
+hash: d46a768864d17e53c33145aa595e2d61c35d69d36b4db6d71ebfd96e3e7ebc5b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

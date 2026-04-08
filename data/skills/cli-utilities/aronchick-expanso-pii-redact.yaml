@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_expanso_pii_redact
+name: expanso-pii-redact
+slug: aronchick-expanso-pii-redact
+description: '"Redact PII from text, replacing sensitive data with placeholders".'
+category: cli-utilities
+metadata:
+  author: aronchick
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/aronchick-expanso-pii-redact
+created_at: 2026-04-06T18:20:38.728699149+00:00
+updated_at: 2026-04-06T18:20:38.728699149+00:00
+hash: aa59a86b42879f5db6bc1cccd4ad72d81da84d24c4ee71ee6a59de960fd68279
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,54 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-memdir
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-memdir"
+description: "Auto-generated skill from memdir"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "memdir.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "max_entrypoint_lines"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "load_memory_prompt"
+
+dependencies:
+  - "__future__"
+  - "openharness.memory.paths"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

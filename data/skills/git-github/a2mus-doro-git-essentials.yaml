@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_doro_git_essentials
+name: doro-git-essentials
+slug: a2mus-doro-git-essentials
+description: Essential Git commands and workflows for version control, branching, and collaboration.
+category: git-github
+metadata:
+  author: a2mus
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/a2mus-doro-git-essentials
+created_at: 2026-04-06T18:20:45.999710425+00:00
+updated_at: 2026-04-06T18:20:45.999710425+00:00
+hash: 3de5aa8a2d81dd667764e0a207a0112862c7f3c2c39986efde758b12c8092003
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

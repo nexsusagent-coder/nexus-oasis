@@ -1,0 +1,30 @@
+[package]
+name = "sentient_selfcoder"
+version = "0.1.0"
+edition = "2021"
+description = "SENTIENT Self-Coding Loop - Autonomous Self-Improvement Engine"
+authors = ["SENTIENT Core Team"]
+
+[[bin]]
+name = "sentient-selfcoder"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = "0.3"
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+clap = { workspace = true }
+walkdir = "2.5"
+regex = "1.10"
+syn = { version = "2.0", features = ["full", "parsing"] }
+quote = "1.0"
+proc-macro2 = "1.0"
+rusqlite = { version = "0.35", features = ["bundled"] }
+chrono = { workspace = true }
+dirs = "5"
+
+sentient_common = { path = "../sentient_common" }

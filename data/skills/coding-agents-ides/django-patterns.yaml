@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_django_patterns
+name: django-patterns
+slug: django-patterns
+description: Django architecture patterns, REST API design with DRF, ORM best practices, caching, signals, middleware, and production-grade Django apps.
+category: coding-agents-ides
+metadata:
+  author: everything-claude-code
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- ecc
+- claude-code
+dependencies: []
+created_at: 2026-04-06T18:20:55.968634860+00:00
+updated_at: 2026-04-06T18:20:55.968634860+00:00
+hash: 68d953d5e497b2bdba9b2c77089f750281fdc332a14d10730d1a4c01171acda4
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

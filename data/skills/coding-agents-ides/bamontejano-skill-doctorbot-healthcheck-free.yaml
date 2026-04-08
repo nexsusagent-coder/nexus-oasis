@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_skill_doctorbot_healthcheck_free
+name: skill-doctorbot-healthcheck-free
+slug: bamontejano-skill-doctorbot-healthcheck-free
+description: 🩺 Free Security & Health Audit.
+category: coding-agents-ides
+metadata:
+  author: bamontejano
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/bamontejano-skill-doctorbot-healthcheck-free
+created_at: 2026-04-06T18:20:42.490621737+00:00
+updated_at: 2026-04-06T18:20:42.490621737+00:00
+hash: 8ec6b4098911c5d800d207bf304a97d971f97741e3b209fbc62348477474d588
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

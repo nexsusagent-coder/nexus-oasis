@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_instagram_reel_downloader_whatsapp
+name: instagram-reel-downloader-whatsapp
+slug: besaif-instagram-reel-downloader-whatsapp
+description: Download an Instagram Reel via sssinstagram.com and return it as a WhatsApp-ready video file.
+category: coding-agents-ides
+metadata:
+  author: besaif
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/besaif-instagram-reel-downloader-whatsapp
+created_at: 2026-04-06T18:20:41.125194259+00:00
+updated_at: 2026-04-06T18:20:41.125194259+00:00
+hash: 0464d560da010dc8a09a6d910492051d6d7128287d5d6677150e2a1704c10730
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

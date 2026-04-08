@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-permission-sync
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-permission-sync"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_permission_sync.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tool_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_is_read_only_true_for_safe_tools"
+  - "test_is_read_only_false_for_write_tools"
+  - "test_create_permission_request_has_unique_id"
+  - "test_create_permission_request_fields"
+  - "test_create_permission_request_default_suggestions"
+  - "test_swarm_permission_response_defaults"
+  - "test_send_permission_request_writes_to_leader"
+  - "test_send_permission_response_writes_to_worker"
+  - "test_handle_read_only_tool_auto_approved"
+  - "test_handle_write_tool_delegates_to_checker"
+  - "test_handle_write_tool_allowed_by_checker"
+  - "test_poll_permission_response_times_out"
+  - "test_poll_permission_response_finds_matching_message"
+
+dependencies:
+  - "__future__"
+  - "openharness.swarm.permission_sync"
+  - "pathlib"
+  - "pytest"
+  - "unittest.mock"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

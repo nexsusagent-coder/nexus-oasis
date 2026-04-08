@@ -1,0 +1,44 @@
+[package]
+name = "sentient_research"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "L5: RESEARCH - MindSearch & AutoResearch Asimilasyonu (PyO3 Native Bridge)"
+
+[dependencies]
+# Workspace
+sentient_common = { path = "../sentient_common" }
+sentient_vgate = { path = "../sentient_vgate" }
+sentient_guardrails = { path = "../sentient_guardrails" }
+sentient_memory = { path = "../sentient_memory" }
+
+# Async & Concurrency
+tokio = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# PyO3 Bridge (Python Native Modules)
+pyo3 = { workspace = true }
+
+# HTTP Client
+reqwest = { workspace = true }
+
+# Logging
+log = { workspace = true }
+tracing = { workspace = true }
+
+# Utils
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+url = "2"
+regex = { workspace = true }
+urlencoding = "2"
+
+[dev-dependencies]
+tokio-test = "0.4"

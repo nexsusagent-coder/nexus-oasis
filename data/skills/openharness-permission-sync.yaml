@@ -1,0 +1,144 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-permission-sync
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-permission-sync"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "permission_sync.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tool_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "request_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "request_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "max_age_seconds"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "team_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_get_team_name"
+  - "_get_agent_id"
+  - "_get_agent_name"
+  - "_get_teammate_color"
+  - "_is_read_only"
+  - "generate_request_id"
+  - "generate_sandbox_request_id"
+  - "get_permission_dir"
+  - "_get_pending_dir"
+  - "_get_resolved_dir"
+  - "_ensure_permission_dirs"
+  - "_pending_request_path"
+  - "_resolved_request_path"
+  - "create_permission_request"
+  - "_sync_write_permission_request"
+  - "write_permission_request"
+  - "read_pending_permissions"
+  - "read_resolved_permission"
+  - "_sync_resolve_permission"
+  - "resolve_permission"
+  - "_sync_cleanup_old_resolutions"
+  - "cleanup_old_resolutions"
+  - "delete_resolved_permission"
+  - "poll_for_response"
+  - "remove_worker_response"
+  - "is_team_leader"
+  - "is_swarm_worker"
+  - "get_leader_name"
+  - "send_permission_request_via_mailbox"
+  - "send_permission_response_via_mailbox"
+  - "send_sandbox_permission_request_via_mailbox"
+  - "send_sandbox_permission_response_via_mailbox"
+  - "send_permission_request"
+  - "poll_permission_response"
+  - "handle_permission_request"
+  - "send_permission_response"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "dataclasses"
+  - "json"
+  - "openharness.swarm.lockfile"
+  - "openharness.swarm.mailbox"
+  - "os"
+  - "pathlib"
+  - "random"
+  - "string"
+  - "time"
+  - "typing"
+  - "uuid"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

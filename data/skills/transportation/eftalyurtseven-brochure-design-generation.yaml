@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_brochure_design_generation
+name: brochure-design-generation
+slug: eftalyurtseven-brochure-design-generation
+description: Generate professional brochure designs using each::sense AI.
+category: transportation
+metadata:
+  author: eftalyurtseven
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/eftalyurtseven-brochure-design-generation
+created_at: 2026-04-06T18:20:51.490470489+00:00
+updated_at: 2026-04-06T18:20:51.490470489+00:00
+hash: 76c2448001f79b8f1dbfc22271cdca00e67d22f31a6e6d9605cd020f2101f13b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

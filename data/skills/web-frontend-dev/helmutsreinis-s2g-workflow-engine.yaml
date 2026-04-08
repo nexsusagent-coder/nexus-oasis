@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_s2g_workflow_engine
+name: s2g-workflow-engine
+slug: helmutsreinis-s2g-workflow-engine
+description: Connect to S2G (s2g.run) visual workflow automation platform over WebSocket.
+category: web-frontend-dev
+metadata:
+  author: helmutsreinis
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/helmutsreinis-s2g-workflow-engine
+created_at: 2026-04-06T18:20:54.249377198+00:00
+updated_at: 2026-04-06T18:20:54.249377198+00:00
+hash: 26030fc3bbec226106c98fd644788fb3322f060e6d7a8de7424314616aab84db
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

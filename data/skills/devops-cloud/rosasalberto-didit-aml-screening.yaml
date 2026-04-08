@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_didit_aml_screening
+name: didit-aml-screening
+slug: rosasalberto-didit-aml-screening
+description: Integrate Didit AML Screening standalone API to screen individuals or companies against global watchlists.
+category: devops-cloud
+metadata:
+  author: rosasalberto
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/rosasalberto-didit-aml-screening
+created_at: 2026-04-06T18:20:44.687910787+00:00
+updated_at: 2026-04-06T18:20:44.687910787+00:00
+hash: 875e44a7746bf78913def20be6d16b84edda7474a473ee555a7ef1ab2d4a2105
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

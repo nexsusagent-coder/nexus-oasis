@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_rss_skill
+name: rss-skill
+slug: myx0m0p-rss-skill
+description: Convert RSS or Atom feed URLs into Markdown using the bundled local converter script.
+category: search-research
+metadata:
+  author: myx0m0p
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/myx0m0p-rss-skill
+created_at: 2026-04-06T18:20:50.526912087+00:00
+updated_at: 2026-04-06T18:20:50.526912087+00:00
+hash: 33f10acc2a0fa6a6bf9df2802b520582854a2e0765f9f507e7b01c0eaea01f9f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

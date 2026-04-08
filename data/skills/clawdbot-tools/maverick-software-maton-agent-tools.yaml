@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_clawdbot_tools_maton_agent_tools
+name: maton-agent-tools
+slug: maverick-software-maton-agent-tools
+description: Connect to SaaS tools via Maton AI.
+category: clawdbot-tools
+metadata:
+  author: maverick
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- clawdbot-tools
+dependencies: []
+source_url: https://clawskills.sh/skills/maverick-software-maton-agent-tools
+created_at: 2026-04-06T18:20:38.409695063+00:00
+updated_at: 2026-04-06T18:20:38.409695063+00:00
+hash: 4861fc35bcaf0877329d8910bee0709e445230765120dc7763172f237704a603
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

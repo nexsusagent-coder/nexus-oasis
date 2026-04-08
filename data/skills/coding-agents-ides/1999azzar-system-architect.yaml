@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_system_architect
+name: system-architect
+slug: 1999azzar-system-architect
+description: Acts as a Senior System Architect to design robust, scalable, and maintainable software architectures.
+category: coding-agents-ides
+metadata:
+  author: 1999azzar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/1999azzar-system-architect
+created_at: 2026-04-06T18:20:42.811907233+00:00
+updated_at: 2026-04-06T18:20:42.811907233+00:00
+hash: 80ead4d974865528f74ecfdbf3e44424dd8ac02e58677e7f272a61fa4e235769
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

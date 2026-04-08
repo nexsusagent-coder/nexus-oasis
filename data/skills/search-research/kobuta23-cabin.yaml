@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_cabin
+name: cabin
+slug: kobuta23-cabin
+description: Search and book real flights with USDC payments.
+category: search-research
+metadata:
+  author: kobuta23
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/kobuta23-cabin
+created_at: 2026-04-06T18:20:49.942558938+00:00
+updated_at: 2026-04-06T18:20:49.942558938+00:00
+hash: 72e054c620283cb044816eb2097e98de366b2fdfb7293fc99e8e173cee8207b3
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_azure_cli
+name: Azure CLI
+slug: ddevaal-azure-cli
+description: Comprehensive Azure Cloud Platform management via command-line interface.
+category: devops-cloud
+metadata:
+  author: ddevaal
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/ddevaal-azure-cli
+created_at: 2026-04-06T18:20:44.472206206+00:00
+updated_at: 2026-04-06T18:20:44.472206206+00:00
+hash: 8b39eb0d159e6d6200682cc7fb6463d953f0d0a5aa4e676e792a4e7803873685
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,49 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "sentient"
+version = "2.1.0"
+description = "SENTIENT OS - The Operating System That Thinks"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Rust",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Operating System",
+]
+dependencies = [
+    "typing-extensions>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "maturin>=1.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.maturin]
+features = ["extension-module"]
+python-source = "python"
+module-name = "sentient.sentient_python"
+strip = true
+
+[project.urls]
+Homepage = "https://sentient-os.ai"
+Documentation = "https://docs.sentient-os.ai"
+Repository = "https://github.com/nexsusagent-coder/sentient-os"
+Issues = "https://github.com/nexsusagent-coder/sentient-os/issues"

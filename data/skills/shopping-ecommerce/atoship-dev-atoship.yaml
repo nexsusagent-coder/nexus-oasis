@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_shopping_ecommerce_atoship
+name: atoship
+slug: atoship-dev-atoship
+description: Ship packages with AI — compare rates across USPS, FedEx, and UPS, buy discounted labels, track shipments.
+category: shopping-ecommerce
+metadata:
+  author: atoship
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- shopping-ecommerce
+dependencies: []
+source_url: https://clawskills.sh/skills/atoship-dev-atoship
+created_at: 2026-04-06T18:20:51.016257466+00:00
+updated_at: 2026-04-06T18:20:51.016257466+00:00
+hash: 6cb510c8a515d55851c44a240faabc2407dde1bd34516c50cf029bd13f03a41a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

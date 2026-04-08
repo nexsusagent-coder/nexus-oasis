@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_audio_upload_aioz_stream
+name: audio-upload-aioz-stream
+slug: vinhbui3004-audio-upload-aioz-stream
+description: Quick upload audio to AIOZ Stream API.
+category: coding-agents-ides
+metadata:
+  author: vinhbui3004
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/vinhbui3004-audio-upload-aioz-stream
+created_at: 2026-04-06T18:20:39.793068139+00:00
+updated_at: 2026-04-06T18:20:39.793068139+00:00
+hash: e693f97cf9c4a6e46aa71e489d1ca76ac471dc79c2c0ef49a224e5b20e20cdb7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,52 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-query
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-query"
+description: "Auto-generated skill from query"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "query.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "run_query"
+  - "_execute_tool_call"
+  - "_resolve_permission_file_path"
+  - "_extract_permission_command"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "dataclasses"
+  - "openharness.api.client"
+  - "openharness.api.usage"
+  - "openharness.engine.messages"
+  - "openharness.engine.stream_events"
+  - "openharness.hooks"
+  - "openharness.permissions.checker"
+  - "openharness.tools.base"
+  - "pathlib"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

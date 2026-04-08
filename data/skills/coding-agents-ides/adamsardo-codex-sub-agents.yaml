@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_codex_sub_agents
+name: codex-sub-agents
+slug: adamsardo-codex-sub-agents
+description: Use OpenAI Codex CLI for coding tasks.
+category: coding-agents-ides
+metadata:
+  author: adamsardo
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/adamsardo-codex-sub-agents
+created_at: 2026-04-06T18:20:40.310540020+00:00
+updated_at: 2026-04-06T18:20:40.310540020+00:00
+hash: 28b010d69279f39e7f971bd3de08fad8077048d51d6cda1fc52dc554b4339b5e
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

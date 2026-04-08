@@ -1,0 +1,56 @@
+# ─── ASENA GATEWAY SERVICE ───
+# NEXUS OASIS AI Operating System - API Gateway
+# HTTP REST API, WebSocket, Telegram Bot
+#
+# Kurulum:
+#   sudo cp deploy/asena-gateway.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable asena-gateway
+#   sudo systemctl start asena-gateway
+
+[Unit]
+Description=ASENA Gateway - API & WebSocket Server
+Documentation=https://github.com/nexus-oasis/asena
+After=network.target network-online.target asena-vgate.service
+Wants=network-online.target
+Requires=asena-vgate.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/ASENA_CORE
+
+# Ortam değişkenleri (.env dosyasından yüklenir)
+EnvironmentFile=/root/ASENA_CORE/.env
+
+# Çalıştırma komutu
+ExecStart=/root/ASENA_CORE/target/release/asena gateway --http-addr 0.0.0.0:8080
+
+# Yeniden başlatma ayarları
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Kaynak limitleri
+LimitNOFILE=65536
+LimitNPROC=2048
+MemoryMax=2G
+CPUQuota=150%
+
+# Güvenlik ayarları
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Log ayarları
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=asena-gateway
+
+# Timeout ayarları
+TimeoutStartSec=60
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target

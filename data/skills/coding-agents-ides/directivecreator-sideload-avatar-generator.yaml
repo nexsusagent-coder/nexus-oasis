@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_sideload_avatar_generator
+name: sideload-avatar-generator
+slug: directivecreator-sideload-avatar-generator
+description: Generate 3D avatars (VRM/GLB/MML) from text prompts or images via Sideload.gg.
+category: coding-agents-ides
+metadata:
+  author: directivecreator
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/directivecreator-sideload-avatar-generator
+created_at: 2026-04-06T18:20:42.448128084+00:00
+updated_at: 2026-04-06T18:20:42.448128084+00:00
+hash: 0c48996108efdf3d392bbc0bda52585b0c9a3fd32997c17a41eba39060ff7162
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_wisediag_medocr
+name: wisediag-medocr
+slug: fmdmm-wisediag-medocr
+description: Convert PDF files to Markdown using WiseDiag MedOcr API.
+category: browser-automation
+metadata:
+  author: fmdmm
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/fmdmm-wisediag-medocr
+created_at: 2026-04-06T18:20:37.926462834+00:00
+updated_at: 2026-04-06T18:20:37.926462834+00:00
+hash: 95ba6a905be4cb8d942ff01cec6f237776eaf0f170076b797bf669a04c8ec057
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

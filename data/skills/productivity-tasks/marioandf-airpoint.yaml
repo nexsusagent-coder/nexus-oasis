@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_airpoint
+name: airpoint
+slug: marioandf-airpoint
+description: Control a Mac through natural language — open apps, click buttons, read the screen, type text, manage windows.
+category: productivity-tasks
+metadata:
+  author: marioandf
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/marioandf-airpoint
+created_at: 2026-04-06T18:20:49.136539086+00:00
+updated_at: 2026-04-06T18:20:49.136539086+00:00
+hash: e317c7a58270c5383e43aa4b513a5545f1c24ef0c934d0a76ff8b85fddd3a370
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

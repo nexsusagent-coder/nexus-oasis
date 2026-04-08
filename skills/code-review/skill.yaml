@@ -1,0 +1,59 @@
+# ASENA Skill: code-review
+# OpenHarness & OpenClaw pattern'inden adapte
+
+name: code-review
+version: "1.0.0"
+description: "Kod kalitesi, güvenlik ve performans açısından derinlemesine kod incelemesi yapar"
+author: "ASENA_CORE"
+category: development
+
+# İzinler (SOVEREIGN.md ile uyumlu)
+permissions:
+  file_read: true
+  file_write: false
+  bash_execute: false
+  network_access: false
+  
+# Parametre şeması
+parameters:
+  path:
+    type: string
+    required: true
+    description: "İncelenecek dosya veya dizin yolu"
+  focus:
+    type: string
+    required: false
+    default: "all"
+    enum: [all, security, performance, style, bugs]
+    description: "İnceleme odağı"
+  language:
+    type: string
+    required: false
+    default: "auto"
+    description: "Programlama dili (auto-detect)"
+
+# Tool mapping (OpenHarness pattern)
+tools:
+  - read_file
+  - grep_tool
+  - glob_tool
+
+# Çıktı formatı
+output_format:
+  type: structured
+  schema:
+    summary: string
+    issues: list
+    suggestions: list
+    score: integer
+    
+# Rate limiting
+rate_limit:
+  requests_per_minute: 10
+  max_tokens: 4000
+
+# Metadata
+metadata:
+  tags: [code, review, quality, security]
+  priority: high
+  hot_reload: true

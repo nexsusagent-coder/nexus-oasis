@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_norman_tax_deduction_finder
+name: norman-tax-deduction-finder
+slug: stanlee000-norman-tax-deduction-finder
+description: Scan transactions for potentially missed tax deductions and suggest proper categorization.
+category: cli-utilities
+metadata:
+  author: stanlee000
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/stanlee000-norman-tax-deduction-finder
+created_at: 2026-04-06T18:20:38.910624479+00:00
+updated_at: 2026-04-06T18:20:38.910624479+00:00
+hash: 28033641c102c6048fd531d031749c8b53e4f85395f53705e08bbcb99b549bee
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_soul_forge
+name: soul-forge
+slug: taha2053-soul-forge
+description: Evolves your SOUL.md automatically based on who you actually are — not who you thought you were when you wrote it.
+category: cli-utilities
+metadata:
+  author: taha2053
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/taha2053-soul-forge
+created_at: 2026-04-06T18:20:39.027049717+00:00
+updated_at: 2026-04-06T18:20:39.027049717+00:00
+hash: 9cdb7d437683b7b2337210adb6c231ae560a786d8adf5bb19e08465e00d328aa
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

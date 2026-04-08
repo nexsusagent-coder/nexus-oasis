@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_smart_home_iot_glitch_homeassistant
+name: glitch-homeassistant
+slug: chris6970barbarian-hue-glitch-homeassistant
+description: Control smart home devices via Home Assistant API.
+category: smart-home-iot
+metadata:
+  author: chris6970barbarian
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- smart-home-iot
+dependencies: []
+source_url: https://clawskills.sh/skills/chris6970barbarian-hue-glitch-homeassistant
+created_at: 2026-04-06T18:20:51.206739437+00:00
+updated_at: 2026-04-06T18:20:51.206739437+00:00
+hash: fd81f4c0cbcfa6c8576798cc1ad33307810ca2d92e329803ae89bff6be7a1d73
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,109 @@
+[workspace]
+members = [
+    # Core Intelligence (Gemma 4 Kernel)
+    "crates/oasis_brain",
+    # Security Modules (Military Grade)
+    "crates/oasis_core",
+    "crates/oasis_vault",
+    "crates/sentient_tee",
+    "crates/sentient_zk_mcp",
+    "crates/sentient_anomaly",
+    # Core Modules
+    "crates/sentient_research",
+    "crates/oasis_hands",
+    "crates/sentient_core",
+    "crates/sentient_memory",
+    "crates/sentient_vgate",
+    "crates/sentient_guardrails",
+    "crates/sentient_python",
+    "crates/sentient_common",
+    "crates/sentient_graph",
+    "crates/sentient_cli",
+    "crates/sentient_sandbox",
+    "crates/sentient_orchestrator",
+    "crates/sentient_gateway",
+    "crates/sentient_scout",
+    "crates/sentient_forge",
+    "crates/sentient_storage",
+    "crates/oasis_browser",
+    "crates/oasis_manus",
+    "crates/sentient_ingestor",
+    # A1-A8 Native Modules
+    "crates/sentient_persona",
+    "crates/sentient_session",
+    "crates/sentient_checkpoint",
+    "crates/sentient_modes",
+    "crates/sentient_reporting",
+    # Self-Coding Loop
+    "crates/sentient_selfcoder",
+    # v3.0.0 New Modules
+    "crates/sentient_agents",
+    "crates/sentient_vector",
+    "crates/sentient_local",
+    "crates/sentient_devtools",
+    "crates/sentient_execution",
+    # v4.0.0 Universal Omni-Gateway
+    "crates/sentient_setup",
+    "crates/sentient_settings",
+    # v5.0.0 Silent Auto-Update Engine
+    "crates/sentient_sync",
+    # v6.0.0 Skills System (DeerFlow Integration)
+    "crates/sentient_skills",
+    # Skills System
+    "skills",
+    "scripts",
+    "dashboard",
+]
+resolver = "2"
+
+[workspace.package]
+version = "4.0.0"
+edition = "2021"
+authors = ["Pi <sentient@sentient-os.ai>"]
+license = "MIT"
+
+[workspace.dependencies]
+
+# Common
+tokio = { version = "1", features = ["full"] }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+log = "0.4"
+env_logger = "0.11"
+thiserror = "2"
+chrono = { version = "0.4", features = ["serde"] }
+rusqlite = { version = "0.35", features = ["bundled"] }
+
+# V-Gate / HTTP
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+axum = { version = "0.8", features = ["ws"] }
+tower = "0.5"
+tower-http = "0.6"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# PyO3 bridge
+pyo3 = { version = "0.25", features = ["auto-initialize"] }
+
+# Async traits
+async-trait = "0.1"
+futures = "0.3"
+
+# Random number generation
+rand = "0.8"
+
+# Error handling
+anyhow = "1"
+
+# Graph / Concurrency
+crossbeam = "0.8"
+parking_lot = "0.12"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Guardrails / Regex
+regex = "1"
+lazy_static = "1"

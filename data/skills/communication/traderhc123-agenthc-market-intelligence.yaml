@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_agenthc_market_intelligence
+name: agenthc-market-intelligence
+slug: traderhc123-agenthc-market-intelligence
+description: Real-time stock market data and trading intelligence API. 85 intelligence modules, 40 encoded intelligence skills.
+category: communication
+metadata:
+  author: traderhc123
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/traderhc123-agenthc-market-intelligence
+created_at: 2026-04-06T18:20:43.459454495+00:00
+updated_at: 2026-04-06T18:20:43.459454495+00:00
+hash: 51eff144d325993d6ff1cd0b00ea9c801da8e20e0edf22c77b986132b766c36e
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

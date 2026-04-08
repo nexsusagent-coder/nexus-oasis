@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_gaming_android_3d_developer
+name: android-3d-developer
+slug: tippyentertainment-android-3d-developer
+description: Help build and optimize 3D games and interactive experiences on Android, using engines and frameworks.
+category: gaming
+metadata:
+  author: tippyentertainment
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- gaming
+dependencies: []
+source_url: https://clawskills.sh/skills/tippyentertainment-android-3d-developer
+created_at: 2026-04-06T18:20:45.729966047+00:00
+updated_at: 2026-04-06T18:20:45.729966047+00:00
+hash: 82c3190ccf816eaff681efa92c7a61bd6643a3f25dc364895ab318447d7ae2ad
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

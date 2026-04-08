@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_stock_data_skill
+name: stock-data-skill
+slug: raufimusaddiq-stock-data-skill
+description: Fetch comprehensive stock data from Simplywall.st.
+category: coding-agents-ides
+metadata:
+  author: raufimusaddiq
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/raufimusaddiq-stock-data-skill
+created_at: 2026-04-06T18:20:42.755572074+00:00
+updated_at: 2026-04-06T18:20:42.755572074+00:00
+hash: 2cb97db610de422f3009ac1c0f68e1666bff47d7baf75f2fd4d288dbf95e8f9b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

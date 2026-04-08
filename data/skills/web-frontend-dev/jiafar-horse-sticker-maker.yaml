@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_horse_sticker_maker
+name: horse-sticker-maker
+slug: jiafar-horse-sticker-maker
+description: Create and deploy a festive Chinese New Year (Year of the Horse 2026) animated GIF sticker maker web app.
+category: web-frontend-dev
+metadata:
+  author: jiafar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/jiafar-horse-sticker-maker
+created_at: 2026-04-06T18:20:53.005528108+00:00
+updated_at: 2026-04-06T18:20:53.005528108+00:00
+hash: 363977570307a05f2d12d414af240781c77cc122c1e979ce26a4f65803728ff9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

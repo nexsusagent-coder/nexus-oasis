@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_skulk_skill_scanner
+name: skulk-skill-scanner
+slug: adainthelab-skulk-skill-scanner
+description: Scan OpenClaw skill folders for security red flags before installing or publishing.
+category: coding-agents-ides
+metadata:
+  author: adainthelab
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/adainthelab-skulk-skill-scanner
+created_at: 2026-04-06T18:20:42.598864303+00:00
+updated_at: 2026-04-06T18:20:42.598864303+00:00
+hash: 4d0e1a630d192a3ade415ef5e35084f25247bc093f0eb10ed2e65c0f1ec53757
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

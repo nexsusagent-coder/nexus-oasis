@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_node_red_manager
+name: node-red-manager
+slug: 1999azzar-node-red-manager
+description: Manage Node-RED instances via Admin API or CLI.
+category: devops-cloud
+metadata:
+  author: 1999azzar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/1999azzar-node-red-manager
+created_at: 2026-04-06T18:20:45.088831468+00:00
+updated_at: 2026-04-06T18:20:45.088831468+00:00
+hash: ccbf6930b669efe1b513e2ff2d5e8ab839876c80e77a5adfc5c6b678f9944b58
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

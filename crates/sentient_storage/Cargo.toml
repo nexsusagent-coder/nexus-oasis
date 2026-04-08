@@ -1,0 +1,26 @@
+[package]
+name = "sentient_storage"
+version = "0.1.0"
+edition = "2021"
+description = "SENTIENT Task Persistence Layer - SQLite veritabanı ile görev sürekliliği"
+authors = ["SENTIENT Team"]
+
+[dependencies]
+# Core
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Database (rusqlite - sentient_memory ile uyumlu)
+rusqlite = { version = "0.35", features = ["bundled", "serde_json"] }
+
+# Logging
+log = "0.4"
+
+# Internal
+sentient_common = { path = "../sentient_common" }
+
+[dev-dependencies]
+tokio-test = "0.4"

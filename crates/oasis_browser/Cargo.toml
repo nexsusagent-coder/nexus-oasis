@@ -1,0 +1,60 @@
+[package]
+name = "oasis_browser"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "L4: EXECUTION - Browser-Use Asimilasyonu (Sovereign Sandbox)"
+
+[features]
+default = []
+lightpanda-ffi = []  # Lightpanda FFI desteği (Zig kütüphanesi gerekli)
+
+[dependencies]
+# Workspace
+sentient_common = { path = "../sentient_common" }
+sentient_vgate = { path = "../sentient_vgate" }
+sentient_guardrails = { path = "../sentient_guardrails" }
+
+# Async & Concurrency
+tokio = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# PyO3 Bridge (Browser-Use wrapper)
+pyo3 = { workspace = true }
+
+# HTTP & Browser Control
+reqwest = { workspace = true }
+
+# URL parsing
+url = "2"
+
+# Random (stealth)
+rand = "0.8"
+
+# Logging
+log = { workspace = true }
+tracing = { workspace = true }
+
+# Utils
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+base64 = "0.22"
+
+# Encryption
+aes-gcm = "0.10"
+sha2 = "0.10"
+
+# Directories
+dirs = "5"
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3"

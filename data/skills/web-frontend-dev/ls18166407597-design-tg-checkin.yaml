@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_tg_checkin
+name: tg-checkin
+slug: ls18166407597-design-tg-checkin
+description: Generic Telegram Web automation for group check-ins.
+category: web-frontend-dev
+metadata:
+  author: ls18166407597
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/ls18166407597-design-tg-checkin
+created_at: 2026-04-06T18:20:54.693312020+00:00
+updated_at: 2026-04-06T18:20:54.693312020+00:00
+hash: 66b33195eb7d97a3ae5c3f05b737af0465797d5f942e40c423de457c7d81aff8
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

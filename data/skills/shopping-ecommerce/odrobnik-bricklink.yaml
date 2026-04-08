@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_shopping_ecommerce_bricklink
+name: bricklink
+slug: odrobnik-bricklink
+description: BrickLink Store API helper/CLI (OAuth 1.0 request signing).
+category: shopping-ecommerce
+metadata:
+  author: odrobnik
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- shopping-ecommerce
+dependencies: []
+source_url: https://clawskills.sh/skills/odrobnik-bricklink
+created_at: 2026-04-06T18:20:51.025233549+00:00
+updated_at: 2026-04-06T18:20:51.025233549+00:00
+hash: da49006226fbf19156bd3d9968cf8105e067b0be4bf46652c6307d02ce5697bd
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_shopping_ecommerce_clawpify
+name: clawpify
+slug: alhwyn-clawpify
+description: Query and manage Shopify stores via GraphQL Admin API.
+category: shopping-ecommerce
+metadata:
+  author: alhwyn
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- shopping-ecommerce
+dependencies: []
+source_url: https://clawskills.sh/skills/alhwyn-clawpify
+created_at: 2026-04-06T18:20:51.040439663+00:00
+updated_at: 2026-04-06T18:20:51.040439663+00:00
+hash: 3f5a4d4fa8698289c4d4baab2c789b6865fe989749d0c27848a5b92f0f14dd47
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

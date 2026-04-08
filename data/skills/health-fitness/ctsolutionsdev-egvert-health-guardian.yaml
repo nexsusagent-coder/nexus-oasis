@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_health_fitness_egvert_health_guardian
+name: egvert-health-guardian
+slug: ctsolutionsdev-egvert-health-guardian
+description: Proactive health monitoring for AI.
+category: health-fitness
+metadata:
+  author: ctsolutionsdev
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- health-fitness
+dependencies: []
+source_url: https://clawskills.sh/skills/ctsolutionsdev-egvert-health-guardian
+created_at: 2026-04-06T18:20:46.613354375+00:00
+updated_at: 2026-04-06T18:20:46.613354375+00:00
+hash: 9f696fce837aaafbbdfd8e073da4d1b9b381407dfe495fd8b828c86617e94383
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

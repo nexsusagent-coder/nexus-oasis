@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_webhook_router
+name: webhook-router
+slug: yoder-bawt-webhook-router
+description: A general-purpose webhook receiver that routes incoming webhooks from any source to appropriate handlers.
+category: web-frontend-dev
+metadata:
+  author: yoder
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/yoder-bawt-webhook-router
+created_at: 2026-04-06T18:20:55.039949962+00:00
+updated_at: 2026-04-06T18:20:55.039949962+00:00
+hash: b2799607e9cdab62bebd7ec804464daf6f3d62fa52ba1acad979e35c20da77be
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

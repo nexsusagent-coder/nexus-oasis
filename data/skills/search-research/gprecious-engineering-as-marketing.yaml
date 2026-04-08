@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_engineering_as_marketing
+name: engineering-as-marketing
+slug: gprecious-engineering-as-marketing
+description: Build free tools to drive organic search traffic and convert visitors into customers — the 'Engineering.
+category: search-research
+metadata:
+  author: gprecious
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/gprecious-engineering-as-marketing
+created_at: 2026-04-06T18:20:50.045753091+00:00
+updated_at: 2026-04-06T18:20:50.045753091+00:00
+hash: d1cbc5f01318b676ef572e30ae6c0a83eb6d55b6d511988133504de20cbe4166
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_bilibili_youtube_watcher
+name: bilibili-youtube-watcher
+slug: donnycui-bilibili-youtube-watcher
+description: Fetch and read transcripts from YouTube and Bilibili videos.
+category: coding-agents-ides
+metadata:
+  author: donnycui
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/donnycui-bilibili-youtube-watcher
+created_at: 2026-04-06T18:20:39.895350413+00:00
+updated_at: 2026-04-06T18:20:39.895350413+00:00
+hash: 38d2c5977e5879639a1aa0bba7fab94be8c1eb41b4ee8acb63f683cfb7554e02
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ⚙️ SENTIENT Automation Skill
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[skill]
+name = "automation"
+version = "0.1.0"
+description = "Görev otomasyonu ve iş akışı yönetimi"
+author = "SENTIENT Team"
+category = "workflow"
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_python = { path = "../../crates/sentient_python" }
+
+[config]
+max_concurrent_tasks = 10
+task_timeout_secs = 300
+retry_attempts = 3
+notification_enabled = true
+
+[triggers]
+keywords = ["otomasyon", "automate", "zamanla", "schedule", "workflow"]
+patterns = ["^otomatik[:\\s]+(.+)$", "^automate[:\\s]+(.+)$"]
+
+[integrations]
+crewai = true
+browser = true
+sandbox = true

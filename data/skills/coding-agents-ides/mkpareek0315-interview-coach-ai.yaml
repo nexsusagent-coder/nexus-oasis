@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_interview_coach_ai
+name: interview-coach-ai
+slug: mkpareek0315-interview-coach-ai
+description: When user asks for interview prep, mock interview, practice questions, behavioral questions, technical interview.
+category: coding-agents-ides
+metadata:
+  author: mkpareek0315
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/mkpareek0315-interview-coach-ai
+created_at: 2026-04-06T18:20:41.152308317+00:00
+updated_at: 2026-04-06T18:20:41.152308317+00:00
+hash: cab7c59aaf94aabf23df60328759d0cdbf70ae4d77dda74b4eb086eb780d3669
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

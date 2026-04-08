@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_entity_optimizer
+name: entity-optimizer
+slug: aaron-he-zhu-entity-optimizer
+description: Use when the user asks to "optimize entity presence", "build knowledge graph", "improve knowledge panel", "entity.
+category: browser-automation
+metadata:
+  author: aaron
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/aaron-he-zhu-entity-optimizer
+created_at: 2026-04-06T18:20:37.182267637+00:00
+updated_at: 2026-04-06T18:20:37.182267637+00:00
+hash: c89b01c9496ae84c6ec99eb0b6d8659030a294df4831b215681f05e80d0f84ed
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

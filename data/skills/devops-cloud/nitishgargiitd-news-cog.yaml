@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_news_cog
+name: news-cog
+slug: nitishgargiitd-news-cog
+description: Frontier search models with multi-angle research on every query.
+category: devops-cloud
+metadata:
+  author: nitishgargiitd
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/nitishgargiitd-news-cog
+created_at: 2026-04-06T18:20:45.068993782+00:00
+updated_at: 2026-04-06T18:20:45.068993782+00:00
+hash: 66aa7104faebe50e1e28b3c41922805d31161f6834f18c13faf991379f4df4b3
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

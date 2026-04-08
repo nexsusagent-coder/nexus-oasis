@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-slack
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-slack"
+description: "Auto-generated skill from slack"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "slack.py"
+    language: "python"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  []
+
+dependencies:
+  - "asyncio"
+  - "logging"
+  - "openharness.channels.bus.events"
+  - "openharness.channels.bus.queue"
+  - "openharness.channels.impl.base"
+  - "openharness.config.schema"
+  - "re"
+  - "slack_sdk.socket_mode.request"
+  - "slack_sdk.socket_mode.response"
+  - "slack_sdk.socket_mode.websockets"
+  - "slack_sdk.web.async_client"
+  - "slackify_markdown"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

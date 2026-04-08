@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_elite_rfc_writer_safe
+name: elite-rfc-writer-safe
+slug: moep90-elite-rfc-writer-safe
+description: Write decision-oriented engineering RFCs with strict template enforcement.
+category: coding-agents-ides
+metadata:
+  author: moep90
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/moep90-elite-rfc-writer-safe
+created_at: 2026-04-06T18:20:40.687840084+00:00
+updated_at: 2026-04-06T18:20:40.687840084+00:00
+hash: 170487574c698c532292def5f2f42fe1c9dcc787dda4e181cd449f7cd0477e32
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_evolink_media
+name: evolink-media
+slug: evolinkai-evolink-media
+description: Generate AI videos, images & music. 60+ models including Sora, Veo 3, Kling, Seedance, GPT Image, Suno v5.
+category: coding-agents-ides
+metadata:
+  author: evolinkai
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/evolinkai-evolink-media
+created_at: 2026-04-06T18:20:40.767146290+00:00
+updated_at: 2026-04-06T18:20:40.767146290+00:00
+hash: e4e19f6e25cb383b4d311a761a12abe57f6bc7e7fae5b114eea9626c07e63200
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

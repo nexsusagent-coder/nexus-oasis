@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-modalhostx
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: typescript
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-modalhostx"
+description: "Auto-generated skill from modalhostx"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "ModalHost.tsx"
+    language: "typescript"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "WaitingAnimation"
+  - "timer = setInterval"
+  - "QuestionModal"
+  - "handleSubmit ="
+  - "ModalHost"
+
+dependencies:
+  - "ink-text-input;"
+  - "ink;"
+  - "react;"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

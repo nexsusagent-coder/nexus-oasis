@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_apple_apps_services_apple_remind_me
+name: apple-remind-me
+slug: plgonzalezrx8-apple-remind-me
+description: Natural language reminders that create actual Apple.
+category: apple-apps-services
+metadata:
+  author: plgonzalezrx8
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- apple-apps-services
+dependencies: []
+source_url: https://clawskills.sh/skills/plgonzalezrx8-apple-remind-me
+created_at: 2026-04-06T18:20:36.739716010+00:00
+updated_at: 2026-04-06T18:20:36.739716010+00:00
+hash: b178a60f53f072f881476b69a2b3a7ef8b11dba5f7968540ca066169860dad4d
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

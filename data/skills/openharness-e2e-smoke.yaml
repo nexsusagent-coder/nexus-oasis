@@ -1,0 +1,632 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-e2e-smoke
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-e2e-smoke"
+description: "Auto-generated skill from e2e-smoke"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "e2e_smoke.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "_"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "config_dir"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "_"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "__"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "_"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "_"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "_"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "_"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "_"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "cwd"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "final_text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tool_names"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "started"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "completed"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_parse_args"
+  - "_validate_file_io"
+  - "_validate_search_edit"
+  - "_validate_phase48"
+  - "_validate_task_flow"
+  - "_setup_skill_flow"
+  - "_setup_mcp_model_flow"
+  - "_setup_context_flow"
+  - "_setup_plugin_combo_flow"
+  - "_setup_worktree_flow"
+  - "_setup_issue_pr_context_flow"
+  - "_validate_skill_flow"
+  - "_validate_mcp_model_flow"
+  - "_validate_mcp_resource_flow"
+  - "_validate_context_flow"
+  - "_validate_agent_flow"
+  - "_validate_remote_agent_flow"
+  - "_validate_plugin_combo_flow"
+  - "_validate_ask_user_flow"
+  - "_validate_task_update_flow"
+  - "_validate_notebook_flow"
+  - "_setup_lsp_flow"
+  - "_validate_lsp_flow"
+  - "_validate_cron_flow"
+  - "_validate_worktree_flow"
+  - "_validate_issue_pr_context_flow"
+  - "_validate_mcp_auth_flow"
+  - "_run_scenario"
+  - "_run"
+  - "main"
+
+dependencies:
+  - "__future__"
+  - "argparse"
+  - "asyncio"
+  - "dataclasses"
+  - "openharness.api.client"
+  - "openharness.config.paths"
+  - "openharness.config.settings"
+  - "openharness.engine"
+  - "openharness.engine.stream_events"
+  - "openharness.mcp.client"
+  - "openharness.mcp.config"
+  - "openharness.mcp.types"
+  - "openharness.memory"
+  - "openharness.permissions"
+  - "openharness.plugins"
+  - "openharness.prompts"
+  - "openharness.tools"
+  - "os"
+  - "pathlib"
+  - "sys"
+  - "tempfile"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

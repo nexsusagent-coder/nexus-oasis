@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_m2wise
+name: m2wise
+slug: zengyi-thinking-m2wise
+description: Memory-to-Wisdom Engine for AI agents.
+category: web-frontend-dev
+metadata:
+  author: zengyi
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/zengyi-thinking-m2wise
+created_at: 2026-04-06T18:20:53.336536403+00:00
+updated_at: 2026-04-06T18:20:53.336536403+00:00
+hash: b2c2d262b2d902a583f30b7e2be643c1d38c7428059b52f73649487d03c36992
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

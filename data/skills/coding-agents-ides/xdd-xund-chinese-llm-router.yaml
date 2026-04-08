@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_chinese_llm_router
+name: chinese-llm-router
+slug: xdd-xund-chinese-llm-router
+description: Route your OpenClaw conversations to the best Chinese AI models — no config headaches, just pick and chat.
+category: coding-agents-ides
+metadata:
+  author: xdd
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/xdd-xund-chinese-llm-router
+created_at: 2026-04-06T18:20:40.128912631+00:00
+updated_at: 2026-04-06T18:20:40.128912631+00:00
+hash: 0a40cf229618cffc84e148b5972774dce1f582f2cbe8bad45c189a03a43d0830
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

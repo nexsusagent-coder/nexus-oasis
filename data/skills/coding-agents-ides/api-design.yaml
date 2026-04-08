@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_api_design
+name: api-design
+slug: api-design
+description: REST API design patterns including resource naming, status codes, pagination, filtering, error responses, versioning, and rate limiting for production APIs.
+category: coding-agents-ides
+metadata:
+  author: everything-claude-code
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- ecc
+- claude-code
+dependencies: []
+created_at: 2026-04-06T18:20:55.649063358+00:00
+updated_at: 2026-04-06T18:20:55.649063358+00:00
+hash: abc1f1deb17d5bae2d3ff1fb05ebd3ebc7a20228f2c8ac458b262381c7e300dd
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

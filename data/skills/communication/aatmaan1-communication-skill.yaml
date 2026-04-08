@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_communication_skill
+name: communication-skill
+slug: aatmaan1-communication-skill
+description: Deep Listening & Response Crafting - Transform.
+category: communication
+metadata:
+  author: aatmaan1
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/aatmaan1-communication-skill
+created_at: 2026-04-06T18:20:43.573510563+00:00
+updated_at: 2026-04-06T18:20:43.573510563+00:00
+hash: e56dd161121910436f450b23c3c57c1c7099822225c6f52f554828711015a1bf
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

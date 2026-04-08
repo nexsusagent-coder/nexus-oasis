@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_security_passwords_facebook
+name: facebook
+slug: codedao12-facebook
+description: OpenClaw skill for Facebook Graph API workflows focused on Pages posting,.
+category: security-passwords
+metadata:
+  author: codedao12
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- security-passwords
+dependencies: []
+source_url: https://clawskills.sh/skills/codedao12-facebook
+created_at: 2026-04-06T18:20:50.814084500+00:00
+updated_at: 2026-04-06T18:20:50.814084500+00:00
+hash: 4d5da4dacae46d95f6d907319a5ed09dc7ffdc2cd5c45493ca2558af35f89f8a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

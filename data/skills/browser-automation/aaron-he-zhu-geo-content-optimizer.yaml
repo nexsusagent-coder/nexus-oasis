@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_geo_content_optimizer
+name: geo-content-optimizer
+slug: aaron-he-zhu-geo-content-optimizer
+description: Use when the user asks to "optimize for AI", "get cited by ChatGPT", "AI optimization", "appear in AI answers".
+category: browser-automation
+metadata:
+  author: aaron
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/aaron-he-zhu-geo-content-optimizer
+created_at: 2026-04-06T18:20:37.237931365+00:00
+updated_at: 2026-04-06T18:20:37.237931365+00:00
+hash: f571b5ff890e573875b7dcf681065fc9c6f7b333538dfc962265fd7d5fc84382
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

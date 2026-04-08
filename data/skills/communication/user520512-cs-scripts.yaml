@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_cs_scripts
+name: cs-scripts
+slug: user520512-cs-scripts
+description: Generate context-aware CS responses.
+category: communication
+metadata:
+  author: user520512
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/user520512-cs-scripts
+created_at: 2026-04-06T18:20:43.600318902+00:00
+updated_at: 2026-04-06T18:20:43.600318902+00:00
+hash: df384ca80cf6fff953a669570772b52203e3c75cf7317eedcda8754b1968f28a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

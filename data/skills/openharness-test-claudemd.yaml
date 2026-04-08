@@ -1,0 +1,74 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-claudemd
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-claudemd"
+description: "Auto-generated skill from test-claudemd"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_claudemd.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_discover_claude_md_files"
+  - "test_load_claude_md_prompt"
+  - "test_build_runtime_system_prompt_combines_sections"
+  - "test_build_runtime_system_prompt_includes_project_context_and_fast_mode"
+
+dependencies:
+  - "__future__"
+  - "openharness.config.paths"
+  - "openharness.config.settings"
+  - "openharness.prompts"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

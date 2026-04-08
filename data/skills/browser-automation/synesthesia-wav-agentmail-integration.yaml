@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_agentmail_integration
+name: agentmail-integration
+slug: synesthesia-wav-agentmail-integration
+description: Integrate AgentMail API for AI agent.
+category: browser-automation
+metadata:
+  author: synesthesia
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/synesthesia-wav-agentmail-integration
+created_at: 2026-04-06T18:20:36.926737482+00:00
+updated_at: 2026-04-06T18:20:36.926737482+00:00
+hash: b99a394debe55baeff6ea19a64766db83e4dd526996b63de487a262ec542e9e5
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

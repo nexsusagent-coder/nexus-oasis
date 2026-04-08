@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_echo_repeater
+name: echo-repeater
+slug: theeightt-echo-repeater
+description: Echo the user's input back to them with optional formatting like "Echo:" or "You said:" as a prefix.
+category: browser-automation
+metadata:
+  author: theeightt
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/theeightt-echo-repeater
+created_at: 2026-04-06T18:20:37.176792865+00:00
+updated_at: 2026-04-06T18:20:37.176792865+00:00
+hash: 677bfb88f15d95017e37eff8a18a3d294072694ff5672e69625e37820a4ffb3b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

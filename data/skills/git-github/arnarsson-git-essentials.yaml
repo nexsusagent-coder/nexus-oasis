@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_git_essentials
+name: git-essentials
+slug: arnarsson-git-essentials
+description: Essential Git commands and workflows for version control.
+category: git-github
+metadata:
+  author: arnarsson
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/arnarsson-git-essentials
+created_at: 2026-04-06T18:20:46.102742499+00:00
+updated_at: 2026-04-06T18:20:46.102742499+00:00
+hash: 4286c4c860a650c7b04703501d650ed634e83b9b7b7aeac36b267a44d12ddc97
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

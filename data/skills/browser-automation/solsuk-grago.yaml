@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_grago
+name: grago
+slug: solsuk-grago
+description: '**Delegate research and data-fetch tasks to a free local LLM.'
+category: browser-automation
+metadata:
+  author: solsuk
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/solsuk-grago
+created_at: 2026-04-06T18:20:37.260423773+00:00
+updated_at: 2026-04-06T18:20:37.260423773+00:00
+hash: bf5d4cca31b97c343219ef8989e9bfd10350ca0f384c2b9a725efbec27a58d52
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

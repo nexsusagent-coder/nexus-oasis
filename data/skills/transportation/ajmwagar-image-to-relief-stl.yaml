@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_image_to_relief_stl
+name: image-to-relief-stl
+slug: ajmwagar-image-to-relief-stl
+description: Turn a source image (or multi-color mask image)
+category: transportation
+metadata:
+  author: ajmwagar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/ajmwagar-image-to-relief-stl
+created_at: 2026-04-06T18:20:51.651230361+00:00
+updated_at: 2026-04-06T18:20:51.651230361+00:00
+hash: d3c3546bc9a88246d8df7194dd2c603c6057548fa30c71277bda5ca8d87a6fc7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

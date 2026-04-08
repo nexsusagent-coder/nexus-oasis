@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_data_analytics_facebook_page_manager
+name: facebook-page-manager
+slug: longmaba-facebook-page-manager
+description: Manage Facebook Pages via Meta Graph API.
+category: data-analytics
+metadata:
+  author: longmaba
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- data-analytics
+dependencies: []
+source_url: https://clawskills.sh/skills/longmaba-facebook-page-manager
+created_at: 2026-04-06T18:20:44.112365099+00:00
+updated_at: 2026-04-06T18:20:44.112365099+00:00
+hash: 7eed5609a515ff81951cfa0ed683ddbcc6619c69deb922434df417b0f8b42d19
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

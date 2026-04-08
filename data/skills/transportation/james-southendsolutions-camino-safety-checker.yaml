@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_camino_safety_checker
+name: camino-safety-checker
+slug: james-southendsolutions-camino-safety-checker
+description: Find 24-hour businesses, well-lit public areas, transit stations, police stations, and hospitals near any location.
+category: transportation
+metadata:
+  author: james
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/james-southendsolutions-camino-safety-checker
+created_at: 2026-04-06T18:20:51.519987138+00:00
+updated_at: 2026-04-06T18:20:51.519987138+00:00
+hash: 3ccc0a6a6fb3c59faf876217d431109d8047b9dd88c0179790653a59b81d9c8f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

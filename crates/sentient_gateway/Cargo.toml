@@ -1,0 +1,81 @@
+[package]
+name = "sentient_gateway"
+version = "0.1.0"
+edition = "2021"
+description = "SENTIENT Communication and Control Layer - API Gateway + Telegram Bot"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+sentient_orchestrator = { path = "../sentient_orchestrator" }
+sentient_vgate = { path = "../sentient_vgate" }
+sentient_storage = { path = "../sentient_storage" }
+
+# Async runtime
+tokio = { version = "1.40", features = ["full"] }
+
+# Web framework
+axum = { version = "0.7", features = ["ws", "macros"] }
+axum-extra = { version = "0.9", features = ["typed-header"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+hyper = { version = "1.4", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Telegram Bot
+teloxide = { version = "0.12", features = ["macros"] }
+teloxide-core = "0.10"
+
+# WebSocket
+futures = "0.3"
+futures-util = "0.3"
+
+# Authentication
+jsonwebtoken = "9.3"
+bcrypt = "0.15"
+
+# Cryptography (Webhook signature verification)
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+base64 = "0.22"
+
+# HTTP client (V-GATE communication)
+reqwest = { version = "0.12", features = ["json"] }
+
+# UUID and time
+uuid = { version = "1.10", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Environment
+dotenvy = "0.15"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+log = "0.4"
+
+# Utils
+thiserror = "1.0"
+anyhow = "1.0"
+once_cell = "1.19"
+parking_lot = "0.12"
+
+# System metrics
+sysinfo = "0.30"
+
+# Static file serving
+rust-embed = "8.3"
+mime_guess = "2.0"
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockall = "0.12"
+
+[features]
+default = ["api", "telegram", "websocket"]
+api = []
+telegram = []
+websocket = []

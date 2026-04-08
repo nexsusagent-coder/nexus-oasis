@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-lockfile
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-lockfile"
+description: "Auto-generated skill from test-lockfile"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "filesystem"
+    source_repo: "openharness"
+    source_file: "test_lockfile.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_exclusive_file_lock_creates_lock_file_on_posix"
+  - "test_exclusive_file_lock_routes_windows_branch"
+  - "test_exclusive_file_lock_rejects_unknown_platform"
+
+dependencies:
+  - "__future__"
+  - "contextlib"
+  - "openharness.swarm"
+  - "pathlib"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

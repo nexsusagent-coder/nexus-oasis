@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_deai_image
+name: deai-image
+slug: swaylq-deai-image
+description: Detect and remove AI fingerprints from AI-generated images.
+category: git-github
+metadata:
+  author: swaylq
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/swaylq-deai-image
+created_at: 2026-04-06T18:20:45.981196619+00:00
+updated_at: 2026-04-06T18:20:45.981196619+00:00
+hash: 3e6a3b591d818cc0818a6e52c19ed7854f71d6c94b936c5487a29f8325ba3c4f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

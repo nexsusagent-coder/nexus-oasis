@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_iyeque_device_control
+name: iyeque-device-control
+slug: iyeque-iyeque-device-control
+description: Expose safe device actions (volume, brightness, open/close apps) for personal automation.
+category: browser-automation
+metadata:
+  author: iyeque
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/iyeque-iyeque-device-control
+created_at: 2026-04-06T18:20:37.326150275+00:00
+updated_at: 2026-04-06T18:20:37.326150275+00:00
+hash: 2aa36d2487f4659dc20499536ca8665c5fe5a53cf0779164fd82e87bcc4de5a1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

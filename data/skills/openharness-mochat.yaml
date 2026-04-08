@@ -1,0 +1,134 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-mochat
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-mochat"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "mochat.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "value"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "src"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*keys"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "content"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "raw"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "value"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "payload"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "Any]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "agent_user_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "config"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "session_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "group_id"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "entries"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "is_group"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "value"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_safe_dict"
+  - "_str_field"
+  - "_make_synthetic_event"
+  - "normalize_mochat_content"
+  - "resolve_mochat_target"
+  - "extract_mention_ids"
+  - "resolve_was_mentioned"
+  - "resolve_require_mention"
+  - "build_buffered_body"
+  - "parse_timestamp"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "collections"
+  - "dataclasses"
+  - "datetime"
+  - "httpx"
+  - "json"
+  - "logging"
+  - "openharness.channels.bus.events"
+  - "openharness.channels.bus.queue"
+  - "openharness.channels.impl.base"
+  - "openharness.config.schema"
+  - "openharness.utils.helpers"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

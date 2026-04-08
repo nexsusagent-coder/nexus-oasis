@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_agentaudit
+name: agentaudit
+slug: starbuck100-agentaudit
+description: Automatic security gate that checks packages against a vulnerability database before installation.
+category: browser-automation
+metadata:
+  author: starbuck100
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/starbuck100-agentaudit
+created_at: 2026-04-06T18:20:36.921098480+00:00
+updated_at: 2026-04-06T18:20:36.921098480+00:00
+hash: 3d763260287de7e27d6553a661e9941a01b1bd5cda2ec030889517845e52f45d
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

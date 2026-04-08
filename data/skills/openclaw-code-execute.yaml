@@ -1,0 +1,47 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openclaw-code-execute
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openclaw
+# Dil: typescript
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openclaw-code-execute"
+description: "Sandbox içinde kod çalıştırma"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "execution"
+    source_repo: "openclaw"
+    source_file: "execute.ts"
+    language: "typescript"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "code"
+    type: "string"
+    required: true
+    default: null
+    description: "Çalıştırılacak kod"
+  - name: "language"
+    type: "string"
+    required: true
+    default: null
+    description: "Programlama dili"
+
+commands:
+  - "execute(code, language)"
+
+dependencies:
+  - "vm2"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

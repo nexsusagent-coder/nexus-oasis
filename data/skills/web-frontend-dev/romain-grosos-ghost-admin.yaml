@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_ghost_admin
+name: ghost-admin
+slug: romain-grosos-ghost-admin
+description: Ghost CMS content management via Admin API v5.x.
+category: web-frontend-dev
+metadata:
+  author: romain
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/romain-grosos-ghost-admin
+created_at: 2026-04-06T18:20:52.869914923+00:00
+updated_at: 2026-04-06T18:20:52.869914923+00:00
+hash: badf653ae29e314d27076e7b15326696be815bc04b4315f59d074c3c68c3bd29
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

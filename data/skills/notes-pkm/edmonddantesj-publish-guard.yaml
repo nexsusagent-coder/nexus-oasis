@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_notes_pkm_publish_guard
+name: publish-guard
+slug: edmonddantesj-publish-guard
+description: '<!-- 🌌 Aoineco-Verified | S-DNA: AOI-2026-0213-SDNA-PG01 -->.'
+category: notes-pkm
+metadata:
+  author: edmonddantesj
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- notes-pkm
+dependencies: []
+source_url: https://clawskills.sh/skills/edmonddantesj-publish-guard
+created_at: 2026-04-06T18:20:48.565067361+00:00
+updated_at: 2026-04-06T18:20:48.565067361+00:00
+hash: ddc7209063cac77a5e285466ad2f402bb28dbe7db9f8ba3f0b32a95dbe83de22
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

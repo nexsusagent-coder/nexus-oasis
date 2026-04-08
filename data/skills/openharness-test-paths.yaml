@@ -1,0 +1,115 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-paths
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-paths"
+description: "Auto-generated skill from test-paths"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_paths.py"
+    language: "python"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_get_config_dir_default"
+  - "test_get_config_dir_env_override"
+  - "test_get_config_file_path"
+  - "test_get_data_dir_default"
+  - "test_get_data_dir_env_override"
+  - "test_get_logs_dir_default"
+  - "test_get_logs_dir_env_override"
+
+dependencies:
+  - "__future__"
+  - "openharness.config.paths"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

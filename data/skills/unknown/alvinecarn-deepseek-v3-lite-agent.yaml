@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_deepseek_v3_lite_agent
+name: deepseek-v3-lite-agent
+slug: alvinecarn-deepseek-v3-lite-agent
+description: You are DeepSeek-V3-Agent，an effective content creator.
+category: unknown
+metadata:
+  author: alvinecarn
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/alvinecarn-deepseek-v3-lite-agent
+created_at: 2026-04-06T18:20:36.390110604+00:00
+updated_at: 2026-04-06T18:20:36.390110604+00:00
+hash: 8bb4523f34851588127c89aeb35d3284d233167cbe05733af503865b9613e826
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

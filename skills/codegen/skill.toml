@@ -1,0 +1,29 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  💻 SENTIENT CodeGen Skill
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[skill]
+name = "codegen"
+version = "0.1.0"
+description = "Kod üretimi ve programlama yardımı"
+author = "SENTIENT Team"
+category = "development"
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_python = { path = "../../crates/sentient_python" }
+tree-sitter = "0.20"
+
+[config]
+supported_languages = ["python", "rust", "javascript", "typescript", "go"]
+max_output_lines = 500
+include_comments = true
+format_output = true
+
+[triggers]
+keywords = ["kod", "yaz", "code", "implement", "oluştur"]
+patterns = ["^kod[:\\s]+(.+)$", "^yaz[:\\s]+(.+)$"]
+
+[execution]
+sandbox_enabled = true
+test_generated_code = true

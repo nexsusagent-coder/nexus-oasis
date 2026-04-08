@@ -1,0 +1,58 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-codex-client
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-codex-client"
+description: "Auto-generated skill from test-codex-client"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_codex_client.py"
+    language: "python"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "data"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "object]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_b64url"
+  - "_fake_codex_token"
+  - "test_convert_messages_to_codex"
+  - "test_resolve_codex_url_ignores_unrelated_base_url"
+  - "test_codex_client_streams_text"
+  - "test_codex_client_emits_tool_use"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "openharness.api.client"
+  - "openharness.api.codex_client"
+  - "openharness.engine.messages"
+  - "pytest"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

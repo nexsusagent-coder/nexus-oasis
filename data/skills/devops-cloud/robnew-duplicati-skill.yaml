@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_duplicati_skill
+name: duplicati-skill
+slug: robnew-duplicati-skill
+description: Manage Duplicati backups on the server using secure Bearer tokens.
+category: devops-cloud
+metadata:
+  author: robnew
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/robnew-duplicati-skill
+created_at: 2026-04-06T18:20:44.696926800+00:00
+updated_at: 2026-04-06T18:20:44.696926800+00:00
+hash: 394aa08b1bd7db4371d4c56dddd96aaad16a12ed1aed009d2879a9635b5a889a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_data_analytics_kradleverse_cleanup
+name: kradleverse-cleanup
+slug: themrzz-kradleverse-cleanup
+description: Remove all stored Kradleverse sessions.
+category: data-analytics
+metadata:
+  author: themrzz
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- data-analytics
+dependencies: []
+source_url: https://clawskills.sh/skills/themrzz-kradleverse-cleanup
+created_at: 2026-04-06T18:20:44.139717038+00:00
+updated_at: 2026-04-06T18:20:44.139717038+00:00
+hash: ba1c7653536377878c053f89c1421d438fc09775222d97b021ffa10ec880aa9f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

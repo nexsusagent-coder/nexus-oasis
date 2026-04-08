@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_ztpc_spam_sweep
+name: ztpc-spam-sweep
+slug: cubiczeta-ztpc-spam-sweep
+description: Use a persistent OpenClaw browser profile to access **http://mail.ztpc.com/** (Aliyun Enterprise Mail),.
+category: web-frontend-dev
+metadata:
+  author: cubiczeta
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/cubiczeta-ztpc-spam-sweep
+created_at: 2026-04-06T18:20:55.213109397+00:00
+updated_at: 2026-04-06T18:20:55.213109397+00:00
+hash: fac9811d1cc65024837796c62484f3c34c79996fb6ba71557b99817c95a30b96
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

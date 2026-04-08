@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_business_card_generation
+name: business-card-generation
+slug: eftalyurtseven-business-card-generation
+description: Generate professional business cards using each::sense AI.
+category: transportation
+metadata:
+  author: eftalyurtseven
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/eftalyurtseven-business-card-generation
+created_at: 2026-04-06T18:20:51.492779829+00:00
+updated_at: 2026-04-06T18:20:51.492779829+00:00
+hash: 6c90d3b838cc285467659be0102ec16e45b96fa50eab9035d048448429880aeb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

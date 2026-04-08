@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_health_fitness_soft_pillow
+name: soft-pillow
+slug: kivs-soft-pillow
+description: Use when the user asks about their sleep data, dream history, or wants to query sleep entries from the Soft Pillow app.
+category: health-fitness
+metadata:
+  author: kivs
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- health-fitness
+dependencies: []
+source_url: https://clawskills.sh/skills/kivs-soft-pillow
+created_at: 2026-04-06T18:20:46.812461680+00:00
+updated_at: 2026-04-06T18:20:46.812461680+00:00
+hash: 20ad5cac39bf221894a2616991d67e1e66c22b6e4389c05f6c4dae3ee75179c0
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

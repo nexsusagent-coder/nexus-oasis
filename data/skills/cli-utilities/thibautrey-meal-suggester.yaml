@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_meal_suggester
+name: meal-suggester
+slug: thibautrey-meal-suggester
+description: Quick dinner companion blending taste profiles, inventory tracking, and learning-based recipe rotation.
+category: cli-utilities
+metadata:
+  author: thibautrey
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/thibautrey-meal-suggester
+created_at: 2026-04-06T18:20:38.889648342+00:00
+updated_at: 2026-04-06T18:20:38.889648342+00:00
+hash: 05bdf3a2393e659ad1b0f53c02e61835c263684c49f85ec81dca14bbef7e42ae
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

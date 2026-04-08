@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-backend-host
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-backend-host"
+description: "Auto-generated skill from backend-host"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "backend_host.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "run_backend_host"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "contextlib"
+  - "dataclasses"
+  - "json"
+  - "logging"
+  - "openharness.api.client"
+  - "openharness.auth.manager"
+  - "openharness.bridge"
+  - "openharness.config.settings"
+  - "openharness.engine.stream_events"
+  - "openharness.output_styles"
+  - "openharness.services.session_backend"
+  - "openharness.tasks"
+  - "openharness.themes"
+  - "openharness.ui.protocol"
+  - "openharness.ui.runtime"
+  - "os"
+  - "sys"
+  - "uuid"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_pr_risk_analyzer
+name: pr-risk-analyzer
+slug: nerdvana-labs-pr-risk-analyzer
+description: Analyze GitHub pull requests for security risks and determine if a PR is safe to merge.
+category: git-github
+metadata:
+  author: nerdvana
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/nerdvana-labs-pr-risk-analyzer
+created_at: 2026-04-06T18:20:46.346394949+00:00
+updated_at: 2026-04-06T18:20:46.346394949+00:00
+hash: d70f683c9f480ac7f1fedaa53355c8b12179d6ecd28827021debb53479264c56
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

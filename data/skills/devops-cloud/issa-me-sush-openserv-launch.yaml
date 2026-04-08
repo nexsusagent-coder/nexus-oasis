@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_openserv_launch
+name: openserv-launch
+slug: issa-me-sush-openserv-launch
+description: Launch tokens on Base blockchain via the OpenServ Launch API.
+category: devops-cloud
+metadata:
+  author: issa
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/issa-me-sush-openserv-launch
+created_at: 2026-04-06T18:20:45.141105356+00:00
+updated_at: 2026-04-06T18:20:45.141105356+00:00
+hash: d3601dfef69ee410beb7fee123c1fb53b4e5327c8efe170ed8dd6f2741d32d0f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

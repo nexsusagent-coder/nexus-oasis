@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_universal_notify
+name: universal-notify
+slug: josunlp-universal-notify
+description: Send notifications through multiple channels with a single script.
+category: web-frontend-dev
+metadata:
+  author: josunlp
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/josunlp-universal-notify
+created_at: 2026-04-06T18:20:54.792133282+00:00
+updated_at: 2026-04-06T18:20:54.792133282+00:00
+hash: a84acd4c82901ba71ef7fb676fd3da9012770b6b72db0820961e2cd938163cc3
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

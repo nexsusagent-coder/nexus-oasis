@@ -1,0 +1,51 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-task-tools
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-task-tools"
+description: "Auto-generated skill from test-task-tools"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_task_tools.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "test_task_create_and_output_tool"
+  - "test_team_create_tool"
+  - "test_task_update_tool_updates_metadata"
+  - "test_agent_tool_supports_remote_and_teammate_modes"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "openharness.tasks"
+  - "openharness.tools.agent_tool"
+  - "openharness.tools.base"
+  - "openharness.tools.task_create_tool"
+  - "openharness.tools.task_output_tool"
+  - "openharness.tools.task_update_tool"
+  - "openharness.tools.team_create_tool"
+  - "pathlib"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

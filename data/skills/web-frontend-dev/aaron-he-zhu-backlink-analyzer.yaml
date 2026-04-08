@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_backlink_analyzer
+name: backlink-analyzer
+slug: aaron-he-zhu-backlink-analyzer
+description: Use when the user asks to "analyze backlinks", "check link profile", "find toxic links", "link building.
+category: web-frontend-dev
+metadata:
+  author: aaron
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/aaron-he-zhu-backlink-analyzer
+created_at: 2026-04-06T18:20:52.173042919+00:00
+updated_at: 2026-04-06T18:20:52.173042919+00:00
+hash: 2c1305cf246793691b62f12c22adbd9af33634232911ed4f630b575fa1b05e2b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

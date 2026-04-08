@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_hi
+name: hi
+slug: roman181-hi
+description: Captures learnings, errors, and corrections to enable continuous improvement.
+category: browser-automation
+metadata:
+  author: roman181
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/roman181-hi
+created_at: 2026-04-06T18:20:37.273543237+00:00
+updated_at: 2026-04-06T18:20:37.273543237+00:00
+hash: 52def6ae592e68e92adbbdf4adfb079ebcce7cbf474adbab9964bfe0c645fdf9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

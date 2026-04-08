@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_intranet
+name: intranet
+slug: odrobnik-intranet
+description: Lightweight local HTTP file server with plugin support.
+category: web-frontend-dev
+metadata:
+  author: odrobnik
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/odrobnik-intranet
+created_at: 2026-04-06T18:20:53.078347261+00:00
+updated_at: 2026-04-06T18:20:53.078347261+00:00
+hash: b131927d3a2446f76cc62175fda70fdcc7a19540e142d888039f69752c167af7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

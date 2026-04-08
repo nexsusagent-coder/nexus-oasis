@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_manim_video
+name: manim-video
+slug: manim-video
+description: Build reusable Manim explainers for technical concepts, graphs, system diagrams, and product walkthroughs, then hand off to the wider ECC video stack if needed. Use when the user wants a clean animated explainer rather than a generic talking-head script.
+category: coding-agents-ides
+metadata:
+  author: everything-claude-code
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- ecc
+- claude-code
+dependencies: []
+created_at: 2026-04-06T18:20:55.891168784+00:00
+updated_at: 2026-04-06T18:20:55.891168784+00:00
+hash: 6f66b834e0b7c8d5fd4cc9ea33e9b2cdd28b581af2bf8b5b7ac68c7b1cb56aeb
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

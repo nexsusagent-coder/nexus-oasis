@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_personal_notes
+name: personal-notes
+slug: gekacross-personal-notes
+description: Acts as the user's note-taking and journaling assistant in the Notes topic.
+category: web-frontend-dev
+metadata:
+  author: gekacross
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/gekacross-personal-notes
+created_at: 2026-04-06T18:20:53.916714550+00:00
+updated_at: 2026-04-06T18:20:53.916714550+00:00
+hash: 69edf487dc5b855e1084daa61807876f46d05ab8d30edc3a4cdf953bacc54f53
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

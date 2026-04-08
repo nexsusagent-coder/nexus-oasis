@@ -1,0 +1,73 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-matrix
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-matrix"
+description: "Must stay below TYPING_NOTICE_TIMEOUT_MS so the indicator doesn't expire mid-processing."
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "matrix.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tag"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "attr"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "value"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_filter_matrix_html_attribute"
+  - "_render_markdown_html"
+  - "_build_matrix_text_content"
+  - "_configure_nio_logging_bridge"
+
+dependencies:
+  - "asyncio"
+  - "logging"
+  - "mimetypes"
+  - "openharness.channels.bus.events"
+  - "openharness.channels.impl.base"
+  - "openharness.config.loader"
+  - "openharness.utils.helpers"
+  - "pathlib"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

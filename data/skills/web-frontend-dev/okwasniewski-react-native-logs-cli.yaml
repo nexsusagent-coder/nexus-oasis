@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_react_native_logs_cli
+name: react-native-logs-cli
+slug: okwasniewski-react-native-logs-cli
+description: Use rn-logs to read React Native Metro logs via CDP without MCP overhead.
+category: web-frontend-dev
+metadata:
+  author: okwasniewski
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/okwasniewski-react-native-logs-cli
+created_at: 2026-04-06T18:20:54.116747845+00:00
+updated_at: 2026-04-06T18:20:54.116747845+00:00
+hash: 8c8d5a07ee79f89bc89b4faa73b6400883b9c35735c792fe82711ffdd2256231
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

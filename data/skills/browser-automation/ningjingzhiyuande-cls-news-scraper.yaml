@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_cls_news_scraper
+name: cls-news-scraper
+slug: ningjingzhiyuande-cls-news-scraper
+description: Use this skill to pull real-time market news from Cailian Press (CLS) and extract stock-positive catalysts.
+category: browser-automation
+metadata:
+  author: ningjingzhiyuande
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/ningjingzhiyuande-cls-news-scraper
+created_at: 2026-04-06T18:20:37.108111212+00:00
+updated_at: 2026-04-06T18:20:37.108111212+00:00
+hash: 844e6d5e28707feb26d7f8dd8d0b256d04eca064770c4b9e0450c281862f3f5c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

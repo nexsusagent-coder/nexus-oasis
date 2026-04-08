@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_pdf_documents_dc_weather
+name: dc-weather
+slug: vital1188-dc-weather
+description: Check Washington DC weather using Open-Meteo API.
+category: pdf-documents
+metadata:
+  author: vital1188
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- pdf-documents
+dependencies: []
+source_url: https://clawskills.sh/skills/vital1188-dc-weather
+created_at: 2026-04-06T18:20:48.701688005+00:00
+updated_at: 2026-04-06T18:20:48.701688005+00:00
+hash: 4793fa6fa9f195acabb55d610c2db1d53540e650b67ab8bbc9104dffed04c4da
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

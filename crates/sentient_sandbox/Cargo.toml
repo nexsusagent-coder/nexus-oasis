@@ -1,0 +1,34 @@
+[package]
+name = "sentient_sandbox"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+# Async
+tokio = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Docker API
+bollard = "0.18"
+
+# Utilities
+uuid = { workspace = true }
+log = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+base64 = "0.22"
+tar = "0.4"
+tokio-tar = "0.3"
+bytes = "1"
+
+[dev-dependencies]
+tokio-test = "0.4"

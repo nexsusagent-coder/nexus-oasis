@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_telegram_context
+name: telegram-context
+slug: fourthdensity-telegram-context
+description: Toggle-enabled skill that fetches Telegram message history at session start for conversational continuity.
+category: browser-automation
+metadata:
+  author: fourthdensity
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/fourthdensity-telegram-context
+created_at: 2026-04-06T18:20:37.833353623+00:00
+updated_at: 2026-04-06T18:20:37.833353623+00:00
+hash: 9025e347782ca2136e665d50d436e5d1e8117c6c785ca0d342b907d3aee65e3f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

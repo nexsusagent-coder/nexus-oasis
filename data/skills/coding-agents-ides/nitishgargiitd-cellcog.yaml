@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_cellcog
+name: cellcog
+slug: nitishgargiitd-cellcog
+description: '#1 on DeepResearch Bench (Feb 2026).'
+category: coding-agents-ides
+metadata:
+  author: nitishgargiitd
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/nitishgargiitd-cellcog
+created_at: 2026-04-06T18:20:40.066283180+00:00
+updated_at: 2026-04-06T18:20:40.066283180+00:00
+hash: 5ae79dbe709684580c9823d3c9954c1f8073c017d6060835f88ed10ee1ca4667
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

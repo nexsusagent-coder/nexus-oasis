@@ -1,0 +1,43 @@
+{
+  "name": "debug-helper",
+  "version": "1.0.0",
+  "description": "AI destekli hata ayıklama: log analizi, stack trace çözümleme, fix önerisi",
+  "author": "ASENA_CORE",
+  "category": "development",
+  "permissions": {
+    "file_read": true,
+    "file_write": true,
+    "bash_execute": true,
+    "network_access": false
+  },
+  "parameters": {
+    "error_type": {
+      "type": "string",
+      "required": true,
+      "description": "Hata türü"
+    },
+    "error_message": {
+      "type": "string",
+      "required": true,
+      "description": "Hata mesajı veya stack trace"
+    },
+    "code_context": {
+      "type": "string",
+      "required": false,
+      "description": "İlgili kod parçası"
+    }
+  },
+  "tools": ["read_file", "grep_tool", "bash", "web_search"],
+  "output_format": {
+    "type": "structured"
+  },
+  "rate_limit": {
+    "requests_per_minute": 20,
+    "max_tokens": 8000
+  },
+  "metadata": {
+    "tags": ["debug", "error", "fix", "development"],
+    "priority": "critical",
+    "hot_reload": true
+  }
+}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_content_repurpose_pro
+name: content-repurpose-pro
+slug: mkpareek0315-content-repurpose-pro
+description: When user asks to repurpose content, convert blog to tweets, turn article into LinkedIn post, create Twitter thread.
+category: git-github
+metadata:
+  author: mkpareek0315
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/mkpareek0315-content-repurpose-pro
+created_at: 2026-04-06T18:20:45.952639510+00:00
+updated_at: 2026-04-06T18:20:45.952639510+00:00
+hash: 7c35f742e3104bdc89c8d7a0fbb648928d7a8860b7db0a778700af24248ca14c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

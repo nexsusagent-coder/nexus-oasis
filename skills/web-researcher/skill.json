@@ -1,0 +1,45 @@
+{
+  "name": "web-researcher",
+  "version": "1.0.0",
+  "description": "Derin web araştırması yapar, çoklu kaynakları analiz eder ve rapor oluşturur",
+  "author": "ASENA_CORE",
+  "category": "research",
+  "permissions": {
+    "file_read": false,
+    "file_write": true,
+    "bash_execute": false,
+    "network_access": true
+  },
+  "parameters": {
+    "query": {
+      "type": "string",
+      "required": true,
+      "description": "Araştırma sorgusu"
+    },
+    "depth": {
+      "type": "integer",
+      "required": false,
+      "description": "Araştırma derinliği",
+      "default": 3
+    },
+    "sources": {
+      "type": "array",
+      "required": false,
+      "description": "Kaynak türleri",
+      "default": ["web", "academic", "news"]
+    }
+  },
+  "tools": ["web_search", "web_fetch", "browser_tool", "pdf_tool"],
+  "output_format": {
+    "type": "report"
+  },
+  "rate_limit": {
+    "requests_per_minute": 5,
+    "max_tokens": 16000
+  },
+  "metadata": {
+    "tags": ["research", "web", "analysis", "report"],
+    "priority": "high",
+    "hot_reload": true
+  }
+}

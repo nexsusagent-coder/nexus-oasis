@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_kie_ai_skill
+name: kie-ai-skill
+slug: jon-xo-kie-ai-skill
+description: Unified API access to multiple AI models via kie.ai - image generation (Nano Banana Pro, Flux, 4o-image) at 30-80%.
+category: image-video-gen
+metadata:
+  author: jon
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/jon-xo-kie-ai-skill
+created_at: 2026-04-06T18:20:47.307405961+00:00
+updated_at: 2026-04-06T18:20:47.307405961+00:00
+hash: 318bd68698439fe6c9a2ac0954b770abf53d13fd2937d91cc6e4615629f82ff6
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

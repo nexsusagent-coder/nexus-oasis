@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_cli_utilities_agent_commerce_engine
+name: agent-commerce-engine
+slug: nowloady-agent-commerce-engine
+description: A production-ready universal engine for Agentic.
+category: cli-utilities
+metadata:
+  author: nowloady
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- cli-utilities
+dependencies: []
+source_url: https://clawskills.sh/skills/nowloady-agent-commerce-engine
+created_at: 2026-04-06T18:20:38.478189016+00:00
+updated_at: 2026-04-06T18:20:38.478189016+00:00
+hash: 211d576f8c09ffc72f4df302233b2fb11b0033f2cec6d9b57e80de4802cda991
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

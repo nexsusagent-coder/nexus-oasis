@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_agent_id_osiris
+name: agent-id-osiris
+slug: nantes-agent-id-osiris
+description: Cryptographic identity for AI agents - sign and verify agent messages.
+category: coding-agents-ides
+metadata:
+  author: nantes
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/nantes-agent-id-osiris
+created_at: 2026-04-06T18:20:39.395470488+00:00
+updated_at: 2026-04-06T18:20:39.395470488+00:00
+hash: 718909211ba58451c699eddb5e74caff01b7db30af318fdca333b75a74851311
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_cli_worker
+name: cli-worker
+slug: quratus-cli-worker
+description: Delegates coding tasks to Kimi CLI agents in isolated git worktrees.
+category: coding-agents-ides
+metadata:
+  author: quratus
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/quratus-cli-worker
+created_at: 2026-04-06T18:20:40.222699721+00:00
+updated_at: 2026-04-06T18:20:40.222699721+00:00
+hash: fce1d3c21c10f57760fda5b8898be93e4a87dc3e1a2741d1db0135e689f41597
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

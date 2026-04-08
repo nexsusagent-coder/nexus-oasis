@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_xpr_web_scraping
+name: xpr-web-scraping
+slug: paulgnz-xpr-web-scraping
+description: Web scraping tools for fetching and extracting data from web pages.
+category: web-frontend-dev
+metadata:
+  author: paulgnz
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/paulgnz-xpr-web-scraping
+created_at: 2026-04-06T18:20:55.150133627+00:00
+updated_at: 2026-04-06T18:20:55.150133627+00:00
+hash: b66497642372f6974bbb031642b4beba5b417bfc9e1327036d24a8e777e53c86
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

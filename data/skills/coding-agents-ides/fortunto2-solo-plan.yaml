@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_solo_plan
+name: solo-plan
+slug: fortunto2-solo-plan
+description: Explore codebase and create spec + phased implementation plan with file-level task breakdown.
+category: coding-agents-ides
+metadata:
+  author: fortunto2
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/fortunto2-solo-plan
+created_at: 2026-04-06T18:20:42.665795604+00:00
+updated_at: 2026-04-06T18:20:42.665795604+00:00
+hash: d741dff59a3472c337bc6ffacda2c0bb5ce2e241f569a53ec456b742b4c53900
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

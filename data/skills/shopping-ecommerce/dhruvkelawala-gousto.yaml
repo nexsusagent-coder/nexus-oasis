@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_shopping_ecommerce_gousto
+name: gousto
+slug: dhruvkelawala-gousto
+description: Search and browse 9,000+ Gousto recipes.
+category: shopping-ecommerce
+metadata:
+  author: dhruvkelawala
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- shopping-ecommerce
+dependencies: []
+source_url: https://clawskills.sh/skills/dhruvkelawala-gousto
+created_at: 2026-04-06T18:20:51.072902934+00:00
+updated_at: 2026-04-06T18:20:51.072902934+00:00
+hash: e9c2f4b08ad9628d6e1012c9602e705fa3f49039ff2fd41bd4461e9fdb0af597
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

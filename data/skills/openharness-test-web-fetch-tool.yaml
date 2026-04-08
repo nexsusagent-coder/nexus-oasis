@@ -1,0 +1,47 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-web-fetch-tool
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-web-fetch-tool"
+description: "Auto-generated skill from test-web-fetch-tool"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "browser"
+    source_repo: "openharness"
+    source_file: "test_web_fetch_tool.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "test_web_fetch_tool_reads_html"
+  - "test_web_search_tool_reads_results"
+
+dependencies:
+  - "__future__"
+  - "contextlib"
+  - "http.server"
+  - "openharness.tools.base"
+  - "openharness.tools.web_fetch_tool"
+  - "openharness.tools.web_search_tool"
+  - "pytest"
+  - "threading"
+  - "urllib.parse"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

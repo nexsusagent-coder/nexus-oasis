@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_a_share_real_time_data
+name: a-share-real-time-data
+slug: wangdinglu-a-share-real-time-data
+description: Fetch China A-share stock market data (bars, realtime quotes, tick-by-tick transactions) via mootdx/TDX protocol.
+category: browser-automation
+metadata:
+  author: wangdinglu
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/wangdinglu-a-share-real-time-data
+created_at: 2026-04-06T18:20:36.868658243+00:00
+updated_at: 2026-04-06T18:20:36.868658243+00:00
+hash: 18efa00d5cac693be6bba638254126b62402138d8442742cc1952be573e857d4
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

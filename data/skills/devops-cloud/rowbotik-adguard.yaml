@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_adguard
+name: adguard
+slug: rowbotik-adguard
+description: Control AdGuard Home DNS filtering via HTTP API.
+category: devops-cloud
+metadata:
+  author: rowbotik
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/rowbotik-adguard
+created_at: 2026-04-06T18:20:44.236768060+00:00
+updated_at: 2026-04-06T18:20:44.236768060+00:00
+hash: 6b72058a56d7c7786f6fee109f60c5b0854dd4c3d42b2a57a4818e51e7a384aa
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

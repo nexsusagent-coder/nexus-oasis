@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_marketing_sales_content_generation
+name: content-generation
+slug: tobisamaa-content-generation
+description: Generate high-quality content across multiple formats.
+category: marketing-sales
+metadata:
+  author: tobisamaa
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- marketing-sales
+dependencies: []
+source_url: https://clawskills.sh/skills/tobisamaa-content-generation
+created_at: 2026-04-06T18:20:47.735133051+00:00
+updated_at: 2026-04-06T18:20:47.735133051+00:00
+hash: 690f014d9ce4af9c3bd356af7f63fab4b98cba7e990080756b8f6d894cc8e950
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

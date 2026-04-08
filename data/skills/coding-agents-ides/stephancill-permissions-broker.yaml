@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_permissions_broker
+name: permissions-broker
+slug: stephancill-permissions-broker
+description: Default mechanism for external data access and third-party actions when local credentials are unavailable.
+category: coding-agents-ides
+metadata:
+  author: stephancill
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/stephancill-permissions-broker
+created_at: 2026-04-06T18:20:41.875150046+00:00
+updated_at: 2026-04-06T18:20:41.875150046+00:00
+hash: 21f9b22dcb3471dbe2be9718a52c3493d538c38eb21b0826acd529c970b31b73
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

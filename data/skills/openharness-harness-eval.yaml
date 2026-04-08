@@ -1,0 +1,65 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-harness-eval
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: mixed
+# Risk: low
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-harness-eval"
+description: "This skill should be used when the user asks to "test the harness", "run integration tests", "validate features with real API", "test with real model calls", "run agent loop tests", "verify end-to-end", or needs to verify OpenHarness features on a real codebase with actual LLM calls."
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "SKILL.md"
+    language: "mixed"
+    risk_level: "low"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "git clone https://github.com/HKUDS/AutoAgent /tmp/eval-workspace"
+  - "export ANTHROPIC_API_KEY=sk-xxx
+export ANTHROPIC_BASE_URL=https://api.moonshot.cn/anthropic  # or any provider
+export ANTHROPIC_MODEL=kimi-k2.5"
+  - "npm install -g @anthropic-ai/sandbox-runtime
+sudo apt-get update
+sudo apt-get install -y bubblewrap ripgrep
+which srt
+which bwrap
+which rg
+srt --version"
+  - "from pathlib import Path
+from openharness.config.settings import Settings, SandboxSettings, save_settings
+from openharness.tools.bash_tool import BashTool
+
+cfg = Path("/tmp/openharness-sandbox-settings.json")
+save_settings(Settings(sandbox=SandboxSettings(enabled=True, fail_if_unavailable=True)), cfg)
+# Point config loader at this file, then run BashTool on a tiny command such as `pwd`."
+  - "engine = make_engine(system_prompt="...", cwd=UNFAMILIAR_PROJECT)
+evs1 = [ev async for ev in engine.submit_message("Read X, analyze Y")]
+r1 = collect(evs1)  # text, tools, turns, tokens
+evs2 = [ev async for ev in engine.submit_message("Based on what you found...")]
+r2 = collect(evs2)
+assert "grep" in r1["tools"]  # verify tools ran"
+  - "python tests/test_merged_prs_on_autoagent.py   # PR feature tests
+python tests/test_real_large_tasks.py           # large multi-step tasks
+python tests/test_hooks_skills_plugins_real.py  # hooks/skills/plugins
+python -m pytest tests/ -q -k "not autoagent"  # unit tests (no API)"
+
+dependencies:
+  - "version:0.2.0"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: low
+# ═══════════════════════════════════════════════════════════════════════════════

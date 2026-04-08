@@ -1,0 +1,61 @@
+# ASENA Skill: web-researcher
+# browser-use & MindSearch pattern'inden adapte
+
+name: web-researcher
+version: "1.0.0"
+description: "Derin web araştırması yapar, çoklu kaynakları analiz eder ve rapor oluşturur"
+author: "ASENA_CORE"
+category: research
+
+permissions:
+  file_read: false
+  file_write: true
+  bash_execute: false
+  network_access: true
+  
+parameters:
+  query:
+    type: string
+    required: true
+    description: "Araştırma sorgusu"
+  depth:
+    type: integer
+    required: false
+    default: 3
+    min: 1
+    max: 5
+    description: "Araştırma derinliği"
+  sources:
+    type: array
+    required: false
+    default: ["web", "academic", "news"]
+    description: "Kaynak türleri"
+  output_format:
+    type: string
+    required: false
+    default: "markdown"
+    enum: [markdown, json, pdf]
+
+tools:
+  - web_search
+  - web_fetch
+  - browser_tool
+  - pdf_tool
+  
+output_format:
+  type: report
+  sections:
+    - executive_summary
+    - methodology
+    - findings
+    - sources
+    - recommendations
+
+rate_limit:
+  requests_per_minute: 5
+  max_tokens: 16000
+  
+metadata:
+  tags: [research, web, analysis, report]
+  priority: high
+  hot_reload: true

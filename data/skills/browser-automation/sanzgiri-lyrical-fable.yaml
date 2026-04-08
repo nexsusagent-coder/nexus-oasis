@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_lyrical_fable
+name: lyrical-fable
+slug: sanzgiri-lyrical-fable
+description: Create short lyrical fables (~1000 words) about historical, fictional, or mythological characters in the style.
+category: browser-automation
+metadata:
+  author: sanzgiri
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/sanzgiri-lyrical-fable
+created_at: 2026-04-06T18:20:37.402434639+00:00
+updated_at: 2026-04-06T18:20:37.402434639+00:00
+hash: 22d4b80a4cc2bce54ea43bbb2cd9ef56860bc92a4e5aa67544a45cb705b11232
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

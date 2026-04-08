@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_aminer_open_academic
+name: aminer-open-academic
+slug: canxiangcc-aminer-open-academic
+description: AMiner open academic resource query tool and academic data acquisition tool.
+category: search-research
+metadata:
+  author: canxiangcc
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/canxiangcc-aminer-open-academic
+created_at: 2026-04-06T18:20:50.730245493+00:00
+updated_at: 2026-04-06T18:20:50.730245493+00:00
+hash: b2c832604cb20fe2bd0d730573abdfa8cd9a5a85a2bc4f4acd6420dd11d1a573
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

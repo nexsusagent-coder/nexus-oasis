@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_scrapling_fetcher
+name: scrapling-fetcher
+slug: damirikys-scrapling-fetcher
+description: Web scraping using Scrapling — a Python framework with anti-bot bypass (Cloudflare Turnstile, fingerprint.
+category: web-frontend-dev
+metadata:
+  author: damirikys
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/damirikys-scrapling-fetcher
+created_at: 2026-04-06T18:20:54.293848622+00:00
+updated_at: 2026-04-06T18:20:54.293848622+00:00
+hash: 7642fff38f56321df359fd3561dae55114f412066f156e6d08150fcfb8fc9b77
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

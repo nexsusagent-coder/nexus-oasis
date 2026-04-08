@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_read_optimizer
+name: read-optimizer
+slug: autogame-17-read-optimizer
+description: Optimizes file reading operations by providing smarter read strategies (head/tail/grep/diff) to reduce token usage.
+category: git-github
+metadata:
+  author: autogame
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/autogame-17-read-optimizer
+created_at: 2026-04-06T18:20:46.361531733+00:00
+updated_at: 2026-04-06T18:20:46.361531733+00:00
+hash: 2031cc357369eb3fc632ca06bc26e2a116fbe04cf11dc3f496c41d9c4799ac34
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

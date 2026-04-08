@@ -1,0 +1,70 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-core-tools
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-core-tools"
+description: "Auto-generated skill from test-core-tools"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_core_tools.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "test_file_write_read_and_edit"
+  - "test_glob_and_grep"
+  - "test_bash_tool_runs_command"
+  - "test_tool_search_and_brief_tools"
+  - "test_skill_todo_and_config_tools"
+  - "test_notebook_edit_tool"
+  - "test_lsp_tool"
+  - "test_worktree_tools"
+  - "test_cron_and_remote_trigger_tools"
+
+dependencies:
+  - "__future__"
+  - "openharness.tools"
+  - "openharness.tools.base"
+  - "openharness.tools.bash_tool"
+  - "openharness.tools.brief_tool"
+  - "openharness.tools.config_tool"
+  - "openharness.tools.cron_create_tool"
+  - "openharness.tools.cron_delete_tool"
+  - "openharness.tools.cron_list_tool"
+  - "openharness.tools.enter_worktree_tool"
+  - "openharness.tools.exit_worktree_tool"
+  - "openharness.tools.file_edit_tool"
+  - "openharness.tools.file_read_tool"
+  - "openharness.tools.file_write_tool"
+  - "openharness.tools.glob_tool"
+  - "openharness.tools.grep_tool"
+  - "openharness.tools.lsp_tool"
+  - "openharness.tools.notebook_edit_tool"
+  - "openharness.tools.remote_trigger_tool"
+  - "openharness.tools.skill_tool"
+  - "openharness.tools.todo_write_tool"
+  - "openharness.tools.tool_search_tool"
+  - "pathlib"
+  - "pytest"
+  - "subprocess"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

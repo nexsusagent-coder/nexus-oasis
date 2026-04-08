@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_code_security_audit
+name: code-security-audit
+slug: wisdomsword-code-security-audit
+description: Comprehensive code security audit toolkit combining OWASP Top 10 vulnerability scanning, dependency analysis.
+category: coding-agents-ides
+metadata:
+  author: wisdomsword
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/wisdomsword-code-security-audit
+created_at: 2026-04-06T18:20:40.269442597+00:00
+updated_at: 2026-04-06T18:20:40.269442597+00:00
+hash: 055e6c795f70bd8b506ff405b12a3409ad19764ab0100dcd04b77d527b8a09d0
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

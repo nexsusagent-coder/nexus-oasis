@@ -1,0 +1,54 @@
+# ASENA Skill: competitor-analyzer
+# agency-agents & MindSearch pattern'inden adapte
+
+name: competitor-analyzer
+version: "1.0.0"
+description: "Rakip ürün/hizmet analizi: özellik karşılaştırma, fiyat analizi, SWOT"
+author: "ASENA_CORE"
+category: research
+
+permissions:
+  file_read: false
+  file_write: true
+  bash_execute: false
+  network_access: true
+  
+parameters:
+  target:
+    type: string
+    required: true
+    description: "Analiz edilecek rakip"
+  aspects:
+    type: array
+    required: false
+    default: ["features", "pricing", "market", "strengths", "weaknesses"]
+    description: "Analiz boyutları"
+  depth:
+    type: integer
+    required: false
+    default: 3
+    min: 1
+    max: 5
+
+tools:
+  - web_search
+  - web_fetch
+  - browser_tool
+  
+output_format:
+  type: report
+  sections:
+    - executive_summary
+    - feature_comparison
+    - pricing_analysis
+    - swot_analysis
+    - recommendations
+
+rate_limit:
+  requests_per_minute: 5
+  max_tokens: 16000
+  
+metadata:
+  tags: [research, competitive, analysis, market]
+  priority: high
+  hot_reload: true

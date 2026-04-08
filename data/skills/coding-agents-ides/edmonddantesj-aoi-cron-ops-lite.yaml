@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_aoi_cron_ops_lite
+name: aoi-cron-ops-lite
+slug: edmonddantesj-aoi-cron-ops-lite
+description: Cron hygiene and cost-control for OpenClaw.
+category: coding-agents-ides
+metadata:
+  author: edmonddantesj
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/edmonddantesj-aoi-cron-ops-lite
+created_at: 2026-04-06T18:20:39.652245583+00:00
+updated_at: 2026-04-06T18:20:39.652245583+00:00
+hash: dc9eee94effec6bdf3ff51b0ff83b1d8fba5fbddc50f5bc5f828ff7d4bbb0345
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

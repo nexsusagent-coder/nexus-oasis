@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_leadership_prompts
+name: leadership-prompts
+slug: robansuini-leadership-prompts
+description: Curated collection of 25+ battle-tested prompts for engineering leaders — 1-on-1 prep, team health, incident.
+category: coding-agents-ides
+metadata:
+  author: robansuini
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/robansuini-leadership-prompts
+created_at: 2026-04-06T18:20:41.309544809+00:00
+updated_at: 2026-04-06T18:20:41.309544809+00:00
+hash: 199352e3fae8a6fa448139b3505a7a7e5d756cbf4ba849542272c5675efb2c5f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

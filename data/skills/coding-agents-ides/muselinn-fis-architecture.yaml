@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_fis_architecture
+name: fis-architecture
+slug: muselinn-fis-architecture
+description: Multi-agent workflow framework using JSON tickets and file-based coordination.
+category: coding-agents-ides
+metadata:
+  author: muselinn
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/muselinn-fis-architecture
+created_at: 2026-04-06T18:20:40.831202972+00:00
+updated_at: 2026-04-06T18:20:40.831202972+00:00
+hash: 4b0477f893638953ca671054f2368aabcfac97c3e1506f5abb193a2727f7fc45
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

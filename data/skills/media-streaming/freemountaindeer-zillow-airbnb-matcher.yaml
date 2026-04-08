@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_media_streaming_zillow_airbnb_matcher
+name: zillow-airbnb-matcher
+slug: freemountaindeer-zillow-airbnb-matcher
+description: Find properties for sale that are already generating Airbnb income.
+category: media-streaming
+metadata:
+  author: freemountaindeer
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- media-streaming
+dependencies: []
+source_url: https://clawskills.sh/skills/freemountaindeer-zillow-airbnb-matcher
+created_at: 2026-04-06T18:20:48.193650930+00:00
+updated_at: 2026-04-06T18:20:48.193650930+00:00
+hash: 1a96a653dfc2b427d1ec3f718615f8ee1bd13055e597879823d006b640864380
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

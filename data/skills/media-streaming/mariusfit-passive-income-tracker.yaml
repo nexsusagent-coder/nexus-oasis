@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_media_streaming_passive_income_tracker
+name: passive-income-tracker
+slug: mariusfit-passive-income-tracker
+description: Track all your passive income crypto apps from one place.
+category: media-streaming
+metadata:
+  author: mariusfit
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- media-streaming
+dependencies: []
+source_url: https://clawskills.sh/skills/mariusfit-passive-income-tracker
+created_at: 2026-04-06T18:20:48.076755702+00:00
+updated_at: 2026-04-06T18:20:48.076755702+00:00
+hash: dfc0ddc5b02e2e258bb0e3fe380ba64ab2d1267c9cd5aad7cb8fe8965f32c413
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_arc_department_manager
+name: arc-department-manager
+slug: trypto1019-arc-department-manager
+description: Manage a team of AI sub-agents organized into departments.
+category: productivity-tasks
+metadata:
+  author: trypto1019
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/trypto1019-arc-department-manager
+created_at: 2026-04-06T18:20:49.143660199+00:00
+updated_at: 2026-04-06T18:20:49.143660199+00:00
+hash: 6a6f432cdc13eb388d9a807ab0d9968f7448e2dec7c1c9fb59622c7a0accff25
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

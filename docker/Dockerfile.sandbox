@@ -1,0 +1,39 @@
+# ─── ASENA Sandbox Base Image ───
+# Yalıtılmış kod çalıştırma ortamı
+
+FROM python:3.11-slim
+
+# Metadata
+LABEL maintainer="NEXUS OASIS"
+LABEL description="ASENA Docker Sandbox"
+LABEL version="0.1.0"
+
+# Güvenlik: Non-root kullanıcı oluştur
+RUN groupadd -r asena && useradd -r -g asena -d /home/asena -s /bin/bash asena
+
+# Çalışma dizini
+RUN mkdir -p /workspace && chown asena:asena /workspace
+WORKDIR /workspace
+
+# Gerekli araçlar
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python bağımlılıkları (sandbox için güvenli kütüphaneler)
+RUN pip install --no-cache-dir \
+    numpy \
+    requests \
+    beautifulsoup4 \
+    lxml
+
+# Ortam değişkenleri
+ENV ASENA_SANDBOX=true
+ENV ASENA_VERSION=0.1.0
+ENV PYTHONUNBUFFERED=1
+
+# Kullanıcıya geç
+USER asena
+
+# Varsayılan komut
+CMD ["sleep", "infinity"]

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_adhd_daily_planner
+name: adhd-daily-planner
+slug: mikecourt-adhd-daily-planner
+description: Time-blind friendly planning, executive function.
+category: productivity-tasks
+metadata:
+  author: mikecourt
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/mikecourt-adhd-daily-planner
+created_at: 2026-04-06T18:20:49.098057384+00:00
+updated_at: 2026-04-06T18:20:49.098057384+00:00
+hash: 4d4885c1a7c0f1f3884df64e0ed6d7f5247f91cb2e1e07c87abcfc10967e67f1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

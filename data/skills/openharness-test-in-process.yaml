@@ -1,0 +1,65 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-in-process
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-in-process"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "data"
+    source_repo: "openharness"
+    source_file: "test_in_process.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "spawn_config"
+  - "backend"
+  - "test_teammate_context_defaults"
+  - "test_get_teammate_context_returns_none_outside_task"
+  - "test_set_and_get_teammate_context"
+  - "test_spawn_returns_success_result"
+  - "test_spawn_duplicate_returns_failure"
+  - "test_spawn_creates_active_agent"
+  - "test_shutdown_unknown_agent_returns_false"
+  - "test_graceful_shutdown"
+  - "test_force_shutdown"
+  - "test_send_message_writes_to_mailbox"
+  - "test_send_message_invalid_agent_id_raises"
+  - "test_active_agents_lists_running"
+  - "test_shutdown_all"
+
+dependencies:
+  - "__future__"
+  - "openharness.swarm.in_process"
+  - "openharness.swarm.types"
+  - "pathlib"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

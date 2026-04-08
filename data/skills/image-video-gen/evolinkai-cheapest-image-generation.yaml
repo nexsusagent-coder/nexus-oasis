@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_cheapest_image_generation
+name: cheapest-image-generation
+slug: evolinkai-cheapest-image-generation
+description: Possibly the cheapest AI image generation (~$0.0036/image)
+category: image-video-gen
+metadata:
+  author: evolinkai
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/evolinkai-cheapest-image-generation
+created_at: 2026-04-06T18:20:47.066716463+00:00
+updated_at: 2026-04-06T18:20:47.066716463+00:00
+hash: cdd8beaf7d9fe431de7e848febf48f33973f2dec4369654fbf17c36671b21422
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

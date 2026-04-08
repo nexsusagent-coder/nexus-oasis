@@ -1,0 +1,45 @@
+{
+  "name": "code-review",
+  "version": "1.0.0",
+  "description": "Kod kalitesi, güvenlik ve performans açısından derinlemesine kod incelemesi yapar",
+  "author": "ASENA_CORE",
+  "category": "development",
+  "permissions": {
+    "file_read": true,
+    "file_write": false,
+    "bash_execute": false,
+    "network_access": false
+  },
+  "parameters": {
+    "path": {
+      "type": "string",
+      "required": true,
+      "description": "İncelenecek dosya veya dizin yolu"
+    },
+    "focus": {
+      "type": "string",
+      "required": false,
+      "description": "İnceleme odağı",
+      "default": "all"
+    },
+    "language": {
+      "type": "string",
+      "required": false,
+      "description": "Programlama dili (auto-detect)",
+      "default": "auto"
+    }
+  },
+  "tools": ["read_file", "grep_tool", "glob_tool"],
+  "output_format": {
+    "type": "structured"
+  },
+  "rate_limit": {
+    "requests_per_minute": 10,
+    "max_tokens": 4000
+  },
+  "metadata": {
+    "tags": ["code", "review", "quality", "security"],
+    "priority": "high",
+    "hot_reload": true
+  }
+}

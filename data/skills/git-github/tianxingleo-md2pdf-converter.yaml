@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_md2pdf_converter
+name: md2pdf-converter
+slug: tianxingleo-md2pdf-converter
+description: Offline Markdown to PDF converter with FULL Unicode support using Pandoc + WeasyPrint + local Twemoji cache (3660.
+category: git-github
+metadata:
+  author: tianxingleo
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/tianxingleo-md2pdf-converter
+created_at: 2026-04-06T18:20:46.245863086+00:00
+updated_at: 2026-04-06T18:20:46.245863086+00:00
+hash: bd0590e2722527b81a654bbd6605442fb379691edfaf5a8b89803d97104c9400
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

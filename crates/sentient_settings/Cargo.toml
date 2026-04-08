@@ -1,0 +1,21 @@
+[package]
+name = "sentient-settings"
+version = "4.0.0"
+edition = "2021"
+description = "SENTIENT Settings Manager v4.0.0 - Multi-Key Vault & Dynamic Routing"
+authors = ["SENTIENT Core Team"]
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+axum = { workspace = true }
+tower-http = { workspace = true }
+anyhow = { workspace = true }
+toml = "0.8"
+dirs = "5.0"
+notify = "6.1"
+rand = { workspace = true }
+log = { workspace = true }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }

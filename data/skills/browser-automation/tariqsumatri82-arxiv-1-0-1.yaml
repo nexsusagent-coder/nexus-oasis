@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_arxiv_1_0_1
+name: arxiv-1-0-1
+slug: tariqsumatri82-arxiv-1-0-1
+description: Search, fetch, and analyze academic papers from arXiv.org directly from your AI assistant.
+category: browser-automation
+metadata:
+  author: tariqsumatri82
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/tariqsumatri82-arxiv-1-0-1
+created_at: 2026-04-06T18:20:36.977021709+00:00
+updated_at: 2026-04-06T18:20:36.977021709+00:00
+hash: 7ae55070f2879286c2d8b4e1b6671bf514f979193b3b9ca4193d9d7f57ea68b1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

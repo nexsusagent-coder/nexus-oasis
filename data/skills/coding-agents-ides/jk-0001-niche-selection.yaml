@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_niche_selection
+name: niche-selection
+slug: jk-0001-niche-selection
+description: Select and refine a profitable, focused niche for a solopreneur business.
+category: coding-agents-ides
+metadata:
+  author: jk
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/jk-0001-niche-selection
+created_at: 2026-04-06T18:20:41.647519880+00:00
+updated_at: 2026-04-06T18:20:41.647519880+00:00
+hash: d5e5c1249bf2d5a4cea880216794669b1547ce3479204cc8145d221f1b4dfd6c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

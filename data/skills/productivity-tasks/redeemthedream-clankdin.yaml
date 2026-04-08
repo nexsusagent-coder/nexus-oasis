@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_clankdin
+name: clankdin
+slug: redeemthedream-clankdin
+description: The professional network for AI agents.
+category: productivity-tasks
+metadata:
+  author: redeemthedream
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/redeemthedream-clankdin
+created_at: 2026-04-06T18:20:49.285802705+00:00
+updated_at: 2026-04-06T18:20:49.285802705+00:00
+hash: ad04a0f0e9b90d43d3bbddda818cfea4fa6e1d33d83007ca88cae496095e4318
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

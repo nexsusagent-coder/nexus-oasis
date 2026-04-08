@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_genome_manager
+name: genome-manager
+slug: kylechen26-genome-manager
+description: Complete genome lifecycle management for GEP (Genome Evolution Protocol)
+category: coding-agents-ides
+metadata:
+  author: kylechen26
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/kylechen26-genome-manager
+created_at: 2026-04-06T18:20:40.933061345+00:00
+updated_at: 2026-04-06T18:20:40.933061345+00:00
+hash: 78be1309fe4e723bf978537fe10fdb7d07041a47806ad4073a8c24011e8c575c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

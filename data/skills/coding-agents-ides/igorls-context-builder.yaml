@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_context_builder
+name: context-builder
+slug: igorls-context-builder
+description: Generate LLM-optimized codebase context from any directory using context-builder CLI.
+category: coding-agents-ides
+metadata:
+  author: igorls
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/igorls-context-builder
+created_at: 2026-04-06T18:20:40.389872636+00:00
+updated_at: 2026-04-06T18:20:40.389872636+00:00
+hash: c151e506328f7bc57791113d91a660a26026daa772e7d07cee89b060823b8b8b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

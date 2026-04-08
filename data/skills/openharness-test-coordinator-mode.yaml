@@ -1,0 +1,116 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-coordinator-mode
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-coordinator-mode"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_coordinator_mode.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "value"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_format_and_parse_basic"
+  - "test_format_and_parse_with_result_and_usage"
+  - "test_parse_ignores_missing_optional_fields"
+  - "test_parse_partial_usage_block"
+  - "test_is_coordinator_mode_false_by_default"
+  - "test_is_coordinator_mode_true_variants"
+  - "test_is_coordinator_mode_false_for_garbage"
+  - "test_get_coordinator_tools_returns_expected"
+  - "test_match_session_mode_no_change_when_already_coordinator"
+  - "test_match_session_mode_switches_to_coordinator"
+  - "test_match_session_mode_exits_coordinator"
+  - "test_match_session_mode_none_returns_none"
+  - "test_coordinator_user_context_empty_when_not_coordinator"
+  - "test_coordinator_user_context_includes_tools"
+  - "test_coordinator_user_context_with_mcp_clients"
+  - "test_coordinator_user_context_with_scratchpad"
+  - "test_worker_config_defaults"
+  - "test_worker_config_full"
+
+dependencies:
+  - "__future__"
+  - "openharness.coordinator.coordinator_mode"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_ipwebcam
+name: ipwebcam
+slug: alihmaou-ipwebcam
+description: Transform an Android phone with IP Webcam into an intelligent Edge AI security system with OpenClaw.
+category: web-frontend-dev
+metadata:
+  author: alihmaou
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/alihmaou-ipwebcam
+created_at: 2026-04-06T18:20:53.083891203+00:00
+updated_at: 2026-04-06T18:20:53.083891203+00:00
+hash: d00a9b45be2501072e7596e9b206c796be3d115a774193ffca3dcfb0a3869360
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

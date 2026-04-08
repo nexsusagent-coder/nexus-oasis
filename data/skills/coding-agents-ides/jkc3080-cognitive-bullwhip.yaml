@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_cognitive_bullwhip
+name: cognitive-bullwhip
+slug: jkc3080-cognitive-bullwhip
+description: Diagnoses whether a Cognitive Bullwhip Effect is already active in your agent system.
+category: coding-agents-ides
+metadata:
+  author: jkc3080
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/jkc3080-cognitive-bullwhip
+created_at: 2026-04-06T18:20:40.325652025+00:00
+updated_at: 2026-04-06T18:20:40.325652025+00:00
+hash: c602e7cf050ae4e8bca81ce6ea61e1324652f3ee91abb6e21066bca1b8a80208
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

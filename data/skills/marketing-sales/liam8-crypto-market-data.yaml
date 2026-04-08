@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_marketing_sales_crypto_market_data
+name: crypto-market-data
+slug: liam8-crypto-market-data
+description: No API KEY needed for free tier.
+category: marketing-sales
+metadata:
+  author: liam8
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- marketing-sales
+dependencies: []
+source_url: https://clawskills.sh/skills/liam8-crypto-market-data
+created_at: 2026-04-06T18:20:47.742275484+00:00
+updated_at: 2026-04-06T18:20:47.742275484+00:00
+hash: 3611a7f951662becb3074101533de5e017b56eeb0770785b4a290219bde54dfa
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

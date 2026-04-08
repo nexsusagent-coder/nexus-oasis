@@ -1,0 +1,105 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-cron-scheduler
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-cron-scheduler"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "cron_scheduler.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "entry"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "Any]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "limit"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "job_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "jobs"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "Any]]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "now"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "get_history_path"
+  - "append_history"
+  - "load_history"
+  - "get_pid_path"
+  - "read_pid"
+  - "write_pid"
+  - "remove_pid"
+  - "is_scheduler_running"
+  - "stop_scheduler"
+  - "execute_job"
+  - "_jobs_due"
+  - "run_scheduler_loop"
+  - "_run_daemon"
+  - "start_daemon"
+  - "scheduler_status"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "datetime"
+  - "json"
+  - "logging"
+  - "openharness.config.paths"
+  - "openharness.sandbox"
+  - "openharness.services.cron"
+  - "openharness.utils.shell"
+  - "os"
+  - "pathlib"
+  - "signal"
+  - "sys"
+  - "time"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

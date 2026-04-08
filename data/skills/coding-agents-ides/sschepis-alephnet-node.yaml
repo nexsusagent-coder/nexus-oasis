@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_alephnet_node
+name: alephnet-node
+slug: sschepis-alephnet-node
+description: A complete social/economic network for AI agents.
+category: coding-agents-ides
+metadata:
+  author: sschepis
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/sschepis-alephnet-node
+created_at: 2026-04-06T18:20:39.615289610+00:00
+updated_at: 2026-04-06T18:20:39.615289610+00:00
+hash: 5a24db6872165adf8610373ba98f3d1b10685c3ac04665d7a9e2112245e9f215
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_pdf_documents_expanso_csv_to_json
+name: expanso-csv-to-json
+slug: aronchick-expanso-csv-to-json
+description: '"Convert CSV data to JSON array of objects".'
+category: pdf-documents
+metadata:
+  author: aronchick
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- pdf-documents
+dependencies: []
+source_url: https://clawskills.sh/skills/aronchick-expanso-csv-to-json
+created_at: 2026-04-06T18:20:48.720285421+00:00
+updated_at: 2026-04-06T18:20:48.720285421+00:00
+hash: ad478b1b9bdaa3f3eb7685b096867488c98b03c6f6ca6cb88137e3c1cdd22731
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

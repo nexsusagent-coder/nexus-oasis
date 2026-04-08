@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_agentgate
+name: agentgate
+slug: monteslu-agentgate
+description: API gateway for personal data with human-in-the-loop write approval.
+category: git-github
+metadata:
+  author: monteslu
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/monteslu-agentgate
+created_at: 2026-04-06T18:20:45.813381825+00:00
+updated_at: 2026-04-06T18:20:45.813381825+00:00
+hash: a65755afb398efa150b2211b71a1f3d6a8db21fe7ac9e8073b94f53d6b45a9b2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_gmail_to_outlook
+name: gmail-to-outlook
+slug: luigi08001-gmail-to-outlook
+description: Migrate email, contacts, and calendars from Google Workspace (Gmail) to Microsoft 365 (Outlook/Exchange Online).
+category: web-frontend-dev
+metadata:
+  author: luigi08001
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/luigi08001-gmail-to-outlook
+created_at: 2026-04-06T18:20:52.901798154+00:00
+updated_at: 2026-04-06T18:20:52.901798154+00:00
+hash: cdfb14825ecda9aa87ca5324919911289f6718830d280dfbc89b953ad4c99da6
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

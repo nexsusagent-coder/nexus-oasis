@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_apipick_email_checker
+name: apipick-email-checker
+slug: javainthinking-apipick-email-checker
+description: Validate email addresses using the apipick Email Validator API.
+category: web-frontend-dev
+metadata:
+  author: javainthinking
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/javainthinking-apipick-email-checker
+created_at: 2026-04-06T18:20:52.055535671+00:00
+updated_at: 2026-04-06T18:20:52.055535671+00:00
+hash: cc6f7a716ab949cbe38fb3faf98a0c76582daf67a5d42f759fefd47261d58cb4
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

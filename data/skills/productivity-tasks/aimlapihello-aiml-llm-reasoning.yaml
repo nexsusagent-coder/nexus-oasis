@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_aiml_llm_reasoning
+name: aiml-llm-reasoning
+slug: aimlapihello-aiml-llm-reasoning
+description: Run AIMLAPI LLM and reasoning workflows through chat completions with retries, structured outputs, and explicit.
+category: productivity-tasks
+metadata:
+  author: aimlapihello
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/aimlapihello-aiml-llm-reasoning
+created_at: 2026-04-06T18:20:49.133417856+00:00
+updated_at: 2026-04-06T18:20:49.133417856+00:00
+hash: 3e3513b8cfb28f183efa8a538d9d3d2e51b8f2b6d93a6a6f252eb13432263885
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

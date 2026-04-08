@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_nova_act
+name: nova-act
+slug: zouchaoqun-nova-act
+description: Write and execute Python scripts using Amazon Nova Act for AI-powered browser automation tasks like flight.
+category: browser-automation
+metadata:
+  author: zouchaoqun
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/zouchaoqun-nova-act
+created_at: 2026-04-06T18:20:37.530774112+00:00
+updated_at: 2026-04-06T18:20:37.530774112+00:00
+hash: 654fe05c64ae89dd7b35c00718ec6325ae73cc9157c394c9065fef20bea942fd
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

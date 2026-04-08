@@ -1,0 +1,47 @@
+[package]
+name = "oasis_core"
+version.workspace = true
+edition.workspace = true
+description = "OASIS Core Runtime with Creusot Contracts - Mathematical Security Proofs"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# IDs
+uuid.workspace = true
+
+# Errors
+thiserror.workspace = true
+anyhow.workspace = true
+
+# Logging
+log.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Concurrency
+parking_lot.workspace = true
+crossbeam.workspace = true
+
+# Crypto
+sha2 = "0.10"
+blake3 = "1.5"
+
+# Metrics
+prometheus = "0.13"
+
+# Creusot contracts support
+# Note: Creusot annotations are via proc-macros in comments
+# This crate provides runtime assertion layer
+
+[features]
+default = []
+creusot = []  # Enable Creusot verification mode

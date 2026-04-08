@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_notes_pkm_dev_chronicle
+name: dev-chronicle
+slug: sssamuelll-dev-chronicle
+description: Generate narrative chronicles of developer work from git history, session transcripts, and memory files.
+category: notes-pkm
+metadata:
+  author: sssamuelll
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- notes-pkm
+dependencies: []
+source_url: https://clawskills.sh/skills/sssamuelll-dev-chronicle
+created_at: 2026-04-06T18:20:48.471403291+00:00
+updated_at: 2026-04-06T18:20:48.471403291+00:00
+hash: c29898d61d87434e83de5fb30aa6ca89d2080e02c070c704c995db9aa4376104
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

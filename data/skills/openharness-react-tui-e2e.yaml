@@ -1,0 +1,82 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-react-tui-e2e
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-react-tui-e2e"
+description: "Auto-generated skill from react-tui-e2e"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "react_tui_e2e.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "env"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "str] | None = None"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "child"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "text"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "permission_mode"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_spawn_oh"
+  - "_submit"
+  - "_isolated_env"
+  - "_run_permission_file_io"
+  - "_run_question_flow"
+  - "_run_command_flow"
+  - "main"
+
+dependencies:
+  - "__future__"
+  - "argparse"
+  - "json"
+  - "openharness.config.settings"
+  - "os"
+  - "pathlib"
+  - "pexpect"
+  - "sys"
+  - "tempfile"
+  - "time"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_solo_seo_audit
+name: solo-seo-audit
+slug: fortunto2-solo-seo-audit
+description: SEO health check for any URL — analyzes meta tags, OG, JSON-LD, sitemap, robots.txt, SERP positions, and scores.
+category: search-research
+metadata:
+  author: fortunto2
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/fortunto2-solo-seo-audit
+created_at: 2026-04-06T18:20:50.577899433+00:00
+updated_at: 2026-04-06T18:20:50.577899433+00:00
+hash: dfbd58376f68e9e20ec147ef5719683ec6b27151500ea289dca7396cae09f6d2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

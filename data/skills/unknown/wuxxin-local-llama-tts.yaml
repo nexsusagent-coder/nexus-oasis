@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_local_llama_tts
+name: local-llama-tts
+slug: wuxxin-local-llama-tts
+description: Local text-to-speech using llama-tts (llama.cpp) and OuteTTS-1.0-0.6B model.
+category: unknown
+metadata:
+  author: wuxxin
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/wuxxin-local-llama-tts
+created_at: 2026-04-06T18:20:36.469233170+00:00
+updated_at: 2026-04-06T18:20:36.469233170+00:00
+hash: 1540d5d8748c8657c7b7ce44efcb78636671f241ea0e1e47e168061d0106767b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_fsd_secure_skill
+name: fsd-secure-skill
+slug: aadipapp-fsd-secure-skill
+description: Full Self-Driving agent with highest safety standards (Camera-Only, Redundant Checks).
+category: transportation
+metadata:
+  author: aadipapp
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/aadipapp-fsd-secure-skill
+created_at: 2026-04-06T18:20:51.609064957+00:00
+updated_at: 2026-04-06T18:20:51.609064957+00:00
+hash: 74edddada8a8eaf7c4391db1ec62f89dff42a256416d3ae8e4eac32f70299aab
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_gotify
+name: gotify
+slug: jmagar-gotify
+description: Send push notifications via Gotify when long-running tasks complete.
+category: browser-automation
+metadata:
+  author: jmagar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/jmagar-gotify
+created_at: 2026-04-06T18:20:50.942650032+00:00
+updated_at: 2026-04-06T18:20:50.942650032+00:00
+hash: 38330f77978c492c5f0bd07c5177790d1b56e249cc2ea0042d5653a1683f5d54
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

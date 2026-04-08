@@ -1,0 +1,28 @@
+[package]
+name = "sentient_forge"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+log.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+
+# Code generation
+handlebars = "6"  # Template engine
+once_cell = "1"
+
+# Validation
+regex.workspace = true
+
+# Formats
+serde_yaml = "0.9"
+
+[dev-dependencies]
+tokio-test = "0.4"

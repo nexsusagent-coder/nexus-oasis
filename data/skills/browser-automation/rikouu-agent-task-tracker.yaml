@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_agent_task_tracker
+name: agent-task-tracker
+slug: rikouu-agent-task-tracker
+description: Proactive task state management.
+category: browser-automation
+metadata:
+  author: rikouu
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/rikouu-agent-task-tracker
+created_at: 2026-04-06T18:20:36.906078836+00:00
+updated_at: 2026-04-06T18:20:36.906078836+00:00
+hash: 31fdf2f647802e5318db1399f5abea38999348b10f5256146f28ff01cf6e04a4
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

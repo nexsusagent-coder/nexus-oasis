@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_tubelab_api
+name: tubelab-api
+slug: antoniojps-tubelab-api
+description: YouTube analytics and research API.
+category: coding-agents-ides
+metadata:
+  author: antoniojps
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/antoniojps-tubelab-api
+created_at: 2026-04-06T18:20:43.022419671+00:00
+updated_at: 2026-04-06T18:20:43.022419671+00:00
+hash: 625ec9a324d5dae4fe095fb57dc11f824a66eb6f585e1da6031d4009a2996ba1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

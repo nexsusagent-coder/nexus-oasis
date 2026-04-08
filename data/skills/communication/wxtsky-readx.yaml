@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_readx
+name: readx
+slug: wxtsky-readx
+description: 'Twitter/X intelligence toolkit: analyze users, tweets, trends, communities, and networks.'
+category: communication
+metadata:
+  author: wxtsky
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/wxtsky-readx
+created_at: 2026-04-06T18:20:43.897124919+00:00
+updated_at: 2026-04-06T18:20:43.897124919+00:00
+hash: 07cfff23c69758dcd6cd2c94abfb8d4e23dd4d8be0305a78cdb3c26ae9845415
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

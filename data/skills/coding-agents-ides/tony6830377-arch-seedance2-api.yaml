@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_seedance2_api
+name: seedance2-api
+slug: tony6830377-arch-seedance2-api
+description: Out-of-the-box Seedance 2.0 API skill — just one API key to generate AI videos.
+category: coding-agents-ides
+metadata:
+  author: tony6830377
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/tony6830377-arch-seedance2-api
+created_at: 2026-04-06T18:20:42.358566434+00:00
+updated_at: 2026-04-06T18:20:42.358566434+00:00
+hash: 971dbb485e3fede916f263b40dfd46ff266cc16ff2610360da6764d05f08731f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

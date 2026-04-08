@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_git_github_xpr_structured_data
+name: xpr-structured-data
+slug: paulgnz-xpr-structured-data
+description: CSV parsing, JSON-to-CSV conversion, and SVG chart generation.
+category: git-github
+metadata:
+  author: paulgnz
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- git-github
+dependencies: []
+source_url: https://clawskills.sh/skills/paulgnz-xpr-structured-data
+created_at: 2026-04-06T18:20:46.513890113+00:00
+updated_at: 2026-04-06T18:20:46.513890113+00:00
+hash: 7f12906a707103912ebd2685de25192d85e1c6bcc33e739af6d1c5c10c3f2477
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

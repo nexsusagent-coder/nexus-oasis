@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_smart_home_iot_wiz_light_control
+name: wiz-light-control
+slug: canbirlik-wiz-light-control
+description: Controls Wiz smart bulbs (turn on/off, RGB colors, disco mode) via local WiFi.
+category: smart-home-iot
+metadata:
+  author: canbirlik
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- smart-home-iot
+dependencies: []
+source_url: https://clawskills.sh/skills/canbirlik-wiz-light-control
+created_at: 2026-04-06T18:20:51.273509019+00:00
+updated_at: 2026-04-06T18:20:51.273509019+00:00
+hash: 774a7377f504473e16c7ebec22d8a7075b23ddf89fe79124f21122ec3e7c6b61
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

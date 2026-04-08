@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_publora_mastodon
+name: publora-mastodon
+slug: sergebulaev-publora-mastodon
+description: Post or schedule content to Mastodon using the Publora API.
+category: productivity-tasks
+metadata:
+  author: sergebulaev
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/sergebulaev-publora-mastodon
+created_at: 2026-04-06T18:20:49.549094770+00:00
+updated_at: 2026-04-06T18:20:49.549094770+00:00
+hash: 069d7f0aabc9455376fede93396025fe7828243a1a882b546c39650ceb3accdc
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

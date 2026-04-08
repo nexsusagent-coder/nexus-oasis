@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_exec_error_doctor
+name: exec-error-doctor
+slug: bluebirdback-exec-error-doctor
+description: Diagnose and mitigate exec-related command failures across tools (OpenClaw exec output, shell errors, GitHub CLI.
+category: coding-agents-ides
+metadata:
+  author: bluebirdback
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/bluebirdback-exec-error-doctor
+created_at: 2026-04-06T18:20:40.784869317+00:00
+updated_at: 2026-04-06T18:20:40.784869317+00:00
+hash: fd323eea4361cbcc90426a15b0a6acd1dbef3e466b3e93d0d24c8d7715c017f6
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

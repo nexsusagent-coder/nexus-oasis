@@ -1,0 +1,67 @@
+# ─── ASENA UNIFIED SERVICE ───
+# NEXUS OASIS AI Operating System - Birleşik Servis
+# Gateway + V-GATE + Orchestrator + Swarm + Dashboard
+# Port: 8080 (HTTP/WebSocket/Dashboard)
+#
+# Kurulum:
+#   sudo cp deploy/asena.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable asena
+#   sudo systemctl start asena
+#
+# Yönetim:
+#   sudo systemctl status asena
+#   sudo journalctl -u asena -f
+#   sudo systemctl restart asena
+
+[Unit]
+Description=ASENA - NEXUS OASIS AI Operating System
+Documentation=https://github.com/nexus-oasis/asena
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/ASENA_CORE
+
+# Ortam değişkenleri (.env dosyasından)
+EnvironmentFile=/root/ASENA_CORE/.env
+
+# Ana çalıştırma komutu - tüm modüller tek Process
+ExecStart=/root/ASENA_CORE/target/release/asena serve --scan-interval 300 --scout --forge --self-healing
+
+# Yeniden başlatma ayarları
+Restart=always
+RestartSec=15
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Kaynak limitleri
+LimitNOFILE=65536
+LimitNPROC=4096
+MemoryMax=4G
+CPUQuota=200%
+
+# Güvenlik ayarları
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/root/ASENA_CORE/data
+
+# Log ayarları
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=asena
+
+# Timeout ayarları
+TimeoutStartSec=120
+TimeoutStopSec=30
+
+# Önbellek temizliği (çökme durumunda)
+ExecStopPost=/bin/bash -c 'rm -f /root/ASENA_CORE/data/*.lock 2>/dev/null || true'
+
+[Install]
+WantedBy=multi-user.target

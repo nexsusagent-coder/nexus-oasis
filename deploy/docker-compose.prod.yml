@@ -1,0 +1,357 @@
+# ─── ASENA PRODUCTION DOCKER COMPOSE ───
+# NEXUS OASIS Yapay Zeka İşletim Sistemi
+# 7/24 Kesintisiz Production Deployment
+#
+# Kullanım:
+#   docker-compose -f deploy/docker-compose.prod.yml up -d
+#   docker-compose -f deploy/docker-compose.prod.yml logs -f
+#   docker-compose -f deploy/docker-compose.prod.yml down
+
+version: "3.8"
+
+# ═══════════════════════════════════════════════════════════
+#  ORTAM DEĞİŞKENLERİ
+# ═══════════════════════════════════════════════════════════
+x-common-env: &common-env
+  RUST_LOG: ${RUST_LOG:-info}
+  ASENA_ENV: production
+  ASENA_DATA_DIR: /data
+  TZ: UTC
+
+x-healthcheck-defaults: &healthcheck-defaults
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+
+# ═══════════════════════════════════════════════════════════
+#  SERVİSLER
+# ═══════════════════════════════════════════════════════════
+services:
+
+  # ─── ASENA GATEWAY (Ana API Sunucusu) ───
+  gateway:
+    image: asena-gateway:${ASENA_VERSION:-latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.gateway
+    container_name: asena_gateway
+    hostname: asena-gateway
+    restart: unless-stopped
+    
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    
+    networks:
+      - asena_net
+    
+    volumes:
+      - gateway_data:/data
+      - ../data:/data/persistent:rw
+    
+    environment:
+      <<: *common-env
+      GATEWAY_HTTP_ADDR: 0.0.0.0:8080
+      GATEWAY_JWT_SECRET: ${JWT_SECRET}
+      GATEWAY_API_KEYS: ${GATEWAY_API_KEYS:-}
+      MAX_CONCURRENT_TASKS: ${MAX_CONCURRENT_TASKS:-50}
+      TASK_TIMEOUT_SECS: ${TASK_TIMEOUT_SECS:-1800}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-120}
+      V_GATE_URL: http://vgate:1071
+      MEMORY_DB_PATH: /data/persistent/asena.db
+    
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+    
+    depends_on:
+      vgate:
+        condition: service_healthy
+      memory:
+        condition: service_healthy
+    
+    labels:
+      - "asena.module=gateway"
+      - "asena.role=api"
+      - "asena.version=${ASENA_VERSION:-latest}"
+    
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # ─── V-GATE (Vekil Sunucu - API Anahtarı Yönetimi) ───
+  vgate:
+    image: asena-vgate:${ASENA_VERSION:-latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.vgate
+    container_name: asena_vgate
+    hostname: asena-vgate
+    restart: unless-stopped
+    
+    ports:
+      - "${VGATE_PORT:-1071}:1071"
+    
+    networks:
+      - asena_net
+    
+    environment:
+      <<: *common-env
+      V_GATE_LISTEN: 0.0.0.0:1071
+      V_GATE_TIMEOUT: ${V_GATE_TIMEOUT:-120}
+      # API Anahtarları (sunucuda tutulur, istemciye gönderilmez)
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "curl", "-f", "http://localhost:1071/health"]
+    
+    labels:
+      - "asena.module=vgate"
+      - "asena.role=proxy"
+    
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  # ─── ASENA MEMORY (SQLite + Bellek Yönetimi) ───
+  memory:
+    image: alpine:3.19
+    container_name: asena_memory
+    hostname: asena-memory
+    restart: unless-stopped
+    
+    networks:
+      - asena_net
+    
+    volumes:
+      - memory_data:/data
+    
+    environment:
+      <<: *common-env
+    
+    command: >
+      sh -c "apk add --no-cache sqlite curl &&
+             mkdir -p /data/memory &&
+             sqlite3 /data/memory/asena_memory.db 'CREATE TABLE IF NOT EXISTS memories
+             (id TEXT PRIMARY KEY, content TEXT, memory_type TEXT, metadata TEXT, 
+              importance REAL, created_at TEXT, last_accessed TEXT, access_count INTEGER)' &&
+             echo 'ASENA Memory initialized' &&
+             while true; do curl -sf http://localhost:9999/health || true; sleep 30; done"
+    
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "test", "-f", "/data/memory/asena_memory.db"]
+    
+    labels:
+      - "asena.module=memory"
+      - "asena.role=storage"
+
+  # ─── SANDBOX PYTHON (Güvenli Kod Çalıştırma) ───
+  sandbox-python:
+    image: asena-sandbox:${ASENA_VERSION:-latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.sandbox
+    container_name: asena_sandbox_python
+    hostname: asena-sandbox
+    restart: unless-stopped
+    
+    # Maksimum güvenlik
+    read_only: true
+    tmpfs:
+      - /tmp:rw,size=100m,exec
+      - /var/run:rw,size=10m
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=default
+    
+    # Kaynak limitleri
+    mem_limit: 512m
+    cpus: 1.0
+    pids_limit: 50
+    
+    # Network izolasyonu (sandbox internete erişemez)
+    networks:
+      - sandbox_net
+    
+    environment:
+      <<: *common-env
+      ASENA_SANDBOX: "true"
+      ASENA_PROFILE: standard
+    
+    labels:
+      - "asena.module=sandbox"
+      - "asena.language=python"
+      - "asena.security=isolated"
+
+  # ─── SANDBOX SECURE (Yüksek Güvenlik) ───
+  sandbox-secure:
+    image: asena-sandbox:${ASENA_VERSION:-latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.sandbox
+    container_name: asena_sandbox_secure
+    hostname: asena-sandbox-secure
+    restart: unless-stopped
+    
+    # En yüksek güvenlik
+    read_only: true
+    tmpfs:
+      - /tmp:rw,size=50m,noexec
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=default
+    
+    # Sıkı limitler
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 25
+    
+    # Network yok - tamamen izole
+    network_mode: none
+    
+    environment:
+      <<: *common-env
+      ASENA_SANDBOX: "true"
+      ASENA_PROFILE: secure
+    
+    labels:
+      - "asena.module=sandbox"
+      - "asena.profile=secure"
+
+  # ─── NGINX REVERSE PROXY ───
+  nginx:
+    image: nginx:alpine
+    container_name: asena_nginx
+    hostname: asena-nginx
+    restart: unless-stopped
+    
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    
+    networks:
+      - asena_net
+    
+    volumes:
+      - ../deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../deploy/nginx/ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    
+    environment:
+      <<: *common-env
+    
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "nginx", "-t"]
+    
+    depends_on:
+      gateway:
+        condition: service_healthy
+    
+    labels:
+      - "asena.module=nginx"
+      - "asena.role=proxy"
+
+  # ─── PROMETHEUS (Monitoring) ───
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: asena_prometheus
+    hostname: asena-prometheus
+    restart: unless-stopped
+    
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    
+    networks:
+      - asena_net
+    
+    volumes:
+      - ../deploy/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    
+    labels:
+      - "asena.module=prometheus"
+      - "asena.role=monitoring"
+
+  # ─── GRAFANA (Dashboard) ───
+  grafana:
+    image: grafana/grafana:latest
+    container_name: asena_grafana
+    hostname: asena-grafana
+    restart: unless-stopped
+    
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    
+    networks:
+      - asena_net
+    
+    volumes:
+      - grafana_data:/var/lib/grafana
+    
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-asena2024}
+      GF_INSTALL_PLUGINS: ""
+    
+    depends_on:
+      - prometheus
+    
+    labels:
+      - "asena.module=grafana"
+      - "asena.role=dashboard"
+
+# ═══════════════════════════════════════════════════════════
+#  AĞLAR
+# ═══════════════════════════════════════════════════════════
+networks:
+  asena_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+    
+  sandbox_net:
+    driver: bridge
+    internal: true  # İnternet erişimi yok
+
+# ═══════════════════════════════════════════════════════════
+#  VERİ HACİMLERİ
+# ═══════════════════════════════════════════════════════════
+volumes:
+  gateway_data:
+    driver: local
+  
+  memory_data:
+    driver: local
+  
+  nginx_logs:
+    driver: local
+  
+  prometheus_data:
+    driver: local
+  
+  grafana_data:
+    driver: local

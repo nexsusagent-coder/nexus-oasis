@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_media_streaming_audio_transcribe
+name: audio-transcribe
+slug: aktheknight-audio-transcribe
+description: Auto-transcribe voice messages using faster-whisper (local, no API key needed).
+category: media-streaming
+metadata:
+  author: aktheknight
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- media-streaming
+dependencies: []
+source_url: https://clawskills.sh/skills/aktheknight-audio-transcribe
+created_at: 2026-04-06T18:20:47.907827817+00:00
+updated_at: 2026-04-06T18:20:47.907827817+00:00
+hash: 73cb64f026880bb6840d53a30987f4d866d4a3606be45a594b4b1619fa5e145b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

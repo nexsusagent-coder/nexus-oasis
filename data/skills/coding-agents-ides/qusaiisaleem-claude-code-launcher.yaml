@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_claude_code_launcher
+name: claude-code-launcher
+slug: qusaiisaleem-claude-code-launcher
+description: Launch Claude Code in a new terminal window with Remote Control enabled.
+category: coding-agents-ides
+metadata:
+  author: qusaiisaleem
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/qusaiisaleem-claude-code-launcher
+created_at: 2026-04-06T18:20:40.159834511+00:00
+updated_at: 2026-04-06T18:20:40.159834511+00:00
+hash: d7c5027e42c19e6b803d66d8f5341417a9e2f32dba35f07fa947807427cf9e37
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

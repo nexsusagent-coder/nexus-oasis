@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_agent_memory
+name: agent-memory
+slug: dennis-da-menace-agent-memory
+description: Persistent memory system for AI agents.
+category: unknown
+metadata:
+  author: dennis
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/dennis-da-menace-agent-memory
+created_at: 2026-04-06T18:20:36.136131111+00:00
+updated_at: 2026-04-06T18:20:36.136131111+00:00
+hash: 6f4331b4cc09308ab79664e2fd0d01a0168c5f7a173c87baa01eb6c47a91f723
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

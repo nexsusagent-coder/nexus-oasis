@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_unknown_openmeteo_sh_weather_advanced
+name: openmeteo-sh-weather-advanced
+slug: lstpsche-openmeteo-sh-weather-advanced
+description: 'Advanced weather from free OpenMeteo API: historical data, detailed variable selection, model choice, past-days.'
+category: unknown
+metadata:
+  author: lstpsche
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- unknown
+dependencies: []
+source_url: https://clawskills.sh/skills/lstpsche-openmeteo-sh-weather-advanced
+created_at: 2026-04-06T18:20:36.537634414+00:00
+updated_at: 2026-04-06T18:20:36.537634414+00:00
+hash: d978c734b9cdc544b2fc25d5405d067768d03126a4bae0f7ce258b096f30d391
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

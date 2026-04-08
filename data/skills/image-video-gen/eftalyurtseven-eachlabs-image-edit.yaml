@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_image_video_gen_eachlabs_image_edit
+name: eachlabs-image-edit
+slug: eftalyurtseven-eachlabs-image-edit
+description: Edit, transform, upscale images using 200+ AI models.
+category: image-video-gen
+metadata:
+  author: eftalyurtseven
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- image-video-gen
+dependencies: []
+source_url: https://clawskills.sh/skills/eftalyurtseven-eachlabs-image-edit
+created_at: 2026-04-06T18:20:47.140349168+00:00
+updated_at: 2026-04-06T18:20:47.140349168+00:00
+hash: ace63125a5506f019e2ea737d273b1a74181d76f4bd714a9582dc4d07c31edd5
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_diagrams
+name: diagrams
+slug: brennerspear-diagrams
+description: Generate visual flow diagrams, architecture diagrams, and system maps as SVG/PNG.
+category: coding-agents-ides
+metadata:
+  author: brennerspear
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/brennerspear-diagrams
+created_at: 2026-04-06T18:20:40.592805154+00:00
+updated_at: 2026-04-06T18:20:40.592805154+00:00
+hash: bf346866246af25ad1ec0c43d6c48a599b8fca3aeed8fa18031baea2290f165b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

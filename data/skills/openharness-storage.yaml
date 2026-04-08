@@ -1,0 +1,156 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-storage
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-storage"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "storage.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "data"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "Any]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "key"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "key"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "value"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "use_keyring"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "key"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "use_keyring"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "use_keyring"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "binding"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "plaintext"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "ciphertext"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_creds_path"
+  - "_load_creds_file"
+  - "_save_creds_file"
+  - "_keyring_available"
+  - "_keyring_key"
+  - "store_credential"
+  - "load_credential"
+  - "clear_provider_credentials"
+  - "list_stored_providers"
+  - "store_external_binding"
+  - "load_external_binding"
+  - "_obfuscation_key"
+  - "encrypt"
+  - "decrypt"
+
+dependencies:
+  - "__future__"
+  - "dataclasses"
+  - "json"
+  - "logging"
+  - "openharness.config.paths"
+  - "pathlib"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

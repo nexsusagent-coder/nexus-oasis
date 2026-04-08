@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_asr
+name: asr
+slug: ilyakam-asr
+description: Fast, accurate, and incredibly inexpensive automatic speech-to-text.
+category: browser-automation
+metadata:
+  author: ilyakam
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/ilyakam-asr
+created_at: 2026-04-06T18:20:36.982069930+00:00
+updated_at: 2026-04-06T18:20:36.982069930+00:00
+hash: 2287ec820d145206e7fe0ad0df4cc39c377892fdf9733f196e83cb0ded54f967
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

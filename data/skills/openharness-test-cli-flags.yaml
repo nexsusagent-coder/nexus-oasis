@@ -1,0 +1,60 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-cli-flags
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-cli-flags"
+description: "Colors for output"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_cli_flags.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "*args"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "timeout"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_env"
+  - "_run_oh"
+  - "test_help_output"
+  - "test_print_mode"
+  - "test_print_json"
+  - "test_subcommand_mcp_list"
+  - "test_subcommand_plugin_list"
+  - "test_subcommand_auth_status"
+  - "main"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "os"
+  - "pathlib"
+  - "subprocess"
+  - "sys"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

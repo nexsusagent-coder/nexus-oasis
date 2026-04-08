@@ -1,0 +1,174 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-external
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-external"
+description: "Auto-generated skill from test-external"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_external.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "data"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "object]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "payload"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "object]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_b64url"
+  - "_fake_jwt"
+  - "test_load_codex_external_credential"
+  - "test_load_claude_external_credential"
+  - "test_settings_resolve_auth_uses_external_binding"
+  - "test_settings_resolve_auth_refreshes_expired_external_binding"
+  - "test_cli_codex_login_binds_without_switching"
+  - "test_cli_claude_login_binds_without_switching"
+  - "test_cli_claude_login_refreshes_expired_credentials"
+  - "test_cli_provider_use_activates_codex_profile"
+  - "test_settings_resolve_auth_rejects_third_party_base_url_for_claude_subscription"
+  - "test_describe_external_binding_reports_refreshable_claude_token"
+  - "test_refresh_claude_oauth_credential"
+  - "test_get_claude_code_version_uses_fallback"
+
+dependencies:
+  - "__future__"
+  - "base64"
+  - "json"
+  - "openharness.auth.external"
+  - "openharness.auth.storage"
+  - "openharness.cli"
+  - "openharness.config.settings"
+  - "pathlib"
+  - "pytest"
+  - "typer.testing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

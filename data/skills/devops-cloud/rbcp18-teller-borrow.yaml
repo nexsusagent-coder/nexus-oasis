@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_teller_borrow
+name: teller-borrow
+slug: rbcp18-teller-borrow
+description: Expose the Teller delta-neutral + lending Model Context Protocol server.
+category: devops-cloud
+metadata:
+  author: rbcp18
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/rbcp18-teller-borrow
+created_at: 2026-04-06T18:20:45.529205832+00:00
+updated_at: 2026-04-06T18:20:45.529205832+00:00
+hash: ca1915dec3b1693c794cdd97a43096036cb80b3fd9d9133cc61f90e7c1d56bd9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

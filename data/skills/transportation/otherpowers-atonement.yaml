@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_atonement
+name: atonement
+slug: otherpowers-atonement
+description: Atonement is an expression of care that may arise in an intelligence when its actions contribute to harm.
+category: transportation
+metadata:
+  author: otherpowers
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/otherpowers-atonement
+created_at: 2026-04-06T18:20:51.467289372+00:00
+updated_at: 2026-04-06T18:20:51.467289372+00:00
+hash: 3254124c46312d256648b7e43d0e9bc9c51ef92ec125d94e7b3cac1562922fac
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

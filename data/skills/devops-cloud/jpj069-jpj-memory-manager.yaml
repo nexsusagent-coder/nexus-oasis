@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_jpj_memory_manager
+name: jpj-memory-manager
+slug: jpj069-jpj-memory-manager
+description: Automatic session logging and memory management for infrastructure, projects, and tools.
+category: devops-cloud
+metadata:
+  author: jpj069
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 9
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/jpj069-jpj-memory-manager
+created_at: 2026-04-06T18:20:44.878672819+00:00
+updated_at: 2026-04-06T18:20:44.878672819+00:00
+hash: 5a65a9e14d7298ece3beb533f8f9e7537ad0c43c3ffcadb90ed3f976c822d019
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

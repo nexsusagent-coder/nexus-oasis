@@ -1,0 +1,129 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-workspace
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-workspace"
+description: "Auto-generated skill from workspace"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "workspace.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "get_workspace_root"
+  - "get_soul_path"
+  - "get_user_path"
+  - "get_identity_path"
+  - "get_bootstrap_path"
+  - "get_memory_dir"
+  - "get_memory_index_path"
+  - "get_sessions_dir"
+  - "get_logs_dir"
+  - "get_attachments_dir"
+  - "get_state_path"
+  - "get_gateway_config_path"
+  - "ensure_workspace"
+  - "initialize_workspace"
+  - "workspace_health"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "os"
+  - "pathlib"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

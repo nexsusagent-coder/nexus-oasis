@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-integration-flows
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-integration-flows"
+description: "Auto-generated skill from test-integration-flows"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_integration_flows.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "test_search_edit_flow_across_registry"
+  - "test_task_and_todo_flow_across_registry"
+  - "test_skill_and_config_flow_across_registry"
+  - "test_agent_send_message_flow_restarts_completed_agent"
+  - "test_ask_user_question_flow_across_registry"
+  - "test_notebook_and_cron_flow_across_registry"
+  - "test_lsp_flow_across_registry"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "openharness.tools"
+  - "openharness.tools.base"
+  - "pathlib"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

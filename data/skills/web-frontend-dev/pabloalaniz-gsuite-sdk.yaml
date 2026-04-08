@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_gsuite_sdk
+name: gsuite-sdk
+slug: pabloalaniz-gsuite-sdk
+description: Interact with Google Workspace APIs (Gmail, Calendar, Drive, Sheets) using gsuite-sdk.
+category: web-frontend-dev
+metadata:
+  author: pabloalaniz
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/pabloalaniz-gsuite-sdk
+created_at: 2026-04-06T18:20:52.937291835+00:00
+updated_at: 2026-04-06T18:20:52.937291835+00:00
+hash: 497d42d6ff53dd9518f41d1f2df7ba376fc6480087471473233d412e6c507081
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

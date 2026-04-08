@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_pdf_documents_book_reader
+name: book-reader
+slug: josharsh-book-reader
+description: Read books (epub, pdf, txt) from various sources with progress tracking.
+category: pdf-documents
+metadata:
+  author: josharsh
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- pdf-documents
+dependencies: []
+source_url: https://clawskills.sh/skills/josharsh-book-reader
+created_at: 2026-04-06T18:20:48.653397350+00:00
+updated_at: 2026-04-06T18:20:48.653397350+00:00
+hash: 3e633dc1432e43b447d918c6e2b749575d799619b1dacc7e37c372afafc6de47
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

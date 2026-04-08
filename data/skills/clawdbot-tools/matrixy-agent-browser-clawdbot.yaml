@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_clawdbot_tools_agent_browser
+name: agent-browser
+slug: matrixy-agent-browser-clawdbot
+description: Headless browser automation CLI optimized for AI agents.
+category: clawdbot-tools
+metadata:
+  author: matrixy
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- clawdbot-tools
+dependencies: []
+source_url: https://clawskills.sh/skills/matrixy-agent-browser-clawdbot
+created_at: 2026-04-06T18:20:38.285398882+00:00
+updated_at: 2026-04-06T18:20:38.285398882+00:00
+hash: d46a3e7f85777553da84763374b10013e70d171e761eb4f7b49675f4894fd0cd
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

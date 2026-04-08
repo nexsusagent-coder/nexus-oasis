@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_capture_website
+name: capture-website
+slug: silencezx007-capture-website
+description: Capture website screenshots from the command line.
+category: web-frontend-dev
+metadata:
+  author: silencezx007
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/silencezx007-capture-website
+created_at: 2026-04-06T18:20:52.324882528+00:00
+updated_at: 2026-04-06T18:20:52.324882528+00:00
+hash: af9965e90c0564804067726f2802e041d27c5829ff78b00a4839bcd7c38e2e6b
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: true
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

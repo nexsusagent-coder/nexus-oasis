@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_crusty_security
+name: crusty-security
+slug: silentcool-crusty-security
+description: Security and threat scanning skill for OpenClaw agents.
+category: coding-agents-ides
+metadata:
+  author: silentcool
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/silentcool-crusty-security
+created_at: 2026-04-06T18:20:40.445869955+00:00
+updated_at: 2026-04-06T18:20:40.445869955+00:00
+hash: 6bace627cd5c245d7bb2a6ea0396e4d26cb88dd2a5310e52bfa8c98d5c4a29d6
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

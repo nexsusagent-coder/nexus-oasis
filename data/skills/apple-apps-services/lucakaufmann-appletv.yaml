@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_apple_apps_services_appletv
+name: appletv
+slug: lucakaufmann-appletv
+description: Control Apple TV via pyatv.
+category: apple-apps-services
+metadata:
+  author: lucakaufmann
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- apple-apps-services
+dependencies: []
+source_url: https://clawskills.sh/skills/lucakaufmann-appletv
+created_at: 2026-04-06T18:20:36.746275982+00:00
+updated_at: 2026-04-06T18:20:36.746275982+00:00
+hash: cd970ceccdfb1f2422ce3fd588e5230b0ae4a49f79aaccd701ac3e7aa8198ea3
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

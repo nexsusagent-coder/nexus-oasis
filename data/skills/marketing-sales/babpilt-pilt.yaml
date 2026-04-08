@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_marketing_sales_pilt
+name: pilt
+slug: babpilt-pilt
+description: Access Pilt fundraising data -- investor matches, campaign stats, outreach events, and deck analysis.
+category: marketing-sales
+metadata:
+  author: babpilt
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- marketing-sales
+dependencies: []
+source_url: https://clawskills.sh/skills/babpilt-pilt
+created_at: 2026-04-06T18:20:47.823691640+00:00
+updated_at: 2026-04-06T18:20:47.823691640+00:00
+hash: 1e2f4208074a0a8512179d654c5e6a6083bfd5e5969633a9a8df14dd4b596750
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

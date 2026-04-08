@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_stability_ai
+name: stability-ai
+slug: 1999azzar-stability-ai
+description: Generate high-quality images via Stability AI API (SDXL, SD3, Stable Image Core)
+category: browser-automation
+metadata:
+  author: 1999azzar
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/1999azzar-stability-ai
+created_at: 2026-04-06T18:20:37.768710871+00:00
+updated_at: 2026-04-06T18:20:37.768710871+00:00
+hash: 4e2423caa1e4dad5fdd688b5cfbf6e2ed657f3ee97dffeffa8f4d69b2ad97cc8
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

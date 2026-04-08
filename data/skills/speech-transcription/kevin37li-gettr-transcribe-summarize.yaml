@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_speech_transcription_gettr_transcribe_summarize
+name: gettr-transcribe-summarize
+slug: kevin37li-gettr-transcribe-summarize
+description: Download audio from a GETTR post.
+category: speech-transcription
+metadata:
+  author: kevin37li
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- speech-transcription
+dependencies: []
+source_url: https://clawskills.sh/skills/kevin37li-gettr-transcribe-summarize
+created_at: 2026-04-06T18:20:51.388938476+00:00
+updated_at: 2026-04-06T18:20:51.388938476+00:00
+hash: 63edd52112c1ca40b51e7d31850c1f62f4dc2f3ec7437dc820fc53ef04473c4d
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

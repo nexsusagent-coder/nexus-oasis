@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_usewhisper_autohook
+name: usewhisper-autohook
+slug: alinxus-usewhisper-autohook
+description: 'Auto-hook tools for OpenClaw: query Whisper Context before every generation, ingest after every turn.'
+category: coding-agents-ides
+metadata:
+  author: alinxus
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/alinxus-usewhisper-autohook
+created_at: 2026-04-06T18:20:43.091575005+00:00
+updated_at: 2026-04-06T18:20:43.091575005+00:00
+hash: aea547bfdde925d4e794ddcb42686fc8ecb03c073e6ae3c9401cdcc198a83996
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

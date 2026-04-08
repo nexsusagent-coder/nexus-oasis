@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_baidu_baike_data
+name: baidu-baike-data
+slug: ide-rea-baidu-baike-data
+description: The Baidu Baike Component is a knowledge service tool designed to query authoritative encyclopedia explanations.
+category: coding-agents-ides
+metadata:
+  author: ide
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/ide-rea-baidu-baike-data
+created_at: 2026-04-06T18:20:39.851789789+00:00
+updated_at: 2026-04-06T18:20:39.851789789+00:00
+hash: d2a6d48e769ec2254e723fe323f632e98f80ce5efc7b10d9655ff24ba4c04027
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

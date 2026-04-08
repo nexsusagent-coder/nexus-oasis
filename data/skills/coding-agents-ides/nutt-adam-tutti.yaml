@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_tutti
+name: tutti
+slug: nutt-adam-tutti
+description: Orchestrate multiple AI coding agents (Claude Code, Codex, Aider) from a single config — launch teams, run workflows, track capacity, and manage handoffs.
+category: coding-agents-ides
+metadata:
+  author: nutt
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 7
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/nutt-adam-tutti
+created_at: 2026-04-06T18:20:43.026050353+00:00
+updated_at: 2026-04-06T18:20:43.026050353+00:00
+hash: fd9acfbcdbdfe3e618b54d6f877b8581b5a995d53f8a83ec466bc387e963f1ad
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

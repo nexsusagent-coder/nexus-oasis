@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_quick_test
+name: quick-test
+slug: gustavoziaugra-quick-test
+description: Quick system test to verify OpenClaw environment.
+category: coding-agents-ides
+metadata:
+  author: gustavoziaugra
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/gustavoziaugra-quick-test
+created_at: 2026-04-06T18:20:42.047475202+00:00
+updated_at: 2026-04-06T18:20:42.047475202+00:00
+hash: 0d5fd5b668facad4b7a27a0779e44d60359572c7676d910f5f6bd75448198c9f
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

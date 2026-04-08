@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_k8s_memory_tune
+name: k8s-memory-tune
+slug: 2233admin-k8s-memory-tune
+description: '**触发词**: oomkilled, memory_limit, jvm_heap, container_memory, k8s 内存.'
+category: devops-cloud
+metadata:
+  author: 2233admin
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/2233admin-k8s-memory-tune
+created_at: 2026-04-06T18:20:44.885089522+00:00
+updated_at: 2026-04-06T18:20:44.885089522+00:00
+hash: 5b972d6fa75686fe0439c6941a795427118642f24a460dbedd462caef57cf596
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

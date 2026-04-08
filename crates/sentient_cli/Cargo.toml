@@ -1,0 +1,42 @@
+[package]
+name = "sentient_cli"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "sentient"
+path = "src/main.rs"
+
+[[bin]]
+name = "sentient-shell"
+path = "src/bin/sentient-shell.rs"
+
+[lib]
+name = "sentient_cli"
+path = "src/lib.rs"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+sentient_core = { path = "../sentient_core" }
+sentient_vgate = { path = "../sentient_vgate" }
+sentient_orchestrator = { path = "../sentient_orchestrator" }
+sentient_gateway = { path = "../sentient_gateway" }
+sentient_memory = { path = "../sentient_memory" }
+sentient_guardrails = { path = "../sentient_guardrails" }
+sentient_sandbox = { path = "../sentient_sandbox" }
+
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+log.workspace = true
+env_logger.workspace = true
+clap.workspace = true
+rustyline = "14"
+colored = "2"
+chrono.workspace = true
+uuid.workspace = true
+dirs = "5"
+notify-rust = "4"
+crossterm = "0.27"
+walkdir = "2.5"
+rusqlite = { version = "0.35", features = ["bundled"] }

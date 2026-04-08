@@ -1,0 +1,64 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-checker
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-checker"
+description: "--- path_rules parsing tests ---"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_checker.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "*rules"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "bad_rule"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "caplog"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "test_default_mode_allows_read_only"
+  - "test_default_mode_requires_confirmation_for_mutation"
+  - "test_plan_mode_blocks_mutating_tools"
+  - "test_full_auto_allows_mutating_tools"
+  - "_settings_with_rules"
+  - "test_invalid_pattern_rule_is_skipped_and_warns"
+  - "test_valid_deny_rule_blocks_matching_path"
+  - "test_valid_deny_rule_does_not_block_non_matching_path"
+  - "test_valid_allow_rule_is_added"
+  - "test_pattern_with_surrounding_whitespace_is_stripped"
+
+dependencies:
+  - "logging"
+  - "openharness.config.settings"
+  - "openharness.permissions"
+  - "pytest"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

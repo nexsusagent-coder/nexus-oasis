@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_twenty_oauth_mastery
+name: twenty-oauth-mastery
+slug: avirweb-twenty-oauth-mastery
+description: '**Author**: Generated from extensive OAuth debugging sessions in OpenCode.'
+category: coding-agents-ides
+metadata:
+  author: avirweb
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/avirweb-twenty-oauth-mastery
+created_at: 2026-04-06T18:20:43.032240196+00:00
+updated_at: 2026-04-06T18:20:43.032240196+00:00
+hash: d06a2710c73f4507734779e7daa9b8473195c537e2ad79d441caa41a12907f41
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_nate_jones_second_brain
+name: nate-jones-second-brain
+slug: justfinethanku-nate-jones-second-brain
+description: Set up and operate a personal knowledge system using Supabase (pgvector) and OpenRouter.
+category: coding-agents-ides
+metadata:
+  author: justfinethanku
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/justfinethanku-nate-jones-second-brain
+created_at: 2026-04-06T18:20:41.609378398+00:00
+updated_at: 2026-04-06T18:20:41.609378398+00:00
+hash: ad54c0b724897e87eb7f03e5cbe449c3efba06d94bb554bd906eef16c60174e4
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

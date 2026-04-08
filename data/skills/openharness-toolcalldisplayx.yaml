@@ -1,0 +1,40 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-toolcalldisplayx
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: typescript
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-toolcalldisplayx"
+description: "Auto-generated skill from toolcalldisplayx"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "ToolCallDisplay.tsx"
+    language: "typescript"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  []
+
+commands:
+  - "ToolCallDisplay"
+  - "summarizeInput"
+
+dependencies:
+  - "ink;"
+  - "react;"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

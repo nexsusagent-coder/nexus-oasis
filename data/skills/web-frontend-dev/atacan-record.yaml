@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_web_frontend_dev_record
+name: record
+slug: atacan-record
+description: macOS CLI tool for recording audio (microphone), screen (video/screenshot), and camera (video/photo)
+category: web-frontend-dev
+metadata:
+  author: atacan
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- web-frontend-dev
+dependencies: []
+source_url: https://clawskills.sh/skills/atacan-record
+created_at: 2026-04-06T18:20:54.129085459+00:00
+updated_at: 2026-04-06T18:20:54.129085459+00:00
+hash: 46d52c852c101a61610dd37f554c945eca7ffed11539c17c6b62cf306b4fe489
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

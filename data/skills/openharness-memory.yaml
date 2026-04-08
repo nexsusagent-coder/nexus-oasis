@@ -1,0 +1,88 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-memory
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-memory"
+description: "Auto-generated skill from memory"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "memory.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "title"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "content"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "workspace"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "max_files"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "list_memory_files"
+  - "add_memory_entry"
+  - "remove_memory_entry"
+  - "load_memory_prompt"
+
+dependencies:
+  - "__future__"
+  - "ohmo.workspace"
+  - "pathlib"
+  - "re"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

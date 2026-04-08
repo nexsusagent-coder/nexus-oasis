@@ -1,0 +1,55 @@
+# ─── ASENA GATEWAY DOCKERFILE ───
+# Production-ready API Gateway container
+
+# Build stage
+FROM rust:1.75-slim-bookworm AS builder
+
+WORKDIR /build
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy manifests
+COPY Cargo.toml Cargo.lock ./
+COPY crates ./crates
+
+# Build release binary
+RUN cargo build --release --bin asena -p asena_cli
+
+# Runtime stage
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    curl \
+    sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN useradd -r -s /bin/false asena
+
+# Copy binary
+COPY --from=builder /build/target/release/asena /app/asena
+
+# Create directories
+RUN mkdir -p /data/logs /data/memory && \
+    chown -R asena:asena /app /data
+
+# Switch to non-root user
+USER asena
+
+# Expose port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=30s \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Run
+CMD ["./asena", "gateway", "--http-addr", "0.0.0.0:8080"]

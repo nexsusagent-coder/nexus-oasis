@@ -1,0 +1,32 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  🔍 SENTIENT Research Skill
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[skill]
+name = "research"
+version = "0.1.0"
+description = "Web araştırması ve bilgi toplama yeteneği"
+author = "SENTIENT Team"
+category = "information"
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_python = { path = "../../crates/sentient_python" }
+reqwest = { version = "0.11", features = ["json"] }
+scraper = "0.18"
+tokio = { version = "1.0", features = ["full"] }
+
+[config]
+max_results = 10
+timeout_secs = 30
+cache_results = true
+sources = ["web", "academic", "news", "docs"]
+
+[triggers]
+keywords = ["araştır", "ara", "bul", "research", "search", "look up"]
+patterns = ["^araştır[:\\s]+(.+)$", "^research[:\\s]+(.+)$"]
+
+[output]
+format = "markdown"
+include_sources = true
+max_snippet_length = 500

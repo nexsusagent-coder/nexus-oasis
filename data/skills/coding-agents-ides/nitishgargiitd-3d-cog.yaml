@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_3d_cog
+name: 3d-cog
+slug: nitishgargiitd-3d-cog
+description: Other tools need perfect images.
+category: coding-agents-ides
+metadata:
+  author: nitishgargiitd
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/nitishgargiitd-3d-cog
+created_at: 2026-04-06T18:20:39.251612181+00:00
+updated_at: 2026-04-06T18:20:39.251612181+00:00
+hash: 3e0fa57f8069244d00957d8aa05a5237f7d3364dfcac4a9a48520df297fd7cb7
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

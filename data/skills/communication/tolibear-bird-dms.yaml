@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_communication_bird_dms
+name: bird-dms
+slug: tolibear-bird-dms
+description: An add-on to the Bird skill that lets your agent check its X/Twitter DM.
+category: communication
+metadata:
+  author: tolibear
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- communication
+dependencies: []
+source_url: https://clawskills.sh/skills/tolibear-bird-dms
+created_at: 2026-04-06T18:20:43.504224119+00:00
+updated_at: 2026-04-06T18:20:43.504224119+00:00
+hash: 64762da35e2bf2924365abe0d6dae3e9416c35f17587ea5fa20bf953343dae25
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

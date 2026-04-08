@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_cybercentry_cyber_security_consultant
+name: cybercentry-cyber-security-consultant
+slug: cybercentry-cybercentry-cyber-security-consultant
+description: Cybercentry Cyber Security Consultant on ACP - Instant expert-level cyber security advisory powered by @centry_agent.
+category: devops-cloud
+metadata:
+  author: cybercentry
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: high
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/cybercentry-cybercentry-cyber-security-consultant
+created_at: 2026-04-06T18:20:44.661510239+00:00
+updated_at: 2026-04-06T18:20:44.661510239+00:00
+hash: 855886a6d70eb00a3b0881949546cf9ac8d98b2a140ed9b94e5116074124640d
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

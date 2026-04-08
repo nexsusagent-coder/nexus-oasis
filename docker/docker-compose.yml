@@ -1,0 +1,142 @@
+# ─── SENTIENT Docker Compose ───
+# Sandbox ve servis yapılandırması
+
+version: "3.8"
+
+services:
+  # ─── SENTIENT Sandbox (Python) ───
+  sandbox-python:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.sandbox
+    container_name: sentient_sandbox_python
+    hostname: sentient-python
+    restart: unless-stopped
+    
+    # Güvenlik ayarları
+    read_only: true
+    tmpfs:
+      - /tmp:rw,size=100m,exec
+      - /var/run:rw,size=10m
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:default
+    
+    # Kaynak limitleri
+    mem_limit: 512m
+    cpus: 1.0
+    pids_limit: 50
+    
+    # Network izolasyonu
+    networks:
+      - sandbox_net
+    
+    # Ortam değişkenleri
+    environment:
+      - SENTIENT_SANDBOX=true
+      - SENTIENT_PROFILE=standard
+    
+    # Labels
+    labels:
+      - "sentient.module=sandbox"
+      - "sentient.language=python"
+      - "sentient.security=isolated"
+
+  # ─── SENTIENT Sandbox (Secure) ───
+  sandbox-secure:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.sandbox
+    container_name: sentient_sandbox_secure
+    hostname: sentient-secure
+    restart: unless-stopped
+    
+    # Maksimum güvenlik
+    read_only: true
+    tmpfs:
+      - /tmp:rw,size=50m,noexec
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=default
+    
+    # Sıkı limitler
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 25
+    
+    # Network yok
+    network_mode: none
+    
+    environment:
+      - SENTIENT_SANDBOX=true
+      - SENTIENT_PROFILE=secure
+    
+    labels:
+      - "sentient.module=sandbox"
+      - "sentient.profile=secure"
+
+  # ─── SENTIENT V-GATE Server ───
+  vgate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.vgate
+    container_name: sentient_vgate
+    hostname: sentient-vgate
+    restart: unless-stopped
+    
+    ports:
+      - "1071:1071"
+    
+    networks:
+      - vgate_net
+    
+    environment:
+      - SENTIENT_VGATE=true
+      - RUST_LOG=info
+    
+    volumes:
+      - ./data:/data:ro
+    
+    labels:
+      - "sentient.module=vgate"
+      - "sentient.port=1071"
+
+  # ─── SENTIENT Memory (SQLite) ───
+  memory:
+    image: alpine:latest
+    container_name: sentient_memory
+    hostname: sentient-memory
+    restart: unless-stopped
+    
+    volumes:
+      - memory_data:/data
+    
+    command: >
+      sh -c "apk add --no-cache sqlite &&
+             sqlite3 /data/sentient_memory.db 'CREATE TABLE IF NOT EXISTS memories 
+             (id TEXT PRIMARY KEY, content TEXT, metadata TEXT, created_at TEXT)' &&
+             sleep infinity"
+    
+    networks:
+      - memory_net
+    
+    labels:
+      - "sentient.module=memory"
+
+# ─── Networks ───
+networks:
+  sandbox_net:
+    driver: bridge
+    internal: true  # Internet erişimi yok
+    
+  vgate_net:
+    driver: bridge
+    
+  memory_net:
+    driver: bridge
+    internal: true
+
+# ─── Volumes ───
+volumes:
+  memory_data:
+    driver: local

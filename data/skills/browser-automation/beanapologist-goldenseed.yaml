@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_goldenseed
+name: goldenseed
+slug: beanapologist-goldenseed
+description: Deterministic entropy streams for reproducible testing and procedural generation.
+category: browser-automation
+metadata:
+  author: beanapologist
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/beanapologist-goldenseed
+created_at: 2026-04-06T18:20:37.252814241+00:00
+updated_at: 2026-04-06T18:20:37.252814241+00:00
+hash: 63b4c08fc5bb02e16d75c7005bebcbb654b7d1a0ff09c06aa44b015fe9416813
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

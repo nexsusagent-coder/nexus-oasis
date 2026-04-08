@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_near_qr_skill
+name: near-qr-skill
+slug: ussyalfaks-near-qr-skill
+description: Generate QR codes for NEAR addresses and payment requests, and read NEAR QR codes from images.
+category: browser-automation
+metadata:
+  author: ussyalfaks
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/ussyalfaks-near-qr-skill
+created_at: 2026-04-06T18:20:37.509654616+00:00
+updated_at: 2026-04-06T18:20:37.509654616+00:00
+hash: 3c5955774070b0e6e3775954b516f031fcfb893f8ffcc5f3e4562ba9b2e8dabf
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

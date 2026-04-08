@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_transportation_email_tool
+name: email-tool
+slug: chowardcode-email-tool
+description: '**Description:** Use this skill to send and read emails (IMAP/SMTP)'
+category: transportation
+metadata:
+  author: chowardcode
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- transportation
+dependencies: []
+source_url: https://clawskills.sh/skills/chowardcode-email-tool
+created_at: 2026-04-06T18:20:51.579547528+00:00
+updated_at: 2026-04-06T18:20:51.579547528+00:00
+hash: 2f63d0d02606bbec3d448f719d398194b1f2187ffa9b35f64f0d4100f24cd4ef
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: true
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

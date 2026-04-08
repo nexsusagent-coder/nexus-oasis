@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_devops_cloud_encrypted_docs
+name: encrypted-docs
+slug: vijaykrishnavanshi-encrypted-docs
+description: End-to-end encrypted .md documents for agents & humans to collaborate.
+category: devops-cloud
+metadata:
+  author: vijaykrishnavanshi
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- devops-cloud
+dependencies: []
+source_url: https://clawskills.sh/skills/vijaykrishnavanshi-encrypted-docs
+created_at: 2026-04-06T18:20:44.717786766+00:00
+updated_at: 2026-04-06T18:20:44.717786766+00:00
+hash: 53549fe3ec2e4d6bfc3f73e77bacb4cc9eb6bea4a975426517a6c74d0f594263
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

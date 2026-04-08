@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_maasv_memory
+name: maasv-memory
+slug: ascottbell-maasv-memory
+description: Structured long-term memory for OpenClaw agents, powered by [maasv](https://github.com/ascottbell/maasv).
+category: coding-agents-ides
+metadata:
+  author: ascottbell
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/ascottbell-maasv-memory
+created_at: 2026-04-06T18:20:41.403334070+00:00
+updated_at: 2026-04-06T18:20:41.403334070+00:00
+hash: a68171a8cc33f260bfe8a9ecfa19ec658155cd09fa3f80ddb6edec07b71779de
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

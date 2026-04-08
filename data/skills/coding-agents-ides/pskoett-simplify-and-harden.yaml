@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_simplify_and_harden
+name: simplify-and-harden
+slug: pskoett-simplify-and-harden
+description: Post-completion self-review for coding agents that runs simplify, harden, and micro-documentation passes.
+category: coding-agents-ides
+metadata:
+  author: pskoett
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/pskoett-simplify-and-harden
+created_at: 2026-04-06T18:20:42.470295701+00:00
+updated_at: 2026-04-06T18:20:42.470295701+00:00
+hash: 078f7b3d33bc7fff76947d0c8a6d26a593700a8609abe2d59a99fbab35ff8428
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

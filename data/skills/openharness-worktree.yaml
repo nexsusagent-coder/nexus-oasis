@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-worktree
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: high
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-worktree"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "worktree.py"
+    language: "python"
+    risk_level: "high"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "slug"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "slug"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "slug"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "validate_worktree_slug"
+  - "_flatten_slug"
+  - "_worktree_branch"
+  - "_run_git"
+  - "_symlink_common_dirs"
+  - "_remove_symlinks"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "dataclasses"
+  - "os"
+  - "pathlib"
+  - "re"
+  - "time"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: high
+# ═══════════════════════════════════════════════════════════════════════════════

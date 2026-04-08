@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_tip_with_grove
+name: tip-with-grove
+slug: olshansk-tip-with-grove
+description: Grove CLI guide - philosophy, commands, and quick start.
+category: coding-agents-ides
+metadata:
+  author: olshansk
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/olshansk-tip-with-grove
+created_at: 2026-04-06T18:20:42.912443636+00:00
+updated_at: 2026-04-06T18:20:42.912443636+00:00
+hash: a4942fe41773a870a3ff5d6622912ecb8ada7203b911669211d3c1dbd68ef88c
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

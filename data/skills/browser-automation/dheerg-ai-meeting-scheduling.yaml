@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_ai_meeting_scheduling
+name: ai-meeting-scheduling
+slug: dheerg-ai-meeting-scheduling
+description: Booking links fail for groups.
+category: browser-automation
+metadata:
+  author: dheerg
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/dheerg-ai-meeting-scheduling
+created_at: 2026-04-06T18:20:36.934549045+00:00
+updated_at: 2026-04-06T18:20:36.934549045+00:00
+hash: 39ce87ac5682c6fac086fa2df8b613121e735db7cf04b4589426e16969610ba1
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

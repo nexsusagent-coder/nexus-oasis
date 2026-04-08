@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_jarvis_ci_flake_hunter_01
+name: jarvis-ci-flake-hunter-01
+slug: xammarie-jarvis-ci-flake-hunter-01
+description: Track and reduce flaky tests with deterministic isolation.
+category: browser-automation
+metadata:
+  author: xammarie
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/xammarie-jarvis-ci-flake-hunter-01
+created_at: 2026-04-06T18:20:37.336543287+00:00
+updated_at: 2026-04-06T18:20:37.336543287+00:00
+hash: 7934f35eb86be457e3200d119300bc5c830e28a1c0f73debba6fc3f0eee9a9b2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

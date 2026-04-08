@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_search_research_didit_face_search
+name: didit-face-search
+slug: rosasalberto-didit-face-search
+description: Integrate Didit Face Search standalone API to perform 1:N facial search against all previously verified sessions.
+category: search-research
+metadata:
+  author: rosasalberto
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- search-research
+dependencies: []
+source_url: https://clawskills.sh/skills/rosasalberto-didit-face-search
+created_at: 2026-04-06T18:20:50.021769064+00:00
+updated_at: 2026-04-06T18:20:50.021769064+00:00
+hash: 17ca6bd1372974e323cb91d0077c890d860e8caf2f49b6484992bcfbd7796263
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

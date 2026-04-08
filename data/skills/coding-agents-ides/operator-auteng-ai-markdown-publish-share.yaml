@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_markdown_publish_share
+name: markdown-publish-share
+slug: operator-auteng-ai-markdown-publish-share
+description: Publish markdown and return share links using curl.
+category: coding-agents-ides
+metadata:
+  author: operator
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/operator-auteng-ai-markdown-publish-share
+created_at: 2026-04-06T18:20:41.439944252+00:00
+updated_at: 2026-04-06T18:20:41.439944252+00:00
+hash: 0f2aa7158392b43d1c89038ac92cec25b9b11517845d7ad436ccdef862dfc707
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

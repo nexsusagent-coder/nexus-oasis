@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_calendar_scheduling_opentweet_x_poster
+name: opentweet-x-poster
+slug: petricbranko-opentweet-x-poster
+description: Post to X (Twitter) using the OpenTweet API.
+category: calendar-scheduling
+metadata:
+  author: petricbranko
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- calendar-scheduling
+dependencies: []
+source_url: https://clawskills.sh/skills/petricbranko-opentweet-x-poster
+created_at: 2026-04-06T18:20:38.177981547+00:00
+updated_at: 2026-04-06T18:20:38.177981547+00:00
+hash: 32e009a5ba0aa5a182fae1645456156bd206f9759ec85b6f707560465fe4919a
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

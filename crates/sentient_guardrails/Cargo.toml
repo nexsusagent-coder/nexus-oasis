@@ -1,0 +1,13 @@
+[package]
+name = "sentient_guardrails"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+serde.workspace = true
+serde_json.workspace = true
+regex.workspace = true
+thiserror.workspace = true
+log.workspace = true

@@ -1,0 +1,194 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-cli
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-cli"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "cli.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "value"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "message"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "*"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "default"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "message"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "profile"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "info"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "object]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "info"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "object]"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "auth_source"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "label"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "target"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "manager"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "profile_name"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "provider"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_version_callback"
+  - "mcp_list"
+  - "mcp_add"
+  - "mcp_remove"
+  - "plugin_list"
+  - "plugin_install"
+  - "plugin_uninstall"
+  - "cron_start"
+  - "cron_stop"
+  - "cron_status_cmd"
+  - "cron_list_cmd"
+  - "cron_toggle_cmd"
+  - "cron_history_cmd"
+  - "cron_logs_cmd"
+  - "_can_use_questionary"
+  - "_select_with_questionary"
+  - "_text_prompt"
+  - "_secret_prompt"
+  - "_select_from_menu"
+  - "_prompt_model_for_profile"
+  - "_format_profile_choice_label"
+  - "_styled_missing_suffix"
+  - "_select_setup_workflow"
+  - "_default_credential_slot_for_profile"
+  - "_prompt_api_key_for_profile"
+  - "_configure_custom_profile_via_setup"
+  - "_ensure_preset_profile"
+  - "_specialize_setup_target"
+  - "_ensure_profile_auth"
+  - "_maybe_update_default_model_for_provider"
+  - "_bind_external_provider"
+  - "_login_provider"
+  - "setup_cmd"
+  - "auth_login"
+  - "auth_status_cmd"
+  - "auth_logout"
+  - "auth_switch"
+  - "_run_copilot_login"
+  - "auth_copilot_login"
+  - "auth_codex_login"
+  - "auth_claude_login"
+  - "auth_copilot_logout"
+  - "provider_list"
+  - "provider_use"
+  - "provider_add"
+  - "provider_edit"
+  - "provider_remove"
+  - "main"
+
+dependencies:
+  - "__future__"
+  - "json"
+  - "pathlib"
+  - "sys"
+  - "typer"
+  - "typing"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

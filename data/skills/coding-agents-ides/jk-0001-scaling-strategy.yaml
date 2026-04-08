@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_scaling_strategy
+name: scaling-strategy
+slug: jk-0001-scaling-strategy
+description: Scale a solopreneur business beyond solo operations.
+category: coding-agents-ides
+metadata:
+  author: jk
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/jk-0001-scaling-strategy
+created_at: 2026-04-06T18:20:42.239671285+00:00
+updated_at: 2026-04-06T18:20:42.239671285+00:00
+hash: c2efb85d35c31a87cb43f971c5eccf712cbe72fee228ad7e2c4fb036640c05cf
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

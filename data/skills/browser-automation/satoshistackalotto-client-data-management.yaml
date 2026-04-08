@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_client_data_management
+name: client-data-management
+slug: satoshistackalotto-client-data-management
+description: Secure client database for Greek accounting firms.
+category: browser-automation
+metadata:
+  author: satoshistackalotto
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/satoshistackalotto-client-data-management
+created_at: 2026-04-06T18:20:37.097968409+00:00
+updated_at: 2026-04-06T18:20:37.097968409+00:00
+hash: 18d56cf22fd19d6682dadba9ddb36642cd567c0c77d6279edd231a14637353b2
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

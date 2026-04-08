@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_productivity_tasks_plans_methodology
+name: plans-methodology
+slug: cramtek-plans-methodology
+description: Structured work tracking methodology using Plans.
+category: productivity-tasks
+metadata:
+  author: cramtek
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- productivity-tasks
+dependencies: []
+source_url: https://clawskills.sh/skills/cramtek-plans-methodology
+created_at: 2026-04-06T18:20:49.530560154+00:00
+updated_at: 2026-04-06T18:20:49.530560154+00:00
+hash: 78a0cffb8891462d490e5ffea07e0493aa48a116836e5efa0a16fe1040076210
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

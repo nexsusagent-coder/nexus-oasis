@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_og_board_manager
+name: og-board-manager
+slug: jatin-31-og-board-manager
+description: Use when you need to delegate, track, or review work.
+category: coding-agents-ides
+metadata:
+  author: jatin
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/jatin-31-og-board-manager
+created_at: 2026-04-06T18:20:41.702089858+00:00
+updated_at: 2026-04-06T18:20:41.702089858+00:00
+hash: 13176d9c54af77d00cfcd509190ee152393ad21da88efc00fd23a83453724e4e
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

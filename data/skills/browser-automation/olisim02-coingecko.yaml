@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_browser_automation_coingecko
+name: coingecko
+slug: olisim02-coingecko
+description: Fetch crypto prices, market data, and token info from the CoinGecko free API.
+category: browser-automation
+metadata:
+  author: olisim02
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- browser-automation
+dependencies: []
+source_url: https://clawskills.sh/skills/olisim02-coingecko
+created_at: 2026-04-06T18:20:37.136715031+00:00
+updated_at: 2026-04-06T18:20:37.136715031+00:00
+hash: bd2012042e13ebaca79ee63aa29d84a6542ed31096d8a757cbd2124125accfd9
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

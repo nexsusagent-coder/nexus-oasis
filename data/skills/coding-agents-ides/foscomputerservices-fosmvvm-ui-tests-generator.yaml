@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_fosmvvm_ui_tests_generator
+name: fosmvvm-ui-tests-generator
+slug: foscomputerservices-fosmvvm-ui-tests-generator
+description: Generate UI tests for FOSMVVM SwiftUI views using XCTest and FOSTestingUI.
+category: coding-agents-ides
+metadata:
+  author: foscomputerservices
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/foscomputerservices-fosmvvm-ui-tests-generator
+created_at: 2026-04-06T18:20:40.871121035+00:00
+updated_at: 2026-04-06T18:20:40.871121035+00:00
+hash: e4966ea2dcb5da4b27e18e9ee09e1766dda9b6faaba409a205177fd56dd51b76
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

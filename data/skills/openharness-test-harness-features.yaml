@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-harness-features
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: critical
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-harness-features"
+description: "---------- Test: API Retry ----------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "general"
+    source_repo: "openharness"
+    source_file: "test_harness_features.py"
+    language: "python"
+    risk_level: "critical"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "*args"
+    type: "any"
+    required: false
+    default: null
+    description: ""
+  - name: "timeout"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "_env"
+  - "_run_oh"
+  - "test_api_retry_config"
+  - "test_api_retry_real_call"
+  - "test_skills_loaded"
+  - "test_skills_in_system_prompt"
+  - "test_skill_tool_invocation"
+  - "test_skill_real_model"
+  - "test_parallel_tools_code"
+  - "test_path_permissions_deny"
+  - "test_command_deny_pattern"
+  - "main"
+
+dependencies:
+  - "__future__"
+  - "asyncio"
+  - "os"
+  - "pathlib"
+  - "subprocess"
+  - "sys"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: critical
+# ═══════════════════════════════════════════════════════════════════════════════

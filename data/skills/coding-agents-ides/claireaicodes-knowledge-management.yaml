@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_coding_agents_ides_knowledge_management
+name: knowledge-management
+slug: claireaicodes-knowledge-management
+description: Organize and classify OpenClaw knowledge entries into local folders by content type (Research, Decision, Insight.
+category: coding-agents-ides
+metadata:
+  author: claireaicodes
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: low
+parameters: []
+examples: []
+tags:
+- coding-agents-ides
+dependencies: []
+source_url: https://clawskills.sh/skills/claireaicodes-knowledge-management
+created_at: 2026-04-06T18:20:41.271030246+00:00
+updated_at: 2026-04-06T18:20:41.271030246+00:00
+hash: 5331c48bac694a097972610db262cf97ccac3da65d12a567d3f3a5fc02ba4fbe
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: false
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}

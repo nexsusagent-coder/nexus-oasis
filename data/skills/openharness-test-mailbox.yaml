@@ -1,0 +1,74 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ASENA SKILL: openharness-test-mailbox
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kaynak: openharness
+# Dil: python
+# Risk: medium
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: "openharness-test-mailbox"
+description: "---------------------------------------------------------------------------"
+metadata:
+  version: "0.1.0"
+  asena:
+    category: "api"
+    source_repo: "openharness"
+    source_file: "test_mailbox.py"
+    language: "python"
+    risk_level: "medium"
+    assimilated_at: "2026-04-06 16:30:00"
+
+parameters:
+  - name: "tmp_path"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "monkeypatch"
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "sender="leader""
+    type: "any"
+    required: true
+    default: null
+    description: ""
+  - name: "recipient="worker1""
+    type: "any"
+    required: true
+    default: null
+    description: ""
+
+commands:
+  - "mailbox"
+  - "_make_msg"
+  - "test_mailbox_message_round_trip"
+  - "test_mailbox_message_from_dict_defaults_read_false"
+  - "test_write_and_read_all"
+  - "test_read_all_unread_only_filters"
+  - "test_write_multiple_messages_sorted_by_timestamp"
+  - "test_mark_read_updates_flag"
+  - "test_mark_read_nonexistent_id_is_noop"
+  - "test_clear_removes_all_messages"
+  - "test_clear_on_empty_mailbox_is_noop"
+  - "test_create_user_message"
+  - "test_create_shutdown_request"
+  - "test_create_idle_notification"
+
+dependencies:
+  - "__future__"
+  - "openharness.swarm.mailbox"
+  - "pathlib"
+  - "pytest"
+  - "time"
+
+# ───────────────────────────────────────────────────────────────────────────────
+#  ASENA SOVEREIGN GÜVENLİK KURALLARI
+# ───────────────────────────────────────────────────────────────────────────────
+# Bu skill aşağıdaki güvenlik kurallarına tabidir:
+# - Whitelist kontrolü (eğer dosya/uygulama erişimi varsa)
+# - V-GATE loglaması (tüm çağrılar loglanır)
+# - Guardrails kontrolü (prompt injection koruması)
+# - Risk seviyesi: medium
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,34 @@
+schema_version: 1.0.0
+id: asena_media_streaming_mlx_audio_server
+name: mlx-audio-server
+slug: guoqiao-mlx-audio-server
+description: A fast, accurate, and fully local OpenAI-compatible API.
+category: media-streaming
+metadata:
+  author: guoqiao
+  version: ''
+  min_asena_version: ''
+  platforms: []
+  languages: []
+  estimated_frequency: 5
+  reliability_score: 0.0
+  risk_level: medium
+parameters: []
+examples: []
+tags:
+- media-streaming
+dependencies: []
+source_url: https://clawskills.sh/skills/guoqiao-mlx-audio-server
+created_at: 2026-04-06T18:20:48.034217649+00:00
+updated_at: 2026-04-06T18:20:48.034217649+00:00
+hash: 075d7b3d7a56f2fc9a9d7b4321b853bc1bbb729b19dc5b1bcc7c568a898aa8fa
+asena_extensions:
+  requires_vgate: false
+  uses_memory: false
+  requires_browser: false
+  requires_filesystem: false
+  requires_network: true
+  requires_sandbox: false
+  timeout_secs: 0
+  max_retries: 0
+  custom_config: {}
