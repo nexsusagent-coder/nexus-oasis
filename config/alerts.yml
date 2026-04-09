@@ -1,0 +1,62 @@
+groups:
+  - name: sentient_alerts
+    rules:
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(sentient_llm_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High LLM error rate"
+          description: "LLM error rate is {{ $value }} errors/s"
+
+      # High latency
+      - alert: HighLatency
+        expr: histogram_quantile(0.99, rate(sentient_message_latency_seconds_bucket[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High message latency"
+          description: "P99 latency is {{ $value }}s"
+
+      # Agent unavailable
+      - alert: AgentDown
+        expr: sentient_agents_total < 1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "No active agents"
+          description: "All agents are down"
+
+      # Memory usage high
+      - alert: HighMemoryUsage
+        expr: process_resident_memory_bytes > 4294967296
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanize }}B"
+
+      # Channel disconnected
+      - alert: ChannelDisconnected
+        expr: sentient_channel_connections == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Channel disconnected"
+          description: "One or more channels are disconnected"
+
+      # Token usage spike
+      - alert: TokenUsageSpike
+        expr: rate(sentient_tokens_used_total[1h]) > 100000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High token usage"
+          description: "Token usage rate is {{ $value }} tokens/s"

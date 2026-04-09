@@ -1,5 +1,3 @@
-# Prometheus configuration for SENTIENT AI OS
-
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
@@ -12,28 +10,27 @@ alerting:
 rule_files: []
 
 scrape_configs:
-  # SENTIENT Gateway metrics
-  - job_name: 'sentient-gateway'
+  # SENTIENT application metrics
+  - job_name: 'sentient'
     static_configs:
-      - targets: ['sentient:8080']
-    metrics_path: '/metrics'
+      - targets: ['sentient:9090']
+    metrics_path: /metrics
 
   # Prometheus self-monitoring
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
-
-  # Redis exporter
-  - job_name: 'redis'
-    static_configs:
-      - targets: ['redis:6379']
-
-  # PostgreSQL exporter
-  - job_name: 'postgres'
-    static_configs:
-      - targets: ['postgres:5432']
+      - targets: ['localhost:9091']
 
   # Node exporter (system metrics)
   - job_name: 'node'
     static_configs:
       - targets: ['node-exporter:9100']
+
+  # Redis exporter
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+
+# Alerting rules
+rule_files:
+  - /etc/prometheus/alerts.yml
