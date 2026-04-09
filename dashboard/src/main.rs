@@ -1389,23 +1389,26 @@ async fn main() {
         .with_state(dashboard.clone())
         .fallback_service(ServeDir::new("dashboard/assets"));
     
-    let addr = "0.0.0.0:8080";
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    // Port ve host çevre değişkenlerinden veya varsayılanlardan al
+    let port = std::env::var("SENTIENT_PORT").unwrap_or_else(|_| "8080".to_string());
+    let host = std::env::var("SENTIENT_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let addr = format!("{}:{}", host, port);
+    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     
     println!("═══════════════════════════════════════════════════════════════");
-    println!("  🌐 War Room:   http://localhost:8080");
-    println!("  📡 WebSocket:  ws://localhost:8080/ws");
-    println!("  📦 Skills API: http://localhost:8080/api/skills");
-    println!("  🔧 Tools API:  http://localhost:8080/api/tools");
-    println!("  📊 Stats API:  http://localhost:8080/api/stats");
-    println!("  🔒 Security API: http://localhost:8080/api/security");
+    println!("  🌐 War Room:   http://{}:{}", host, port);
+    println!("  📡 WebSocket:  ws://{}:{}/ws", host, port);
+    println!("  📦 Skills API: http://{}:{}/api/skills", host, port);
+    println!("  🔧 Tools API:  http://{}:{}/api/tools", host, port);
+    println!("  📊 Stats API:  http://{}:{}/api/stats", host, port);
+    println!("  🔒 Security API: http://{}:{}/api/security", host, port);
     println!("═══════════════════════════════════════════════════════════════");
     println!("");
     
     // Print comprehensive system dump
     print_system_dump();
     
-    println!("  War Room operational on port 8080...");
+    println!("  War Room operational on port {}...", port);
     println!("");
 
     axum::serve(listener, app).await.unwrap();

@@ -1,26 +1,20 @@
-//! Setup Wizard - Modern Interactive TUI Sihirbazı v6.0.0
-//! Strategic UX Update: Sentient Onboarding
+//! Setup Wizard - Professional Interactive TUI v7.0.0
+//! OpenClaw Standard: Professional Model Selection Interface
 //! 
 //! Features:
 //! - Security Warning (Multi-user lockdown)
 //! - QuickStart vs Manual mode selection
-//! - 25+ LLM Providers with hidden API key input
+//! - 100+ LLM Models in provider/model_id format
 //! - 20+ Communication Channels with security policies
 //! - Web Search Tools (SearXNG, DuckDuckGo, Ollama)
 //! - Skip option on all steps
 
 use dialoguer::{Input, Select, Confirm, Password, MultiSelect, FuzzySelect};
-use console::{style, Emoji, Term};
+use console::{style, Term};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::collections::HashMap;
 
 use crate::{SetupStatus, SetupResult, SetupConfig, IntegrationConfig};
-
-// Emojis used in UI
-static CHECK: Emoji<'_, '_> = Emoji("✅", "[OK]");
-static ARROW: Emoji<'_, '_> = Emoji("→", "->");
-static WARNING: Emoji<'_, '_> = Emoji("⚠️", "[!]");
-static SKIP: Emoji<'_, '_> = Emoji("⏭️", "[skip]");
 
 /// Skip selection result
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -49,11 +43,11 @@ impl SetupWizard {
         }
     }
     
-    /// Kurulum sihirbazını başlat - Modern TUI
+    /// Run setup wizard - Professional TUI
     pub async fn run(&mut self) -> anyhow::Result<SetupResult> {
         self.print_welcome();
         
-        // ADIM 0: Güvenlik Uyarısı
+        // STEP 0: Security Warning
         if !self.show_security_warning()? {
             self.print_goodbye();
             return Ok(SetupResult {
@@ -64,7 +58,7 @@ impl SetupWizard {
             });
         }
         
-        // ADIM 1: Setup Mode Selection (QuickStart vs Manual)
+        // STEP 1: Setup Mode Selection (QuickStart vs Manual)
         let mode = self.select_setup_mode()?;
         
         match mode {
@@ -99,68 +93,66 @@ impl SetupWizard {
     }
     
     // ═══════════════════════════════════════════════════════════════════════════════
-    // ADIM 0: Güvenlik Uyarısı
+    // STEP 0: Security Warning
     // ═══════════════════════════════════════════════════════════════════════════════
     
     fn show_security_warning(&self) -> anyhow::Result<bool> {
         println!();
         println!("{}", style("╔════════════════════════════════════════════════════════════════════════════════╗").red());
         println!("{}", style("║                                                                                ║").red());
-        println!("{} {} {}", style("║").red(), style("   ⚠️  GÜVENLİK UYARISI / SECURITY WARNING                                   ").bold().yellow(), style("║").red());
+        println!("{}", style("║   SECURITY WARNING                                                            ║").red());
         println!("{}", style("║                                                                                ║").red());
         println!("{}", style("╚════════════════════════════════════════════════════════════════════════════════╝").red());
         println!();
         
-        println!("{}", style("🔒 Bu sistem varsayılan olarak KİŞİSELDİR.").bold().yellow());
-        println!("   This system is PERSONAL by default.");
+        println!("{}", style("This system is PERSONAL by default.").bold().yellow());
         println!();
-        println!("{}", style("   Çoklu kullanım için LOCK-DOWN (kilit) gereklidir.").red());
-        println!("   Multi-user access requires LOCK-DOWN mode.");
+        println!("{}", style("Multi-user access requires LOCK-DOWN mode.").red());
         println!();
-        println!("   • Kişisel mod: Tüm verilere tam erişim");
-        println!("   • Lock-down mod: Kısıtlı erişim, audit log aktif");
+        println!("   - Personal mode: Full access to all data");
+        println!("   - Lock-down mode: Restricted access, audit log enabled");
         println!();
         
         let confirm = Confirm::new()
-            .with_prompt("Devam etmek istiyor musunuz? / Do you want to continue?")
+            .with_prompt("Do you want to continue?")
             .default(true)
             .interact()?;
         
         if confirm {
             println!();
-            println!("{} Güvenlik uyarısı kabul edildi. Devam ediliyor...", CHECK);
+            println!("[OK] Security warning accepted. Continuing...");
         }
         
         Ok(confirm)
     }
     
     // ═══════════════════════════════════════════════════════════════════════════════
-    // ADIM 1: Setup Mode Selection
+    // STEP 1: Setup Mode Selection
     // ═══════════════════════════════════════════════════════════════════════════════
     
     fn select_setup_mode(&mut self) -> anyhow::Result<SetupMode> {
-        self.print_step("Kurulum Modu Seçimi / Setup Mode Selection");
+        self.print_step("Setup Mode Selection");
         
         println!();
-        println!("{}", style("🎯 Kurulum modunu seçin:").bold().cyan());
+        println!("{}", style("Select setup mode:").bold().cyan());
         println!();
-        println!("   ⚡ QuickStart    - Hızlı başlangıç");
-        println!("                     Port: 18789, Loopback, Token Auth");
-        println!("                     Önerilen: İlk kez kurulum");
+        println!("   QuickStart    - Fast setup");
+        println!("                   Port: 18789, Loopback, Token Auth");
+        println!("                   Recommended for first-time setup");
         println!();
-        println!("   🔧 Manual       - Tam kontrol");
-        println!("                     Tüm ayarları özelleştir");
-        println!("                     Önerilen: Deneyimli kullanıcılar");
+        println!("   Manual        - Full control");
+        println!("                   Customize all settings");
+        println!("                   Recommended for experienced users");
         println!();
         
         let options = vec![
-            "⚡ QuickStart (Önerilen / Recommended)",
-            "🔧 Manual - Tam Yapılandırma",
-            "🚪 İptal / Cancel",
+            "QuickStart (Recommended)",
+            "Manual - Full Configuration",
+            "Cancel",
         ];
         
         let selection = Select::new()
-            .with_prompt("Seçiminiz (↑↓ ok tuşları, Enter onayla)")
+            .with_prompt("Your selection")
             .items(&options)
             .default(0)
             .interact()?;
@@ -184,30 +176,30 @@ impl SetupWizard {
         self.config.dashboard.host = "127.0.0.1".to_string(); // Loopback only
         self.config.permissions.require_confirmation = true; // Token auth
         
-        // ADIM 2: LLM Provider (25+)
+        // STEP 2: LLM Provider (100+)
         self.step = 1;
-        self.print_step("🤖 LLM Provider Seçimi");
+        self.print_step("LLM Provider Selection");
         if self.configure_llm_provider()? == StepResult::Skipped {
-            println!("  {} LLM yapılandırması atlandı", SKIP);
+            println!("  [SKIP] LLM configuration skipped");
         }
         
-        // ADIM 3: İletişim Kanalları (20+)
+        // STEP 3: Communication Channels (20+)
         self.step = 2;
-        self.print_step("💬 İletişim Kanalları");
+        self.print_step("Communication Channels");
         if self.configure_communication_channels()? == StepResult::Skipped {
-            println!("  {} Kanal yapılandırması atlandı", SKIP);
+            println!("  [SKIP] Channel configuration skipped");
         }
         
-        // ADIM 4: Araçlar (Web Search)
+        // STEP 4: Tools (Web Search)
         self.step = 3;
-        self.print_step("🔧 Araçlar / Tools");
+        self.print_step("Tools");
         if self.configure_tools()? == StepResult::Skipped {
-            println!("  {} Araç yapılandırması atlandı", SKIP);
+            println!("  [SKIP] Tools configuration skipped");
         }
         
-        // ADIM 5: Kaydet
+        // STEP 5: Save
         self.step = 4;
-        self.print_step("💾 Yapılandırma Kaydediliyor");
+        self.print_step("Saving Configuration");
         self.save_and_show_success()?;
         
         Ok(())
@@ -220,119 +212,390 @@ impl SetupWizard {
     async fn manual_setup(&mut self) -> anyhow::Result<()> {
         self.total_steps = 6;
         
-        // ADIM 2: Dil Seçimi
+        // STEP 2: Language Selection
         self.step = 1;
-        self.print_step("🌍 Dil / Language");
+        self.print_step("Language");
         if self.select_language()? == StepResult::Skipped {
-            self.config.language = "tr".to_string();
+            self.config.language = "en".to_string();
         }
         
-        // ADIM 3: LLM Provider (25+)
+        // STEP 3: LLM Provider (100+)
         self.step = 2;
-        self.print_step("🤖 LLM Provider");
+        self.print_step("LLM Provider");
         if self.configure_llm_provider()? == StepResult::Skipped {
-            println!("  {} LLM yapılandırması atlandı", SKIP);
+            println!("  [SKIP] LLM configuration skipped");
         }
         
-        // ADIM 4: İletişim Kanalları (20+)
+        // STEP 4: Communication Channels (20+)
         self.step = 3;
-        self.print_step("💬 İletişim Kanalları");
+        self.print_step("Communication Channels");
         if self.configure_communication_channels()? == StepResult::Skipped {
-            println!("  {} Kanal yapılandırması atlandı", SKIP);
+            println!("  [SKIP] Channel configuration skipped");
         }
         
-        // ADIM 5: Araçlar
+        // STEP 5: Tools
         self.step = 4;
-        self.print_step("🔧 Araçlar / Tools");
+        self.print_step("Tools");
         if self.configure_tools()? == StepResult::Skipped {
-            println!("  {} Araç yapılandırması atlandı", SKIP);
+            println!("  [SKIP] Tools configuration skipped");
         }
         
-        // ADIM 6: İzinler
+        // STEP 6: Permissions
         self.step = 5;
-        self.print_step("🔐 İzinler / Permissions");
+        self.print_step("Permissions");
         if self.configure_permissions()? == StepResult::Skipped {
-            println!("  {} İzin yapılandırması atlandı", SKIP);
+            println!("  [SKIP] Permissions configuration skipped");
         }
         
-        // ADIM 7: Kaydet
+        // STEP 7: Save
         self.step = 6;
-        self.print_step("💾 Kaydediliyor");
+        self.print_step("Saving");
         self.save_and_show_success()?;
         
         Ok(())
     }
     
     // ═══════════════════════════════════════════════════════════════════════════════
-    // LLM Provider Configuration (25+ Providers)
+    // LLM Provider Configuration (100+ Models) - OpenClaw Standard
     // ═══════════════════════════════════════════════════════════════════════════════
     
     fn configure_llm_provider(&mut self) -> anyhow::Result<StepResult> {
         println!();
-        println!("{}", style("🤖 LLM Provider Seçimi - 25+ Sağlayıcı").bold().cyan());
-        println!("{}", style("   Fuzzy search aktif - yazarak arayın").dim());
+        println!("{}", style("LLM Model Selection - OpenClaw Standard Format").bold().cyan());
+        println!("{}", style("   Format: provider/model_id | Fuzzy search enabled").dim());
         println!();
         
-        // 25+ LLM Providers list
-        let providers = vec![
-            // Major Cloud Providers
-            ("anthropic", "Claude 3.5 Sonnet", "🟠 Anthropic - Claude 3.5 Sonnet (En güçlü)"),
-            ("anthropic", "claude-3-opus", "🟠 Anthropic - Claude 3 Opus"),
-            ("anthropic", "claude-3-haiku", "🟠 Anthropic - Claude 3 Haiku (Hızlı)"),
-            ("openai", "gpt-4o", "🟢 OpenAI - GPT-4o (Multimodal)"),
-            ("openai", "gpt-4-turbo", "🟢 OpenAI - GPT-4 Turbo"),
-            ("openai", "gpt-3.5-turbo", "🟢 OpenAI - GPT-3.5 Turbo (Ekonomik)"),
-            ("google", "gemini-2.0-flash", "🔵 Google - Gemini 2.0 Flash"),
-            ("google", "gemini-pro", "🔵 Google - Gemini Pro"),
-            ("google", "gemini-1.5-pro", "🔵 Google - Gemini 1.5 Pro (1M context)"),
+        // 100+ Models - Professional provider/model format (NO emojis, NO subjective descriptions)
+        let providers: Vec<(&str, &str, &str)> = vec![
+            // === ANTHROPIC ===
+            ("anthropic", "claude-3-5-sonnet-20241022", "anthropic/claude-3-5-sonnet-20241022"),
+            ("anthropic", "claude-3-5-haiku-20241022", "anthropic/claude-3-5-haiku-20241022"),
+            ("anthropic", "claude-3-opus-20240229", "anthropic/claude-3-opus-20240229"),
+            ("anthropic", "claude-3-sonnet-20240229", "anthropic/claude-3-sonnet-20240229"),
+            ("anthropic", "claude-3-haiku-20240307", "anthropic/claude-3-haiku-20240307"),
+            ("anthropic", "claude-2.1", "anthropic/claude-2.1"),
+            ("anthropic", "claude-2.0", "anthropic/claude-2.0"),
+            ("anthropic", "claude-instant-1.2", "anthropic/claude-instant-1.2"),
             
-            // OpenRouter - Universal Gateway
-            ("openrouter", "openrouter/auto", "🌐 OpenRouter - Auto (Akıllı routing)"),
-            ("openrouter", "anthropic/claude-3.5-sonnet", "🌐 OpenRouter - Claude 3.5 Sonnet"),
-            ("openrouter", "openai/gpt-4o", "🌐 OpenRouter - GPT-4o"),
-            ("openrouter", "google/gemini-pro", "🌐 OpenRouter - Gemini Pro"),
-            ("openrouter", "meta-llama/llama-3.1-405b", "🌐 OpenRouter - Llama 3.1 405B"),
+            // === OPENAI ===
+            ("openai", "gpt-4o", "openai/gpt-4o"),
+            ("openai", "gpt-4o-mini", "openai/gpt-4o-mini"),
+            ("openai", "gpt-4-turbo", "openai/gpt-4-turbo"),
+            ("openai", "gpt-4-turbo-preview", "openai/gpt-4-turbo-preview"),
+            ("openai", "gpt-4", "openai/gpt-4"),
+            ("openai", "gpt-4-32k", "openai/gpt-4-32k"),
+            ("openai", "gpt-4-vision-preview", "openai/gpt-4-vision-preview"),
+            ("openai", "gpt-3.5-turbo", "openai/gpt-3.5-turbo"),
+            ("openai", "gpt-3.5-turbo-16k", "openai/gpt-3.5-turbo-16k"),
+            ("openai", "gpt-3.5-turbo-instruct", "openai/gpt-3.5-turbo-instruct"),
+            ("openai", "o1", "openai/o1"),
+            ("openai", "o1-preview", "openai/o1-preview"),
+            ("openai", "o1-mini", "openai/o1-mini"),
+            ("openai", "chatgpt-4o-latest", "openai/chatgpt-4o-latest"),
+            ("openai", "gpt-4o-realtime-preview", "openai/gpt-4o-realtime-preview"),
+            ("openai", "gpt-4o-audio-preview", "openai/gpt-4o-audio-preview"),
             
-            // Local/Free Providers
-            ("ollama", "llama3.3:70b", "🦙 Ollama - Llama 3.3 70B (Yerel/Ücretsiz)"),
-            ("ollama", "qwen2.5-coder:7b", "🦙 Ollama - Qwen 2.5 Coder 7B (Coding)"),
-            ("ollama", "deepseek-r1:67b", "🦙 Ollama - DeepSeek R1 (Reasoning)"),
-            ("ollama", "gemma3:27b", "🦙 Ollama - Gemma 3 27B"),
-            ("ollama", "mistral:24b", "🦙 Ollama - Mistral 24B"),
+            // === GOOGLE ===
+            ("google", "gemini-2.0-flash", "google/gemini-2.0-flash"),
+            ("google", "gemini-2.0-flash-lite", "google/gemini-2.0-flash-lite"),
+            ("google", "gemini-2.0-pro-exp", "google/gemini-2.0-pro-exp"),
+            ("google", "gemini-1.5-pro", "google/gemini-1.5-pro"),
+            ("google", "gemini-1.5-flash", "google/gemini-1.5-flash"),
+            ("google", "gemini-1.5-flash-8b", "google/gemini-1.5-flash-8b"),
+            ("google", "gemini-1.5-pro-latest", "google/gemini-1.5-pro-latest"),
+            ("google", "gemini-1.5-flash-latest", "google/gemini-1.5-flash-latest"),
+            ("google", "gemini-pro", "google/gemini-pro"),
+            ("google", "gemini-pro-vision", "google/gemini-pro-vision"),
+            ("google", "gemma-2-27b-it", "google/gemma-2-27b-it"),
+            ("google", "gemma-2-9b-it", "google/gemma-2-9b-it"),
             
-            // Fast/Edge Providers
-            ("groq", "llama-3.3-70b-versatile", "⚡ Groq - Llama 3.3 70B (Ultra hızlı)"),
-            ("groq", "mixtral-8x7b-32768", "⚡ Groq - Mixtral 8x7B"),
+            // === OPENROUTER - Anthropic ===
+            ("openrouter", "anthropic/claude-3.5-sonnet", "openrouter/anthropic/claude-3.5-sonnet"),
+            ("openrouter", "anthropic/claude-3.5-haiku", "openrouter/anthropic/claude-3.5-haiku"),
+            ("openrouter", "anthropic/claude-3-opus", "openrouter/anthropic/claude-3-opus"),
+            ("openrouter", "anthropic/claude-3-haiku", "openrouter/anthropic/claude-3-haiku"),
+            ("openrouter", "anthropic/claude-3-sonnet", "openrouter/anthropic/claude-3-sonnet"),
+            ("openrouter", "anthropic/claude-2.1", "openrouter/anthropic/claude-2.1"),
             
-            // Chinese Providers
-            ("deepseek", "deepseek-chat", "🇨🇳 DeepSeek - Chat"),
-            ("deepseek", "deepseek-reasoner", "🇨🇳 DeepSeek - Reasoner (R1)"),
-            ("moonshot", "moonshot-v1-8k", "🇨🇳 Moonshot (Kimi) - 8K"),
-            ("zhipu", "glm-4", "🇨🇳 ZhipuAI - GLM-4"),
+            // === OPENROUTER - OpenAI ===
+            ("openrouter", "openai/gpt-4o", "openrouter/openai/gpt-4o"),
+            ("openrouter", "openai/gpt-4o-mini", "openrouter/openai/gpt-4o-mini"),
+            ("openrouter", "openai/gpt-4-turbo", "openrouter/openai/gpt-4-turbo"),
+            ("openrouter", "openai/gpt-4", "openrouter/openai/gpt-4"),
+            ("openrouter", "openai/o1-preview", "openrouter/openai/o1-preview"),
+            ("openrouter", "openai/o1-mini", "openrouter/openai/o1-mini"),
+            ("openrouter", "openai/gpt-3.5-turbo", "openrouter/openai/gpt-3.5-turbo"),
+            ("openrouter", "openai/chatgpt-4o-latest", "openrouter/openai/chatgpt-4o-latest"),
             
-            // Specialized Providers
-            ("mistral", "mistral-large-latest", "🔴 Mistral AI - Large"),
-            ("mistral", "codestral-latest", "🔴 Mistral AI - Codestral (Code)"),
-            ("together", "meta-llama/Llama-3-70b-chat-hf", "🤝 Together AI - Llama 3 70B"),
-            ("perplexity", "llama-3.1-sonar-large-128k-online", "🔮 Perplexity - Sonar (Search)"),
+            // === OPENROUTER - Google ===
+            ("openrouter", "google/gemini-2.0-flash-exp", "openrouter/google/gemini-2.0-flash-exp"),
+            ("openrouter", "google/gemini-pro", "openrouter/google/gemini-pro"),
+            ("openrouter", "google/gemini-1.5-pro", "openrouter/google/gemini-1.5-pro"),
+            ("openrouter", "google/gemini-1.5-flash", "openrouter/google/gemini-1.5-flash"),
+            ("openrouter", "google/gemma-2-27b-it", "openrouter/google/gemma-2-27b-it"),
+            ("openrouter", "google/palm-2-chat-bison", "openrouter/google/palm-2-chat-bison"),
             
-            // Enterprise Providers  
-            ("azure", "gpt-4", "☁️ Azure OpenAI - GPT-4"),
-            ("bedrock", "anthropic.claude-v3", "☁️ AWS Bedrock - Claude"),
-            ("vertex", "gemini-pro", "☁️ Google Vertex - Gemini"),
+            // === OPENROUTER - Meta Llama ===
+            ("openrouter", "meta-llama/llama-3.3-70b-instruct", "openrouter/meta-llama/llama-3.3-70b-instruct"),
+            ("openrouter", "meta-llama/llama-3.2-90b-vision-instruct", "openrouter/meta-llama/llama-3.2-90b-vision-instruct"),
+            ("openrouter", "meta-llama/llama-3.2-11b-vision-instruct", "openrouter/meta-llama/llama-3.2-11b-vision-instruct"),
+            ("openrouter", "meta-llama/llama-3.2-3b-instruct", "openrouter/meta-llama/llama-3.2-3b-instruct"),
+            ("openrouter", "meta-llama/llama-3.2-1b-instruct", "openrouter/meta-llama/llama-3.2-1b-instruct"),
+            ("openrouter", "meta-llama/llama-3.1-405b-instruct", "openrouter/meta-llama/llama-3.1-405b-instruct"),
+            ("openrouter", "meta-llama/llama-3.1-70b-instruct", "openrouter/meta-llama/llama-3.1-70b-instruct"),
+            ("openrouter", "meta-llama/llama-3.1-8b-instruct", "openrouter/meta-llama/llama-3.1-8b-instruct"),
+            ("openrouter", "meta-llama/llama-3-70b-instruct", "openrouter/meta-llama/llama-3-70b-instruct"),
+            ("openrouter", "meta-llama/llama-3-8b-instruct", "openrouter/meta-llama/llama-3-8b-instruct"),
+            ("openrouter", "meta-llama/llama-2-70b-chat", "openrouter/meta-llama/llama-2-70b-chat"),
+            ("openrouter", "meta-llama/llama-2-13b-chat", "openrouter/meta-llama/llama-2-13b-chat"),
             
-            // Custom
-            ("custom", "custom", "🎯 Custom Provider - Kendi API'niz"),
+            // === OPENROUTER - Mistral ===
+            ("openrouter", "mistralai/mistral-large", "openrouter/mistralai/mistral-large"),
+            ("openrouter", "mistralai/mistral-large-2407", "openrouter/mistralai/mistral-large-2407"),
+            ("openrouter", "mistralai/mistral-medium", "openrouter/mistralai/mistral-medium"),
+            ("openrouter", "mistralai/mistral-small", "openrouter/mistralai/mistral-small"),
+            ("openrouter", "mistralai/codestral-mamba", "openrouter/mistralai/codestral-mamba"),
+            ("openrouter", "mistralai/ministral-8b", "openrouter/mistralai/ministral-8b"),
+            ("openrouter", "mistralai/ministral-3b", "openrouter/mistralai/ministral-3b"),
+            ("openrouter", "mistralai/mixtral-8x22b-instruct", "openrouter/mistralai/mixtral-8x22b-instruct"),
+            ("openrouter", "mistralai/mixtral-8x7b-instruct", "openrouter/mistralai/mixtral-8x7b-instruct"),
+            ("openrouter", "mistralai/mistral-7b-instruct", "openrouter/mistralai/mistral-7b-instruct"),
             
-            // Skip option
-            ("__skip__", "", "⏭️ Şimdilik Atla / Skip for now"),
+            // === OPENROUTER - DeepSeek ===
+            ("openrouter", "deepseek/deepseek-chat", "openrouter/deepseek/deepseek-chat"),
+            ("openrouter", "deepseek/deepseek-coder", "openrouter/deepseek/deepseek-coder"),
+            ("openrouter", "deepseek/deepseek-r1", "openrouter/deepseek/deepseek-r1"),
+            ("openrouter", "deepseek/deepseek-r1-distill-llama-70b", "openrouter/deepseek/deepseek-r1-distill-llama-70b"),
+            ("openrouter", "deepseek/deepseek-r1-distill-qwen-32b", "openrouter/deepseek/deepseek-r1-distill-qwen-32b"),
+            
+            // === OPENROUTER - Qwen ===
+            ("openrouter", "qwen/qwen-2.5-72b-instruct", "openrouter/qwen/qwen-2.5-72b-instruct"),
+            ("openrouter", "qwen/qwen-2.5-32b-instruct", "openrouter/qwen/qwen-2.5-32b-instruct"),
+            ("openrouter", "qwen/qwen-2.5-14b-instruct", "openrouter/qwen/qwen-2.5-14b-instruct"),
+            ("openrouter", "qwen/qwen-2.5-7b-instruct", "openrouter/qwen/qwen-2.5-7b-instruct"),
+            ("openrouter", "qwen/qwen-2.5-coder-32b-instruct", "openrouter/qwen/qwen-2.5-coder-32b-instruct"),
+            ("openrouter", "qwen/qwen-2.5-coder-7b-instruct", "openrouter/qwen/qwen-2.5-coder-7b-instruct"),
+            ("openrouter", "qwen/qwen-2-72b-instruct", "openrouter/qwen/qwen-2-72b-instruct"),
+            ("openrouter", "qwen/qwq-32b-preview", "openrouter/qwen/qwq-32b-preview"),
+            ("openrouter", "qwen/qwen-2.5-vl-72b-instruct", "openrouter/qwen/qwen-2.5-vl-72b-instruct"),
+            
+            // === OPENROUTER - Other ===
+            ("openrouter", "openrouter/auto", "openrouter/auto"),
+            ("openrouter", "cohere/command-r-plus", "openrouter/cohere/command-r-plus"),
+            ("openrouter", "cohere/command-r", "openrouter/cohere/command-r"),
+            ("openrouter", "cohere/command", "openrouter/cohere/command"),
+            ("openrouter", "perplexity/llama-3.1-sonar-small-128k-online", "openrouter/perplexity/llama-3.1-sonar-small-128k-online"),
+            ("openrouter", "perplexity/llama-3.1-sonar-large-128k-online", "openrouter/perplexity/llama-3.1-sonar-large-128k-online"),
+            ("openrouter", "perplexity/llama-3.1-sonar-huge-128k-online", "openrouter/perplexity/llama-3.1-sonar-huge-128k-online"),
+            ("openrouter", "x-ai/grok-beta", "openrouter/x-ai/grok-beta"),
+            ("openrouter", "x-ai/grok-2-1212", "openrouter/x-ai/grok-2-1212"),
+            ("openrouter", "x-ai/grok-2-vision-1212", "openrouter/x-ai/grok-2-vision-1212"),
+            ("openrouter", "microsoft/phi-4", "openrouter/microsoft/phi-4"),
+            ("openrouter", "microsoft/phi-3-medium-128k-instruct", "openrouter/microsoft/phi-3-medium-128k-instruct"),
+            ("openrouter", "microsoft/phi-3-mini-128k-instruct", "openrouter/microsoft/phi-3-mini-128k-instruct"),
+            ("openrouter", "nousresearch/hermes-3-llama-3.1-405b", "openrouter/nousresearch/hermes-3-llama-3.1-405b"),
+            ("openrouter", "nousresearch/hermes-3-llama-3.1-70b", "openrouter/nousresearch/hermes-3-llama-3.1-70b"),
+            ("openrouter", "cognitivecomputations/dolphin-mixtral-8x22b", "openrouter/cognitivecomputations/dolphin-mixtral-8x22b"),
+            ("openrouter", "allenai/olmo-7b-instruct", "openrouter/allenai/olmo-7b-instruct"),
+            ("openrouter", "databricks/dbrx-instruct", "openrouter/databricks/dbrx-instruct"),
+            ("openrouter", "inflection/inflection-3-pi", "openrouter/inflection/inflection-3-pi"),
+            ("openrouter", "inflection/inflection-3-productivity", "openrouter/inflection/inflection-3-productivity"),
+            ("openrouter", "sao10k/l3-euryale-70b", "openrouter/sao10k/l3-euryale-70b"),
+            ("openrouter", "teknium/openhermes-2.5-mistral-7b", "openrouter/teknium/openhermes-2.5-mistral-7b"),
+            
+            // === OLLAMA ===
+            ("ollama", "llama3.3:70b", "ollama/llama3.3:70b"),
+            ("ollama", "llama3.2:3b", "ollama/llama3.2:3b"),
+            ("ollama", "llama3.2:1b", "ollama/llama3.2:1b"),
+            ("ollama", "llama3.1:8b", "ollama/llama3.1:8b"),
+            ("ollama", "llama3.1:70b", "ollama/llama3.1:70b"),
+            ("ollama", "llama3.1:405b", "ollama/llama3.1:405b"),
+            ("ollama", "llama3:70b", "ollama/llama3:70b"),
+            ("ollama", "llama3:8b", "ollama/llama3:8b"),
+            ("ollama", "llama2:70b", "ollama/llama2:70b"),
+            ("ollama", "llama2:13b", "ollama/llama2:13b"),
+            ("ollama", "llama2:7b", "ollama/llama2:7b"),
+            ("ollama", "qwen2.5:72b", "ollama/qwen2.5:72b"),
+            ("ollama", "qwen2.5:32b", "ollama/qwen2.5:32b"),
+            ("ollama", "qwen2.5:14b", "ollama/qwen2.5:14b"),
+            ("ollama", "qwen2.5:7b", "ollama/qwen2.5:7b"),
+            ("ollama", "qwen2.5-coder:32b", "ollama/qwen2.5-coder:32b"),
+            ("ollama", "qwen2.5-coder:7b", "ollama/qwen2.5-coder:7b"),
+            ("ollama", "qwen2:72b", "ollama/qwen2:72b"),
+            ("ollama", "qwen2:7b", "ollama/qwen2:7b"),
+            ("ollama", "deepseek-r1:671b", "ollama/deepseek-r1:671b"),
+            ("ollama", "deepseek-r1:70b", "ollama/deepseek-r1:70b"),
+            ("ollama", "deepseek-r1:32b", "ollama/deepseek-r1:32b"),
+            ("ollama", "deepseek-r1:7b", "ollama/deepseek-r1:7b"),
+            ("ollama", "deepseek-v2:236b", "ollama/deepseek-v2:236b"),
+            ("ollama", "deepseek-coder-v2:236b", "ollama/deepseek-coder-v2:236b"),
+            ("ollama", "mistral:7b", "ollama/mistral:7b"),
+            ("ollama", "mistral-nemo:12b", "ollama/mistral-nemo:12b"),
+            ("ollama", "mixtral:8x7b", "ollama/mixtral:8x7b"),
+            ("ollama", "mixtral:8x22b", "ollama/mixtral:8x22b"),
+            ("ollama", "codellama:34b", "ollama/codellama:34b"),
+            ("ollama", "codellama:13b", "ollama/codellama:13b"),
+            ("ollama", "codellama:7b", "ollama/codellama:7b"),
+            ("ollama", "gemma2:27b", "ollama/gemma2:27b"),
+            ("ollama", "gemma2:9b", "ollama/gemma2:9b"),
+            ("ollama", "gemma:7b", "ollama/gemma:7b"),
+            ("ollama", "phi4:14b", "ollama/phi4:14b"),
+            ("ollama", "phi3.5:3.8b", "ollama/phi3.5:3.8b"),
+            ("ollama", "phi3:14b", "ollama/phi3:14b"),
+            ("ollama", "phi3:medium", "ollama/phi3:medium"),
+            ("ollama", "command-r:35b", "ollama/command-r:35b"),
+            ("ollama", "llava:13b", "ollama/llava:13b"),
+            ("ollama", "llava:7b", "ollama/llava:7b"),
+            ("ollama", "moondream:latest", "ollama/moondream:latest"),
+            ("ollama", "nomic-embed-text:latest", "ollama/nomic-embed-text:latest"),
+            ("ollama", "mxbai-embed-large:latest", "ollama/mxbai-embed-large:latest"),
+            ("ollama", "starcoder2:7b", "ollama/starcoder2:7b"),
+            ("ollama", "codeqwen:7b", "ollama/codeqwen:7b"),
+            ("ollama", "dolphin-mixtral:8x7b", "ollama/dolphin-mixtral:8x7b"),
+            ("ollama", "openchat:7b", "ollama/openchat:7b"),
+            ("ollama", "wizardlm2:7b", "ollama/wizardlm2:7b"),
+            
+            // === GROQ ===
+            ("groq", "llama-3.3-70b-versatile", "groq/llama-3.3-70b-versatile"),
+            ("groq", "llama-3.3-70b-specdec", "groq/llama-3.3-70b-specdec"),
+            ("groq", "llama-3.1-70b-versatile", "groq/llama-3.1-70b-versatile"),
+            ("groq", "llama-3.1-8b-instant", "groq/llama-3.1-8b-instant"),
+            ("groq", "llama-3.2-90b-vision-preview", "groq/llama-3.2-90b-vision-preview"),
+            ("groq", "llama-3.2-11b-vision-preview", "groq/llama-3.2-11b-vision-preview"),
+            ("groq", "llama-3.2-3b-preview", "groq/llama-3.2-3b-preview"),
+            ("groq", "llama-3.2-1b-preview", "groq/llama-3.2-1b-preview"),
+            ("groq", "mixtral-8x7b-32768", "groq/mixtral-8x7b-32768"),
+            ("groq", "gemma2-9b-it", "groq/gemma2-9b-it"),
+            
+            // === DEEPSEEK ===
+            ("deepseek", "deepseek-chat", "deepseek/deepseek-chat"),
+            ("deepseek", "deepseek-coder", "deepseek/deepseek-coder"),
+            ("deepseek", "deepseek-reasoner", "deepseek/deepseek-reasoner"),
+            
+            // === MISTRAL AI ===
+            ("mistral", "mistral-large-latest", "mistral/mistral-large-latest"),
+            ("mistral", "mistral-medium-latest", "mistral/mistral-medium-latest"),
+            ("mistral", "mistral-small-latest", "mistral/mistral-small-latest"),
+            ("mistral", "codestral-latest", "mistral/codestral-latest"),
+            ("mistral", "ministral-8b-latest", "mistral/ministral-8b-latest"),
+            ("mistral", "ministral-3b-latest", "mistral/ministral-3b-latest"),
+            ("mistral", "open-mistral-nemo", "mistral/open-mistral-nemo"),
+            ("mistral", "open-mixtral-8x22b", "mistral/open-mixtral-8x22b"),
+            ("mistral", "open-mixtral-8x7b", "mistral/open-mixtral-8x7b"),
+            ("mistral", "mistral-embed", "mistral/mistral-embed"),
+            
+            // === PERPLEXITY ===
+            ("perplexity", "llama-3.1-sonar-small-128k-online", "perplexity/llama-3.1-sonar-small-128k-online"),
+            ("perplexity", "llama-3.1-sonar-large-128k-online", "perplexity/llama-3.1-sonar-large-128k-online"),
+            ("perplexity", "llama-3.1-sonar-huge-128k-online", "perplexity/llama-3.1-sonar-huge-128k-online"),
+            ("perplexity", "llama-3.1-sonar-small-128k-chat", "perplexity/llama-3.1-sonar-small-128k-chat"),
+            ("perplexity", "llama-3.1-sonar-large-128k-chat", "perplexity/llama-3.1-sonar-large-128k-chat"),
+            
+            // === COHERE ===
+            ("cohere", "command-r-plus", "cohere/command-r-plus"),
+            ("cohere", "command-r", "cohere/command-r"),
+            ("cohere", "command", "cohere/command"),
+            ("cohere", "command-light", "cohere/command-light"),
+            ("cohere", "command-nightly", "cohere/command-nightly"),
+            ("cohere", "rerank-english-v3.0", "cohere/rerank-english-v3.0"),
+            ("cohere", "rerank-multilingual-v3.0", "cohere/rerank-multilingual-v3.0"),
+            
+            // === TOGETHER AI ===
+            ("together", "meta-llama/Llama-3.3-70B-Instruct-Turbo", "together/meta-llama/Llama-3.3-70B-Instruct-Turbo"),
+            ("together", "meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo", "together/meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo"),
+            ("together", "meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo", "together/meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo"),
+            ("together", "meta-llama/Llama-3.1-405B-Instruct-Turbo", "together/meta-llama/Llama-3.1-405B-Instruct-Turbo"),
+            ("together", "mistralai/Mixtral-8x7B-Instruct-v0.1", "together/mistralai/Mixtral-8x7B-Instruct-v0.1"),
+            ("together", "mistralai/Mixtral-8x22B-Instruct-v0.1", "together/mistralai/Mixtral-8x22B-Instruct-v0.1"),
+            ("together", "Qwen/Qwen2.5-72B-Instruct-Turbo", "together/Qwen/Qwen2.5-72B-Instruct-Turbo"),
+            ("together", "Qwen/Qwen2.5-Coder-32B-Instruct", "together/Qwen/Qwen2.5-Coder-32B-Instruct"),
+            ("together", "deepseek-ai/DeepSeek-V3", "together/deepseek-ai/DeepSeek-V3"),
+            ("together", "databricks/dbrx-instruct", "together/databricks/dbrx-instruct"),
+            
+            // === X.AI ===
+            ("xai", "grok-beta", "xai/grok-beta"),
+            ("xai", "grok-2-1212", "xai/grok-2-1212"),
+            ("xai", "grok-2-vision-1212", "xai/grok-2-vision-1212"),
+            ("xai", "grok-vision-beta", "xai/grok-vision-beta"),
+            
+            // === MOONSHOT ===
+            ("moonshot", "moonshot-v1-8k", "moonshot/moonshot-v1-8k"),
+            ("moonshot", "moonshot-v1-32k", "moonshot/moonshot-v1-32k"),
+            ("moonshot", "moonshot-v1-128k", "moonshot/moonshot-v1-128k"),
+            
+            // === ZHIPU AI ===
+            ("zhipu", "glm-4", "zhipu/glm-4"),
+            ("zhipu", "glm-4-flash", "zhipu/glm-4-flash"),
+            ("zhipu", "glm-4-plus", "zhipu/glm-4-plus"),
+            ("zhipu", "glm-4-long", "zhipu/glm-4-long"),
+            ("zhipu", "glm-4v-plus", "zhipu/glm-4v-plus"),
+            ("zhipu", "glm-4v", "zhipu/glm-4v"),
+            ("zhipu", "embedding-3", "zhipu/embedding-3"),
+            
+            // === BAIDU (ERNIE) ===
+            ("baidu", "ernie-4.0-8k", "baidu/ernie-4.0-8k"),
+            ("baidu", "ernie-4.0-turbo-8k", "baidu/ernie-4.0-turbo-8k"),
+            ("baidu", "ernie-3.5-8k", "baidu/ernie-3.5-8k"),
+            ("baidu", "ernie-speed-8k", "baidu/ernie-speed-8k"),
+            
+            // === ALIBABA (QWEN via DASHSCOPE) ===
+            ("alibaba", "qwen-max", "alibaba/qwen-max"),
+            ("alibaba", "qwen-plus", "alibaba/qwen-plus"),
+            ("alibaba", "qwen-turbo", "alibaba/qwen-turbo"),
+            ("alibaba", "qwen-vl-max", "alibaba/qwen-vl-max"),
+            ("alibaba", "qwen-vl-plus", "alibaba/qwen-vl-plus"),
+            
+            // === REPLICATE ===
+            ("replicate", "meta/llama-3.3-70b-instruct", "replicate/meta/llama-3.3-70b-instruct"),
+            ("replicate", "meta/llama-3.1-405b-instruct", "replicate/meta/llama-3.1-405b-instruct"),
+            ("replicate", "mistralai/mixtral-8x7b-instruct-v0.1", "replicate/mistralai/mixtral-8x7b-instruct-v0.1"),
+            
+            // === AZURE OPENAI ===
+            ("azure", "gpt-4o", "azure/gpt-4o"),
+            ("azure", "gpt-4o-mini", "azure/gpt-4o-mini"),
+            ("azure", "gpt-4-turbo", "azure/gpt-4-turbo"),
+            ("azure", "gpt-4", "azure/gpt-4"),
+            ("azure", "gpt-4-32k", "azure/gpt-4-32k"),
+            ("azure", "gpt-3.5-turbo", "azure/gpt-3.5-turbo"),
+            ("azure", "gpt-3.5-turbo-16k", "azure/gpt-3.5-turbo-16k"),
+            
+            // === AWS BEDROCK ===
+            ("bedrock", "anthropic.claude-3-5-sonnet-20241022-v2:0", "bedrock/anthropic.claude-3-5-sonnet"),
+            ("bedrock", "anthropic.claude-3-opus-20240229-v1:0", "bedrock/anthropic.claude-3-opus"),
+            ("bedrock", "anthropic.claude-3-haiku-20240307-v1:0", "bedrock/anthropic.claude-3-haiku"),
+            ("bedrock", "anthropic.claude-3-sonnet-20240229-v1:0", "bedrock/anthropic.claude-3-sonnet"),
+            ("bedrock", "meta.llama3-3-70b-instruct-v1:0", "bedrock/meta.llama3-3-70b"),
+            ("bedrock", "meta.llama3-1-405b-instruct-v1:0", "bedrock/meta.llama3-1-405b"),
+            ("bedrock", "meta.llama3-1-70b-instruct-v1:0", "bedrock/meta.llama3-1-70b"),
+            ("bedrock", "meta.llama3-1-8b-instruct-v1:0", "bedrock/meta.llama3-1-8b"),
+            ("bedrock", "mistral.mistral-large-2407-v1:0", "bedrock/mistral-large"),
+            ("bedrock", "amazon.titan-text-premier-v1:0", "bedrock/amazon.titan-premier"),
+            ("bedrock", "cohere.command-r-plus-v1:0", "bedrock/cohere.command-r-plus"),
+            
+            // === GOOGLE VERTEX ===
+            ("vertex", "gemini-2.0-flash", "vertex/gemini-2.0-flash"),
+            ("vertex", "gemini-2.0-flash-lite", "vertex/gemini-2.0-flash-lite"),
+            ("vertex", "gemini-1.5-pro", "vertex/gemini-1.5-pro"),
+            ("vertex", "gemini-1.5-flash", "vertex/gemini-1.5-flash"),
+            ("vertex", "gemini-1.5-flash-8b", "vertex/gemini-1.5-flash-8b"),
+            
+            // === IBM WATSONX ===
+            ("watsonx", "ibm/granite-13b-chat-v2", "watsonx/ibm/granite-13b-chat-v2"),
+            ("watsonx", "ibm/granite-20b-code-instruct-v1", "watsonx/ibm/granite-20b-code-instruct-v1"),
+            ("watsonx", "meta-llama/llama-3-70b-instruct", "watsonx/meta-llama/llama-3-70b-instruct"),
+            
+            // === CUSTOM ===
+            ("custom", "custom", "custom/custom"),
+            
+            // === SKIP ===
+            ("__skip__", "", "Skip for now"),
         ];
         
         let provider_names: Vec<&str> = providers.iter().map(|(_, _, display)| *display).collect();
         
         // Fuzzy select for easy search
         let selection = FuzzySelect::new()
-            .with_prompt("Provider seçin (yazarak arayın, ↑↓ gezinin)")
+            .with_prompt("Select provider (type to search)")
             .items(&provider_names)
             .default(0)
             .interact()?;
@@ -349,14 +612,14 @@ impl SetupWizard {
         self.config.llm.model = default_model.to_string();
         
         println!();
-        println!("{} Seçilen: {} ({})", CHECK, default_model, provider_id);
+        println!("[OK] Selected: {} ({})", default_model, provider_id);
         
         // API Key input (hidden) - except for local Ollama
         if provider_id != "ollama" {
             self.prompt_api_key(provider_id)?;
         } else {
             println!();
-            println!("{}", style("💡 Ollama kurulumu gereklidir:").yellow());
+            println!("{}", style("Note: Ollama installation required:").yellow());
             println!("   curl -fsSL https://ollama.com/install.sh | sh");
             println!("   ollama pull {}", default_model);
         }
@@ -371,7 +634,7 @@ impl SetupWizard {
     
     fn prompt_api_key(&mut self, provider: &str) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("🔑 API Key girişi (gizli/hidden input)").bold().yellow());
+        println!("{}", style("API Key Input (hidden)").bold().yellow());
         
         let prompt = match provider {
             "anthropic" => "Anthropic API Key (sk-ant-...)",
@@ -388,6 +651,12 @@ impl SetupWizard {
             "vertex" => "Google Cloud API Key",
             "moonshot" => "Moonshot API Key",
             "zhipu" => "ZhipuAI API Key",
+            "baidu" => "Baidu API Key",
+            "alibaba" => "Alibaba DashScope API Key",
+            "xai" => "X.AI API Key",
+            "cohere" => "Cohere API Key",
+            "replicate" => "Replicate API Key",
+            "watsonx" => "IBM WatsonX API Key",
             _ => "API Key",
         };
         
@@ -407,9 +676,9 @@ impl SetupWizard {
                 "together" => self.config.api_keys.together = Some(api_key),
                 _ => { self.config.api_keys.extra.insert(provider.to_string(), api_key); }
             };
-            println!("{} API Key kaydedildi (gizli)", CHECK);
+            println!("[OK] API Key saved (hidden)");
         } else {
-            println!("{} API Key girilmedi - daha sonra ekleyebilirsiniz", WARNING);
+            println!("[!] API Key not provided - you can add it later");
         }
         
         Ok(())
@@ -419,7 +688,7 @@ impl SetupWizard {
         println!();
         
         let confirm = Confirm::new()
-            .with_prompt("Farklı bir model seçmek ister misiniz?")
+            .with_prompt("Select a different model?")
             .default(false)
             .interact()?;
         
@@ -429,32 +698,37 @@ impl SetupWizard {
         
         let models: Vec<(&str, &str)> = match provider {
             "openrouter" => vec![
-                ("openrouter/auto", "Auto - Akıllı routing"),
-                ("anthropic/claude-3.5-sonnet", "Claude 3.5 Sonnet"),
-                ("anthropic/claude-3-opus", "Claude 3 Opus"),
-                ("openai/gpt-4o", "GPT-4o"),
-                ("google/gemini-pro", "Gemini Pro"),
-                ("meta-llama/llama-3.1-405b-instruct", "Llama 3.1 405B"),
-                ("mistralai/mistral-large", "Mistral Large"),
-                ("deepseek/deepseek-chat", "DeepSeek Chat"),
+                ("openrouter/auto", "openrouter/auto"),
+                ("anthropic/claude-3.5-sonnet", "openrouter/anthropic/claude-3.5-sonnet"),
+                ("anthropic/claude-3-opus", "openrouter/anthropic/claude-3-opus"),
+                ("openai/gpt-4o", "openrouter/openai/gpt-4o"),
+                ("google/gemini-pro", "openrouter/google/gemini-pro"),
+                ("meta-llama/llama-3.1-405b-instruct", "openrouter/meta-llama/llama-3.1-405b-instruct"),
+                ("mistralai/mistral-large", "openrouter/mistralai/mistral-large"),
+                ("deepseek/deepseek-chat", "openrouter/deepseek/deepseek-chat"),
+                ("qwen/qwen-2.5-72b-instruct", "openrouter/qwen/qwen-2.5-72b-instruct"),
+                ("x-ai/grok-beta", "openrouter/x-ai/grok-beta"),
             ],
             "ollama" => vec![
-                ("llama3.3:70b", "Llama 3.3 70B - Genel"),
-                ("qwen2.5-coder:7b", "Qwen 2.5 Coder - Code"),
-                ("qwen2.5:72b", "Qwen 2.5 72B - Güçlü"),
-                ("deepseek-r1:67b", "DeepSeek R1 - Reasoning"),
-                ("gemma3:27b", "Gemma 3 27B"),
-                ("mistral:24b", "Mistral 24B"),
-                ("codellama:34b", "Code Llama 34B"),
-                ("phi4:14b", "Phi-4 14B - Hafif"),
+                ("llama3.3:70b", "ollama/llama3.3:70b"),
+                ("llama3.2:3b", "ollama/llama3.2:3b"),
+                ("qwen2.5:72b", "ollama/qwen2.5:72b"),
+                ("qwen2.5-coder:32b", "ollama/qwen2.5-coder:32b"),
+                ("deepseek-r1:70b", "ollama/deepseek-r1:70b"),
+                ("gemma2:27b", "ollama/gemma2:27b"),
+                ("mistral:7b", "ollama/mistral:7b"),
+                ("codellama:34b", "ollama/codellama:34b"),
+                ("phi4:14b", "ollama/phi4:14b"),
+                ("mixtral:8x7b", "ollama/mixtral:8x7b"),
             ],
             "openai" => vec![
-                ("gpt-4o", "GPT-4o - Multimodal"),
-                ("gpt-4-turbo", "GPT-4 Turbo"),
-                ("gpt-4", "GPT-4"),
-                ("gpt-3.5-turbo", "GPT-3.5 Turbo - Ekonomik"),
-                ("o1-preview", "o1 Preview - Reasoning"),
-                ("o1-mini", "o1 Mini - Hızlı reasoning"),
+                ("gpt-4o", "openai/gpt-4o"),
+                ("gpt-4o-mini", "openai/gpt-4o-mini"),
+                ("gpt-4-turbo", "openai/gpt-4-turbo"),
+                ("gpt-4", "openai/gpt-4"),
+                ("gpt-3.5-turbo", "openai/gpt-3.5-turbo"),
+                ("o1-preview", "openai/o1-preview"),
+                ("o1-mini", "openai/o1-mini"),
             ],
             _ => return Ok(()),
         };
@@ -462,14 +736,14 @@ impl SetupWizard {
         let model_names: Vec<&str> = models.iter().map(|(_, desc)| *desc).collect();
         
         let selection = Select::new()
-            .with_prompt("Model seçin")
+            .with_prompt("Select model")
             .items(&model_names)
             .default(0)
             .interact()?;
         
         let (model, _) = models[selection];
         self.config.llm.model = model.to_string();
-        println!("{} Model: {}", CHECK, model);
+        println!("[OK] Model: {}", model);
         
         Ok(())
     }
@@ -480,62 +754,62 @@ impl SetupWizard {
     
     fn configure_communication_channels(&mut self) -> anyhow::Result<StepResult> {
         println!();
-        println!("{}", style("💬 İletişim Kanalları - 20+ Platform").bold().cyan());
-        println!("{}", style("   Space: Seç/Kaldır    Enter: Onayla    ↑↓: Gezin").dim());
+        println!("{}", style("Communication Channels - 20+ Platforms").bold().cyan());
+        println!("{}", style("   Space: Select/Remove    Enter: Confirm").dim());
         println!();
         
-        // 20+ Communication channels
+        // 20+ Communication channels (NO emojis)
         let channels = vec![
             // Mobile Messengers
-            ("telegram", "✈️ Telegram Bot"),
-            ("whatsapp", "📱 WhatsApp Business"),
-            ("signal", "🔔 Signal"),
-            ("imessage", "🍎 iMessage (macOS)"),
-            ("wechat", "🇨🇳 WeChat"),
-            ("line", "🇯🇵 LINE"),
-            ("viber", "💜 Viber"),
-            ("kakaotalk", "🇰🇷 KakaoTalk"),
+            ("telegram", "Telegram Bot"),
+            ("whatsapp", "WhatsApp Business"),
+            ("signal", "Signal"),
+            ("imessage", "iMessage (macOS)"),
+            ("wechat", "WeChat"),
+            ("line", "LINE"),
+            ("viber", "Viber"),
+            ("kakaotalk", "KakaoTalk"),
             
             // Enterprise Platforms
-            ("discord", "🎮 Discord"),
-            ("slack", "💼 Slack"),
-            ("ms_teams", "👥 Microsoft Teams"),
-            ("google_chat", "💬 Google Chat"),
-            ("webex", "📹 Webex"),
-            ("zoom", "🎥 Zoom Chat"),
-            ("mattermost", "🏢 Mattermost"),
-            ("rocketchat", "🚀 Rocket.Chat"),
+            ("discord", "Discord"),
+            ("slack", "Slack"),
+            ("ms_teams", "Microsoft Teams"),
+            ("google_chat", "Google Chat"),
+            ("webex", "Webex"),
+            ("zoom", "Zoom Chat"),
+            ("mattermost", "Mattermost"),
+            ("rocketchat", "Rocket.Chat"),
             
             // Decentralized / Privacy
-            ("matrix", "🧮 Matrix/Element"),
-            ("xmpp", "🔗 XMPP/Jabber"),
-            ("session", "🛡️ Session"),
-            ("wire", "🔒 Wire"),
-            ("threema", "🔑 Threema"),
-            ("nostr", "⚡ Nostr"),
+            ("matrix", "Matrix/Element"),
+            ("xmpp", "XMPP/Jabber"),
+            ("session", "Session"),
+            ("wire", "Wire"),
+            ("threema", "Threema"),
+            ("nostr", "Nostr"),
             
             // Social Platforms
-            ("twitter", "🐦 Twitter/X DM"),
-            ("instagram", "📸 Instagram DM"),
-            ("facebook", "📘 Facebook Messenger"),
-            ("linkedin", "💼 LinkedIn"),
-            ("reddit", "🤖 Reddit"),
+            ("twitter", "Twitter/X DM"),
+            ("instagram", "Instagram DM"),
+            ("facebook", "Facebook Messenger"),
+            ("linkedin", "LinkedIn"),
+            ("reddit", "Reddit"),
             
             // Email & SMS
-            ("email", "📧 Email (SMTP/IMAP)"),
-            ("sms", "📲 SMS (Twilio)"),
-            ("rcs", "💬 RCS (Rich Communication)"),
+            ("email", "Email (SMTP/IMAP)"),
+            ("sms", "SMS (Twilio)"),
+            ("rcs", "RCS (Rich Communication)"),
             
             // Web/API
-            ("web", "🌐 Web Dashboard"),
-            ("api", "🔌 REST API"),
+            ("web", "Web Dashboard"),
+            ("api", "REST API"),
         ];
         
         let channel_names: Vec<&str> = channels.iter().map(|(_, name)| *name).collect();
         
         // Multi-select with Space
         let selections = MultiSelect::new()
-            .with_prompt("Kanalları seçin (Space ile seçim, Enter onayla)")
+            .with_prompt("Select channels (Space to select, Enter to confirm)")
             .items(&channel_names)
             .defaults(&[false].repeat(channels.len())) // None selected by default
             .interact()?;
@@ -544,7 +818,7 @@ impl SetupWizard {
         if selections.is_empty() {
             // Ask if they want to skip
             let skip = Confirm::new()
-                .with_prompt("Hiçbir kanal seçilmedi. Devam etmek istiyor musunuz?")
+                .with_prompt("No channels selected. Continue anyway?")
                 .default(true)
                 .interact()?;
             if skip {
@@ -577,15 +851,15 @@ impl SetupWizard {
             "reddit" => self.setup_reddit()?,
             "web" => {
                 self.config.integrations.extra.insert("web_enabled".to_string(), "true".to_string());
-                println!("  {} Web Dashboard aktif", CHECK);
+                println!("  [OK] Web Dashboard enabled");
             }
             "api" => {
                 self.config.integrations.extra.insert("api_enabled".to_string(), "true".to_string());
-                println!("  {} REST API aktif", CHECK);
+                println!("  [OK] REST API enabled");
             }
             _ => {
                 // Generic setup for other channels
-                println!("  {} {} seçildi - yapılandırma sonradan", CHECK, channel);
+                println!("  [OK] {} selected - configure later", channel);
                 self.config.integrations.extra.insert(format!("{}_enabled", channel), "true".to_string());
             }
         }
@@ -594,36 +868,36 @@ impl SetupWizard {
     
     fn setup_telegram_full(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  ✈️ Telegram Bot Kurulumu").bold().cyan());
-        println!("     1. Telegram'da @BotFather'ı bulun");
-        println!("     2. /newbot gönderin ve talimatları izleyin");
-        println!("     3. Token'ı kopyalayın");
+        println!("{}", style("  Telegram Bot Setup").bold().cyan());
+        println!("     1. Find @BotFather on Telegram");
+        println!("     2. Send /newbot and follow instructions");
+        println!("     3. Copy the token");
         println!();
         
         // Bot Token
         let token = Password::new()
-            .with_prompt("  🔑 Bot Token (gizli)")
+            .with_prompt("  Bot Token (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
         if token.is_empty() {
-            println!("  {} Token girilmedi, atlanıyor", SKIP);
+            println!("  [SKIP] No token provided, skipping");
             return Ok(());
         }
         
         // Security Policy
         println!();
-        println!("{}", style("  🔒 Güvenlik Politikası:").bold().yellow());
+        println!("{}", style("  Security Policy:").bold().yellow());
         
         let policies = vec![
-            "🔐 DM Pairing - Sadece eşleşmiş kullanıcılar",
-            "📋 Allowlist - İzin verilen kullanıcı listesi",
-            "🌐 Açık - Herkes kullanabilir (önerilmez)",
-            "⏭️ Atla - Varsayılan (DM Pairing)",
+            "DM Pairing - Only paired users",
+            "Allowlist - Allowed users list",
+            "Open - Anyone can use (not recommended)",
+            "Skip - Default (DM Pairing)",
         ];
         
         let policy_sel = Select::new()
-            .with_prompt("  Güvenlik politikası seçin")
+            .with_prompt("  Select security policy")
             .items(&policies)
             .default(3)
             .interact()?;
@@ -644,12 +918,12 @@ impl SetupWizard {
             ].into_iter().collect(),
         });
         
-        println!("  {} Telegram bağlandı! (Policy: {})", CHECK, policy);
+        println!("  [OK] Telegram connected! (Policy: {})", policy);
         
         // If allowlist, ask for users
         if policy == "allowlist" {
             let users: String = Input::new()
-                .with_prompt("  İzin verilen Telegram User ID'leri (virgülle ayırın)")
+                .with_prompt("  Allowed Telegram User IDs (comma-separated)")
                 .allow_empty(true)
                 .interact_text()?;
             
@@ -663,7 +937,7 @@ impl SetupWizard {
     
     fn setup_whatsapp_full(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  📱 WhatsApp Business API").bold().cyan());
+        println!("{}", style("  WhatsApp Business API").bold().cyan());
         println!("     https://business.facebook.com");
         println!();
         
@@ -673,24 +947,24 @@ impl SetupWizard {
             .interact_text()?;
         
         if phone_id.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
         let token = Password::new()
-            .with_prompt("  🔑 Access Token (gizli)")
+            .with_prompt("  Access Token (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
         // Security Policy
         let policies = vec![
-            "🔐 Verified Numbers - Doğrulanmış numaralar",
-            "📋 Allowlist - İzin listesi",
-            "⏭️ Atla",
+            "Verified Numbers - Verified numbers only",
+            "Allowlist - Allowed list",
+            "Skip",
         ];
         
         let policy_sel = Select::new()
-            .with_prompt("  Güvenlik politikası")
+            .with_prompt("  Security policy")
             .items(&policies)
             .default(2)
             .interact()?;
@@ -710,29 +984,29 @@ impl SetupWizard {
             ].into_iter().collect(),
         });
         
-        println!("  {} WhatsApp bağlandı!", CHECK);
+        println!("  [OK] WhatsApp connected!");
         Ok(())
     }
     
     fn setup_discord_full(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  🎮 Discord Bot").bold().cyan());
+        println!("{}", style("  Discord Bot").bold().cyan());
         println!("     https://discord.com/developers/applications");
         println!();
         
         let token = Password::new()
-            .with_prompt("  🔑 Bot Token (gizli)")
+            .with_prompt("  Bot Token (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
         if token.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
         // Server selection
         let guild_id: String = Input::new()
-            .with_prompt("  Server/Guild ID (isteğe bağlı)")
+            .with_prompt("  Server/Guild ID (optional)")
             .allow_empty(true)
             .interact_text()?;
         
@@ -746,28 +1020,28 @@ impl SetupWizard {
             },
         });
         
-        println!("  {} Discord bağlandı!", CHECK);
+        println!("  [OK] Discord connected!");
         Ok(())
     }
     
     fn setup_slack_full(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  💼 Slack App").bold().cyan());
+        println!("{}", style("  Slack App").bold().cyan());
         println!("     https://api.slack.com/apps");
         println!();
         
         let token = Password::new()
-            .with_prompt("  🔑 Bot Token (xoxb-...) (gizli)")
+            .with_prompt("  Bot Token (xoxb-...) (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
         if token.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
         let channel: String = Input::new()
-            .with_prompt("  Default Channel (ör: #general)")
+            .with_prompt("  Default Channel (e.g. #general)")
             .allow_empty(true)
             .interact_text()?;
         
@@ -781,14 +1055,14 @@ impl SetupWizard {
             },
         });
         
-        println!("  {} Slack bağlandı!", CHECK);
+        println!("  [OK] Slack connected!");
         Ok(())
     }
     
     fn setup_matrix_full(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  🧮 Matrix/Element").bold().cyan());
-        println!("     Element → Settings → Help & About → Access Token");
+        println!("{}", style("  Matrix/Element").bold().cyan());
+        println!("     Element -> Settings -> Help & About -> Access Token");
         println!();
         
         let homeserver: String = Input::new()
@@ -797,17 +1071,17 @@ impl SetupWizard {
             .interact_text()?;
         
         let token = Password::new()
-            .with_prompt("  🔑 Access Token (gizli)")
+            .with_prompt("  Access Token (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
         if token.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
         let room_id: String = Input::new()
-            .with_prompt("  Default Room ID (isteğe bağlı)")
+            .with_prompt("  Default Room ID (optional)")
             .allow_empty(true)
             .interact_text()?;
         
@@ -820,23 +1094,23 @@ impl SetupWizard {
             ].into_iter().collect(),
         });
         
-        println!("  {} Matrix bağlandı!", CHECK);
+        println!("  [OK] Matrix connected!");
         Ok(())
     }
     
     fn setup_signal(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  🔔 Signal").bold().cyan());
-        println!("     signal-cli veya signald gereklidir");
+        println!("{}", style("  Signal").bold().cyan());
+        println!("     signal-cli or signald required");
         println!();
         
         let phone: String = Input::new()
-            .with_prompt("  Telefon numarası (+90...)")
+            .with_prompt("  Phone number (+90...)")
             .allow_empty(true)
             .interact_text()?;
         
         if phone.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
@@ -846,13 +1120,13 @@ impl SetupWizard {
             extra: [("phone".to_string(), phone)].into_iter().collect(),
         });
         
-        println!("  {} Signal yapılandırıldı!", CHECK);
+        println!("  [OK] Signal configured!");
         Ok(())
     }
     
     fn setup_email_full(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  📧 Email (SMTP)").bold().cyan());
+        println!("{}", style("  Email (SMTP)").bold().cyan());
         println!();
         
         let host: String = Input::new()
@@ -870,7 +1144,7 @@ impl SetupWizard {
             .interact_text()?;
         
         let pass = Password::new()
-            .with_prompt("  🔑 Password/App Password (gizli)")
+            .with_prompt("  Password/App Password (hidden)")
             .interact()?;
         
         self.config.integrations.email = Some(IntegrationConfig {
@@ -884,23 +1158,23 @@ impl SetupWizard {
             ].into_iter().collect(),
         });
         
-        println!("  {} Email bağlandı!", CHECK);
+        println!("  [OK] Email connected!");
         Ok(())
     }
     
     fn setup_twitter(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  🐦 Twitter/X API").bold().cyan());
+        println!("{}", style("  Twitter/X API").bold().cyan());
         println!("     https://developer.twitter.com");
         println!();
         
         let bearer = Password::new()
-            .with_prompt("  🔑 Bearer Token (gizli)")
+            .with_prompt("  Bearer Token (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
         if bearer.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
@@ -910,22 +1184,22 @@ impl SetupWizard {
             extra: HashMap::new(),
         });
         
-        println!("  {} Twitter bağlandı!", CHECK);
+        println!("  [OK] Twitter connected!");
         Ok(())
     }
     
     fn setup_linkedin(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  💼 LinkedIn API").bold().cyan());
+        println!("{}", style("  LinkedIn API").bold().cyan());
         println!();
         
         let token = Password::new()
-            .with_prompt("  🔑 Access Token (gizli)")
+            .with_prompt("  Access Token (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
         if token.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
@@ -935,13 +1209,13 @@ impl SetupWizard {
             extra: HashMap::new(),
         });
         
-        println!("  {} LinkedIn bağlandı!", CHECK);
+        println!("  [OK] LinkedIn connected!");
         Ok(())
     }
     
     fn setup_reddit(&mut self) -> anyhow::Result<()> {
         println!();
-        println!("{}", style("  🤖 Reddit API").bold().cyan());
+        println!("{}", style("  Reddit API").bold().cyan());
         println!("     https://www.reddit.com/prefs/apps");
         println!();
         
@@ -951,12 +1225,12 @@ impl SetupWizard {
             .interact_text()?;
         
         if client_id.is_empty() {
-            println!("  {} Atlanıyor", SKIP);
+            println!("  [SKIP] Skipping");
             return Ok(());
         }
         
         let secret = Password::new()
-            .with_prompt("  🔑 Client Secret (gizli)")
+            .with_prompt("  Client Secret (hidden)")
             .allow_empty_password(true)
             .interact()?;
         
@@ -966,7 +1240,7 @@ impl SetupWizard {
             extra: [("client_id".to_string(), client_id)].into_iter().collect(),
         });
         
-        println!("  {} Reddit bağlandı!", CHECK);
+        println!("  [OK] Reddit connected!");
         Ok(())
     }
     
@@ -976,30 +1250,30 @@ impl SetupWizard {
     
     fn configure_tools(&mut self) -> anyhow::Result<StepResult> {
         println!();
-        println!("{}", style("🔧 Araçlar / Tools").bold().cyan());
+        println!("{}", style("Tools").bold().cyan());
         println!();
         
         // Web Search Provider
-        println!("{}", style("🔍 Web Search Provider:").bold());
+        println!("{}", style("Web Search Provider:").bold());
         println!();
         
         let providers = vec![
-            ("searxng", "🦊 SearXNG - Açık kaynak, kendi instance"),
-            ("duckduckgo", "🦆 DuckDuckGo - Gizlilik odaklı"),
-            ("ollama_web", "🦙 Ollama Web Search - Yerel LLM + Web"),
-            ("google_cse", "🔍 Google Custom Search - Resmi API"),
-            ("bing", "🅱️ Bing Search API - Microsoft"),
-            ("tavily", "⚡ Tavily - AI-optimized search"),
-            ("serper", "🔑 Serper - Google API wrapper"),
-            ("brave", "🦁 Brave Search - Gizlilik"),
-            ("kagi", "💎 Kagi - Premium search"),
-            ("__skip__", "⏭️ Şimdilik Atla / Skip for now"),
+            ("searxng", "SearXNG - Open source, self-hosted"),
+            ("duckduckgo", "DuckDuckGo - Privacy focused"),
+            ("ollama_web", "Ollama Web Search - Local LLM + Web"),
+            ("google_cse", "Google Custom Search - Official API"),
+            ("bing", "Bing Search API - Microsoft"),
+            ("tavily", "Tavily - AI-optimized search"),
+            ("serper", "Serper - Google API wrapper"),
+            ("brave", "Brave Search - Privacy"),
+            ("kagi", "Kagi - Premium search"),
+            ("__skip__", "Skip for now"),
         ];
         
         let provider_names: Vec<&str> = providers.iter().map(|(_, name)| *name).collect();
         
         let selection = Select::new()
-            .with_prompt("Web search sağlayıcısı seçin")
+            .with_prompt("Select web search provider")
             .items(&provider_names)
             .default(9) // Skip by default
             .interact()?;
@@ -1015,20 +1289,20 @@ impl SetupWizard {
         
         // Additional tools
         println!();
-        println!("{}", style("🛠️ Ek Araçlar:").bold());
+        println!("{}", style("Additional Tools:").bold());
         
         let tools = vec![
-            ("code_exec", "💻 Code Execution (Python, JS, Shell)"),
-            ("file_ops", "📁 File Operations"),
-            ("web_browser", "🌐 Web Browser (automation)"),
-            ("calendar", "📅 Calendar Integration"),
-            ("contacts", "👥 Contacts Integration"),
+            ("code_exec", "Code Execution (Python, JS, Shell)"),
+            ("file_ops", "File Operations"),
+            ("web_browser", "Web Browser (automation)"),
+            ("calendar", "Calendar Integration"),
+            ("contacts", "Contacts Integration"),
         ];
         
         let tool_names: Vec<&str> = tools.iter().map(|(_, name)| *name).collect();
         
         let tool_selections = MultiSelect::new()
-            .with_prompt("Ek araçları seçin (Space seçim)")
+            .with_prompt("Select additional tools (Space to select)")
             .items(&tool_names)
             .defaults(&[true, true, false, false, false])
             .interact()?;
@@ -1036,7 +1310,7 @@ impl SetupWizard {
         for idx in tool_selections {
             let (key, _) = tools[idx];
             self.config.integrations.extra.insert(format!("tool_{}", key), "true".to_string());
-            println!("  {} {} aktif", CHECK, key);
+            println!("  [OK] {} enabled", key);
         }
         
         Ok(StepResult::Completed)
@@ -1046,8 +1320,8 @@ impl SetupWizard {
         match provider {
             "searxng" => {
                 println!();
-                println!("{}", style("  🦊 SearXNG Kurulumu").bold().cyan());
-                println!("     https://searx.be veya kendi instance'ınız");
+                println!("{}", style("  SearXNG Setup").bold().cyan());
+                println!("     https://searx.be or your own instance");
                 println!();
                 
                 let instance: String = Input::new()
@@ -1060,18 +1334,18 @@ impl SetupWizard {
             }
             "duckduckgo" => {
                 self.config.integrations.extra.insert("web_search_provider".to_string(), "duckduckgo".to_string());
-                println!("  {} DuckDuckGo kullanılacak (API key gereksiz)", CHECK);
+                println!("  [OK] DuckDuckGo will be used (no API key required)");
             }
             "ollama_web" => {
                 self.config.integrations.extra.insert("web_search_provider".to_string(), "ollama_web".to_string());
-                println!("  {} Ollama Web Search aktif", CHECK);
+                println!("  [OK] Ollama Web Search enabled");
             }
             "google_cse" => {
                 println!();
-                println!("{}", style("  🔍 Google Custom Search").bold().cyan());
+                println!("{}", style("  Google Custom Search").bold().cyan());
                 
                 let api_key = Password::new()
-                    .with_prompt("  🔑 API Key (gizli)")
+                    .with_prompt("  API Key (hidden)")
                     .allow_empty_password(true)
                     .interact()?;
                 
@@ -1087,7 +1361,7 @@ impl SetupWizard {
             "bing" => {
                 println!();
                 let key = Password::new()
-                    .with_prompt("  🔑 Bing API Key (gizli)")
+                    .with_prompt("  Bing API Key (hidden)")
                     .allow_empty_password(true)
                     .interact()?;
                 
@@ -1097,7 +1371,7 @@ impl SetupWizard {
             "tavily" => {
                 println!();
                 let key = Password::new()
-                    .with_prompt("  🔑 Tavily API Key (gizli)")
+                    .with_prompt("  Tavily API Key (hidden)")
                     .allow_empty_password(true)
                     .interact()?;
                 
@@ -1107,7 +1381,7 @@ impl SetupWizard {
             "serper" => {
                 println!();
                 let key = Password::new()
-                    .with_prompt("  🔑 Serper API Key (gizli)")
+                    .with_prompt("  Serper API Key (hidden)")
                     .allow_empty_password(true)
                     .interact()?;
                 
@@ -1117,7 +1391,7 @@ impl SetupWizard {
             "brave" => {
                 println!();
                 let key = Password::new()
-                    .with_prompt("  🔑 Brave Search API Key (gizli)")
+                    .with_prompt("  Brave Search API Key (hidden)")
                     .allow_empty_password(true)
                     .interact()?;
                 
@@ -1127,7 +1401,7 @@ impl SetupWizard {
             "kagi" => {
                 println!();
                 let key = Password::new()
-                    .with_prompt("  🔑 Kagi API Key (gizli)")
+                    .with_prompt("  Kagi API Key (hidden)")
                     .allow_empty_password(true)
                     .interact()?;
                 
@@ -1137,7 +1411,7 @@ impl SetupWizard {
             _ => {}
         }
         
-        println!("  {} Web search yapılandırıldı: {}", CHECK, provider);
+        println!("  [OK] Web search configured: {}", provider);
         Ok(())
     }
     
@@ -1147,21 +1421,21 @@ impl SetupWizard {
     
     fn select_language(&mut self) -> anyhow::Result<StepResult> {
         let languages = vec![
-            ("tr", "🇹🇷 Türkçe"),
-            ("en", "🇺🇸 English"),
-            ("de", "🇩🇪 Deutsch"),
-            ("fr", "🇫🇷 Français"),
-            ("es", "🇪🇸 Español"),
-            ("zh", "🇨🇳 中文"),
-            ("ja", "🇯🇵 日本語"),
-            ("ko", "🇰🇷 한국어"),
-            ("__skip__", "⏭️ Şimdilik Atla"),
+            ("en", "English"),
+            ("tr", "Turkce"),
+            ("de", "Deutsch"),
+            ("fr", "Francais"),
+            ("es", "Espanol"),
+            ("zh", "Chinese"),
+            ("ja", "Japanese"),
+            ("ko", "Korean"),
+            ("__skip__", "Skip"),
         ];
         
         let lang_names: Vec<&str> = languages.iter().map(|(_, name)| *name).collect();
         
         let selection = Select::new()
-            .with_prompt("🌍 Dil seçin")
+            .with_prompt("Select language")
             .items(&lang_names)
             .default(0)
             .interact()?;
@@ -1173,7 +1447,7 @@ impl SetupWizard {
         }
         
         self.config.language = lang_code.to_string();
-        println!("{} Dil: {}", CHECK, lang_names[selection]);
+        println!("[OK] Language: {}", lang_names[selection]);
         
         Ok(StepResult::Completed)
     }
@@ -1184,22 +1458,22 @@ impl SetupWizard {
     
     fn configure_permissions(&mut self) -> anyhow::Result<StepResult> {
         println!();
-        println!("{}", style("🔐 İzinler / Permissions").bold().cyan());
+        println!("{}", style("Permissions").bold().cyan());
         println!();
         
         let levels = vec![
-            ("1", "📖 Level 1 - Sadece Okuma"),
-            ("2", "📝 Level 2 - Dosya İşlemleri"),
-            ("3", "🖱️ Level 3 - GUI Kontrol (Agent-S3)"),
-            ("4", "🚀 Level 4 - Tam Otonom"),
-            ("5", "⚡ Level 5 - Sistem Yönetimi"),
-            ("__skip__", "⏭️ Şimdilik Atla (Level 2)"),
+            ("1", "Level 1 - Read Only"),
+            ("2", "Level 2 - File Operations"),
+            ("3", "Level 3 - GUI Control (Agent-S3)"),
+            ("4", "Level 4 - Full Autonomous"),
+            ("5", "Level 5 - System Administration"),
+            ("__skip__", "Skip (Level 2)"),
         ];
         
         let level_names: Vec<&str> = levels.iter().map(|(_, desc)| *desc).collect();
         
         let selection = Select::new()
-            .with_prompt("Yetki seviyesi seçin")
+            .with_prompt("Select permission level")
             .items(&level_names)
             .default(5) // Skip by default
             .interact()?;
@@ -1213,10 +1487,10 @@ impl SetupWizard {
         
         self.config.permissions.default_level = level.parse().unwrap_or(2);
         
-        // GUI kontrol izni
+        // GUI control permission
         if selection >= 2 && selection < 5 {
             let gui_confirm = Confirm::new()
-                .with_prompt("🖱️ Klavye/Fare kontrolüne izin verilsin mi?")
+                .with_prompt("Allow keyboard/mouse control?")
                 .default(true)
                 .interact()?;
             
@@ -1224,7 +1498,7 @@ impl SetupWizard {
         }
         
         println!();
-        println!("{} Yetki seviyesi: {}", CHECK, level);
+        println!("[OK] Permission level: {}", level);
         
         Ok(StepResult::Completed)
     }
@@ -1239,13 +1513,13 @@ impl SetupWizard {
         println!();
         println!("{}", style("╔════════════════════════════════════════════════════════════════════════════════╗").cyan());
         println!("{}", style("║                                                                                ║").cyan());
-        println!("{} {} {}", style("║").cyan(), style("   🐺 SENTIENT NEXUS OS - v6.0.0 SETUP WIZARD                           ").bold(), style("║").cyan());
+        println!("{} {} {}", style("║").cyan(), style("   SENTIENT NEXUS OS - v7.0.0 SETUP WIZARD                              ").bold(), style("║").cyan());
         println!("{}", style("║                                                                                ║").cyan());
-        println!("{} {} {}", style("║").cyan(), style("   ✨ Strategic UX Update: Sentient Onboarding                           ").bold().dim(), style("║").cyan());
+        println!("{} {} {}", style("║").cyan(), style("   OpenClaw Standard: Professional Model Selection                       ").dim(), style("║").cyan());
         println!("{}", style("║                                                                                ║").cyan());
-        println!("{}", style("║   🎮 Controls:                                                                 ║").cyan());
-        println!("{}", style("║      ↑↓ Arrow Keys: Navigate     Space: Multi-Select     Enter: Confirm     ║").cyan());
-        println!("{}", style("║      Esc: Back                  Type: Fuzzy Search                        ║").cyan());
+        println!("{}", style("║   Controls:                                                                    ║").cyan());
+        println!("{}", style("║      Arrow Keys: Navigate     Space: Multi-Select     Enter: Confirm          ║").cyan());
+        println!("{}", style("║      Esc: Back                Type: Fuzzy Search                           ║").cyan());
         println!("{}", style("║                                                                                ║").cyan());
         println!("{}", style("╚════════════════════════════════════════════════════════════════════════════════╝").cyan());
         println!();
@@ -1254,10 +1528,10 @@ impl SetupWizard {
     fn print_goodbye(&self) {
         println!();
         println!("{}", style("╔════════════════════════════════════════════════════════════════════════════════╗").green());
-        println!("{}", style("║   🐺 Görüşmek üzere! SENTIENT seni bekliyor...                                ║").green());
+        println!("{}", style("║   Goodbye! SENTIENT awaits you...                                              ║").green());
         println!("{}", style("║                                                                                ║").green());
-        println!("{}", style("║   📚 Dokümantasyon: https://docs.sentient-os.ai                              ║").green());
-        println!("{}", style("║   💬 Discord: https://discord.gg/sentient                                    ║").green());
+        println!("{}", style("║   Documentation: https://docs.sentient-os.ai                                   ║").green());
+        println!("{}", style("║   Discord: https://discord.gg/sentient                                         ║").green());
         println!("{}", style("╚════════════════════════════════════════════════════════════════════════════════╝").green());
         println!();
     }
@@ -1265,7 +1539,7 @@ impl SetupWizard {
     fn print_step(&self, title: &str) {
         let progress = format!("[{}/{}]", self.step, self.total_steps);
         println!();
-        println!("{}", style(format!("{} {} {}", ARROW, progress, title)).bold().yellow());
+        println!("{}", style(format!("-> {} {}", progress, title)).bold().yellow());
         println!("{}", style("─".repeat(70)).dim());
     }
     
@@ -1274,10 +1548,10 @@ impl SetupWizard {
         pb.set_style(
             ProgressStyle::with_template("{spinner:.green} {msg} [{bar:40.cyan/blue}] {percent}%")
                 .unwrap()
-                .progress_chars("━╸ ")
+                .progress_chars("=> ")
         );
         
-        pb.set_message("Yapılandırma kaydediliyor...");
+        pb.set_message("Saving configuration...");
         pb.inc(30);
         
         // Save config
@@ -1285,42 +1559,42 @@ impl SetupWizard {
         pb.inc(40);
         
         // Simulate a bit of setup work
-        pb.set_message("Varsayılanlar oluşturuluyor...");
+        pb.set_message("Creating defaults...");
         pb.inc(30);
         
-        pb.finish_with_message("Kayıt tamamlandı!");
+        pb.finish_with_message("Save completed!");
         
         println!();
         println!("{}", style("╔════════════════════════════════════════════════════════════════════════════════╗").green());
         println!("{}", style("║                                                                                ║").green());
-        println!("{}", style("║   🎉 KURULUM BAŞARIYLA TAMAMLANDI!                                            ║").green());
+        println!("{}", style("║   SETUP COMPLETED SUCCESSFULLY                                                 ║").green());
         println!("{}", style("║                                                                                ║").green());
         
         // Model info
         let model_display = &self.config.llm.model;
         let provider_display = &self.config.llm.provider;
-        println!("{} {}{} ║", style("║   🤖 Model: ").green(), style(model_display).yellow().bold(), " ".repeat(55usize.saturating_sub(model_display.len())));
-        println!("{} {}{} ║", style("║   🔌 Provider: ").green(), style(provider_display).yellow().bold(), " ".repeat(52usize.saturating_sub(provider_display.len())));
+        println!("{} {}{} ║", style("║   Model: ").green(), style(model_display).yellow().bold(), " ".repeat(58usize.saturating_sub(model_display.len())));
+        println!("{} {}{} ║", style("║   Provider: ").green(), style(provider_display).yellow().bold(), " ".repeat(55usize.saturating_sub(provider_display.len())));
         
         // Channels
         let enabled = self.get_enabled_integrations();
         if !enabled.is_empty() {
             let channels = enabled.join(", ");
-            println!("{} {}{} ║", style("║   💬 Kanallar: ").green(), style(&channels).yellow(), " ".repeat(51usize.saturating_sub(channels.len())));
+            println!("{} {}{} ║", style("║   Channels: ").green(), style(&channels).yellow(), " ".repeat(54usize.saturating_sub(channels.len())));
         }
         
         println!("{}", style("║                                                                                ║").green());
         
         // Config path
         let config_display = &self.config.config_path;
-        println!("{} {}{} ║", style("║   📁 Config: ").green(), style(config_display).yellow(), " ".repeat(52usize.saturating_sub(config_display.len())));
+        println!("{} {}{} ║", style("║   Config: ").green(), style(config_display).yellow(), " ".repeat(55usize.saturating_sub(config_display.len())));
         
         // Dashboard info
-        println!("{} {}{} ║", style("║   🌐 Dashboard: ").green(), style(format!("http://{}:{}", self.config.dashboard.host, self.config.dashboard.port)).yellow(), " ".repeat(44));
+        println!("{} {}{} ║", style("║   Dashboard: ").green(), style(format!("http://{}:{}", self.config.dashboard.host, self.config.dashboard.port)).yellow(), " ".repeat(44));
         
         println!("{}", style("║                                                                                ║").green());
-        println!("{}", style("║   🚀 Başlatmak için: sentient-shell                                          ║").green());
-        println!("{}", style("║   📚 Dokümantasyon: https://docs.sentient-os.ai                              ║").green());
+        println!("{}", style("║   To start: sentient                                                           ║").green());
+        println!("{}", style("║   Documentation: https://docs.sentient-os.ai                                   ║").green());
         println!("{}", style("║                                                                                ║").green());
         println!("{}", style("╚════════════════════════════════════════════════════════════════════════════════╝").green());
         println!();

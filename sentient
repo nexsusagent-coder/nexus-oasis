@@ -1,0 +1,200 @@
+#!/bin/bash
+# ╔════════════════════════════════════════════════════════════════════════════════╗
+# ║  SENTIENT NEXUS OS - Global Launcher v7.0.0                                   ║
+# ║  Professional AI Agent Framework                                              ║
+# ╚════════════════════════════════════════════════════════════════════════════════╝
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Sentinel installation directory
+SENTIENT_DIR="${SENTIENT_HOME:-$HOME/.sentient}"
+SENTIENT_CORE="/opt/sentient"
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Find the actual installation
+if [ -d "$SENTIENT_CORE" ]; then
+    INSTALL_DIR="$SENTIENT_CORE"
+elif [ -f "$REPO_DIR/Cargo.toml" ]; then
+    INSTALL_DIR="$REPO_DIR"
+elif [ -d "$SENTIENT_DIR" ]; then
+    INSTALL_DIR="$SENTIENT_DIR"
+else
+    echo -e "${RED}ERROR: SENTIENT installation not found.${NC}"
+    echo "Please run setup.sh first to install SENTIENT."
+    exit 1
+fi
+
+cd "$INSTALL_DIR"
+
+# Parse arguments
+MODE="${1:-dashboard}"
+
+show_help() {
+    echo -e "${CYAN}SENTIENT NEXUS OS - Global Launcher${NC}"
+    echo ""
+    echo "Usage: sentient [command]"
+    echo ""
+    echo "Commands:"
+    echo "  dashboard, ui    Launch the web dashboard (default)"
+    echo "  shell, cli       Launch the interactive CLI"
+    echo "  setup            Run the setup wizard"
+    echo "  config           Open configuration"
+    echo "  status           Show system status"
+    echo "  update           Update to latest version"
+    echo "  logs             View system logs"
+    echo "  help, --help     Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  sentient              # Launch dashboard"
+    echo "  sentient shell        # Launch CLI"
+    echo "  sentient setup        # Reconfigure"
+    echo ""
+}
+
+show_status() {
+    echo -e "${CYAN}SENTIENT System Status${NC}"
+    echo ""
+    echo "Installation: $INSTALL_DIR"
+    
+    # Check if dashboard is running
+    if pgrep -f "sentient-dashboard" > /dev/null 2>&1; then
+        echo -e "Dashboard: ${GREEN}Running${NC}"
+    else
+        echo -e "Dashboard: ${YELLOW}Not running${NC}"
+    fi
+    
+    # Check config
+    if [ -f "$HOME/.config/sentient/config.toml" ]; then
+        echo -e "Config: ${GREEN}Configured${NC}"
+    else
+        echo -e "Config: ${YELLOW}Not configured (run 'sentient setup')${NC}"
+    fi
+    
+    # Check Ollama
+    if command -v ollama &> /dev/null; then
+        echo -e "Ollama: ${GREEN}Installed${NC}"
+    else
+        echo -e "Ollama: ${YELLOW}Not installed${NC}"
+    fi
+    
+    echo ""
+}
+
+# Main execution
+case "$MODE" in
+    dashboard|ui|"")
+        echo -e "${CYAN}Starting SENTIENT Dashboard...${NC}"
+        echo ""
+        
+        # Check if Rust binary exists
+        if [ -f "$INSTALL_DIR/target/release/sentient-dashboard" ]; then
+            "$INSTALL_DIR/target/release/sentient-dashboard"
+        elif [ -f "$INSTALL_DIR/target/debug/sentient-dashboard" ]; then
+            "$INSTALL_DIR/target/debug/sentient-dashboard"
+        elif [ -d "$INSTALL_DIR/dashboard" ]; then
+            cd "$INSTALL_DIR/dashboard"
+            if [ -f "package.json" ]; then
+                # Node.js dashboard
+                if command -v npm &> /dev/null; then
+                    npm run dev 2>/dev/null || npm start
+                else
+                    echo -e "${RED}ERROR: npm not found. Please install Node.js.${NC}"
+                    exit 1
+                fi
+            fi
+        else
+            # Fallback: start all services
+            echo -e "${YELLOW}Starting all services...${NC}"
+            if [ -f "$INSTALL_DIR/sentient_start.sh" ]; then
+                bash "$INSTALL_DIR/sentient_start.sh"
+            else
+                echo -e "${RED}ERROR: No dashboard binary found.${NC}"
+                echo "Please build the project first: cargo build --release"
+                exit 1
+            fi
+        fi
+        ;;
+    
+    shell|cli|repl)
+        echo -e "${CYAN}Starting SENTIENT Shell...${NC}"
+        echo ""
+        
+        if [ -f "$INSTALL_DIR/target/release/sentient-shell" ]; then
+            "$INSTALL_DIR/target/release/sentient-shell"
+        elif [ -f "$INSTALL_DIR/target/debug/sentient-shell" ]; then
+            "$INSTALL_DIR/target/debug/sentient-shell"
+        else
+            echo -e "${RED}ERROR: sentient-shell binary not found.${NC}"
+            echo "Please build the project first: cargo build --release"
+            exit 1
+        fi
+        ;;
+    
+    setup|configure|init)
+        echo -e "${CYAN}Starting SENTIENT Setup Wizard...${NC}"
+        echo ""
+        
+        if [ -f "$INSTALL_DIR/target/release/sentient-setup" ]; then
+            "$INSTALL_DIR/target/release/sentient-setup"
+        elif [ -f "$INSTALL_DIR/target/debug/sentient-setup" ]; then
+            "$INSTALL_DIR/target/debug/sentient-setup"
+        elif [ -f "$INSTALL_DIR/setup.sh" ]; then
+            bash "$INSTALL_DIR/setup.sh"
+        else
+            echo -e "${RED}ERROR: Setup wizard not found.${NC}"
+            exit 1
+        fi
+        ;;
+    
+    config)
+        CONFIG_FILE="$HOME/.config/sentient/config.toml"
+        if [ -f "$CONFIG_FILE" ]; then
+            ${EDITOR:-nano} "$CONFIG_FILE"
+        else
+            echo -e "${YELLOW}Config file not found. Run 'sentient setup' first.${NC}"
+        fi
+        ;;
+    
+    status)
+        show_status
+        ;;
+    
+    update|upgrade)
+        echo -e "${CYAN}Updating SENTIENT...${NC}"
+        cd "$INSTALL_DIR"
+        if [ -d ".git" ]; then
+            git pull origin main
+            cargo build --release
+            echo -e "${GREEN}Update complete!${NC}"
+        else
+            echo -e "${YELLOW}Not a git repository. Manual update required.${NC}"
+        fi
+        ;;
+    
+    logs)
+        LOG_DIR="$HOME/.local/share/sentient/logs"
+        if [ -d "$LOG_DIR" ]; then
+            tail -f "$LOG_DIR"/*.log 2>/dev/null || ls -la "$LOG_DIR"
+        else
+            echo -e "${YELLOW}No logs found.${NC}"
+        fi
+        ;;
+    
+    help|--help|-h)
+        show_help
+        ;;
+    
+    *)
+        echo -e "${RED}Unknown command: $MODE${NC}"
+        echo ""
+        show_help
+        exit 1
+        ;;
+esac
