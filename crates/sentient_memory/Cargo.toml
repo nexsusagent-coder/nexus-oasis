@@ -32,7 +32,7 @@ chrono.workspace = true
 ndarray = "0.16"
 
 # Tokenization for embeddings
-tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
+tokenizers = { version = "0.21", default-features = false, features = [] }
 
 # HTTP client for embedding API
 reqwest = { version = "0.12", features = ["json"] }
@@ -50,6 +50,6 @@ regex = "1.10"
 async-trait = "0.1"
 
 [features]
-default = ["native-tls"]
+default = ["rustls"]
 native-tls = ["reqwest/native-tls"]
 rustls = ["reqwest/rustls-tls"]
