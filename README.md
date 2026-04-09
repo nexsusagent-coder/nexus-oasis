@@ -325,18 +325,29 @@ pub const SOVEREIGN_POLICIES: &[&str] = &[
 
 ## ⚡ Quick Start
 
-### 🐧 Linux / macOS
+### 🚀 Tek Komut ile Kurulum
+
+| Platform | Komut |
+|----------|-------|
+| **🐧 Linux/macOS** | `curl -fsSL https://sentient.sh/install | bash` |
+| **🪟 Windows** | `powershell -c "irm https://sentient.sh/install.ps1 | iex"` |
+
+> 💡 **Kurulum sırasında model seçebilirsiniz:** Yerel (Gemma 4, Llama 3.3) veya API (GPT-4o, Claude 3.7, Gemini 2.0)
+
+---
+
+### 🐧 Linux / macOS (Manuel)
 
 ```bash
-# Requirements: Rust 1.75+, Git, Ollama
+# 1. Kurulum scriptini çalıştır (önerilen)
+curl -fsSL https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install_sentient.sh | bash
+
+# 2. Veya manuel kurulum:
 
 # Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# Git (Ubuntu/Debian)
-sudo apt install git -y
-
-# Ollama (for Gemma 4)
+# Ollama (yerel model için)
 curl -fsSL https://ollama.com/install.sh | sh
 ollama pull gemma4:31b
 
@@ -346,95 +357,69 @@ cd SENTIENT_CORE
 cargo build --release
 
 # Start
-./sentient_tam_gaz.sh
-# or
-cargo run --release --bin sentient-shell
+./target/release/sentient
 ```
 
 ### 🪟 Windows (PowerShell)
 
 ```powershell
-# YÖNTEM 1: Otomatik Kurulum (Önerilen)
-# PowerShell'i YÖNETİCİ olarak açın ve çalıştırın:
-
-Set-ExecutionPolicy Bypass -Scope Process -Force
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/setup.ps1'))
+# YÖNTEM 1: Tek Komut (Önerilen)
+powershell -c "irm https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/setup.ps1 | iex"
 
 # YÖNTEM 2: Manuel Kurulum
-# 1. Rust kur: https://rustup.rs
-# 2. Git kur: https://git-scm.com/download/win
-# 3. Ollama kur: https://ollama.com/download
-# 4. Projeyi klonla ve derle:
+# 1. Rust: https://rustup.rs
+# 2. Git: https://git-scm.com/download/win
+# 3. Ollama: https://ollama.com/download
+# 4. Model: ollama pull gemma4:31b
 
+# 5. Projeyi klonla
 git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
 cd SENTIENT_CORE
+
+# 6. Derle
 cargo build --release
 
-# 5. Başlat
-.\target\release\sentient-shell.exe
-```
-
-### 📦 One-Line Installers
-
-| Platform | Command |
-|----------|--------|
-| **Linux/macOS** | `curl -fsSL https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install_sentient.sh \| bash` |
-| **Windows** | `powershell -ExecutionPolicy ByPass -Command "iwr -useb https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/setup.ps1 | iex"` |
-
-### First Launch
-
-```bash
-# Dashboard
-cargo run --release --bin sentient-dashboard
-# Web interface: http://localhost:8080
-
-# Gemma 4 ile sohbet
-ollama run gemma4:31b
+# 7. Başlat
+.\target\release\sentient.exe
 ```
 
 ---
 
 ## 📦 Installation
 
-### Platform-Specific Guides
+### Kurulum Seçenekleri
 
-| Platform | Setup Script | Documentation |
-|----------|-------------|---------------|
-| **🐧 Linux** | `./setup.sh` | [INSTALL.md](./INSTALL.md) |
-| **🪟 Windows** | `powershell -ExecutionPolicy ByPass -File setup.ps1` | [INSTALL.md](./INSTALL.md#windows-kurulumu) |
-| **🍎 macOS** | `./setup.sh` | [INSTALL.md](./INSTALL.md) |
+| Seçenek | Açıklama |
+|---------|----------|
+| **Otomatik** | Tek komut, interaktif kurulum |
+| **Manuel** | Adım adım, tam kontrol |
+| **Docker** | Konteyner ile izole ortam |
 
-### 🪟 Windows Kurulumu (Detaylı)
+### 🪟 Windows Detaylı
 
 ```powershell
-# ADIM 1: PowerShell'i YÖNETİCİ olarak açın
-# Sağ tık -> "Run as Administrator"
+# Kurulum scriptini çalıştır
+powershell -c "irm https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/setup.ps1 | iex"
 
-# ADIM 2: Execution Policy ayarla
-Set-ExecutionPolicy Bypass -Scope Process -Force
-
-# ADIM 3: Otomatik kurulum scriptini çalıştır
-.\setup.ps1
-
-# VEYA uzaktan çalıştır:
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/setup.ps1'))
-
-# ADIM 4: Gerekirse .env dosyasını düzenle
-notepad .env
-
-# ADIM 5: SENTIENT'ı başlat
-.\target\release\sentient-shell.exe
+# Script size rehberlik edecek:
+# - Sistem kontrolü
+# - Model seçimi (Gemma 4, Llama, GPT-4o, Claude...)
+# - Bağımlılık kurulumu
+# - SENTIENT kurulumu
 ```
 
-**Windows Gereksinimleri:**
+### 🐧 Linux/macOS Detaylı
 
-| Bileşen | Minimum | İndirme |
-|---------|---------|----------|
-| Windows 10/11 | 64-bit | - |
-| Visual Studio Build Tools | 2022 | [İndir](https://visualstudio.microsoft.com/visual-cpp-build-tools/) |
-| Rust | 1.75+ | [İndir](https://rustup.rs) |
-| Git | 2.30+ | [İndir](https://git-scm.com/download/win) |
-| Ollama | Latest | [İndir](https://ollama.com/download) |
+```bash
+# Kurulum scriptini çalıştır
+curl -fsSL https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install_sentient.sh | bash
+
+# Script size rehberlik edecek:
+# - Sistem kontrolü
+# - Model seçimi
+# - Rust, Ollama kurulumu
+# - SENTIENT derleme
+```
 
 ### Docker Installation
 

@@ -1,378 +1,427 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════════════════════════════════════
-#  SENTIENT OS - OTOMATİK KURULUM SCRIPTI
-#  Version: 4.0.0 | Kernel: Gemma 4 31B
+#  🧠 SENTIENT OS - The Operating System That Thinks
+#  Interactive Setup Script v5.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
 set -e
 
-# Renkler
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+BOLD='\033[1m'
+NC='\033[0m'
 
-# Logo
-echo -e "${CYAN}"
-echo "═══════════════════════════════════════════════════════════════"
-echo "  🧠  SENTIENT OS - The Operating System That Thinks"
-echo "  📦  Otomatik Kurulum Scripti v4.0.0"
-echo "  🔑  Kernel: Gemma 4 31B (NO API KEY REQUIRED!)"
-echo "═══════════════════════════════════════════════════════════════"
-echo -e "${NC}"
+# Animation
+show_spinner() {
+    local pid=$1
+    local msg=$2
+    local spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+    local i=0
+    while kill -0 $pid 2>/dev/null; do
+        i=$(( (i+1) % 10 ))
+        printf "\r${CYAN}${spin:$i:1}${NC} ${msg}..."
+        sleep 0.1
+    done
+    printf "\r${GREEN}✓${NC} ${msg}\n"
+}
 
-# OS kontrolü
-detect_os() {
+# Clear screen and show header
+show_header() {
+    clear
+    echo -e "${CYAN}"
+    cat << 'EOF'
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                                                               ║
+    ║     ███████╗███████╗███╗   ██╗████████╗██╗ ██████╗ █████╗     ║
+    ║     ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║██╔════╝██╔══██╗    ║
+    ║     ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██║     ███████║    ║
+    ║     ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║     ██╔══██║    ║
+    ║     ███████║███████╗██║ ╚████║   ██║   ██║╚██████╗██║  ██║    ║
+    ║     ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝    ║
+    ║                                                               ║
+    ║              The Operating System That Thinks                 ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
+EOF
+    echo -e "${NC}"
+    echo ""
+}
+
+# Step indicator
+show_step() {
+    local step=$1
+    local total=$2
+    local title=$3
+    echo -e "\n${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${BOLD}${CYAN}  ADIM ${step}/${total}: ${title}${NC}"
+    echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
+}
+
+# Success message
+show_success() {
+    echo -e "\n${GREEN}✓ $1${NC}"
+}
+
+# Error message
+show_error() {
+    echo -e "\n${RED}✗ $1${NC}"
+}
+
+# Warning message
+show_warning() {
+    echo -e "\n${YELLOW}⚠ $1${NC}"
+}
+
+# Check command exists
+command_exists() {
+    command -v "$1" &> /dev/null
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 1: Welcome & OS Detection
+# ═══════════════════════════════════════════════════════════════════════════════
+step_welcome() {
+    show_header
+    
+    echo -e "${BOLD}SENTIENT OS'e hoş geldiniz!${NC}\n"
+    echo -e "Bu kurulum scripti size adım adım rehberlik edecek:"
+    echo ""
+    echo -e "  ${CYAN}1.${NC} Sistem kontrolü"
+    echo -e "  ${CYAN}2.${NC} Model seçimi"
+    echo -e "  ${CYAN}3.${NC} Bağımlılık kurulumu"
+    echo -e "  ${CYAN}4.${NC} SENTIENT kurulumu"
+    echo -e "  ${CYAN}5.${NC} Yapılandırma"
+    echo ""
+    
+    read -p "Devam etmek için Enter'a basın..."
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 2: System Check
+# ═══════════════════════════════════════════════════════════════════════════════
+step_system_check() {
+    show_step 2 5 "SİSTEM KONTROLÜ"
+    
+    # OS Detection
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         OS=$ID
-        VER=$VERSION_ID
+        OS_VER=$VERSION_ID
+        OS_NAME=$PRETTY_NAME
     elif [ "$(uname)" = "Darwin" ]; then
         OS="macos"
-        VER=$(sw_vers -productVersion)
+        OS_VER=$(sw_vers -productVersion)
+        OS_NAME="macOS $OS_VER"
     else
         OS="unknown"
-    fi
-    echo -e "${BLUE}📌 İşletim Sistemi: ${OS} ${VER}${NC}"
-}
-
-# Sistem gereksinimleri kontrolü
-check_requirements() {
-    echo -e "\n${YELLOW}🔍 Sistem gereksinimleri kontrol ediliyor...${NC}"
-    
-    local PASS=true
-    
-    # RAM kontrolü
-    local TOTAL_RAM=$(free -m 2>/dev/null | awk '/^Mem:/{print $2}' || sysctl -n hw.memsize 2>/dev/null | awk '{print int($1/1024/1024)}')
-    if [ -n "$TOTAL_RAM" ]; then
-        if [ "$TOTAL_RAM" -lt 8000 ]; then
-            echo -e "${RED}❌ RAM: ${TOTAL_RAM}MB (Minimum 8GB gerekli)${NC}"
-            PASS=false
-        else
-            echo -e "${GREEN}✅ RAM: ${TOTAL_RAM}MB${NC}"
-        fi
+        OS_NAME="Unknown"
     fi
     
-    # Disk kontrolü
-    local DISK_AVAIL=$(df -h . 2>/dev/null | awk 'NR==2{print $4}' | sed 's/G//')
-    if [ -n "$DISK_AVAIL" ]; then
-        if (( $(echo "$DISK_AVAIL < 20" | bc -l 2>/dev/null || echo "0") )); then
-            echo -e "${RED}❌ Disk: ${DISK_AVAIL}GB (Minimum 20GB gerekli)${NC}"
-            PASS=false
-        else
-            echo -e "${GREEN}✅ Disk: ${DISK_AVAIL}GB${NC}"
-        fi
-    fi
+    echo -e "${CYAN}📌 İşletim Sistemi:${NC} $OS_NAME"
     
-    if [ "$PASS" = false ]; then
-        echo -e "${YELLOW}⚠️  Sistem gereksinimleri karşılanmıyor. Devam etmek istiyor musunuz? (y/n)${NC}"
-        read -r CONTINUE
-        if [ "$CONTINUE" != "y" ]; then
-            exit 1
-        fi
-    fi
-}
-
-# Rust kurulumu
-install_rust() {
-    echo -e "\n${YELLOW}🦀 Rust kurulumu kontrol ediliyor...${NC}"
-    
-    if command -v rustc &> /dev/null; then
-        RUST_VER=$(rustc --version)
-        echo -e "${GREEN}✅ Rust kurulu: ${RUST_VER}${NC}"
+    # RAM Check
+    if [ "$OS" = "macos" ]; then
+        TOTAL_RAM=$(sysctl -n hw.memsize 2>/dev/null | awk '{print int($1/1024/1024)}')
     else
-        echo -e "${BLUE}⏳ Rust kuruluyor...${NC}"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source "$HOME/.cargo/env"
-        echo -e "${GREEN}✅ Rust kuruldu!${NC}"
+        TOTAL_RAM=$(free -m 2>/dev/null | awk '/^Mem:/{print $2}')
     fi
     
-    # Rust component'leri
-    rustup component add clippy rustfmt 2>/dev/null || true
-}
-
-# Sistem bağımlılıkları (Ubuntu/Debian)
-install_deps_linux() {
-    echo -e "\n${YELLOW}📦 Sistem bağımlılıkları kuruluyor...${NC}"
-    
-    sudo apt update
-    sudo apt install -y \
-        build-essential \
-        pkg-config \
-        libssl-dev \
-        sqlite3 \
-        libsqlite3-dev \
-        git \
-        curl \
-        wget \
-        cmake \
-        python3 \
-        python3-pip \
-        python3-venv \
-        bc
-    
-    echo -e "${GREEN}✅ Sistem bağımlılıkları kuruldu!${NC}"
-}
-
-# Sistem bağımlılıkları (macOS)
-install_deps_macos() {
-    echo -e "\n${YELLOW}📦 Sistem bağımlılıkları kuruluyor...${NC}"
-    
-    if ! command -v brew &> /dev/null; then
-        echo -e "${BLUE}⏳ Homebrew kuruluyor...${NC}"
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    
-    brew install openssl sqlite cmake python3
-    
-    echo -e "${GREEN}✅ Sistem bağımlılıkları kuruldu!${NC}"
-}
-
-# Ollama kurulumu (Gemma 4 Kernel)
-install_ollama() {
-    echo -e "\n${YELLOW}🤖 Ollama (Gemma 4 Kernel) kurulumu...${NC}"
-    
-    if command -v ollama &> /dev/null; then
-        echo -e "${GREEN}✅ Ollama kurulu${NC}"
+    RAM_GB=$((TOTAL_RAM / 1024))
+    if [ "$TOTAL_RAM" -lt 8000 ]; then
+        show_warning "RAM: ${RAM_GB}GB (Önerilen: 16GB+)"
     else
-        echo -e "${BLUE}⏳ Ollama kuruluyor...${NC}"
-        curl -fsSL https://ollama.com/install.sh | sh
-        echo -e "${GREEN}✅ Ollama kuruldu!${NC}"
+        show_success "RAM: ${RAM_GB}GB"
     fi
     
-    # Ollama servisini başlat
-    echo -e "${BLUE}⏳ Ollama servisi başlatılıyor...${NC}"
-    ollama serve &
-    OLLAMA_PID=$!
-    sleep 5
+    # Disk Check
+    DISK_AVAIL=$(df -h . 2>/dev/null | awk 'NR==2{print $4}')
+    echo -e "${CYAN}💾 Disk Alanı:${NC} ${DISK_AVAIL} boş"
     
-    # Gemma 4 modelini indir
-    echo -e "${PURPLE}⏳ Gemma 4 31B modeli indiriliyor (ilk kurulum ~20GB)...${NC}"
-    echo -e "${YELLOW}   Alternatif: gemma4:12b (8GB) veya gemma4:4b (3GB)${NC}"
+    # GPU Check (optional)
+    if command_exists nvidia-smi; then
+        GPU_INFO=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null | head -1)
+        show_success "GPU: ${GPU_INFO}"
+        HAS_GPU=true
+    else
+        echo -e "${YELLOW}GPU: NVIDIA GPU tespit edilmedi (Yerel model için önerilir)${NC}"
+        HAS_GPU=false
+    fi
     
-    # Kullanıcıya sor
-    echo -e "\n${CYAN}Hangi Gemma 4 modelini indirmek istiyorsunuz?${NC}"
-    echo "  1) gemma4:31b (ÖNERİLEN - 256K context, ~20GB)"
-    echo "  2) gemma4:12b (Orta - 128K context, ~8GB)"
-    echo "  3) gemma4:4b  (Minimum - 64K context, ~3GB)"
-    echo "  4) Daha sonra indir"
     echo ""
-    read -p "Seçiminiz [1-4]: " MODEL_CHOICE
+    show_success "Sistem kontrolü tamamlandı"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 3: Model Selection
+# ═══════════════════════════════════════════════════════════════════════════════
+step_model_selection() {
+    show_step 3 5 "MODEL SEÇİMİ"
+    
+    echo -e "${BOLD}SENTIENT OS birden fazla model destekler:${NC}\n"
+    
+    echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${GREEN}║  🏠 YEREL MODELLER (API Key Gerektirmez)                     ║${NC}"
+    echo -e "${GREEN}╠═══════════════════════════════════════════════════════════════╣${NC}"
+    echo -e "${GREEN}║  1) Gemma 4 31B    - 256K context, Thinking Mode (ÖNERİLEN) ║${NC}"
+    echo -e "${GREEN}║  2) Llama 3.3 70B  - 128K context, Genel kullanım           ║${GREEN}"
+    echo -e "${GREEN}║  3) Qwen 2.5 72B   - 128K context, Coding optimize          ║${GREEN}"
+    echo -e "${GREEN}║  4) DeepSeek R1    - 128K context, Reasoning                ║${GREEN}"
+    echo -e "${GREEN}║  5) Mistral 24B    - 128K context, Hızlı                    ║${GREEN}"
+    echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════╝${NC}"
+    
+    echo -e "${BLUE}╔═══════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${BLUE}║  🔑 API MODELLER (API Key Gerekli)                           ║${NC}"
+    echo -e "${BLUE}╠═══════════════════════════════════════════════════════════════╣${NC}"
+    echo -e "${BLUE}║  6) OpenAI GPT-4o         - Multimodal, Coding              ║${NC}"
+    echo -e "${BLUE}║  7) Anthropic Claude 3.7  - Coding, Reasoning               ║${NC}"
+    echo -e "${BLUE}║  8) Google Gemini 2.0     - 1M Context                      ║${NC}"
+    echo -e "${BLUE}║  9) Groq Llama 3.3        - Hızlı Inference                 ║${NC}"
+    echo -e "${BLUE}║ 10) OpenRouter Free       - Ücretsiz Tier                   ║${NC}"
+    echo -e "${BLUE}╚═══════════════════════════════════════════════════════════════╝${NC}"
+    
+    echo ""
+    read -p "Model seçiniz [1-10] (varsayılan: 1): " MODEL_CHOICE
+    MODEL_CHOICE=${MODEL_CHOICE:-1}
     
     case $MODEL_CHOICE in
-        1) ollama pull gemma4:31b ;;
-        2) ollama pull gemma4:12b ;;
-        3) ollama pull gemma4:4b ;;
-        4) echo -e "${YELLOW}Model daha sonra indirilebilir: ollama pull gemma4:31b${NC}" ;;
-        *) ollama pull gemma4:31b ;;
+        1) SELECTED_MODEL="gemma4:31b"; PROVIDER="local"; MODEL_DESC="Gemma 4 31B (Yerel)" ;;
+        2) SELECTED_MODEL="llama3.3:70b"; PROVIDER="local"; MODEL_DESC="Llama 3.3 70B (Yerel)" ;;
+        3) SELECTED_MODEL="qwen2.5:72b"; PROVIDER="local"; MODEL_DESC="Qwen 2.5 72B (Yerel)" ;;
+        4) SELECTED_MODEL="deepseek-r1:67b"; PROVIDER="local"; MODEL_DESC="DeepSeek R1 (Yerel)" ;;
+        5) SELECTED_MODEL="mistral:24b"; PROVIDER="local"; MODEL_DESC="Mistral 24B (Yerel)" ;;
+        6) SELECTED_MODEL="gpt-4o"; PROVIDER="openai"; MODEL_DESC="GPT-4o (OpenAI)" ;;
+        7) SELECTED_MODEL="claude-3.7-sonnet"; PROVIDER="anthropic"; MODEL_DESC="Claude 3.7 (Anthropic)" ;;
+        8) SELECTED_MODEL="gemini-2.0-flash"; PROVIDER="google"; MODEL_DESC="Gemini 2.0 (Google)" ;;
+        9) SELECTED_MODEL="llama-3.3-70b"; PROVIDER="groq"; MODEL_DESC="Llama 3.3 (Groq)" ;;
+        10) SELECTED_MODEL="google/gemma-4-31b-it:free"; PROVIDER="openrouter"; MODEL_DESC="Gemma 4 Free (OpenRouter)" ;;
+        *) SELECTED_MODEL="gemma4:31b"; PROVIDER="local"; MODEL_DESC="Gemma 4 31B (Yerel)" ;;
     esac
     
-    echo -e "${GREEN}✅ Ollama ve Gemma 4 hazır!${NC}"
-}
-
-# Docker kurulumu (opsiyonel)
-install_docker() {
-    echo -e "\n${YELLOW}🐳 Docker kurulumu (opsiyonel)...${NC}"
+    show_success "Seçilen model: $MODEL_DESC"
     
-    if command -v docker &> /dev/null; then
-        echo -e "${GREEN}✅ Docker kurulu${NC}"
-        return
-    fi
-    
-    echo -e "${CYAN}Docker kurmak istiyor musunuz? (y/n)${NC}"
-    read -r INSTALL_DOCKER
-    
-    if [ "$INSTALL_DOCKER" = "y" ]; then
-        if [ "$OS" = "ubuntu" ] || [ "$OS" = "debian" ]; then
-            sudo apt install -y docker.io
-            sudo systemctl start docker
-            sudo systemctl enable docker
-            sudo usermod -aG docker "$USER"
-        elif [ "$OS" = "macos" ]; then
-            brew install --cask docker
+    # API Key prompt if needed
+    if [ "$PROVIDER" != "local" ] && [ "$PROVIDER" != "openrouter" ]; then
+        echo ""
+        echo -e "${YELLOW}⚠️  Bu model API key gerektiriyor.${NC}"
+        read -p "$PROVIDER API key giriniz (veya Enter'a basıp sonra .env'e ekleyin): " API_KEY
+        
+        if [ -n "$API_KEY" ]; then
+            API_KEY_UPPER=$(echo "$PROVIDER" | tr '[:lower:]' '[:upper:]')
+            API_KEYS="${API_KEYS}${API_KEY_UPPER}_API_KEY=${API_KEY}\n"
         fi
-        echo -e "${GREEN}✅ Docker kuruldu!${NC}"
     fi
 }
 
-# Projeyi klonla
-clone_project() {
-    echo -e "\n${YELLOW}📂 SENTIENT OS projesi klonlanıyor...${NC}"
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 4: Install Dependencies
+# ═══════════════════════════════════════════════════════════════════════════════
+step_install_deps() {
+    show_step 4 5 "BAĞIMLILIK KURULUMU"
     
-    if [ -d "SENTIENT_CORE" ]; then
-        echo -e "${YELLOW}⚠️  SENTIENT_CORE dizini zaten mevcut.${NC}"
-        echo -e "${CYAN}Güncellemek ister misiniz? (y/n)${NC}"
-        read -r UPDATE
+    # Rust
+    if command_exists rustc; then
+        show_success "Rust: $(rustc --version)"
+    else
+        echo -e "${CYAN}⏳ Rust kuruluyor...${NC}"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source "$HOME/.cargo/env" 2>/dev/null || true
+        show_success "Rust kuruldu"
+    fi
+    
+    # System dependencies
+    echo -e "\n${CYAN}📦 Sistem bağımlılıkları...${NC}"
+    
+    case $OS in
+        ubuntu|debian)
+            sudo apt update -qq
+            sudo apt install -y -qq build-essential pkg-config libssl-dev sqlite3 libsqlite3-dev git curl wget cmake python3 python3-pip python3-venv bc > /dev/null 2>&1
+            ;;
+        macos)
+            if ! command_exists brew; then
+                echo -e "${CYAN}⏳ Homebrew kuruluyor...${NC}"
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2>&1
+            fi
+            brew install openssl sqlite cmake python3 > /dev/null 2>&1
+            ;;
+    esac
+    
+    show_success "Sistem bağımlılıkları kuruldu"
+    
+    # Ollama (for local models)
+    if [ "$PROVIDER" = "local" ]; then
+        echo -e "\n${CYAN}🤖 Ollama kuruluyor...${NC}"
+        
+        if command_exists ollama; then
+            show_success "Ollama zaten kurulu"
+        else
+            curl -fsSL https://ollama.com/install.sh | sh > /dev/null 2>&1
+            show_success "Ollama kuruldu"
+        fi
+        
+        # Start Ollama
+        ollama serve > /dev/null 2>&1 &
+        sleep 3
+        
+        # Download model
+        echo -e "\n${CYAN}📥 Model indiriliyor: ${SELECTED_MODEL}${NC}"
+        echo -e "${YELLOW}   Bu işlem model boyutuna göre birkaç dakika sürebilir...${NC}"
+        ollama pull "$SELECTED_MODEL"
+        show_success "Model indirildi: $SELECTED_MODEL"
+    fi
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 5: Install SENTIENT
+# ═══════════════════════════════════════════════════════════════════════════════
+step_install_sentient() {
+    show_step 5 5 "SENTIENT KURULUMU"
+    
+    # Clone
+    echo -e "${CYAN}📂 SENTIENT OS indiriliyor...${NC}"
+    
+    INSTALL_DIR="$HOME/sentient"
+    
+    if [ -d "$INSTALL_DIR" ]; then
+        echo -e "${YELLOW}⚠️  $INSTALL_DIR zaten mevcut${NC}"
+        read -p "Güncellensin mi? (y/n): " UPDATE
         if [ "$UPDATE" = "y" ]; then
-            cd SENTIENT_CORE
-            git pull origin main
-            cd ..
+            cd "$INSTALL_DIR"
+            git pull origin main > /dev/null 2>&1
         fi
     else
-        git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
-        echo -e "${GREEN}✅ Proje klonlandı!${NC}"
-    fi
-}
-
-# .env dosyasını oluştur
-setup_env() {
-    echo -e "\n${YELLOW}⚙️  Yapılandırma dosyası oluşturuluyor...${NC}"
-    
-    cd SENTIENT_CORE
-    
-    if [ -f ".env" ]; then
-        echo -e "${GREEN}✅ .env dosyası mevcut${NC}"
-        return
+        git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git "$INSTALL_DIR" > /dev/null 2>&1
     fi
     
-    # .env.example'den kopyala
-    if [ -f ".env.example" ]; then
-        cp .env.example .env
-    else
-        # Varsayılan .env oluştur
-        cat > .env << 'ENVFILE'
-# ═══════════════════════════════════════════════════════════
-#  GEMMA 4 KERNEL - YEREL LLM (API KEY GEREKMİYOR!)
-# ═══════════════════════════════════════════════════════════
-GEMMA4_MODEL=gemma4:31b
-GEMMA4_BASE_URL=http://localhost:11434/v1
-GEMMA4_CONTEXT_LENGTH=262144
-GEMMA4_THINKING_MODE=true
+    show_success "SENTIENT OS indirildi"
+    
+    # Build
+    cd "$INSTALL_DIR"
+    
+    echo -e "\n${CYAN}🔨 SENTIENT derleniyor...${NC}"
+    echo -e "${YELLOW}   İlk derleme 5-10 dakika sürebilir...${NC}"
+    
+    cargo build --release > /dev/null 2>&1 &
+    BUILD_PID=$!
+    
+    # Progress indicator
+    local spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+    local i=0
+    while kill -0 $BUILD_PID 2>/dev/null; do
+        i=$(( (i+1) % 10 ))
+        printf "\r${CYAN}${spin:$i:1}${NC} Derleniyor...  "
+        sleep 0.2
+    done
+    wait $BUILD_PID
+    
+    show_success "SENTIENT derlendi"
+    
+    # Create .env
+    echo -e "\n${CYAN}⚙️  Yapılandırma oluşturuluyor...${NC}"
+    
+    cat > .env << ENVFILE
+# ═════════════════════════════════════════════════════════════
+#  SENTIENT OS Yapılandırma
+# ═════════════════════════════════════════════════════════════
 
-# ═══════════════════════════════════════════════════════════
-#  V-GATE (API ANAHTARI YÖNETİMİ)
-# ═══════════════════════════════════════════════════════════
-V_GATE_URL=http://localhost:8100
-V_GATE_LISTEN=127.0.0.1:1071
-V_GATE_TIMEOUT=120
+# Model Ayarları
+SENTIENT_MODEL=${SELECTED_MODEL}
+SENTIENT_PROVIDER=${PROVIDER}
 
-# ═══════════════════════════════════════════════════════════
-#  GATEWAY (API SUNUCUSU)
-# ═══════════════════════════════════════════════════════════
+# API Keys (varsa)
+${API_KEYS}
+# OpenRouter (ücretsiz modeller için)
+# OPENROUTER_API_KEY=sk-or-...
+
+# Yerel Model (Ollama)
+OLLAMA_HOST=http://localhost:11434
+
+# Gateway
 GATEWAY_HTTP_ADDR=0.0.0.0:8080
-GATEWAY_PORT=8080
-JWT_SECRET=change-this-secret-in-production
+JWT_SECRET=change-this-in-production
 
-# ═══════════════════════════════════════════════════════════
-#  BELLEK (MEMORY CUBE)
-# ═══════════════════════════════════════════════════════════
+# Memory
 MEMORY_DB_PATH=data/sentient.db
-MEMORY_SHORT_TTL=3600
-MEMORY_LONG_TTL=0
-ZERO_COPY_ENABLED=true
 
-# ═══════════════════════════════════════════════════════════
-#  OASIS BRAIN (OTONOM DÜŞÜNCE)
-# ═══════════════════════════════════════════════════════════
-OASIS_BRAIN_MODEL=gemma4:31b
-OASIS_BRAIN_THINKING=true
-OASIS_BRAIN_MAX_STEPS=10
-
-# ═══════════════════════════════════════════════════════════
-#  LOGGING
-# ═══════════════════════════════════════════════════════════
+# Logging
 RUST_LOG=info
-LOG_FILE=logs/sentient.log
 ENVFILE
-    fi
     
-    echo -e "${GREEN}✅ .env dosyası oluşturuldu!${NC}"
-    echo -e "${YELLOW}   Gerekirse düzenleyin: nano SENTIENT_CORE/.env${NC}"
+    show_success ".env dosyası oluşturuldu"
 }
 
-# Projeyi derle
-build_project() {
-    echo -e "\n${YELLOW}🔨 SENTIENT OS derleniyor...${NC}"
-    
-    cd SENTIENT_CORE
-    
-    # Cargo'yu yükle
-    if [ -f "$HOME/.cargo/env" ]; then
-        source "$HOME/.cargo/env"
-    fi
-    
-    # Release derleme
-    echo -e "${BLUE}⏳ Release modda derleniyor (ilk derleme ~10-15 dakika)...${NC}"
-    cargo build --release
-    
-    echo -e "${GREEN}✅ Derleme tamamlandı!${NC}"
-}
-
-# Test çalıştır
-run_tests() {
-    echo -e "\n${YELLOW}🧪 Testler çalıştırılıyor...${NC}"
-    
-    cd SENTIENT_CORE
-    cargo test --release --workspace 2>/dev/null || true
-    
-    echo -e "${GREEN}✅ Testler tamamlandı!${NC}"
-}
-
-# Sonuç
-show_result() {
-    echo -e "\n${CYAN}"
-    echo "═══════════════════════════════════════════════════════════════"
-    echo "  🎉 SENTIENT OS KURULUMU TAMAMLANDI!"
-    echo "═══════════════════════════════════════════════════════════════"
+# ═══════════════════════════════════════════════════════════════════════════════
+# COMPLETE
+# ═══════════════════════════════════════════════════════════════════════════════
+show_complete() {
+    clear
+    echo -e "${GREEN}"
+    cat << 'EOF'
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                                                               ║
+    ║              🎉 SENTIENT OS KURULUMU TAMAMLANDI!             ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
+EOF
     echo -e "${NC}"
     
-    echo -e "${GREEN}✅ Kurulum başarıyla tamamlandı!${NC}\n"
+    echo -e "${BOLD}📋 Kurulum Özeti:${NC}"
+    echo -e "  ${CYAN}Model:${NC}     $MODEL_DESC"
+    echo -e "  ${CYAN}Provider:${NC}  $PROVIDER"
+    echo -e "  ${CYAN}Dizin:${NC}     $INSTALL_DIR"
+    echo ""
     
-    echo -e "${YELLOW}📋 SONRAKI ADIMLAR:${NC}\n"
+    echo -e "${BOLD}🚀 Başlatmak için:${NC}"
+    echo ""
+    echo -e "  ${WHITE}cd $INSTALL_DIR${NC}"
+    echo -e "  ${WHITE}./target/release/sentient${NC}"
+    echo ""
     
-    echo -e "  ${CYAN}1. Proje dizinine git:${NC}"
-    echo -e "     ${WHITE}cd SENTIENT_CORE${NC}\n"
+    echo -e "${BOLD}🌐 Dashboard:${NC}"
+    echo ""
+    echo -e "  ${WHITE}./target/release/sentient-dashboard${NC}"
+    echo -e "  ${WHITE}# http://localhost:8080${NC}"
+    echo ""
     
-    echo -e "  ${CYAN}2. SENTIENT'ı başlat:${NC}"
-    echo -e "     ${WHITE}./sentient_tam_gaz.sh${NC}"
-    echo -e "     ${WHITE}# veya${NC}"
-    echo -e "     ${WHITE}cargo run --release --bin sentient${NC}\n"
-    
-    echo -e "  ${CYAN}3. Dashboard'ı başlat:${NC}"
-    echo -e "     ${WHITE}cargo run --release --bin sentient-dashboard${NC}"
-    echo -e "     ${WHITE}# Tarayıcıda: http://localhost:8080${NC}\n"
-    
-    echo -e "  ${CYAN}4. Gemma 4 ile sohbet:${NC}"
-    echo -e "     ${WHITE}ollama run gemma4:31b${NC}\n"
-    
-    echo -e "  ${CYAN}5. .env dosyasını düzenle (API anahtarları için):${NC}"
-    echo -e "     ${WHITE}nano .env${NC}\n"
+    echo -e "${BOLD}⚙️  Yapılandırma:${NC}"
+    echo ""
+    echo -e "  ${WHITE}nano $INSTALL_DIR/.env${NC}"
+    echo ""
     
     echo -e "${PURPLE}═══════════════════════════════════════════════════════════════${NC}"
     echo -e "${GREEN}🧠 SENTIENT OS - The Operating System That Thinks${NC}"
     echo -e "${PURPLE}═══════════════════════════════════════════════════════════════${NC}"
+    
+    # Add to PATH
+    echo ""
+    read -p "SENTIENT'i PATH'e eklemek ister misiniz? (y/n): " ADD_PATH
+    if [ "$ADD_PATH" = "y" ]; then
+        SHELL_RC="$HOME/.bashrc"
+        [ -f "$HOME/.zshrc" ] && SHELL_RC="$HOME/.zshrc"
+        
+        echo "" >> "$SHELL_RC"
+        echo "# SENTIENT OS" >> "$SHELL_RC"
+        echo "export PATH=\"\$PATH:$INSTALL_DIR/target/release\"" >> "$SHELL_RC"
+        echo "alias sentient='$INSTALL_DIR/target/release/sentient'" >> "$SHELL_RC"
+        
+        show_success "PATH'e eklendi. Yeni terminalde 'sentient' komutu çalışacaktır."
+    fi
 }
 
-# Ana kurulum
+# ═══════════════════════════════════════════════════════════════════════════════
+# MAIN
+# ═══════════════════════════════════════════════════════════════════════════════
 main() {
-    detect_os
-    
-    # OS'a göre bağımlılık kurulumu
-    case $OS in
-        ubuntu|debian)
-            install_deps_linux
-            ;;
-        macos)
-            install_deps_macos
-            ;;
-        *)
-            echo -e "${YELLOW}⚠️  Bilinmeyen OS: $OS. Bağımlılıkları manuel kurmanız gerekebilir.${NC}"
-            ;;
-    esac
-    
-    check_requirements
-    install_rust
-    install_ollama
-    install_docker
-    clone_project
-    setup_env
-    build_project
-    run_tests
-    show_result
+    step_welcome
+    step_system_check
+    step_model_selection
+    step_install_deps
+    step_install_sentient
+    show_complete
 }
 
-# Scripti çalıştır
 main

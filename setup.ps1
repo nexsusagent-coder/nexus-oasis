@@ -1,576 +1,421 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  🧠 SENTIENT OS - WINDOWS POWERSHELL SETUP SCRIPT
-#  Version: 2.1.0 | Kernel: Gemma 4 31B
-# ═══════════════════════════════════════════════════════════════════════════════
-#
-#  Kullanım:
-#    powershell -ExecutionPolicy ByPass -File setup.ps1
-#    veya
-#    .\setup.ps1 -ExecutionPolicy ByPass
-#
+#  🧠 SENTIENT OS - The Operating System That Thinks
+#  Interactive Setup Script v5.0.0 (Windows)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 param(
-    [string]$Command = "all",
-    [switch]$Help,
-    [switch]$Force,
-    [switch]$NoDocker,
-    [switch]$NoPython
+    [switch]$Silent,
+    [string]$Model,
+    [string]$Provider
 )
 
-# Hata durumunda dur
-$ErrorActionPreference = "Stop"
-
-# Renk fonksiyonları
-function Write-ColorOutput {
-    param([string]$Message, [string]$Color = "White")
-    Write-Host $Message -ForegroundColor $Color
+# Colors
+function Write-ColorText {
+    param([string]$Text, [string]$Color = "White")
+    Write-Host $Text -ForegroundColor $Color
 }
 
-function Write-Success { param([string]$Message) Write-ColorOutput "✅ $Message" "Green" }
-function Write-Info { param([string]$Message) Write-ColorOutput "ℹ️  $Message" "Cyan" }
-function Write-Warn { param([string]$Message) Write-ColorOutput "⚠️  $Message" "Yellow" }
-function Write-Error { param([string]$Message) Write-ColorOutput "❌ $Message" "Red"; exit 1 }
-function Write-Step { param([string]$Message) Write-ColorOutput "`n🔹 $Message" "Magenta" }
-
-# Logo
-function Print-Logo {
-    Write-ColorOutput @"
-╔═══════════════════════════════════════════════════════════════════╗
-║                                                                   ║
-║   🧠 SENTIENT OS - The Operating System That Thinks               ║
-║   🦀 Rust Core │ 5587 Skills │ 71 Integrations                    ║
-║                                                                   ║
-║   Version: 2.1.0                                                  ║
-║   Platform: Windows PowerShell                                    ║
-║                                                                   ║
-╚═══════════════════════════════════════════════════════════════════╝
-"@ "Cyan"
+function Write-Step {
+    param([int]$Step, [int]$Total, [string]$Title)
+    Write-Host ""
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+    Write-Host "  ADIM $Step/$Total : $Title" -ForegroundColor Cyan
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+    Write-Host ""
 }
 
-# Yönetici kontrolü
-function Test-Administrator {
-    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
-    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+function Write-Success {
+    param([string]$Text)
+    Write-Host "✓ $Text" -ForegroundColor Green
 }
 
-# Sistem kontrolü
-function Check-System {
-    Write-Step "Sistem kontrol ediliyor..."
+function Write-Warning {
+    param([string]$Text)
+    Write-Host "⚠ $Text" -ForegroundColor Yellow
+}
+
+function Write-Error {
+    param([string]$Text)
+    Write-Host "✗ $Text" -ForegroundColor Red
+}
+
+# Header
+function Show-Header {
+    Clear-Host
+    Write-Host ""
+    Write-Host "    ╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Host "    ║                                                               ║" -ForegroundColor Cyan
+    Write-Host "    ║     ███████╗███████╗███╗   ██╗████████╗██╗ ██████╗ █████╗     ║" -ForegroundColor Cyan
+    Write-Host "    ║     ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║██╔════╝██╔══██╗    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██║     ███████║    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║     ██╔══██║    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ███████║███████╗██║ ╚████║   ██║   ██║╚██████╗██║  ██║    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝    ║" -ForegroundColor Cyan
+    Write-Host "    ║                                                               ║" -ForegroundColor Cyan
+    Write-Host "    ║              The Operating System That Thinks                 ║" -ForegroundColor Cyan
+    Write-Host "    ║                                                               ║" -ForegroundColor Cyan
+    Write-Host "    ╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host ""
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 1: Welcome
+# ═══════════════════════════════════════════════════════════════════════════════
+function Step-Welcome {
+    Show-Header
     
-    $os = Get-CimInstance -ClassName Win32_OperatingSystem
-    Write-Info "OS: $($os.Caption) $($os.Version)"
-    Write-Info "Architecture: $env:PROCESSOR_ARCHITECTURE"
+    Write-Host "SENTIENT OS'e hoş geldiniz!" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Bu kurulum scripti size adım adım rehberlik edecek:"
+    Write-Host ""
+    Write-Host "  1. Sistem kontrolü" -ForegroundColor Cyan
+    Write-Host "  2. Model seçimi" -ForegroundColor Cyan
+    Write-Host "  3. Bağımlılık kurulumu" -ForegroundColor Cyan
+    Write-Host "  4. SENTIENT kurulumu" -ForegroundColor Cyan
+    Write-Host "  5. Yapılandırma" -ForegroundColor Cyan
+    Write-Host ""
     
-    # RAM kontrolü
-    $totalRAM = [math]::Round($os.TotalVisibleMemorySize / 1MB, 2)
-    if ($totalRAM -lt 8) {
-        Write-Warn "RAM: ${totalRAM}GB (Minimum 8GB önerilir)"
+    if (-not $Silent) {
+        Read-Host "Devam etmek için Enter'a basın"
+    }
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 2: System Check
+# ═══════════════════════════════════════════════════════════════════════════════
+function Step-SystemCheck {
+    Write-Step -Step 2 -Total 5 -Title "SİSTEM KONTROLÜ"
+    
+    # OS Info
+    $OS = Get-CimInstance Win32_OperatingSystem
+    Write-Host "📌 İşletim Sistemi: $($OS.Caption)" -ForegroundColor Cyan
+    
+    # RAM
+    $RAM_GB = [math]::Round($OS.TotalVisibleMemorySize / 1MB, 0)
+    if ($RAM_GB -lt 8) {
+        Write-Warning "RAM: ${RAM_GB}GB (Önerilen: 16GB+)"
     } else {
-        Write-Success "RAM: ${totalRAM}GB"
+        Write-Success "RAM: ${RAM_GB}GB"
     }
     
-    # Disk kontrolü
-    $disk = Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DeviceID='C:'"
-    $freeSpace = [math]::Round($disk.FreeSpace / 1GB, 2)
-    if ($freeSpace -lt 20) {
-        Write-Warn "Disk: ${freeSpace}GB boş (Minimum 20GB önerilir)"
+    # Disk
+    $Disk = Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'"
+    $Disk_GB = [math]::Round($Disk.FreeSpace / 1GB, 1)
+    Write-Host "💾 Disk Alanı: ${Disk_GB}GB boş" -ForegroundColor Cyan
+    
+    # GPU
+    $GPU = Get-CimInstance Win32_VideoController | Where-Object { $_.Name -like "*NVIDIA*" -or $_.Name -like "*RTX*" }
+    if ($GPU) {
+        Write-Success "GPU: $($GPU.Name)"
+        $script:HasGPU = $true
     } else {
-        Write-Success "Disk: ${freeSpace}GB boş"
+        Write-Warning "GPU: NVIDIA GPU tespit edilmedi (Yerel model için önerilir)"
+        $script:HasGPU = $false
     }
+    
+    Write-Host ""
+    Write-Success "Sistem kontrolü tamamlandı"
 }
 
-# Chocolatey kurulumu
-function Install-Chocolatey {
-    Write-Step "Chocolatey paket yöneticisi kontrol ediliyor..."
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 3: Model Selection
+# ═══════════════════════════════════════════════════════════════════════════════
+function Step-ModelSelection {
+    Write-Step -Step 3 -Total 5 -Title "MODEL SEÇİMİ"
     
-    if (Get-Command choco -ErrorAction SilentlyContinue) {
-        Write-Success "Chocolatey mevcut: $(choco --version)"
-        return
+    Write-Host "SENTIENT OS birden fazla model destekler:" -ForegroundColor White
+    Write-Host ""
+    
+    Write-Host "╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
+    Write-Host "║  🏠 YEREL MODELLER (API Key Gerektirmez)                     ║" -ForegroundColor Green
+    Write-Host "╠═══════════════════════════════════════════════════════════════╣" -ForegroundColor Green
+    Write-Host "║  1) Gemma 4 31B    - 256K context, Thinking Mode (ÖNERİLEN) ║" -ForegroundColor Green
+    Write-Host "║  2) Llama 3.3 70B  - 128K context, Genel kullanım           ║" -ForegroundColor Green
+    Write-Host "║  3) Qwen 2.5 72B   - 128K context, Coding optimize          ║" -ForegroundColor Green
+    Write-Host "║  4) DeepSeek R1    - 128K context, Reasoning                ║" -ForegroundColor Green
+    Write-Host "║  5) Mistral 24B    - 128K context, Hızlı                    ║" -ForegroundColor Green
+    Write-Host "╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    
+    Write-Host "╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Blue
+    Write-Host "║  🔑 API MODELLER (API Key Gerekli)                           ║" -ForegroundColor Blue
+    Write-Host "╠═══════════════════════════════════════════════════════════════╣" -ForegroundColor Blue
+    Write-Host "║  6) OpenAI GPT-4o         - Multimodal, Coding              ║" -ForegroundColor Blue
+    Write-Host "║  7) Anthropic Claude 3.7  - Coding, Reasoning               ║" -ForegroundColor Blue
+    Write-Host "║  8) Google Gemini 2.0     - 1M Context                      ║" -ForegroundColor Blue
+    Write-Host "║  9) Groq Llama 3.3        - Hızlı Inference                 ║" -ForegroundColor Blue
+    Write-Host "║ 10) OpenRouter Free       - Ücretsiz Tier                   ║" -ForegroundColor Blue
+    Write-Host "╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Blue
+    
+    Write-Host ""
+    
+    if ($Silent -and $Model) {
+        $Choice = $Model
+    } else {
+        $Choice = Read-Host "Model seçiniz [1-10] (varsayılan: 1)"
+        if ([string]::IsNullOrWhiteSpace($Choice)) { $Choice = "1" }
     }
     
-    Write-Info "Chocolatey kuruluyor..."
-    Set-ExecutionPolicy Bypass -Scope Process -Force
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-    
-    # PATH güncelle
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-    
-    Write-Success "Chocolatey kuruldu!"
-}
-
-# Rust kurulumu
-function Install-Rust {
-    Write-Step "Rust kontrol ediliyor..."
-    
-    if (Get-Command rustc -ErrorAction SilentlyContinue) {
-        $rustVersion = rustc --version
-        Write-Success "Rust mevcut: $rustVersion"
-        return
+    switch ($Choice) {
+        "1" { $script:SelectedModel = "gemma4:31b"; $script:Provider = "local"; $script:ModelDesc = "Gemma 4 31B (Yerel)" }
+        "2" { $script:SelectedModel = "llama3.3:70b"; $script:Provider = "local"; $script:ModelDesc = "Llama 3.3 70B (Yerel)" }
+        "3" { $script:SelectedModel = "qwen2.5:72b"; $script:Provider = "local"; $script:ModelDesc = "Qwen 2.5 72B (Yerel)" }
+        "4" { $script:SelectedModel = "deepseek-r1:67b"; $script:Provider = "local"; $script:ModelDesc = "DeepSeek R1 (Yerel)" }
+        "5" { $script:SelectedModel = "mistral:24b"; $script:Provider = "local"; $script:ModelDesc = "Mistral 24B (Yerel)" }
+        "6" { $script:SelectedModel = "gpt-4o"; $script:Provider = "openai"; $script:ModelDesc = "GPT-4o (OpenAI)" }
+        "7" { $script:SelectedModel = "claude-3.7-sonnet"; $script:Provider = "anthropic"; $script:ModelDesc = "Claude 3.7 (Anthropic)" }
+        "8" { $script:SelectedModel = "gemini-2.0-flash"; $script:Provider = "google"; $script:ModelDesc = "Gemini 2.0 (Google)" }
+        "9" { $script:SelectedModel = "llama-3.3-70b"; $script:Provider = "groq"; $script:ModelDesc = "Llama 3.3 (Groq)" }
+        "10" { $script:SelectedModel = "google/gemma-4-31b-it:free"; $script:Provider = "openrouter"; $script:ModelDesc = "Gemma 4 Free (OpenRouter)" }
+        default { $script:SelectedModel = "gemma4:31b"; $script:Provider = "local"; $script:ModelDesc = "Gemma 4 31B (Yerel)" }
     }
     
-    Write-Info "Rust kuruluyor..."
+    Write-Success "Seçilen model: $script:ModelDesc"
     
-    # rustup-init.exe indir
-    $rustupUrl = "https://win.rustup.rs/x86_64"
-    $rustupPath = "$env:TEMP\rustup-init.exe"
-    
-    Invoke-WebRequest -Uri $rustupUrl -OutFile $rustupPath -UseBasicParsing
-    
-    # Sessiz kurulum
-    Start-Process -FilePath $rustupPath -ArgumentList "-y" -Wait -NoNewWindow
-    
-    # PATH güncelle
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-    $env:Path += ";$env:USERPROFILE\.cargo\bin"
-    
-    # Component'ler
-    rustup default stable
-    rustup component add clippy rustfmt rust-analyzer
-    
-    Write-Success "Rust kuruldu: $(rustc --version)"
-}
-
-# Visual Studio Build Tools (Rust için gerekli)
-function Install-BuildTools {
-    Write-Step "Visual Studio Build Tools kontrol ediliyor..."
-    
-    # MSVC kontrolü
-    $vsWhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-    
-    if (Test-Path $vsWhere) {
-        $vsInstall = & $vsWhere -latest -property installationPath 2>$null
-        if ($vsInstall) {
-            Write-Success "Visual Studio mevcut: $vsInstall"
-            return
-        }
-    }
-    
-    Write-Info "Visual Studio Build Tools kuruluyor (bu işlem birkaç dakika sürebilir)..."
-    
-    # Chocolatey ile kur
-    choco install visualstudio2022buildtools -y --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --passive --locale en-US"
-    
-    Write-Success "Visual Studio Build Tools kuruldu!"
-}
-
-# Git kurulumu
-function Install-Git {
-    Write-Step "Git kontrol ediliyor..."
-    
-    if (Get-Command git -ErrorAction SilentlyContinue) {
-        Write-Success "Git mevcut: $(git --version)"
-        return
-    }
-    
-    Write-Info "Git kuruluyor..."
-    choco install git -y
-    
-    # PATH güncelle
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-    
-    Write-Success "Git kuruldu!"
-}
-
-# Python kurulumu
-function Install-Python {
-    if ($NoPython) {
-        Write-Info "Python kurulumu atlanıyor (-NoPython)"
-        return
-    }
-    
-    Write-Step "Python kontrol ediliyor..."
-    
-    $pythonCmd = Get-Command python -ErrorAction SilentlyContinue
-    if ($pythonCmd) {
-        $pythonVersion = & python --version 2>&1
-        Write-Success "Python mevcut: $pythonVersion"
-        return
-    }
-    
-    Write-Info "Python kuruluyor..."
-    choco install python -y
-    
-    # PATH güncelle
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-    
-    # Pip yükselt
-    python -m pip install --upgrade pip
-    
-    Write-Success "Python kuruldu!"
-}
-
-# SQLite kurulumu
-function Install-SQLite {
-    Write-Step "SQLite kontrol ediliyor..."
-    
-    if (Get-Command sqlite3 -ErrorAction SilentlyContinue) {
-        Write-Success "SQLite mevcut"
-        return
-    }
-    
-    Write-Info "SQLite kuruluyor..."
-    choco install sqlite -y
-    
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-    
-    Write-Success "SQLite kuruldu!"
-}
-
-# Docker Desktop kurulumu
-function Install-Docker {
-    if ($NoDocker) {
-        Write-Info "Docker kurulumu atlanıyor (-NoDocker)"
-        return
-    }
-    
-    Write-Step "Docker kontrol ediliyor..."
-    
-    if (Get-Command docker -ErrorAction SilentlyContinue) {
-        Write-Success "Docker mevcut: $(docker --version)"
-        return
-    }
-    
-    Write-Info "Docker Desktop kuruluyor..."
-    
-    # Docker Desktop indir ve kur
-    $dockerUrl = "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe"
-    $dockerPath = "$env:TEMP\DockerDesktopInstaller.exe"
-    
-    Invoke-WebRequest -Uri $dockerUrl -OutFile $dockerPath -UseBasicParsing
-    Start-Process -FilePath $dockerPath -ArgumentList "install", "--quiet" -Wait
-    
-    Write-Success "Docker Desktop kuruldu!"
-    Write-Warn "Docker'ı başlatmak için bilgisayarı yeniden başlatmanız gerekebilir."
-}
-
-# Ollama kurulumu (Gemma 4 Kernel)
-function Install-Ollama {
-    Write-Step "Ollama (Gemma 4 Kernel) kontrol ediliyor..."
-    
-    if (Get-Command ollama -ErrorAction SilentlyContinue) {
-        Write-Success "Ollama mevcut"
+    # API Key
+    if ($script:Provider -ne "local" -and $script:Provider -ne "openrouter") {
+        Write-Host ""
+        Write-Warning "Bu model API key gerektiriyor."
+        $ApiKey = Read-Host "$($script:Provider) API key giriniz (veya Enter'a basıp sonra .env'e ekleyin)"
         
-        # Model kontrolü
-        $models = ollama list 2>$null
-        if ($models -match "gemma4") {
-            Write-Success "Gemma 4 modeli zaten yüklü"
-            return
-        }
-    }
-    
-    Write-Info "Ollama kuruluyor..."
-    
-    # Ollama indir
-    $ollamaUrl = "https://ollama.com/download/OllamaSetup.exe"
-    $ollamaPath = "$env:TEMP\OllamaSetup.exe"
-    
-    Invoke-WebRequest -Uri $ollamaUrl -OutFile $ollamaPath -UseBasicParsing
-    Start-Process -FilePath $ollamaPath -ArgumentList "/S" -Wait
-    
-    # PATH güncelle
-    $env:Path += ";$env:LOCALAPPDATA\Programs\Ollama"
-    
-    Write-Success "Ollama kuruldu!"
-    
-    # Gemma 4 model seçimi
-    Write-ColorOutput "`n🎨 Hangi Gemma 4 modelini indirmek istiyorsunuz?" "Cyan"
-    Write-Host "  1) gemma4:31b (ÖNERİLEN - 256K context, ~20GB)"
-    Write-Host "  2) gemma4:12b (Orta - 128K context, ~8GB)"
-    Write-Host "  3) gemma4:4b  (Minimum - 64K context, ~3GB)"
-    Write-Host "  4) Daha sonra indir"
-    
-    $choice = Read-Host "Seçiminiz [1-4]"
-    
-    switch ($choice) {
-        "1" { 
-            Write-Info "Gemma 4 31B indiriliyor (~20GB)..."
-            ollama pull gemma4:31b 
-        }
-        "2" { 
-            Write-Info "Gemma 4 12B indiriliyor (~8GB)..."
-            ollama pull gemma4:12b 
-        }
-        "3" { 
-            Write-Info "Gemma 4 4B indiriliyor (~3GB)..."
-            ollama pull gemma4:4b 
-        }
-        default { 
-            Write-Warn "Model daha sonra indirilebilir: ollama pull gemma4:31b" 
+        if (-not [string]::IsNullOrWhiteSpace($ApiKey)) {
+            $script:ApiKey = $ApiKey
         }
     }
 }
 
-# Projeyi klonla
-function Clone-Project {
-    Write-Step "SENTIENT OS projesi kontrol ediliyor..."
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 4: Install Dependencies
+# ═══════════════════════════════════════════════════════════════════════════════
+function Step-InstallDeps {
+    Write-Step -Step 4 -Total 5 -Title "BAĞIMLILIK KURULUMU"
     
-    if (Test-Path "SENTIENT_CORE") {
-        Write-Info "SENTIENT_CORE dizini mevcut"
-        if (Test-Path "SENTIENT_CORE\.git") {
-            Write-Info "Güncelleniyor..."
-            Set-Location SENTIENT_CORE
-            git pull origin main
-            Set-Location ..
+    # Check admin
+    $IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    
+    # Rust
+    Write-Host "🦀 Rust kontrol ediliyor..." -ForegroundColor Cyan
+    $RustPath = "$env:USERPROFILE\.cargo\bin\rustc.exe"
+    
+    if (Test-Path $RustPath) {
+        $RustVersion = & $RustPath --version 2>$null
+        Write-Success "Rust: $RustVersion"
+    } else {
+        Write-Host "⏳ Rust kuruluyor..." -ForegroundColor Cyan
+        
+        # Download rustup-init
+        $RustupUrl = "https://win.rustup.rs/x86_64"
+        $RustupPath = "$env:TEMP\rustup-init.exe"
+        
+        try {
+            Invoke-WebRequest -Uri $RustupUrl -OutFile $RustupPath -UseBasicParsing
+            Start-Process -FilePath $RustupPath -ArgumentList "-y" -Wait -NoNewWindow
+            Remove-Item $RustupPath -Force
+            
+            # Refresh PATH
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+            
+            Write-Success "Rust kuruldu"
+        } catch {
+            Write-Error "Rust kurulumu başarısız: $_"
+            Write-Host "Lütfen manuel olarak https://rustup.rs adresinden kurun"
         }
-        return
     }
     
-    Write-Info "Proje klonlanıyor..."
-    git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
-    
-    Write-Success "Proje klonlandı!"
+    # Ollama (for local models)
+    if ($script:Provider -eq "local") {
+        Write-Host ""
+        Write-Host "🤖 Ollama kontrol ediliyor..." -ForegroundColor Cyan
+        
+        $OllamaPath = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
+        
+        if (Test-Path $OllamaPath) {
+            Write-Success "Ollama zaten kurulu"
+        } else {
+            Write-Host "⏳ Ollama kuruluyor..." -ForegroundColor Cyan
+            
+            $OllamaUrl = "https://ollama.com/download/OllamaSetup.exe"
+            $OllamaSetup = "$env:TEMP\OllamaSetup.exe"
+            
+            try {
+                Invoke-WebRequest -Uri $OllamaUrl -OutFile $OllamaSetup -UseBasicParsing
+                Start-Process -FilePath $OllamaSetup -ArgumentList "/S" -Wait
+                Remove-Item $OllamaSetup -Force -ErrorAction SilentlyContinue
+                
+                Write-Success "Ollama kuruldu"
+            } catch {
+                Write-Warning "Ollama kurulumu başarısız. Lütfen https://ollama.com/download adresinden manuel kurun."
+            }
+        }
+        
+        # Start Ollama and download model
+        Write-Host ""
+        Write-Host "📥 Model indiriliyor: $($script:SelectedModel)" -ForegroundColor Cyan
+        Write-Host "   Bu işlem model boyutuna göre birkaç dakika sürebilir..." -ForegroundColor Yellow
+        
+        # Try to start Ollama
+        $OllamaExe = Get-Command ollama -ErrorAction SilentlyContinue
+        if ($OllamaExe) {
+            & ollama pull $script:SelectedModel
+            Write-Success "Model indirildi: $($script:SelectedModel)"
+        } else {
+            Write-Warning "Ollama PATH'te bulunamadı. Modeli manuel olarak indirin: ollama pull $($script:SelectedModel)"
+        }
+    }
 }
 
-# .env dosyası oluştur
-function Setup-Env {
-    Write-Step ".env yapılandırması oluşturuluyor..."
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 5: Install SENTIENT
+# ═══════════════════════════════════════════════════════════════════════════════
+function Step-InstallSentient {
+    Write-Step -Step 5 -Total 5 -Title "SENTIENT KURULUMU"
     
-    Set-Location SENTIENT_CORE
+    $InstallDir = "$env:USERPROFILE\sentient"
+    $script:InstallDir = $InstallDir
     
-    if (Test-Path ".env") {
-        Write-Success ".env dosyası mevcut"
-        Set-Location ..
+    # Git
+    Write-Host "📂 SENTIENT OS indiriliyor..." -ForegroundColor Cyan
+    
+    if (Test-Path $InstallDir) {
+        Write-Warning "$InstallDir zaten mevcut"
+        
+        if (-not $Silent) {
+            $Update = Read-Host "Güncellensin mi? (y/n)"
+            if ($Update -eq "y") {
+                Set-Location $InstallDir
+                git pull origin main 2>$null
+            }
+        }
+    } else {
+        git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git $InstallDir 2>$null
+        Write-Success "SENTIENT OS indirildi"
+    }
+    
+    # Build
+    Set-Location $InstallDir
+    
+    Write-Host ""
+    Write-Host "🔨 SENTIENT derleniyor..." -ForegroundColor Cyan
+    Write-Host "   İlk derleme 5-10 dakika sürebilir..." -ForegroundColor Yellow
+    
+    # Check cargo
+    $CargoPath = "$env:USERPROFILE\.cargo\bin\cargo.exe"
+    if (-not (Test-Path $CargoPath)) {
+        Write-Error "Cargo bulunamadı. Rust'ı kurun: https://rustup.rs"
         return
     }
     
-    # Varsayılan .env
-    $envContent = @"
-# ═══════════════════════════════════════════════════════════
-#  GEMMA 4 KERNEL - YEREL LLM (API KEY GEREKMİYOR!)
-# ═══════════════════════════════════════════════════════════
-GEMMA4_MODEL=gemma4:31b
-GEMMA4_BASE_URL=http://localhost:11434/v1
-GEMMA4_CONTEXT_LENGTH=262144
-GEMMA4_THINKING_MODE=true
+    # Build
+    & $CargoPath build --release 2>&1 | Out-Null
+    
+    Write-Success "SENTIENT derlendi"
+    
+    # Create .env
+    Write-Host ""
+    Write-Host "⚙️  Yapılandırma oluşturuluyor..." -ForegroundColor Cyan
+    
+    $EnvContent = @"
+# ═════════════════════════════════════════════════════════════
+#  SENTIENT OS Yapılandırma
+# ═════════════════════════════════════════════════════════════
 
-# ═══════════════════════════════════════════════════════════
-#  V-GATE (API ANAHTARI YÖNETİMİ)
-# ═══════════════════════════════════════════════════════════
-V_GATE_URL=http://localhost:8100
-V_GATE_LISTEN=127.0.0.1:1071
-V_GATE_TIMEOUT=120
+# Model Ayarları
+SENTIENT_MODEL=$($script:SelectedModel)
+SENTIENT_PROVIDER=$($script:Provider)
 
-# ═══════════════════════════════════════════════════════════
-#  GATEWAY (API SUNUCUSU)
-# ═══════════════════════════════════════════════════════════
+# API Keys
+$("$($script:Provider.ToUpper())_API_KEY=$($script:ApiKey)" -if $script:ApiKey)
+
+# OpenRouter (ücretsiz modeller için)
+# OPENROUTER_API_KEY=sk-or-...
+
+# Yerel Model (Ollama)
+OLLAMA_HOST=http://localhost:11434
+
+# Gateway
 GATEWAY_HTTP_ADDR=0.0.0.0:8080
-GATEWAY_PORT=8080
-JWT_SECRET=change-this-secret-in-production
+JWT_SECRET=change-this-in-production
 
-# ═══════════════════════════════════════════════════════════
-#  BELLEK (MEMORY CUBE)
-# ═══════════════════════════════════════════════════════════
+# Memory
 MEMORY_DB_PATH=data/sentient.db
-MEMORY_SHORT_TTL=3600
-MEMORY_LONG_TTL=0
-ZERO_COPY_ENABLED=true
 
-# ═══════════════════════════════════════════════════════════
-#  OASIS BRAIN (OTONOM DÜŞÜNCE)
-# ═══════════════════════════════════════════════════════════
-OASIS_BRAIN_MODEL=gemma4:31b
-OASIS_BRAIN_THINKING=true
-OASIS_BRAIN_MAX_STEPS=10
-
-# ═══════════════════════════════════════════════════════════
-#  LOGGING
-# ═══════════════════════════════════════════════════════════
+# Logging
 RUST_LOG=info
-LOG_FILE=logs/sentient.log
 "@
     
-    $envContent | Out-File -FilePath ".env" -Encoding UTF8
+    $EnvContent | Out-File -FilePath "$InstallDir\.env" -Encoding utf8
     
-    Write-Success ".env dosyası oluşturuldu!"
-    Set-Location ..
+    Write-Success ".env dosyası oluşturuldu"
 }
 
-# Projeyi derle
-function Build-Project {
-    Write-Step "SENTIENT OS derleniyor..."
+# ═══════════════════════════════════════════════════════════════════════════════
+# COMPLETE
+# ═══════════════════════════════════════════════════════════════════════════════
+function Show-Complete {
+    Clear-Host
     
-    Set-Location SENTIENT_CORE
+    Write-Host ""
+    Write-Host "    ╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
+    Write-Host "    ║                                                               ║" -ForegroundColor Green
+    Write-Host "    ║              🎉 SENTIENT OS KURULUMU TAMAMLANDI!             ║" -ForegroundColor Green
+    Write-Host "    ║                                                               ║" -ForegroundColor Green
+    Write-Host "    ╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host ""
     
-    # PATH'i güncelle (cargo için)
-    $env:Path += ";$env:USERPROFILE\.cargo\bin"
+    Write-Host "📋 Kurulum Özeti:" -ForegroundColor White
+    Write-Host "  Model:     $($script:ModelDesc)" -ForegroundColor Cyan
+    Write-Host "  Provider:  $($script:Provider)" -ForegroundColor Cyan
+    Write-Host "  Dizin:     $($script:InstallDir)" -ForegroundColor Cyan
+    Write-Host ""
     
-    Write-Info "Cargo check..."
-    cargo check
+    Write-Host "🚀 Başlatmak için:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  cd $($script:InstallDir)" -ForegroundColor White
+    Write-Host "  .\target\release\sentient.exe" -ForegroundColor White
+    Write-Host ""
     
-    Write-Info "Release derleme (ilk derleme 10-15 dakika sürebilir)..."
-    cargo build --release
+    Write-Host "🌐 Dashboard:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  .\target\release\sentient-dashboard.exe" -ForegroundColor White
+    Write-Host "  # http://localhost:8080" -ForegroundColor Gray
+    Write-Host ""
     
-    Write-Success "Derleme tamamlandı!"
-    Set-Location ..
-}
-
-# Skill library
-function Setup-Skills {
-    Write-Step "Skill Library hazırlanıyor..."
+    Write-Host "⚙️  Yapılandırma:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  notepad $($script:InstallDir)\.env" -ForegroundColor White
+    Write-Host ""
     
-    Set-Location SENTIENT_CORE
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+    Write-Host "🧠 SENTIENT OS - The Operating System That Thinks" -ForegroundColor Green
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
     
-    # Dizin oluştur
-    New-Item -ItemType Directory -Force -Path "data\skills" | Out-Null
-    
-    # Skill ingest
-    if (Test-Path "target\release\sentient-ingest.exe") {
-        .\target\release\sentient-ingest.exe full
-    } else {
-        cargo run --release --bin sentient-ingest -- full 2>$null
-    }
-    
-    # İstatistik
-    $skillCount = (Get-ChildItem -Path "data\skills" -Filter "*.yaml" -Recurse -ErrorAction SilentlyContinue).Count
-    Write-Success "Skill Library: $skillCount skill yüklendi!"
-    
-    Set-Location ..
-}
-
-# Test çalıştır
-function Run-Tests {
-    Write-Step "Testler çalıştırılıyor..."
-    
-    Set-Location SENTIENT_CORE
-    
-    cargo test --release --workspace 2>$null
-    
-    Write-Success "Testler tamamlandı!"
-    Set-Location ..
-}
-
-# Final rapor
-function Show-Result {
-    Write-ColorOutput @"
-
-╔═══════════════════════════════════════════════════════════════════╗
-║                                                                   ║
-║   🎉 SENTIENT OS KURULUMU TAMAMLANDI!                             ║
-║                                                                   ║
-╠═══════════════════════════════════════════════════════════════════╣
-║                                                                   ║
-║   📋 SONRAKI ADIMLAR:                                             ║
-║                                                                   ║
-║   1. Proje dizinine git:                                          ║
-║      cd SENTIENT_CORE                                             ║
-║                                                                   ║
-║   2. SENTIENT'ı başlat:                                           ║
-║      .\target\release\sentient-shell.exe                          ║
-║      veya                                                         ║
-║      cargo run --release --bin sentient                           ║
-║                                                                   ║
-║   3. Dashboard'ı başlat:                                          ║
-║      .\target\release\sentient-dashboard.exe                      ║
-║      Tarayıcıda: http://localhost:8080                            ║
-║                                                                   ║
-║   4. Gemma 4 ile sohbet:                                          ║
-║      ollama run gemma4:31b                                        ║
-║                                                                   ║
-║   5. .env dosyasını düzenle (API anahtarları için):               ║
-║      notepad .env                                                 ║
-║                                                                   ║
-╠═══════════════════════════════════════════════════════════════════╣
-║                                                                   ║
-║   🧠 SENTIENT OS - The Operating System That Thinks               ║
-║                                                                   ║
-╚═══════════════════════════════════════════════════════════════════╝
-"@ "Green"
-}
-
-# Kullanım yardımı
-function Show-Help {
-    Write-ColorOutput @"
-Kullanım: .\setup.ps1 [komut] [seçenekler]
-
-Komutlar:
-  all        - Tüm kurulum (varsayılan)
-  rust       - Sadece Rust kurulumu
-  deps       - Sadece bağımlılıklar
-  build      - Sadece derleme
-  skills     - Sadece skill kurulumu
-  docker     - Sadece Docker kurulumu
-  test       - Sadece testler
-  clean      - Temizlik
-  help       - Bu yardım
-
-Seçenekler:
-  -NoDocker   Docker kurulumunu atla
-  -NoPython   Python kurulumunu atla
-  -Force      Zorla yeniden kur
-
-Örnekler:
-  .\setup.ps1                          # Tam kurulum
-  .\setup.ps1 -NoDocker               # Docker olmadan
-  .\setup.ps1 build                   # Sadece derleme
-  .\setup.ps1 clean                   # Temizlik
-
-"@ "Cyan"
-}
-
-# Ana kurulum
-function Main {
-    Print-Logo
-    
-    # Yönetici kontrolü
-    if (-not (Test-Administrator)) {
-        Write-Warn "Yönetici olarak çalıştırmanız önerilir."
-        Write-Info "Sağ tık -> 'Run as Administrator' ile çalıştırın."
+    # Add to PATH
+    if (-not $Silent) {
         Write-Host ""
+        $AddPath = Read-Host "SENTIENT'i PATH'e eklemek ister misiniz? (y/n)"
+        
+        if ($AddPath -eq "y") {
+            $CurrentPath = [Environment]::GetEnvironmentVariable("Path", "User")
+            $NewPath = "$($script:InstallDir)\target\release"
+            
+            if ($CurrentPath -notlike "*$NewPath*") {
+                [Environment]::SetEnvironmentVariable("Path", "$CurrentPath;$NewPath", "User")
+                Write-Success "PATH'e eklendi. Yeni terminalde 'sentient' komutu çalışacaktır."
+            }
+        }
     }
-    
-    Write-ColorOutput "Bu script SENTIENT'nın tüm bileşenlerini kuracaktır." "Yellow"
-    Write-ColorOutput "Devam etmek için Enter'a basın..." "Yellow"
-    Read-Host
-    
-    # Adımlar
-    Check-System
-    Install-Chocolatey
-    Install-BuildTools
-    Install-Git
-    Install-Rust
-    Install-Python
-    Install-SQLite
-    Install-Docker
-    Install-Ollama
-    Clone-Project
-    Setup-Env
-    Build-Project
-    Setup-Skills
-    Run-Tests
-    
-    # Final
-    Show-Result
 }
 
-# Komut işleme
-switch ($Command.ToLower()) {
-    "all" { Main }
-    "rust" { Install-Rust }
-    "deps" { 
-        Install-Chocolatey
-        Install-BuildTools
-        Install-Git
-        Install-Python
-        Install-SQLite
-    }
-    "build" { Build-Project }
-    "skills" { Setup-Skills }
-    "docker" { Install-Docker }
-    "test" { Run-Tests }
-    "clean" {
-        Set-Location SENTIENT_CORE
-        cargo clean
-        if (Test-Path "venv") { Remove-Item -Recurse -Force "venv" }
-        if (Test-Path "node_modules") { Remove-Item -Recurse -Force "node_modules" }
-        Set-Location ..
-        Write-Info "Temizlik yapıldı!"
-    }
-    "help" { Show-Help }
-    default { 
-        Write-Error "Bilinmeyen komut: $Command"
-        Show-Help
-    }
+# ═══════════════════════════════════════════════════════════════════════════════
+# MAIN
+# ═══════════════════════════════════════════════════════════════════════════════
+function Main {
+    Step-Welcome
+    Step-SystemCheck
+    Step-ModelSelection
+    Step-InstallDeps
+    Step-InstallSentient
+    Show-Complete
 }
+
+# Run
+Main
