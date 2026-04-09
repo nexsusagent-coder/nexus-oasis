@@ -1,8 +1,8 @@
 [package]
 name = "sentient-setup"
-version = "4.0.0"
+version = "6.0.0"
 edition = "2021"
-description = "SENTIENT Setup Wizard v4.0.0 - Universal Omni-Gateway & Full Channel Support"
+description = "SENTIENT Setup Wizard v6.0.0 - Strategic UX Update: Sentient Onboarding with 25+ LLM Providers, 20+ Communication Channels"
 authors = ["SENTIENT Core Team"]
 
 [dependencies]
