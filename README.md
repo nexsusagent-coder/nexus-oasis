@@ -329,8 +329,8 @@ pub const SOVEREIGN_POLICIES: &[&str] = &[
 
 | Platform | Komut |
 |----------|-------|
-| **🐧 Linux/macOS** | `curl -fsSL https://sentient.sh/install | bash` |
-| **🪟 Windows** | `powershell -c "irm https://sentient.sh/install.ps1 | iex"` |
+| **🐧 Linux/macOS** | `curl -fsSL https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install_sentient.sh \| bash` |
+| **🪟 Windows** | `powershell -c "irm https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/setup.ps1 \| iex"` |
 
 > 💡 **Kurulum sırasında model seçebilirsiniz:** Yerel (Gemma 4, Llama 3.3) veya API (GPT-4o, Claude 3.7, Gemini 2.0)
 

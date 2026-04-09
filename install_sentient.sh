@@ -4,7 +4,8 @@
 #  Interactive Setup Script v5.0.0
 # ═══════════════════════════════════════════════════════════════════════════════
 
-set -e
+# Hata durumunda devam et ama mesaj göster
+trap 'echo -e "\n${RED}Hata oluştu! Devam ediliyor...${NC}"' ERR
 
 # Colors
 RED='\033[0;31m'
@@ -16,25 +17,10 @@ CYAN='\033[0;36m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-# Animation
-show_spinner() {
-    local pid=$1
-    local msg=$2
-    local spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
-    local i=0
-    while kill -0 $pid 2>/dev/null; do
-        i=$(( (i+1) % 10 ))
-        printf "\r${CYAN}${spin:$i:1}${NC} ${msg}..."
-        sleep 0.1
-    done
-    printf "\r${GREEN}✓${NC} ${msg}\n"
-}
-
 # Clear screen and show header
-show_header() {
-    clear
-    echo -e "${CYAN}"
-    cat << 'EOF'
+clear
+echo -e "${CYAN}"
+cat << 'EOF'
     ╔═══════════════════════════════════════════════════════════════╗
     ║                                                               ║
     ║     ███████╗███████╗███╗   ██╗████████╗██╗ ██████╗ █████╗     ║
@@ -48,282 +34,276 @@ show_header() {
     ║                                                               ║
     ╚═══════════════════════════════════════════════════════════════╝
 EOF
-    echo -e "${NC}"
-    echo ""
-}
+echo -e "${NC}"
 
-# Step indicator
-show_step() {
-    local step=$1
-    local total=$2
-    local title=$3
-    echo -e "\n${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${BOLD}${CYAN}  ADIM ${step}/${total}: ${title}${NC}"
-    echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
-}
-
-# Success message
-show_success() {
-    echo -e "\n${GREEN}✓ $1${NC}"
-}
-
-# Error message
-show_error() {
-    echo -e "\n${RED}✗ $1${NC}"
-}
-
-# Warning message
-show_warning() {
-    echo -e "\n${YELLOW}⚠ $1${NC}"
-}
-
-# Check command exists
-command_exists() {
-    command -v "$1" &> /dev/null
-}
+echo ""
+echo -e "${BOLD}SENTIENT OS'e hoş geldiniz!${NC}"
+echo ""
+echo "Bu kurulum scripti size adım adım rehberlik edecek:"
+echo ""
+echo -e "  ${CYAN}1.${NC} Sistem kontrolü"
+echo -e "  ${CYAN}2.${NC} Model seçimi"
+echo -e "  ${CYAN}3.${NC} Bağımlılık kurulumu"
+echo -e "  ${CYAN}4.${NC} SENTIENT kurulumu"
+echo -e "  ${CYAN}5.${NC} Yapılandırma"
+echo ""
+read -p "Devam etmek için Enter'a basın..." -r
+echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 1: Welcome & OS Detection
+# ADIM 1: Sistem Kontrolü
 # ═══════════════════════════════════════════════════════════════════════════════
-step_welcome() {
-    show_header
-    
-    echo -e "${BOLD}SENTIENT OS'e hoş geldiniz!${NC}\n"
-    echo -e "Bu kurulum scripti size adım adım rehberlik edecek:"
-    echo ""
-    echo -e "  ${CYAN}1.${NC} Sistem kontrolü"
-    echo -e "  ${CYAN}2.${NC} Model seçimi"
-    echo -e "  ${CYAN}3.${NC} Bağımlılık kurulumu"
-    echo -e "  ${CYAN}4.${NC} SENTIENT kurulumu"
-    echo -e "  ${CYAN}5.${NC} Yapılandırma"
-    echo ""
-    
-    read -p "Devam etmek için Enter'a basın..."
-}
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# STEP 2: System Check
-# ═══════════════════════════════════════════════════════════════════════════════
-step_system_check() {
-    show_step 2 5 "SİSTEM KONTROLÜ"
-    
-    # OS Detection
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        OS=$ID
-        OS_VER=$VERSION_ID
-        OS_NAME=$PRETTY_NAME
-    elif [ "$(uname)" = "Darwin" ]; then
-        OS="macos"
-        OS_VER=$(sw_vers -productVersion)
-        OS_NAME="macOS $OS_VER"
-    else
-        OS="unknown"
-        OS_NAME="Unknown"
-    fi
-    
-    echo -e "${CYAN}📌 İşletim Sistemi:${NC} $OS_NAME"
-    
-    # RAM Check
-    if [ "$OS" = "macos" ]; then
-        TOTAL_RAM=$(sysctl -n hw.memsize 2>/dev/null | awk '{print int($1/1024/1024)}')
-    else
-        TOTAL_RAM=$(free -m 2>/dev/null | awk '/^Mem:/{print $2}')
-    fi
-    
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}${CYAN}  ADIM 1/5: SİSTEM KONTROLÜ${NC}"
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+# OS Detection
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$ID
+    OS_NAME=$PRETTY_NAME
+elif [ "$(uname)" = "Darwin" ]; then
+    OS="macos"
+    OS_NAME="macOS $(sw_vers -productVersion 2>/dev/null || echo 'Unknown')"
+else
+    OS="linux"
+    OS_NAME="Linux"
+fi
+
+echo -e "${CYAN}📌 İşletim Sistemi:${NC} $OS_NAME"
+
+# RAM Check
+if [ "$OS" = "macos" ]; then
+    TOTAL_RAM=$(sysctl -n hw.memsize 2>/dev/null | awk '{print int($1/1024/1024)}' || echo "0")
+else
+    TOTAL_RAM=$(free -m 2>/dev/null | awk '/^Mem:/{print $2}' || echo "0")
+fi
+
+if [ "$TOTAL_RAM" != "0" ]; then
     RAM_GB=$((TOTAL_RAM / 1024))
     if [ "$TOTAL_RAM" -lt 8000 ]; then
-        show_warning "RAM: ${RAM_GB}GB (Önerilen: 16GB+)"
+        echo -e "${YELLOW}⚠ RAM: ${RAM_GB}GB (Önerilen: 16GB+)${NC}"
     else
-        show_success "RAM: ${RAM_GB}GB"
+        echo -e "${GREEN}✓ RAM: ${RAM_GB}GB${NC}"
     fi
-    
-    # Disk Check
-    DISK_AVAIL=$(df -h . 2>/dev/null | awk 'NR==2{print $4}')
-    echo -e "${CYAN}💾 Disk Alanı:${NC} ${DISK_AVAIL} boş"
-    
-    # GPU Check (optional)
-    if command_exists nvidia-smi; then
-        GPU_INFO=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null | head -1)
-        show_success "GPU: ${GPU_INFO}"
-        HAS_GPU=true
-    else
-        echo -e "${YELLOW}GPU: NVIDIA GPU tespit edilmedi (Yerel model için önerilir)${NC}"
-        HAS_GPU=false
-    fi
-    
+else
+    echo -e "${YELLOW}⚠ RAM bilgisi alınamadı${NC}"
+fi
+
+# Disk Check
+DISK_AVAIL=$(df -h . 2>/dev/null | awk 'NR==2{print $4}' || echo "Unknown")
+echo -e "${CYAN}💾 Disk Alanı:${NC} ${DISK_AVAIL} boş"
+
+# GPU Check
+if command -v nvidia-smi &> /dev/null; then
+    GPU_INFO=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -1 || echo "NVIDIA GPU")
+    echo -e "${GREEN}✓ GPU: ${GPU_INFO}${NC}"
+    HAS_GPU=true
+else
+    echo -e "${YELLOW}⚠ GPU: NVIDIA GPU tespit edilmedi (Yerel model için önerilir)${NC}"
+    HAS_GPU=false
+fi
+
+echo ""
+echo -e "${GREEN}✓ Sistem kontrolü tamamlandı${NC}"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ADIM 2: Model Seçimi
+# ═══════════════════════════════════════════════════════════════════════════════
+
+echo ""
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}${CYAN}  ADIM 2/5: MODEL SEÇİMİ${NC}"
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+echo -e "${BOLD}SENTIENT OS birden fazla model destekler:${NC}"
+echo ""
+
+echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${GREEN}║  🏠 YEREL MODELLER (API Key Gerektirmez)                     ║${NC}"
+echo -e "${GREEN}╠═══════════════════════════════════════════════════════════════╣${NC}"
+echo -e "${GREEN}║  1) Gemma 4 31B    - 256K context, Thinking Mode (ÖNERİLEN) ║${NC}"
+echo -e "${GREEN}║  2) Llama 3.3 70B  - 128K context, Genel kullanım           ║${NC}"
+echo -e "${GREEN}║  3) Qwen 2.5 72B   - 128K context, Coding optimize          ║${NC}"
+echo -e "${GREEN}║  4) DeepSeek R1    - 128K context, Reasoning                ║${NC}"
+echo -e "${GREEN}║  5) Mistral 24B    - 128K context, Hızlı                    ║${NC}"
+echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════╝${NC}"
+
+echo -e "${BLUE}╔═══════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║  🔑 API MODELLER (API Key Gerekli)                           ║${NC}"
+echo -e "${BLUE}╠═══════════════════════════════════════════════════════════════╣${NC}"
+echo -e "${BLUE}║  6) OpenAI GPT-4o         - Multimodal, Coding              ║${NC}"
+echo -e "${BLUE}║  7) Anthropic Claude 3.7  - Coding, Reasoning               ║${NC}"
+echo -e "${BLUE}║  8) Google Gemini 2.0     - 1M Context                      ║${NC}"
+echo -e "${BLUE}║  9) Groq Llama 3.3        - Hızlı Inference                 ║${NC}"
+echo -e "${BLUE}║ 10) OpenRouter Free       - Ücretsiz Tier                   ║${NC}"
+echo -e "${BLUE}╚═══════════════════════════════════════════════════════════════╝${NC}"
+
+echo ""
+read -p "Model seçiniz [1-10] (varsayılan: 1): " MODEL_CHOICE
+MODEL_CHOICE=${MODEL_CHOICE:-1}
+
+case $MODEL_CHOICE in
+    1) SELECTED_MODEL="gemma4:31b"; PROVIDER="local"; MODEL_DESC="Gemma 4 31B (Yerel)" ;;
+    2) SELECTED_MODEL="llama3.3:70b"; PROVIDER="local"; MODEL_DESC="Llama 3.3 70B (Yerel)" ;;
+    3) SELECTED_MODEL="qwen2.5:72b"; PROVIDER="local"; MODEL_DESC="Qwen 2.5 72B (Yerel)" ;;
+    4) SELECTED_MODEL="deepseek-r1:67b"; PROVIDER="local"; MODEL_DESC="DeepSeek R1 (Yerel)" ;;
+    5) SELECTED_MODEL="mistral:24b"; PROVIDER="local"; MODEL_DESC="Mistral 24B (Yerel)" ;;
+    6) SELECTED_MODEL="gpt-4o"; PROVIDER="openai"; MODEL_DESC="GPT-4o (OpenAI)" ;;
+    7) SELECTED_MODEL="claude-3.7-sonnet"; PROVIDER="anthropic"; MODEL_DESC="Claude 3.7 (Anthropic)" ;;
+    8) SELECTED_MODEL="gemini-2.0-flash"; PROVIDER="google"; MODEL_DESC="Gemini 2.0 (Google)" ;;
+    9) SELECTED_MODEL="llama-3.3-70b"; PROVIDER="groq"; MODEL_DESC="Llama 3.3 (Groq)" ;;
+    10) SELECTED_MODEL="google/gemma-4-31b-it:free"; PROVIDER="openrouter"; MODEL_DESC="Gemma 4 Free (OpenRouter)" ;;
+    *) SELECTED_MODEL="gemma4:31b"; PROVIDER="local"; MODEL_DESC="Gemma 4 31B (Yerel)" ;;
+esac
+
+echo ""
+echo -e "${GREEN}✓ Seçilen model: $MODEL_DESC${NC}"
+
+# API Key prompt
+API_KEY_LINE=""
+if [ "$PROVIDER" != "local" ] && [ "$PROVIDER" != "openrouter" ]; then
     echo ""
-    show_success "Sistem kontrolü tamamlandı"
-}
+    echo -e "${YELLOW}⚠️  Bu model API key gerektiriyor.${NC}"
+    read -p "$PROVIDER API key giriniz (veya Enter'a basıp sonra .env'e ekleyin): " API_KEY
+    
+    if [ -n "$API_KEY" ]; then
+        PROVIDER_UPPER=$(echo "$PROVIDER" | tr '[:lower:]' '[:upper:]')
+        API_KEY_LINE="${PROVIDER_UPPER}_API_KEY=${API_KEY}"
+    fi
+fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 3: Model Selection
+# ADIM 3: Bağımlılık Kurulumu
 # ═══════════════════════════════════════════════════════════════════════════════
-step_model_selection() {
-    show_step 3 5 "MODEL SEÇİMİ"
-    
-    echo -e "${BOLD}SENTIENT OS birden fazla model destekler:${NC}\n"
-    
-    echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║  🏠 YEREL MODELLER (API Key Gerektirmez)                     ║${NC}"
-    echo -e "${GREEN}╠═══════════════════════════════════════════════════════════════╣${NC}"
-    echo -e "${GREEN}║  1) Gemma 4 31B    - 256K context, Thinking Mode (ÖNERİLEN) ║${NC}"
-    echo -e "${GREEN}║  2) Llama 3.3 70B  - 128K context, Genel kullanım           ║${GREEN}"
-    echo -e "${GREEN}║  3) Qwen 2.5 72B   - 128K context, Coding optimize          ║${GREEN}"
-    echo -e "${GREEN}║  4) DeepSeek R1    - 128K context, Reasoning                ║${GREEN}"
-    echo -e "${GREEN}║  5) Mistral 24B    - 128K context, Hızlı                    ║${GREEN}"
-    echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════╝${NC}"
-    
-    echo -e "${BLUE}╔═══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║  🔑 API MODELLER (API Key Gerekli)                           ║${NC}"
-    echo -e "${BLUE}╠═══════════════════════════════════════════════════════════════╣${NC}"
-    echo -e "${BLUE}║  6) OpenAI GPT-4o         - Multimodal, Coding              ║${NC}"
-    echo -e "${BLUE}║  7) Anthropic Claude 3.7  - Coding, Reasoning               ║${NC}"
-    echo -e "${BLUE}║  8) Google Gemini 2.0     - 1M Context                      ║${NC}"
-    echo -e "${BLUE}║  9) Groq Llama 3.3        - Hızlı Inference                 ║${NC}"
-    echo -e "${BLUE}║ 10) OpenRouter Free       - Ücretsiz Tier                   ║${NC}"
-    echo -e "${BLUE}╚═══════════════════════════════════════════════════════════════╝${NC}"
-    
+
+echo ""
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}${CYAN}  ADIM 3/5: BAĞIMLILIK KURULUMU${NC}"
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+# Rust Check
+echo -e "${CYAN}🦀 Rust kontrol ediliyor...${NC}"
+if command -v rustc &> /dev/null; then
+    RUST_VERSION=$(rustc --version 2>/dev/null || echo "Unknown")
+    echo -e "${GREEN}✓ Rust: ${RUST_VERSION}${NC}"
+else
+    echo -e "${CYAN}⏳ Rust kuruluyor...${NC}"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env" 2>/dev/null || true
+    echo -e "${GREEN}✓ Rust kuruldu${NC}"
+fi
+
+# System dependencies
+echo ""
+echo -e "${CYAN}📦 Sistem bağımlılıkları...${NC}"
+
+case $OS in
+    ubuntu|debian)
+        sudo apt update -qq 2>/dev/null || true
+        sudo apt install -y -qq build-essential pkg-config libssl-dev sqlite3 libsqlite3-dev git curl wget cmake 2>/dev/null || true
+        ;;
+    fedora|rhel|centos)
+        sudo dnf install -y -q gcc pkg-config openssl-devel sqlite-devel git curl wget cmake 2>/dev/null || true
+        ;;
+    macos)
+        if command -v brew &> /dev/null; then
+            brew install openssl sqlite cmake 2>/dev/null || true
+        fi
+        ;;
+esac
+
+echo -e "${GREEN}✓ Sistem bağımlılıkları hazır${NC}"
+
+# Ollama for local models
+if [ "$PROVIDER" = "local" ]; then
     echo ""
-    read -p "Model seçiniz [1-10] (varsayılan: 1): " MODEL_CHOICE
-    MODEL_CHOICE=${MODEL_CHOICE:-1}
+    echo -e "${CYAN}🤖 Ollama kontrol ediliyor...${NC}"
     
-    case $MODEL_CHOICE in
-        1) SELECTED_MODEL="gemma4:31b"; PROVIDER="local"; MODEL_DESC="Gemma 4 31B (Yerel)" ;;
-        2) SELECTED_MODEL="llama3.3:70b"; PROVIDER="local"; MODEL_DESC="Llama 3.3 70B (Yerel)" ;;
-        3) SELECTED_MODEL="qwen2.5:72b"; PROVIDER="local"; MODEL_DESC="Qwen 2.5 72B (Yerel)" ;;
-        4) SELECTED_MODEL="deepseek-r1:67b"; PROVIDER="local"; MODEL_DESC="DeepSeek R1 (Yerel)" ;;
-        5) SELECTED_MODEL="mistral:24b"; PROVIDER="local"; MODEL_DESC="Mistral 24B (Yerel)" ;;
-        6) SELECTED_MODEL="gpt-4o"; PROVIDER="openai"; MODEL_DESC="GPT-4o (OpenAI)" ;;
-        7) SELECTED_MODEL="claude-3.7-sonnet"; PROVIDER="anthropic"; MODEL_DESC="Claude 3.7 (Anthropic)" ;;
-        8) SELECTED_MODEL="gemini-2.0-flash"; PROVIDER="google"; MODEL_DESC="Gemini 2.0 (Google)" ;;
-        9) SELECTED_MODEL="llama-3.3-70b"; PROVIDER="groq"; MODEL_DESC="Llama 3.3 (Groq)" ;;
-        10) SELECTED_MODEL="google/gemma-4-31b-it:free"; PROVIDER="openrouter"; MODEL_DESC="Gemma 4 Free (OpenRouter)" ;;
-        *) SELECTED_MODEL="gemma4:31b"; PROVIDER="local"; MODEL_DESC="Gemma 4 31B (Yerel)" ;;
-    esac
-    
-    show_success "Seçilen model: $MODEL_DESC"
-    
-    # API Key prompt if needed
-    if [ "$PROVIDER" != "local" ] && [ "$PROVIDER" != "openrouter" ]; then
-        echo ""
-        echo -e "${YELLOW}⚠️  Bu model API key gerektiriyor.${NC}"
-        read -p "$PROVIDER API key giriniz (veya Enter'a basıp sonra .env'e ekleyin): " API_KEY
-        
-        if [ -n "$API_KEY" ]; then
-            API_KEY_UPPER=$(echo "$PROVIDER" | tr '[:lower:]' '[:upper:]')
-            API_KEYS="${API_KEYS}${API_KEY_UPPER}_API_KEY=${API_KEY}\n"
-        fi
+    if command -v ollama &> /dev/null; then
+        echo -e "${GREEN}✓ Ollama zaten kurulu${NC}"
+    else
+        echo -e "${CYAN}⏳ Ollama kuruluyor...${NC}"
+        curl -fsSL https://ollama.com/install.sh | sh 2>/dev/null || {
+            echo -e "${YELLOW}⚠ Ollama kurulumu başarısız. Manuel kurun: https://ollama.com${NC}"
+        }
     fi
-}
+    
+    # Start Ollama
+    echo ""
+    echo -e "${CYAN}🚀 Ollama başlatılıyor...${NC}"
+    ollama serve &
+    sleep 3
+    
+    # Download model
+    echo ""
+    echo -e "${CYAN}📥 Model indiriliyor: ${SELECTED_MODEL}${NC}"
+    echo -e "${YELLOW}   Bu işlem model boyutuna göre birkaç dakika sürebilir...${NC}"
+    
+    if command -v ollama &> /dev/null; then
+        ollama pull "$SELECTED_MODEL" || echo -e "${YELLOW}⚠ Model indirme başarısız. Manuel: ollama pull $SELECTED_MODEL${NC}"
+        echo -e "${GREEN}✓ Model hazır: ${SELECTED_MODEL}${NC}"
+    fi
+fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 4: Install Dependencies
+# ADIM 4: SENTIENT Kurulumu
 # ═══════════════════════════════════════════════════════════════════════════════
-step_install_deps() {
-    show_step 4 5 "BAĞIMLILIK KURULUMU"
-    
-    # Rust
-    if command_exists rustc; then
-        show_success "Rust: $(rustc --version)"
-    else
-        echo -e "${CYAN}⏳ Rust kuruluyor...${NC}"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source "$HOME/.cargo/env" 2>/dev/null || true
-        show_success "Rust kuruldu"
-    fi
-    
-    # System dependencies
-    echo -e "\n${CYAN}📦 Sistem bağımlılıkları...${NC}"
-    
-    case $OS in
-        ubuntu|debian)
-            sudo apt update -qq
-            sudo apt install -y -qq build-essential pkg-config libssl-dev sqlite3 libsqlite3-dev git curl wget cmake python3 python3-pip python3-venv bc > /dev/null 2>&1
-            ;;
-        macos)
-            if ! command_exists brew; then
-                echo -e "${CYAN}⏳ Homebrew kuruluyor...${NC}"
-                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2>&1
-            fi
-            brew install openssl sqlite cmake python3 > /dev/null 2>&1
-            ;;
-    esac
-    
-    show_success "Sistem bağımlılıkları kuruldu"
-    
-    # Ollama (for local models)
-    if [ "$PROVIDER" = "local" ]; then
-        echo -e "\n${CYAN}🤖 Ollama kuruluyor...${NC}"
-        
-        if command_exists ollama; then
-            show_success "Ollama zaten kurulu"
-        else
-            curl -fsSL https://ollama.com/install.sh | sh > /dev/null 2>&1
-            show_success "Ollama kuruldu"
-        fi
-        
-        # Start Ollama
-        ollama serve > /dev/null 2>&1 &
-        sleep 3
-        
-        # Download model
-        echo -e "\n${CYAN}📥 Model indiriliyor: ${SELECTED_MODEL}${NC}"
-        echo -e "${YELLOW}   Bu işlem model boyutuna göre birkaç dakika sürebilir...${NC}"
-        ollama pull "$SELECTED_MODEL"
-        show_success "Model indirildi: $SELECTED_MODEL"
-    fi
-}
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# STEP 5: Install SENTIENT
-# ═══════════════════════════════════════════════════════════════════════════════
-step_install_sentient() {
-    show_step 5 5 "SENTIENT KURULUMU"
-    
-    # Clone
-    echo -e "${CYAN}📂 SENTIENT OS indiriliyor...${NC}"
-    
-    INSTALL_DIR="$HOME/sentient"
-    
-    if [ -d "$INSTALL_DIR" ]; then
-        echo -e "${YELLOW}⚠️  $INSTALL_DIR zaten mevcut${NC}"
-        read -p "Güncellensin mi? (y/n): " UPDATE
-        if [ "$UPDATE" = "y" ]; then
-            cd "$INSTALL_DIR"
-            git pull origin main > /dev/null 2>&1
-        fi
-    else
-        git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git "$INSTALL_DIR" > /dev/null 2>&1
+echo ""
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}${CYAN}  ADIM 4/5: SENTIENT KURULUMU${NC}"
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+
+INSTALL_DIR="$HOME/sentient"
+
+echo -e "${CYAN}📂 SENTIENT OS indiriliyor...${NC}"
+
+if [ -d "$INSTALL_DIR" ]; then
+    echo -e "${YELLOW}⚠ $INSTALL_DIR zaten mevcut${NC}"
+    read -p "Güncellensin mi? (y/n): " UPDATE
+    if [ "$UPDATE" = "y" ] || [ "$UPDATE" = "Y" ]; then
+        cd "$INSTALL_DIR"
+        git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || true
     fi
-    
-    show_success "SENTIENT OS indirildi"
-    
-    # Build
-    cd "$INSTALL_DIR"
-    
-    echo -e "\n${CYAN}🔨 SENTIENT derleniyor...${NC}"
-    echo -e "${YELLOW}   İlk derleme 5-10 dakika sürebilir...${NC}"
-    
-    cargo build --release > /dev/null 2>&1 &
-    BUILD_PID=$!
-    
-    # Progress indicator
-    local spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
-    local i=0
-    while kill -0 $BUILD_PID 2>/dev/null; do
-        i=$(( (i+1) % 10 ))
-        printf "\r${CYAN}${spin:$i:1}${NC} Derleniyor...  "
-        sleep 0.2
+else
+    git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git "$INSTALL_DIR" 2>/dev/null || {
+        echo -e "${RED}✗ Klonlama başarısız!${NC}"
+        exit 1
+    }
+fi
+
+echo -e "${GREEN}✓ SENTIENT OS indirildi${NC}"
+
+# Build
+cd "$INSTALL_DIR"
+echo ""
+echo -e "${CYAN}🔨 SENTIENT derleniyor...${NC}"
+echo -e "${YELLOW}   İlk derleme 5-10 dakika sürebilir...${NC}"
+
+if command -v cargo &> /dev/null; then
+    cargo build --release 2>&1 | while read -r line; do
+        # Show progress
+        if echo "$line" | grep -q "Compiling"; then
+            echo -ne "\r${CYAN}⏳ ${line}${NC}                    "
+        fi
     done
-    wait $BUILD_PID
-    
-    show_success "SENTIENT derlendi"
-    
-    # Create .env
-    echo -e "\n${CYAN}⚙️  Yapılandırma oluşturuluyor...${NC}"
-    
-    cat > .env << ENVFILE
+    echo ""
+    echo -e "${GREEN}✓ SENTIENT derlendi${NC}"
+else
+    echo -e "${RED}✗ Cargo bulunamadı! Rust'ı yükleyin: source ~/.cargo/env${NC}"
+fi
+
+# Create .env
+echo ""
+echo -e "${CYAN}⚙️  Yapılandırma oluşturuluyor...${NC}"
+
+cat > .env << ENVFILE
 # ═════════════════════════════════════════════════════════════
 #  SENTIENT OS Yapılandırma
 # ═════════════════════════════════════════════════════════════
@@ -332,9 +312,8 @@ step_install_sentient() {
 SENTIENT_MODEL=${SELECTED_MODEL}
 SENTIENT_PROVIDER=${PROVIDER}
 
-# API Keys (varsa)
-${API_KEYS}
-# OpenRouter (ücretsiz modeller için)
+# API Keys
+${API_KEY_LINE}
 # OPENROUTER_API_KEY=sk-or-...
 
 # Yerel Model (Ollama)
@@ -350,78 +329,65 @@ MEMORY_DB_PATH=data/sentient.db
 # Logging
 RUST_LOG=info
 ENVFILE
-    
-    show_success ".env dosyası oluşturuldu"
-}
+
+echo -e "${GREEN}✓ .env dosyası oluşturuldu${NC}"
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# COMPLETE
+# ADIM 5: Tamamlandı
 # ═══════════════════════════════════════════════════════════════════════════════
-show_complete() {
-    clear
-    echo -e "${GREEN}"
-    cat << 'EOF'
+
+echo ""
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}${CYAN}  ADIM 5/5: TAMAMLANDI${NC}"
+echo -e "${PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+
+clear
+echo -e "${GREEN}"
+cat << 'EOF'
     ╔═══════════════════════════════════════════════════════════════╗
     ║                                                               ║
     ║              🎉 SENTIENT OS KURULUMU TAMAMLANDI!             ║
     ║                                                               ║
     ╚═══════════════════════════════════════════════════════════════╝
 EOF
-    echo -e "${NC}"
-    
-    echo -e "${BOLD}📋 Kurulum Özeti:${NC}"
-    echo -e "  ${CYAN}Model:${NC}     $MODEL_DESC"
-    echo -e "  ${CYAN}Provider:${NC}  $PROVIDER"
-    echo -e "  ${CYAN}Dizin:${NC}     $INSTALL_DIR"
-    echo ""
-    
-    echo -e "${BOLD}🚀 Başlatmak için:${NC}"
-    echo ""
-    echo -e "  ${WHITE}cd $INSTALL_DIR${NC}"
-    echo -e "  ${WHITE}./target/release/sentient${NC}"
-    echo ""
-    
-    echo -e "${BOLD}🌐 Dashboard:${NC}"
-    echo ""
-    echo -e "  ${WHITE}./target/release/sentient-dashboard${NC}"
-    echo -e "  ${WHITE}# http://localhost:8080${NC}"
-    echo ""
-    
-    echo -e "${BOLD}⚙️  Yapılandırma:${NC}"
-    echo ""
-    echo -e "  ${WHITE}nano $INSTALL_DIR/.env${NC}"
-    echo ""
-    
-    echo -e "${PURPLE}═══════════════════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN}🧠 SENTIENT OS - The Operating System That Thinks${NC}"
-    echo -e "${PURPLE}═══════════════════════════════════════════════════════════════${NC}"
-    
-    # Add to PATH
-    echo ""
-    read -p "SENTIENT'i PATH'e eklemek ister misiniz? (y/n): " ADD_PATH
-    if [ "$ADD_PATH" = "y" ]; then
-        SHELL_RC="$HOME/.bashrc"
-        [ -f "$HOME/.zshrc" ] && SHELL_RC="$HOME/.zshrc"
-        
-        echo "" >> "$SHELL_RC"
-        echo "# SENTIENT OS" >> "$SHELL_RC"
-        echo "export PATH=\"\$PATH:$INSTALL_DIR/target/release\"" >> "$SHELL_RC"
-        echo "alias sentient='$INSTALL_DIR/target/release/sentient'" >> "$SHELL_RC"
-        
-        show_success "PATH'e eklendi. Yeni terminalde 'sentient' komutu çalışacaktır."
-    fi
-}
+echo -e "${NC}"
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# MAIN
-# ═══════════════════════════════════════════════════════════════════════════════
-main() {
-    step_welcome
-    step_system_check
-    step_model_selection
-    step_install_deps
-    step_install_sentient
-    show_complete
-}
+echo ""
+echo -e "${BOLD}📋 Kurulum Özeti:${NC}"
+echo -e "  ${CYAN}Model:${NC}     $MODEL_DESC"
+echo -e "  ${CYAN}Provider:${NC}  $PROVIDER"
+echo -e "  ${CYAN}Dizin:${NC}     $INSTALL_DIR"
+echo ""
 
-main
+echo -e "${BOLD}🚀 Başlatmak için:${NC}"
+echo ""
+echo -e "  ${WHITE}cd $INSTALL_DIR${NC}"
+echo -e "  ${WHITE}./target/release/sentient${NC}"
+echo ""
+
+echo -e "${BOLD}⚙️  Yapılandırma:${NC}"
+echo ""
+echo -e "  ${WHITE}nano $INSTALL_DIR/.env${NC}"
+echo ""
+
+echo -e "${PURPLE}═══════════════════════════════════════════════════════════════${NC}"
+echo -e "${GREEN}🧠 SENTIENT OS - The Operating System That Thinks${NC}"
+echo -e "${PURPLE}═══════════════════════════════════════════════════════════════${NC}"
+
+# Add to PATH
+echo ""
+read -p "SENTIENT'i PATH'e eklemek ister misiniz? (y/n): " ADD_PATH
+if [ "$ADD_PATH" = "y" ] || [ "$ADD_PATH" = "Y" ]; then
+    SHELL_RC="$HOME/.bashrc"
+    [ -f "$HOME/.zshrc" ] && SHELL_RC="$HOME/.zshrc"
+    
+    echo "" >> "$SHELL_RC"
+    echo "# SENTIENT OS" >> "$SHELL_RC"
+    echo "export PATH=\"\$PATH:$INSTALL_DIR/target/release\"" >> "$SHELL_RC"
+    echo "alias sentient='$INSTALL_DIR/target/release/sentient'" >> "$SHELL_RC"
+    
+    echo -e "${GREEN}✓ PATH'e eklendi. Yeni terminalde 'sentient' komutu çalışacaktır.${NC}"
+fi
+
+echo ""
+echo -e "${GREEN}Kurulum tamamlandı! İyi kullanımlar! 🚀${NC}"
