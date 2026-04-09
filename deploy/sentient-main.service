@@ -1,0 +1,71 @@
+# ─── SENTIENT MAIN SERVICE ───
+# SENTIENT OS - Ana Orkestrasyon
+# 7/24 arka planda çalışan ana servis (Watcher + Orchestrator + Swarm)
+#
+# Kurulum:
+#   sudo cp deploy/sentient-main.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable sentient-main
+#   sudo systemctl start sentient-main
+#
+# Yönetim:
+#   sudo systemctl status sentient-main
+#   sudo journalctl -u sentient-main -f
+#   sudo systemctl restart sentient-main
+
+[Unit]
+Description=SENTIENT Main - SENTIENT OS (Orchestrator + Swarm)
+Documentation=https://github.com/nexsusagent-coder/SENTIENT_CORE
+After=network.target network-online.target sentient-vgate.service sentient-gateway.service
+Wants=network-online.target
+Requires=sentient-vgate.service sentient-gateway.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/SENTIENT_CORE
+
+# Ortam değişkenleri
+Environment="RUST_LOG=info"
+Environment="SENTIENT_ENV=production"
+Environment="SENTIENT_DATA_DIR=/root/SENTIENT_CORE/data"
+Environment="SENTIENT_VGATE_URL=http://127.0.0.1:1071"
+Environment="SENTIENT_GATEWAY_URL=http://127.0.0.1:8080"
+
+# Ana çalıştırma komutu - 7/24 servis modu
+ExecStart=/root/SENTIENT_CORE/target/release/sentient serve --scan-interval 300 --scout --forge --self-healing
+
+# Yeniden başlatma ayarları
+Restart=always
+RestartSec=15
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Kaynak limitleri
+LimitNOFILE=65536
+LimitNPROC=4096
+MemoryMax=4G
+CPUQuota=200%
+
+# Güvenlik ayarları
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/root/SENTIENT_CORE/data
+
+# Log ayarları
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentient-main
+
+# Timeout ayarları
+TimeoutStartSec=120
+TimeoutStopSec=30
+
+# Önbellek temizliği (çökme durumunda)
+ExecStopPost=/bin/bash -c 'rm -f /root/SENTIENT_CORE/data/*.lock 2>/dev/null || true'
+
+[Install]
+WantedBy=multi-user.target

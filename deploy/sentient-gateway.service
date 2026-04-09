@@ -1,31 +1,31 @@
-# ─── ASENA GATEWAY SERVICE ───
-# NEXUS OASIS AI Operating System - API Gateway
+# ─── SENTIENT GATEWAY SERVICE ───
+# SENTIENT OS - API Gateway
 # HTTP REST API, WebSocket, Telegram Bot
 #
 # Kurulum:
-#   sudo cp deploy/asena-gateway.service /etc/systemd/system/
+#   sudo cp deploy/sentient-gateway.service /etc/systemd/system/
 #   sudo systemctl daemon-reload
-#   sudo systemctl enable asena-gateway
-#   sudo systemctl start asena-gateway
+#   sudo systemctl enable sentient-gateway
+#   sudo systemctl start sentient-gateway
 
 [Unit]
-Description=ASENA Gateway - API & WebSocket Server
-Documentation=https://github.com/nexus-oasis/asena
-After=network.target network-online.target asena-vgate.service
+Description=SENTIENT Gateway - API & WebSocket Server
+Documentation=https://github.com/nexsusagent-coder/SENTIENT_CORE
+After=network.target network-online.target sentient-vgate.service
 Wants=network-online.target
-Requires=asena-vgate.service
+Requires=sentient-vgate.service
 
 [Service]
 Type=simple
 User=root
 Group=root
-WorkingDirectory=/root/ASENA_CORE
+WorkingDirectory=/root/SENTIENT_CORE
 
 # Ortam değişkenleri (.env dosyasından yüklenir)
-EnvironmentFile=/root/ASENA_CORE/.env
+EnvironmentFile=/root/SENTIENT_CORE/.env
 
 # Çalıştırma komutu
-ExecStart=/root/ASENA_CORE/target/release/asena gateway --http-addr 0.0.0.0:8080
+ExecStart=/root/SENTIENT_CORE/target/release/sentient gateway --http-addr 0.0.0.0:8080
 
 # Yeniden başlatma ayarları
 Restart=always
@@ -46,7 +46,7 @@ PrivateTmp=true
 # Log ayarları
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=asena-gateway
+SyslogIdentifier=sentient-gateway
 
 # Timeout ayarları
 TimeoutStartSec=60
