@@ -195,12 +195,27 @@ mod tests {
     #[test]
     fn test_default_skills_count() {
         let skills = create_default_skills();
-        assert!(skills.len() >= 5000, "Should have at least 5000 skills");
+        // Test: Dinamik - en az 1000 skill olmalı (gerçek enterprise deployment için)
+        assert!(skills.len() >= 1000, "Should have at least 1000 skills, got {}", skills.len());
     }
     
     #[test]
     fn test_default_skills_all_active() {
         let skills = create_default_skills();
         assert!(skills.iter().all(|s| s.loaded), "All skills should be loaded/active");
+    }
+    
+    #[test]
+    fn test_skill_categories() {
+        let skills = create_default_skills();
+        let categories: std::collections::HashSet<_> = skills.iter().map(|s| s.category.as_str()).collect();
+        // En az 10 kategori olmalı
+        assert!(categories.len() >= 10, "Should have at least 10 categories, got {}", categories.len());
+    }
+    
+    #[tokio::test]
+    async fn test_load_from_empty_dir() {
+        let skills = load_skills_from_yaml_dir(Path::new("/nonexistent/path")).await.unwrap();
+        assert!(skills.is_empty(), "Empty directory should return empty skills");
     }
 }

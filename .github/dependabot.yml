@@ -1,0 +1,37 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT CORE - Dependabot Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: 2
+updates:
+  # Rust dependencies
+  - package-ecosystem: "cargo"
+    directory: "/SENTIENT_CORE"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "rust"
+    commit-message:
+      prefix: "cargo"
+      include: "scope"
+    reviewers:
+      - "sentient-ai"
+    
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/SENTIENT_CORE/.github/workflows"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"

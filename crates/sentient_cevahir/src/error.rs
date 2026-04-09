@@ -5,10 +5,6 @@ use thiserror::Error;
 /// Cevahir işlemleri için ana hata tipi
 #[derive(Error, Debug)]
 pub enum CevahirError {
-    /// Python/PyO3 ile ilgili hatalar
-    #[error("Python error: {0}")]
-    PythonError(String),
-
     /// Model yükleme hataları
     #[error("Model error: {0}")]
     ModelError(String),
@@ -44,12 +40,6 @@ pub enum CevahirError {
     /// Genel hatalar
     #[error("General error: {0}")]
     General(String),
-}
-
-impl From<pyo3::PyErr> for CevahirError {
-    fn from(err: pyo3::PyErr) -> Self {
-        CevahirError::PythonError(err.to_string())
-    }
 }
 
 /// Cevahir işlemleri için sonuç tipi

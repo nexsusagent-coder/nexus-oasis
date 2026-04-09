@@ -55,6 +55,30 @@ impl ProviderFactory {
                 // Groq, OpenAI uyumlu API kullanır
                 Box::new(OpenAIProvider::new(base_url, api_key))
             }
+            crate::auth::Provider::Cohere => {
+                // Cohere, OpenAI uyumlu API kullanır
+                Box::new(OpenAIProvider::new(base_url, api_key))
+            }
+            crate::auth::Provider::Mistral => {
+                // Mistral, OpenAI uyumlu API kullanır
+                Box::new(OpenAIProvider::new(base_url, api_key))
+            }
+            crate::auth::Provider::Google => {
+                // Google/Gemini, OpenAI uyumlu API kullanır
+                Box::new(OpenAIProvider::new(base_url, api_key))
+            }
+            crate::auth::Provider::DeepSeek => {
+                // DeepSeek, OpenAI uyumlu API kullanır
+                Box::new(OpenAIProvider::new(base_url, api_key))
+            }
+            crate::auth::Provider::Together => {
+                // Together, OpenAI uyumlu API kullanır
+                Box::new(OpenAIProvider::new(base_url, api_key))
+            }
+            crate::auth::Provider::Replicate => {
+                // Replicate, OpenAI uyumlu API kullanır
+                Box::new(OpenAIProvider::new(base_url, api_key))
+            }
             crate::auth::Provider::Local => {
                 // Yerel modeller için OpenAI uyumlu API
                 Box::new(OpenAIProvider::new(base_url, api_key))

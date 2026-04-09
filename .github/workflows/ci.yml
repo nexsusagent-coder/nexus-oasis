@@ -1,0 +1,267 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT CORE - Continuous Integration Pipeline
+# ═══════════════════════════════════════════════════════════════════════════════
+# 
+#  Otomatik build, test ve deploy pipeline
+#  - Rust 1.70+ desteği
+#  - Multi-platform test (Linux, macOS)
+#  - Cargo clippy ve fmt kontrolü
+#  - Otomatik release
+
+name: SENTIENT CI
+
+on:
+  push:
+    branches: [ main, develop, 'v*' ]
+    paths:
+      - 'SENTIENT_CORE/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'SENTIENT_CORE/**'
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  FORMAT CHECK - Kod stili kontrolü
+  # ═══════════════════════════════════════════════════════════════════════════
+  fmt:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      
+      - name: Check format
+        run: |
+          cd SENTIENT_CORE
+          cargo fmt --all -- --check
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  CLIPPY - Lint kontrolü
+  # ═══════════════════════════════════════════════════════════════════════════
+  clippy:
+    name: Clippy Lint
+    runs-on: ubuntu-latest
+    needs: fmt
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            SENTIENT_CORE/target
+          key: ${{ runner.os }}-cargo-clippy-${{ hashFiles('SENTIENT_CORE/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-clippy-
+            ${{ runner.os }}-cargo-
+      
+      - name: Run clippy
+        run: |
+          cd SENTIENT_CORE
+          cargo clippy --all-targets --all-features -- -D warnings
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  BUILD - Derleme
+  # ═══════════════════════════════════════════════════════════════════════════
+  build:
+    name: Build (${{ matrix.os }})
+    needs: clippy
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            target: x86_64-apple-darwin
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            SENTIENT_CORE/target
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('SENTIENT_CORE/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-
+            ${{ runner.os }}-cargo-
+      
+      - name: Build
+        run: |
+          cd SENTIENT_CORE
+          cargo build --release --target ${{ matrix.target }}
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentient-${{ matrix.target }}
+          path: |
+            SENTIENT_CORE/target/${{ matrix.target }}/release/sentient-cli
+            SENTIENT_CORE/target/${{ matrix.target }}/release/nexus-dashboard
+          retention-days: 7
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  TEST - Birim testler
+  # ═══════════════════════════════════════════════════════════════════════════
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            SENTIENT_CORE/target
+          key: ${{ runner.os }}-cargo-test-${{ hashFiles('SENTIENT_CORE/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-test-
+            ${{ runner.os }}-cargo-
+      
+      - name: Run tests
+        run: |
+          cd SENTIENT_CORE
+          cargo test --release --all-features -- --test-threads=4
+      
+      - name: Generate test report
+        if: always()
+        run: |
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tests completed at $(date)" >> $GITHUB_STEP_SUMMARY
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  DOCS - Dokümantasyon oluştur
+  # ═══════════════════════════════════════════════════════════════════════════
+  docs:
+    name: Documentation
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Build docs
+        run: |
+          cd SENTIENT_CORE
+          cargo doc --release --all-features --no-deps
+      
+      - name: Upload docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentient-docs
+          path: SENTIENT_CORE/target/doc
+          retention-days: 30
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  SECURITY - Güvenlik taraması
+  # ═══════════════════════════════════════════════════════════════════════════
+  security:
+    name: Security Audit
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Install cargo-audit
+        run: cargo install cargo-audit
+      
+      - name: Run security audit
+        run: |
+          cd SENTIENT_CORE
+          cargo audit --json > audit-report.json || true
+      
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-audit
+          path: SENTIENT_CORE/audit-report.json
+          retention-days: 30
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  RELEASE - Otomatik sürüm yayını (sadece main branch)
+  # ═══════════════════════════════════════════════════════════════════════════
+  release:
+    name: Release
+    needs: [test, docs, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Get version
+        id: version
+        run: |
+          cd SENTIENT_CORE
+          VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d'"' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: SENTIENT Core v${{ steps.version.outputs.version }}
+          body: |
+            ## SENTIENT Core Release
+            
+            ### Değişiklikler
+            - Otomatik build pipeline
+            - Multi-platform destek
+            - Güvenlik taraması
+            
+            ### Artifacts
+            - Linux binary (x86_64)
+            - macOS binary (x86_64)
+            - Dokümantasyon
+            
+          files: |
+            artifacts/sentient-x86_64-unknown-linux-gnu/*
+            artifacts/sentient-x86_64-apple-darwin/*
+          draft: false
+          prerelease: false

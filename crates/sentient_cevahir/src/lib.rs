@@ -10,23 +10,6 @@
 //! - **Turkish BPE Tokenizer**: Native Türkçe tokenizer
 //! - **Memory & RAG**: Vector store, semantic cache
 //! - **Tool Execution**: Dynamic tool registration
-//!
-//! ## Kullanım
-//!
-//! ```rust,no_run
-//! use sentient_cevahir::{CevahirBridge, CevahirConfig, CognitiveStrategy};
-//!
-//! #[tokio::main]
-//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let config = CevahirConfig::default();
-//!     let bridge = CevahirBridge::new(config)?;
-//!     
-//!     let response = bridge.generate("Merhaba dünya", 128).await?;
-//!     println!("Response: {}", response);
-//!     
-//!     Ok(())
-//! }
-//! ```
 
 pub mod types;
 pub mod config;
@@ -38,10 +21,13 @@ pub mod tools;
 pub mod memory;
 pub mod error;
 
+#[cfg(feature = "python")]
+pub mod python;
+
 // Re-exports
 pub use types::*;
 pub use config::CevahirConfig;
-pub use cognitive::{CognitiveManager};
+pub use cognitive::CognitiveManager;
 pub use types::{Strategy, CognitiveResult};
 pub use tokenizer::TokenizerWrapper;
 pub use model::ModelWrapper;

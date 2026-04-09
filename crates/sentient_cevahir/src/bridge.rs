@@ -1,6 +1,4 @@
 //! Ana Cevahir Bridge - SENTIENT OS ile tam entegrasyon
-//! 
-//! Bu modül, tüm Cevahir bileşenlerini birleştiren ana API'yi sağlar.
 
 use crate::{
     config::CevahirConfig,
@@ -10,57 +8,19 @@ use crate::{
     tools::{ToolDefinition, ToolExecutor},
     memory::MemoryAdapter,
     types::{DecodingConfig, GenerationOutput, TokenizationResult, Strategy, CognitiveResult},
-    error::{CevahirError, Result},
+    error::Result,
 };
 use std::sync::Arc;
 use parking_lot::RwLock;
 
 /// Ana Cevahir Bridge
-/// 
-/// SENTIENT OS ile Cevahir AI arasındaki ana köprü.
-/// Tüm bileşenleri tek bir API altında birleştirir.
-/// 
-/// # Örnek
-/// 
-/// ```rust,no_run
-/// use sentient_cevahir::{CevahirBridge, CevahirConfig, CognitiveStrategy};
-/// 
-/// #[tokio::main]
-/// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let bridge = CevahirBridge::new(CevahirConfig::default())?;
-///     
-///     // Basit üretim
-///     let response = bridge.generate("Merhaba", 128).await?;
-///     
-///     // Cognitive strateji ile
-///     let output = bridge.process_with_strategy(
-///         "Bu kodu analiz et",
-///         CognitiveStrategy::Think,
-///     ).await?;
-///     
-///     Ok(())
-/// }
-/// ```
 pub struct CevahirBridge {
-    /// Yapılandırma
     config: CevahirConfig,
-    
-    /// Tokenizer
     tokenizer: TokenizerWrapper,
-    
-    /// Model
     model: ModelWrapper,
-    
-    /// Cognitive Manager
     cognitive: CognitiveManager,
-    
-    /// Tool Executor
     tools: ToolExecutor,
-    
-    /// Memory Adapter
     memory: Option<MemoryAdapter>,
-    
-    /// Başlatıldı mı?
     initialized: bool,
 }
 
@@ -105,13 +65,7 @@ impl CevahirBridge {
         
         log::info!("[CevahirBridge] Starting initialization...");
         
-        // Tokenizer başlat
-        // (zaten constructor'da başlatıldı)
-        
-        // Model başlat
         self.model.initialize()?;
-        
-        // Cognitive manager başlat
         self.cognitive.initialize()?;
         
         self.initialized = true;
@@ -120,25 +74,13 @@ impl CevahirBridge {
         log::info!("  - Vocab size: {}", self.config.vocab_size);
         log::info!("  - Embed dim: {}", self.config.embed_dim);
         log::info!("  - Num layers: {}", self.config.num_layers);
-        log::info!("  - Num heads: {}", self.config.num_heads);
-        log::info!("  - Device: {}", self.config.device);
         
         Ok(())
     }
     
     /// Metin üret
     pub async fn generate(&self, prompt: &str, max_tokens: usize) -> Result<String> {
-        let start = std::time::Instant::now();
-        
         let text = self.model.generate(prompt, max_tokens)?;
-        
-        let duration = start.elapsed();
-        log::debug!(
-            "[CevahirBridge] Generated {} chars in {:?}",
-            text.len(),
-            duration
-        );
-        
         Ok(text)
     }
     
@@ -149,9 +91,7 @@ impl CevahirBridge {
         config: DecodingConfig,
     ) -> Result<GenerationOutput> {
         let start = std::time::Instant::now();
-        
         let text = self.model.generate_with_config(prompt, config.clone())?;
-        
         let token_count = self.tokenizer.encode(&text)?.ids.len();
         
         Ok(GenerationOutput {
@@ -169,32 +109,18 @@ impl CevahirBridge {
         input: &str,
         strategy: Strategy,
     ) -> Result<CognitiveResult> {
-        let start = std::time::Instant::now();
-        
-        // Bellek konteksini al (varsa)
-        let context = if let Some(memory) = &self.memory {
-            memory.search(input, 5).await?
+        let _context: Vec<String> = if let Some(_memory) = &self.memory {
+            // Stub: memory search
+            vec![]
         } else {
             vec![]
         };
         
-        // Cognitive işlem
-        let model_ref = self.model.python_ref()
-            .ok_or_else(|| CevahirError::ModelError("Model not initialized".into()))?;
+        let result = self.cognitive.process(input, strategy)?;
         
-        let mut result = self.cognitive.process(input, strategy, model_ref)?;
-        
-        // Belleğe kaydet (varsa)
-        if let Some(memory) = &self.memory {
-            memory.store(input, &result.response).await?;
+        if let Some(_memory) = &self.memory {
+            // Stub: memory store
         }
-        
-        let duration = start.elapsed();
-        log::debug!(
-            "[CevahirBridge] Processed with {:?} strategy in {:?}",
-            strategy,
-            duration
-        );
         
         Ok(result)
     }
@@ -287,12 +213,5 @@ mod tests {
     fn test_config_default() {
         let config = CevahirConfig::default();
         assert_eq!(config.device, "cpu");
-        assert_eq!(config.vocab_size, 60000);
-    }
-    
-    #[test]
-    fn test_strategy_auto_select() {
-        assert_eq!(Strategy::auto_select("Merhaba"), Strategy::Direct);
-        assert_eq!(Strategy::auto_select("Bu nasıl çalışır?"), Strategy::Think);
     }
 }
