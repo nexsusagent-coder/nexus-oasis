@@ -65,6 +65,8 @@ members = [
     "crates/sentient_cluster",
     # v10.0.0 LanceDB Memory (Long-term Context)
     "crates/sentient_lancedb",
+    # v11.0.0 Enterprise Features (RBAC, Audit, SSO)
+    "crates/sentient_enterprise",
     # Skills System
     "skills",
     "scripts",
