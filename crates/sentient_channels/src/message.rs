@@ -11,9 +11,10 @@ pub enum ChannelType {
     Discord,
     WhatsApp,
     Slack,
-    Webhook,
+    Signal,
     Matrix,
     IRC,
+    Webhook,
 }
 
 /// Message content types
@@ -24,7 +25,7 @@ pub enum MessageContent {
     /// Markdown formatted text
     Markdown(String),
     /// HTML formatted text
-    Html(String),
+    Html { body: String, formatted: String },
     /// Image with optional caption
     Image {
         url: String,
@@ -70,6 +71,20 @@ pub enum MessageContent {
         url: Option<String>,
         color: Option<u32>,
     },
+    /// Slack blocks
+    Blocks {
+        text: String,
+        blocks: Vec<Block>,
+    },
+    /// Unknown/Unsupported
+    Unknown,
+}
+
+/// Slack-style block
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Block {
+    pub block_type: String,
+    pub text: Option<String>,
 }
 
 /// Button for interactive messages
@@ -203,9 +218,10 @@ impl std::fmt::Display for ChannelType {
             ChannelType::Discord => write!(f, "discord"),
             ChannelType::WhatsApp => write!(f, "whatsapp"),
             ChannelType::Slack => write!(f, "slack"),
-            ChannelType::Webhook => write!(f, "webhook"),
+            ChannelType::Signal => write!(f, "signal"),
             ChannelType::Matrix => write!(f, "matrix"),
             ChannelType::IRC => write!(f, "irc"),
+            ChannelType::Webhook => write!(f, "webhook"),
         }
     }
 }

@@ -36,6 +36,14 @@ url = "2"
 # Regex for command parsing
 regex.workspace = true
 
+# Crypto for signature verification
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+
+# URL encoding
+urlencoding = "2"
+
 sentient_common = { path = "../sentient_common" }
 
 [features]

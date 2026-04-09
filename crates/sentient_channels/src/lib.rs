@@ -6,7 +6,10 @@
 //!  - Telegram (Bot API)
 //!  - Discord (Bot API)
 //!  - WhatsApp (Business API)
-//!  - Slack (Webhook)
+//!  - Slack (Bot API)
+//!  - Signal (signal-cli REST API)
+//!  - Matrix (Client-Server API)
+//!  - IRC (RFC 1459)
 //!  - Generic Webhook
 //!
 //!  Features:
@@ -23,6 +26,7 @@ pub mod webhook;
 pub mod message;
 pub mod commands;
 pub mod config;
+pub mod platforms;
 
 use serde::{Deserialize, Serialize};
 use async_trait::async_trait;
@@ -37,22 +41,28 @@ pub use config::{ChannelsConfig, ChannelConfig};
 #[async_trait]
 pub trait Channel: Send + Sync {
     /// Channel name
-    fn name(&self) -> &str;
+    fn name(&self) -> &str {
+        "unnamed"
+    }
     
     /// Channel type
     fn channel_type(&self) -> ChannelType;
     
     /// Initialize channel
-    async fn init(&mut self) -> Result<(), ChannelError>;
+    async fn init(&mut self) -> Result<(), ChannelError> {
+        Ok(())
+    }
     
     /// Send message
-    async fn send(&self, message: &ChannelMessage) -> Result<(), ChannelError>;
+    async fn send(&self, message: ChannelMessage) -> Result<String, ChannelError>;
     
-    /// Receive messages (stream)
-    async fn receive(&self) -> Result<(), ChannelError>;
+    /// Receive messages
+    async fn receive(&self) -> Result<Vec<ChannelMessage>, ChannelError>;
     
     /// Shutdown channel
-    async fn shutdown(&mut self) -> Result<(), ChannelError>;
+    async fn shutdown(&mut self) -> Result<(), ChannelError> {
+        Ok(())
+    }
     
     /// Check if connected
     fn is_connected(&self) -> bool;
@@ -62,7 +72,7 @@ pub trait Channel: Send + Sync {
 
 pub struct ChannelManager {
     channels: Vec<Arc<RwLock<Box<dyn Channel>>>>,
-    message_handler: Option<Box<dyn Fn(ChannelMessage) + Send + Sync>>,
+    message_handler: Option<Arc<dyn Fn(ChannelMessage) + Send + Sync>>,
 }
 
 impl ChannelManager {
@@ -83,12 +93,12 @@ impl ChannelManager {
     where
         F: Fn(ChannelMessage) + Send + Sync + 'static,
     {
-        self.message_handler = Some(Box::new(handler));
+        self.message_handler = Some(Arc::new(handler));
     }
     
     /// Initialize all channels
     pub async fn init_all(&mut self) -> Result<(), ChannelError> {
-        for channel in &mut self.channels {
+        for channel in &self.channels {
             let mut ch = channel.write().await;
             ch.init().await?;
         }
@@ -96,40 +106,48 @@ impl ChannelManager {
     }
     
     /// Broadcast message to all channels
-    pub async fn broadcast(&self, message: &ChannelMessage) -> Result<Vec<ChannelError>, ChannelError> {
-        let mut errors = Vec::new();
+    pub async fn broadcast(&self, content: MessageContent) -> Vec<Result<String, ChannelError>> {
+        let mut results = Vec::new();
         
         for channel in &self.channels {
             let ch = channel.read().await;
-            if let Err(e) = ch.send(message).await {
-                errors.push(e);
-            }
+            let msg = ChannelMessage::new(ch.channel_type(), "broadcast", content.clone());
+            results.push(ch.send(msg).await);
         }
         
-        if errors.is_empty() {
-            Ok(errors)
-        } else {
-            Err(ChannelError::Broadcast(errors))
-        }
+        results
     }
     
     /// Send to specific channel
-    pub async fn send_to(&self, channel_name: &str, message: &ChannelMessage) -> Result<(), ChannelError> {
+    pub async fn send_to(&self, channel_type: ChannelType, chat_id: &str, content: MessageContent) -> Result<String, ChannelError> {
         for channel in &self.channels {
             let ch = channel.read().await;
-            if ch.name() == channel_name {
-                return ch.send(message).await;
+            if ch.channel_type() == channel_type {
+                let msg = ChannelMessage::new(channel_type, chat_id, content);
+                return ch.send(msg).await;
             }
         }
-        Err(ChannelError::NotFound(channel_name.into()))
+        Err(ChannelError::NotFound(format!("{:?}", channel_type)))
     }
     
-    /// Get channel by name
-    pub fn get_channel(&self, name: &str) -> Option<Arc<RwLock<Box<dyn Channel>>>> {
-        self.channels.iter().find(|c| {
-            // Can't check name without async, so return first match attempt
-            true
-        }).cloned()
+    /// Receive from all channels
+    pub async fn receive_all(&self) -> Vec<ChannelMessage> {
+        let mut all_messages = Vec::new();
+        
+        for channel in &self.channels {
+            let ch = channel.read().await;
+            if let Ok(messages) = ch.receive().await {
+                all_messages.extend(messages);
+            }
+        }
+        
+        all_messages
+    }
+    
+    /// Get connected channels
+    pub fn connected_channels(&self) -> Vec<ChannelType> {
+        // Would need async to check is_connected
+        vec![]
     }
     
     /// Shutdown all channels
@@ -146,16 +164,34 @@ impl ChannelManager {
 #[derive(Debug, thiserror::Error)]
 pub enum ChannelError {
     #[error("Connection failed: {0}")]
+    Connection(String),
+    
+    #[error("Connection failed: {0}")]
     ConnectionFailed(String),
     
     #[error("Authentication failed: {0}")]
     AuthFailed(String),
+    
+    #[error("API error: {0}")]
+    ApiError(String),
+    
+    #[error("Network error: {0}")]
+    Network(String),
+    
+    #[error("Parse error: {0}")]
+    Parse(String),
+    
+    #[error("IO error: {0}")]
+    Io(String),
     
     #[error("Rate limited: {0}")]
     RateLimited(String),
     
     #[error("Invalid message: {0}")]
     InvalidMessage(String),
+    
+    #[error("Unsupported content type")]
+    UnsupportedContentType,
     
     #[error("Channel not found: {0}")]
     NotFound(String),
@@ -164,10 +200,7 @@ pub enum ChannelError {
     Broadcast(Vec<ChannelError>),
     
     #[error("IO error: {0}")]
-    Io(#[from] std::io::Error),
-    
-    #[error("HTTP error: {0}")]
-    Http(String),
+    StdIo(#[from] std::io::Error),
     
     #[error("JSON error: {0}")]
     Json(#[from] serde_json::Error),
@@ -190,5 +223,10 @@ mod tests {
     fn test_channel_type() {
         assert!(matches!(ChannelType::Telegram, ChannelType::Telegram));
         assert!(matches!(ChannelType::Discord, ChannelType::Discord));
+        assert!(matches!(ChannelType::WhatsApp, ChannelType::WhatsApp));
+        assert!(matches!(ChannelType::Slack, ChannelType::Slack));
+        assert!(matches!(ChannelType::Signal, ChannelType::Signal));
+        assert!(matches!(ChannelType::Matrix, ChannelType::Matrix));
+        assert!(matches!(ChannelType::IRC, ChannelType::IRC));
     }
 }
