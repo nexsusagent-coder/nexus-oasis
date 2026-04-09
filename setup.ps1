@@ -1,311 +1,514 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  🧠 SENTIENT OS - The Operating System That Thinks
-#  Interactive Setup Script v5.0.0 (Windows)
+#  🧠 SENTIENT OS - Interactive Onboarding Wizard
+#  The Operating System That Thinks
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# Hata durumunda devam et
+# Error handling
 $ErrorActionPreference = "Continue"
 
-# Renkli yazı
-function Write-ColorText {
-    param([string]$Text, [string]$Color = "White")
-    Write-Host $Text -ForegroundColor $Color
-}
+# ─────────────────────────────────────────────────────────────────────────────
+# GLOBAL STATE
+# ─────────────────────────────────────────────────────────────────────────────
+$script:SelectedLLM = ""
+$script:SelectedProvider = ""
+$script:SelectedChannels = @()
+$script:ApiKeys = @{}
+$script:InstallDir = "$env:USERPROFILE\sentient"
 
-# Header
-Clear-Host
-Write-Host ""
-Write-Host "    ╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "    ║                                                               ║" -ForegroundColor Cyan
-Write-Host "    ║     ███████╗███████╗███╗   ██╗████████╗██╗ ██████╗ █████╗     ║" -ForegroundColor Cyan
-Write-Host "    ║     ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║██╔════╝██╔══██╗    ║" -ForegroundColor Cyan
-Write-Host "    ║     ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██║     ███████║    ║" -ForegroundColor Cyan
-Write-Host "    ║     ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║     ██╔══██║    ║" -ForegroundColor Cyan
-Write-Host "    ║     ███████║███████╗██║ ╚████║   ██║   ██║╚██████╗██║  ██║    ║" -ForegroundColor Cyan
-Write-Host "    ║     ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝    ║" -ForegroundColor Cyan
-Write-Host "    ║                                                               ║" -ForegroundColor Cyan
-Write-Host "    ║              The Operating System That Thinks                 ║" -ForegroundColor Cyan
-Write-Host "    ║                                                               ║" -ForegroundColor Cyan
-Write-Host "    ╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
-Write-Host ""
+# ─────────────────────────────────────────────────────────────────────────────
+# UI HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
 
-Write-Host "SENTIENT OS'e hoş geldiniz!" -ForegroundColor White
-Write-Host ""
-Write-Host "Bu kurulum scripti size adım adım rehberlik edecek:"
-Write-Host ""
-Write-Host "  1. Sistem kontrolü" -ForegroundColor Cyan
-Write-Host "  2. Model seçimi" -ForegroundColor Cyan
-Write-Host "  3. Bağımlılık kurulumu" -ForegroundColor Cyan
-Write-Host "  4. SENTIENT kurulumu" -ForegroundColor Cyan
-Write-Host "  5. Yapılandırma" -ForegroundColor Cyan
-Write-Host ""
-
-Read-Host "Devam etmek için Enter'a basın"
-Write-Host ""
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# ADIM 1: Sistem Kontrolü
-# ═══════════════════════════════════════════════════════════════════════════════
-
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host "  ADIM 1/5: SİSTEM KONTROLÜ" -ForegroundColor Cyan
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host ""
-
-# OS Info
-$OS = Get-CimInstance Win32_OperatingSystem -ErrorAction SilentlyContinue
-if ($OS) {
-    Write-Host "📌 İşletim Sistemi: $($OS.Caption)" -ForegroundColor Cyan
-} else {
-    Write-Host "📌 İşletim Sistemi: Windows" -ForegroundColor Cyan
-}
-
-# RAM
-$RAM_GB = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 0)
-if ($RAM_GB -lt 8) {
-    Write-Host "⚠ RAM: ${RAM_GB}GB (Önerilen: 16GB+)" -ForegroundColor Yellow
-} else {
-    Write-Host "✓ RAM: ${RAM_GB}GB" -ForegroundColor Green
-}
-
-# Disk
-$Disk = Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'" -ErrorAction SilentlyContinue
-if ($Disk) {
-    $Disk_GB = [math]::Round($Disk.FreeSpace / 1GB, 1)
-    Write-Host "💾 Disk Alanı: ${Disk_GB}GB boş" -ForegroundColor Cyan
-}
-
-# GPU
-$GPU = Get-CimInstance Win32_VideoController -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "*NVIDIA*" -or $_.Name -like "*RTX*" -or $_.Name -like "*GTX*" }
-if ($GPU) {
-    Write-Host "✓ GPU: $($GPU.Name)" -ForegroundColor Green
-} else {
-    Write-Host "⚠ GPU: NVIDIA GPU tespit edilmedi (Yerel model için önerilir)" -ForegroundColor Yellow
-}
-
-Write-Host ""
-Write-Host "✓ Sistem kontrolü tamamlandı" -ForegroundColor Green
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# ADIM 2: Model Seçimi
-# ═══════════════════════════════════════════════════════════════════════════════
-
-Write-Host ""
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host "  ADIM 2/5: MODEL SEÇİMİ" -ForegroundColor Cyan
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host ""
-
-Write-Host "SENTIENT OS birden fazla model destekler:" -ForegroundColor White
-Write-Host ""
-
-Write-Host "╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║  🏠 YEREL MODELLER (API Key Gerektirmez)                     ║" -ForegroundColor Green
-Write-Host "╠═══════════════════════════════════════════════════════════════╣" -ForegroundColor Green
-Write-Host "║  1) Gemma 4 31B    - 256K context, Thinking Mode (ÖNERİLEN) ║" -ForegroundColor Green
-Write-Host "║  2) Llama 3.3 70B  - 128K context, Genel kullanım           ║" -ForegroundColor Green
-Write-Host "║  3) Qwen 2.5 72B   - 128K context, Coding optimize          ║" -ForegroundColor Green
-Write-Host "║  4) DeepSeek R1    - 128K context, Reasoning                ║" -ForegroundColor Green
-Write-Host "║  5) Mistral 24B    - 128K context, Hızlı                    ║" -ForegroundColor Green
-Write-Host "╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
-
-Write-Host "╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Blue
-Write-Host "║  🔑 API MODELLER (API Key Gerekli)                           ║" -ForegroundColor Blue
-Write-Host "╠═══════════════════════════════════════════════════════════════╣" -ForegroundColor Blue
-Write-Host "║  6) OpenAI GPT-4o         - Multimodal, Coding              ║" -ForegroundColor Blue
-Write-Host "║  7) Anthropic Claude 3.7  - Coding, Reasoning               ║" -ForegroundColor Blue
-Write-Host "║  8) Google Gemini 2.0     - 1M Context                      ║" -ForegroundColor Blue
-Write-Host "║  9) Groq Llama 3.3        - Hızlı Inference                 ║" -ForegroundColor Blue
-Write-Host "║ 10) OpenRouter Free       - Ücretsiz Tier                   ║" -ForegroundColor Blue
-Write-Host "╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Blue
-
-Write-Host ""
-$Choice = Read-Host "Model seçiniz [1-10] (varsayılan: 1)"
-if ([string]::IsNullOrWhiteSpace($Choice)) { $Choice = "1" }
-
-switch ($Choice) {
-    "1" { $SelectedModel = "gemma4:31b"; $Provider = "local"; $ModelDesc = "Gemma 4 31B (Yerel)" }
-    "2" { $SelectedModel = "llama3.3:70b"; $Provider = "local"; $ModelDesc = "Llama 3.3 70B (Yerel)" }
-    "3" { $SelectedModel = "qwen2.5:72b"; $Provider = "local"; $ModelDesc = "Qwen 2.5 72B (Yerel)" }
-    "4" { $SelectedModel = "deepseek-r1:67b"; $Provider = "local"; $ModelDesc = "DeepSeek R1 (Yerel)" }
-    "5" { $SelectedModel = "mistral:24b"; $Provider = "local"; $ModelDesc = "Mistral 24B (Yerel)" }
-    "6" { $SelectedModel = "gpt-4o"; $Provider = "openai"; $ModelDesc = "GPT-4o (OpenAI)" }
-    "7" { $SelectedModel = "claude-3.7-sonnet"; $Provider = "anthropic"; $ModelDesc = "Claude 3.7 (Anthropic)" }
-    "8" { $SelectedModel = "gemini-2.0-flash"; $Provider = "google"; $ModelDesc = "Gemini 2.0 (Google)" }
-    "9" { $SelectedModel = "llama-3.3-70b"; $Provider = "groq"; $ModelDesc = "Llama 3.3 (Groq)" }
-    "10" { $SelectedModel = "google/gemma-4-31b-it:free"; $Provider = "openrouter"; $ModelDesc = "Gemma 4 Free (OpenRouter)" }
-    default { $SelectedModel = "gemma4:31b"; $Provider = "local"; $ModelDesc = "Gemma 4 31B (Yerel)" }
-}
-
-Write-Host ""
-Write-Host "✓ Seçilen model: $ModelDesc" -ForegroundColor Green
-
-# API Key
-$ApiKey = ""
-$ApiKeyLine = ""
-if ($Provider -ne "local" -and $Provider -ne "openrouter") {
+function Write-Header {
+    param([string]$Title, [string]$Step, [string]$Total)
+    
+    Clear-Host
+    
     Write-Host ""
-    Write-Host "⚠️  Bu model API key gerektiriyor." -ForegroundColor Yellow
-    $ApiKey = Read-Host "$Provider API key giriniz (veya Enter'a basıp sonra .env'e ekleyin)"
-    
-    if (-not [string]::IsNullOrWhiteSpace($ApiKey)) {
-        $ApiKeyLine = "$($Provider.ToUpper())_API_KEY=$ApiKey"
-    }
-}
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# ADIM 3: Bağımlılık Kurulumu
-# ═══════════════════════════════════════════════════════════════════════════════
-
-Write-Host ""
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host "  ADIM 3/5: BAĞIMLILIK KURULUMU" -ForegroundColor Cyan
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host ""
-
-# Rust Check
-Write-Host "🦀 Rust kontrol ediliyor..." -ForegroundColor Cyan
-$RustPath = "$env:USERPROFILE\.cargo\bin\rustc.exe"
-
-if (Test-Path $RustPath) {
-    $RustVersion = & $RustPath --version 2>$null
-    Write-Host "✓ Rust: $RustVersion" -ForegroundColor Green
-} else {
-    Write-Host "⏳ Rust kuruluyor..." -ForegroundColor Cyan
-    
-    $RustupUrl = "https://win.rustup.rs/x86_64"
-    $RustupPath = "$env:TEMP\rustup-init.exe"
-    
-    try {
-        Invoke-WebRequest -Uri $RustupUrl -OutFile $RustupPath -UseBasicParsing
-        Start-Process -FilePath $RustupPath -ArgumentList "-y" -Wait -NoNewWindow
-        Remove-Item $RustupPath -Force -ErrorAction SilentlyContinue
-        
-        # Refresh PATH
-        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")
-        
-        Write-Host "✓ Rust kuruldu" -ForegroundColor Green
-    } catch {
-        Write-Host "⚠ Rust kurulumu başarısız: $_" -ForegroundColor Yellow
-        Write-Host "Lütfen manuel olarak https://rustup.rs adresinden kurun" -ForegroundColor Yellow
-    }
-}
-
-# Git Check
-Write-Host ""
-Write-Host "📦 Git kontrol ediliyor..." -ForegroundColor Cyan
-if (Get-Command git -ErrorAction SilentlyContinue) {
-    Write-Host "✓ Git yüklü" -ForegroundColor Green
-} else {
-    Write-Host "⚠ Git yüklü değil. https://git-scm.com/download/win adresinden kurun" -ForegroundColor Yellow
-}
-
-# Ollama (for local models)
-if ($Provider -eq "local") {
+    Write-Host "    ╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Host "    ║                                                               ║" -ForegroundColor Cyan
+    Write-Host "    ║     ███████╗███████╗███╗   ██╗████████╗██╗ ██████╗ █████╗     ║" -ForegroundColor Cyan
+    Write-Host "    ║     ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║██╔════╝██╔══██╗    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██║     ███████║    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║     ██╔══██║    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ███████║███████╗██║ ╚████║   ██║   ██║╚██████╗██║  ██║    ║" -ForegroundColor Cyan
+    Write-Host "    ║     ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝    ║" -ForegroundColor Cyan
+    Write-Host "    ║                                                               ║" -ForegroundColor Cyan
+    Write-Host "    ║              🧠 The Operating System That Thinks              ║" -ForegroundColor Cyan
+    Write-Host "    ║                                                               ║" -ForegroundColor Cyan
+    Write-Host "    ╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "🤖 Ollama kontrol ediliyor..." -ForegroundColor Cyan
     
-    $OllamaPath = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
+    if ($Step -and $Total) {
+        Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+        Write-Host "  ADIM $Step/$Total`: $Title" -ForegroundColor White
+        Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+    }
     
-    if (Test-Path $OllamaPath) {
-        Write-Host "✓ Ollama zaten kurulu" -ForegroundColor Green
+    Write-Host ""
+}
+
+function Write-Success {
+    param([string]$Message)
+    Write-Host "✅ $Message" -ForegroundColor Green
+}
+
+function Write-Error {
+    param([string]$Message)
+    Write-Host "❌ $Message" -ForegroundColor Red
+}
+
+function Write-Info {
+    param([string]$Message)
+    Write-Host "ℹ️  $Message" -ForegroundColor Blue
+}
+
+function Write-Warning {
+    param([string]$Message)
+    Write-Host "⚠️  $Message" -ForegroundColor Yellow
+}
+
+function Confirm-Choice {
+    param([string]$Prompt, [string]$Default = "Y")
+    
+    $choices = if ($Default -eq "Y") { "[Y/n]" } else { "[y/N]" }
+    Write-Host "$Prompt $choices" -ForegroundColor Cyan -NoNewline
+    Write-Host ": " -NoNewline
+    
+    $input = Read-Host
+    $input = if ([string]::IsNullOrWhiteSpace($input)) { $Default } else { $input }
+    
+    return $input -match "^[Yy]$"
+}
+
+function Press-Enter {
+    Write-Host ""
+    Write-Host "Devam etmek için Enter'a basın..." -ForegroundColor DarkGray
+    Read-Host | Out-Null
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STEP 1: WELCOME & ACCEPTANCE
+# ─────────────────────────────────────────────────────────────────────────────
+
+function Step-Welcome {
+    Write-Header -Title "KARŞILAMA VE KURULUM ONAYI" -Step "1" -Total "4"
+    
+    Write-Host "SENTIENT OS'e hoş geldiniz!" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Bu sihirbaz, size adım adım rehberlik edecek ve ihtiyaçlarınıza göre"
+    Write-Host "özelleştirilmiş bir kurulum yapacaktır."
+    Write-Host ""
+    Write-Host "Kurulum şunları içerecek:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  ◆ Sistem gereksinimleri kontrolü" -ForegroundColor Cyan
+    Write-Host "  ◆ LLM (Yapay Zeka) modeli seçimi" -ForegroundColor Cyan
+    Write-Host "  ◆ Mesajlaşma kanalları yapılandırması" -ForegroundColor Cyan
+    Write-Host "  ◆ Temel bağımlılıkların kurulumu" -ForegroundColor Cyan
+    Write-Host ""
+    
+    # System info
+    $OS = Get-CimInstance Win32_OperatingSystem -ErrorAction SilentlyContinue
+    $OSName = if ($OS) { $OS.Caption } else { "Windows" }
+    
+    Write-Host "────────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
+    Write-Host "Sistem: $OSName" -ForegroundColor DarkGray
+    Write-Host "Kullanıcı: $env:USERNAME" -ForegroundColor DarkGray
+    Write-Host "Dizin: $script:InstallDir" -ForegroundColor DarkGray
+    Write-Host "────────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
+    Write-Host ""
+    
+    if (Confirm-Choice -Prompt "Kuruluma başlamak istiyor musunuz?" -Default "Y") {
+        return $true
     } else {
-        Write-Host "⏳ Ollama kuruluyor..." -ForegroundColor Cyan
+        Write-Host ""
+        Write-Info "Kurulum iptal edildi. Görüşmek üzere!"
+        exit 0
+    }
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STEP 2: LLM SELECTION
+# ─────────────────────────────────────────────────────────────────────────────
+
+function Step-LLMSelection {
+    Write-Header -Title "LLM (YAPAY ZEKA) MODELİ SEÇİMİ" -Step "2" -Total "4"
+    
+    Write-Host "SENTIENT OS hangi yapay zeka modelini kullanmasını istersiniz?" -ForegroundColor White
+    Write-Host ""
+    
+    # Local Models
+    Write-Host "╔═════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Green
+    Write-Host "║  🏠 YEREL MODELLER (API Key Gerektirmez, Tam Gizlilik)               ║" -ForegroundColor Green
+    Write-Host "╠═════════════════════════════════════════════════════════════════════════╣" -ForegroundColor Green
+    Write-Host "║  1) Ollama - Gemma 4 31B     256K context, Thinking Mode             ║" -ForegroundColor Green
+    Write-Host "║  2) Ollama - Llama 3.3 70B   128K context, Genel kullanım            ║" -ForegroundColor Green
+    Write-Host "║  3) Ollama - Qwen 2.5 72B    128K context, Coding optimize           ║" -ForegroundColor Green
+    Write-Host "║  4) Ollama - DeepSeek R1     128K context, Reasoning                 ║" -ForegroundColor Green
+    Write-Host "║  5) Ollama - Mistral 24B     128K context, Hızlı                     ║" -ForegroundColor Green
+    Write-Host "╚═════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host ""
+    
+    # Cloud Models
+    Write-Host "╔═════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Blue
+    Write-Host "║  ☁️  BULUT MODELLER (API Key Gerekli)                                 ║" -ForegroundColor Blue
+    Write-Host "╠═════════════════════════════════════════════════════════════════════════╣" -ForegroundColor Blue
+    Write-Host "║  6) OpenAI GPT-4o            Multimodal, Coding                      ║" -ForegroundColor Blue
+    Write-Host "║  7) Anthropic Claude 3.7     Coding, Reasoning                       ║" -ForegroundColor Blue
+    Write-Host "║  8) Google Gemini 2.0        1M Context                              ║" -ForegroundColor Blue
+    Write-Host "║  9) Groq Llama 3.3           Hızlı Inference                         ║" -ForegroundColor Blue
+    Write-Host "║ 10) OpenRouter (Free Tier)   Ücretsiz modeller                       ║" -ForegroundColor Blue
+    Write-Host "╚═════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Blue
+    Write-Host ""
+    
+    # Skip option
+    Write-Host "  0) LLM kurulumunu atla (Daha sonra yapılandıracağım)" -ForegroundColor Yellow
+    Write-Host ""
+    
+    while ($true) {
+        Write-Host "Seçiminiz [1-10, 0=atla]: " -ForegroundColor Cyan -NoNewline
+        $choice = Read-Host
         
-        $OllamaUrl = "https://ollama.com/download/OllamaSetup.exe"
-        $OllamaSetup = "$env:TEMP\OllamaSetup.exe"
+        switch ($choice) {
+            "0" {
+                $script:SelectedLLM = "skip"
+                $script:SelectedProvider = "none"
+                Write-Info "LLM kurulumu atlandı. Daha sonra .env dosyasından yapılandırabilirsiniz."
+                return
+            }
+            "1" {
+                $script:SelectedLLM = "gemma4:31b"
+                $script:SelectedProvider = "ollama"
+                break
+            }
+            "2" {
+                $script:SelectedLLM = "llama3.3:70b"
+                $script:SelectedProvider = "ollama"
+                break
+            }
+            "3" {
+                $script:SelectedLLM = "qwen2.5:72b"
+                $script:SelectedProvider = "ollama"
+                break
+            }
+            "4" {
+                $script:SelectedLLM = "deepseek-r1:67b"
+                $script:SelectedProvider = "ollama"
+                break
+            }
+            "5" {
+                $script:SelectedLLM = "mistral:24b"
+                $script:SelectedProvider = "ollama"
+                break
+            }
+            "6" {
+                $script:SelectedLLM = "gpt-4o"
+                $script:SelectedProvider = "openai"
+                break
+            }
+            "7" {
+                $script:SelectedLLM = "claude-3.7-sonnet"
+                $script:SelectedProvider = "anthropic"
+                break
+            }
+            "8" {
+                $script:SelectedLLM = "gemini-2.0-flash"
+                $script:SelectedProvider = "google"
+                break
+            }
+            "9" {
+                $script:SelectedLLM = "llama-3.3-70b-versatile"
+                $script:SelectedProvider = "groq"
+                break
+            }
+            "10" {
+                $script:SelectedLLM = "google/gemma-4-31b-it:free"
+                $script:SelectedProvider = "openrouter"
+                break
+            }
+            default {
+                Write-Warning "Geçersiz seçim. Lütfen 0-10 arası bir sayı girin."
+                continue
+            }
+        }
+        break
+    }
+    
+    Write-Success "Seçilen model: $script:SelectedLLM ($script:SelectedProvider)"
+    
+    # API Key for cloud providers
+    if ($script:SelectedProvider -ne "ollama" -and $script:SelectedProvider -ne "none") {
+        Write-Host ""
+        Write-Warning "$script:SelectedProvider API key gereklidir."
+        Write-Host "$script:SelectedProvider API Key: " -ForegroundColor Cyan -NoNewline
+        $apiKey = Read-Host
         
-        try {
-            Invoke-WebRequest -Uri $OllamaUrl -OutFile $OllamaSetup -UseBasicParsing
-            Write-Host "Ollama kurulumu başlatılıyor..." -ForegroundColor Cyan
-            Start-Process -FilePath $OllamaSetup -Wait
-            Remove-Item $OllamaSetup -Force -ErrorAction SilentlyContinue
-            
-            Write-Host "✓ Ollama kuruldu" -ForegroundColor Green
-        } catch {
-            Write-Host "⚠ Ollama kurulumu başarısız. Lütfen https://ollama.com/download adresinden manuel kurun." -ForegroundColor Yellow
+        if (-not [string]::IsNullOrWhiteSpace($apiKey)) {
+            $script:ApiKeys[$script:SelectedProvider] = $apiKey
+            Write-Success "API key kaydedildi."
+        } else {
+            Write-Warning "API key girilmedi. Daha sonra .env dosyasından ekleyebilirsiniz."
         }
     }
     
-    # Download model
     Write-Host ""
-    Write-Host "📥 Model indiriliyor: $SelectedModel" -ForegroundColor Cyan
-    Write-Host "   Bu işlem model boyutuna göre birkaç dakika sürebilir..." -ForegroundColor Yellow
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STEP 3: MESSAGING CHANNELS
+# ─────────────────────────────────────────────────────────────────────────────
+
+function Step-MessagingChannels {
+    Write-Header -Title "MESAJLAŞMA KANALLARI" -Step "3" -Total "4"
     
-    $OllamaExe = Get-Command ollama -ErrorAction SilentlyContinue
-    if ($OllamaExe) {
-        & ollama pull $SelectedModel
-        Write-Host "✓ Model hazır: $SelectedModel" -ForegroundColor Green
+    Write-Host "SENTIENT OS'i hangi platformlarda kullanmak istersiniz?" -ForegroundColor White
+    Write-Host ""
+    Write-Host "İstediğiniz kadar kanal seçebilirsiniz. Seçmediklerinizi atlayabilirsiniz." -ForegroundColor DarkGray
+    Write-Host ""
+    
+    $selectedChannels = @()
+    
+    # Telegram
+    Write-Host "━━━ Telegram Bot ━━━" -ForegroundColor Cyan
+    if (Confirm-Choice -Prompt "Telegram bot bağlamak istiyor musunuz?" -Default "N") {
+        $selectedChannels += "telegram"
+        Write-Host "  Telegram Bot Token: " -ForegroundColor Yellow -NoNewline
+        $token = Read-Host
+        Write-Host "  Telegram Chat ID: " -ForegroundColor Yellow -NoNewline
+        $chatId = Read-Host
+        $script:ApiKeys["telegram_token"] = $token
+        $script:ApiKeys["telegram_chat_id"] = $chatId
+        Write-Success "Telegram yapılandırıldı."
+    }
+    Write-Host ""
+    
+    # WhatsApp
+    Write-Host "━━━ WhatsApp Business ━━━" -ForegroundColor Cyan
+    if (Confirm-Choice -Prompt "WhatsApp Business API bağlamak istiyor musunuz?" -Default "N") {
+        $selectedChannels += "whatsapp"
+        Write-Host "  WhatsApp Phone Number ID: " -ForegroundColor Yellow -NoNewline
+        $phoneId = Read-Host
+        Write-Host "  WhatsApp Access Token: " -ForegroundColor Yellow -NoNewline
+        $waToken = Read-Host
+        $script:ApiKeys["whatsapp_phone_id"] = $phoneId
+        $script:ApiKeys["whatsapp_token"] = $waToken
+        Write-Success "WhatsApp yapılandırıldı."
+    }
+    Write-Host ""
+    
+    # Discord
+    Write-Host "━━━ Discord Bot ━━━" -ForegroundColor Cyan
+    if (Confirm-Choice -Prompt "Discord bot bağlamak istiyor musunuz?" -Default "N") {
+        $selectedChannels += "discord"
+        Write-Host "  Discord Bot Token: " -ForegroundColor Yellow -NoNewline
+        $discordToken = Read-Host
+        $script:ApiKeys["discord_token"] = $discordToken
+        Write-Success "Discord yapılandırıldı."
+    }
+    Write-Host ""
+    
+    # Slack
+    Write-Host "━━━ Slack App ━━━" -ForegroundColor Cyan
+    if (Confirm-Choice -Prompt "Slack app bağlamak istiyor musunuz?" -Default "N") {
+        $selectedChannels += "slack"
+        Write-Host "  Slack Bot Token (xoxb-...): " -ForegroundColor Yellow -NoNewline
+        $slackToken = Read-Host
+        $script:ApiKeys["slack_token"] = $slackToken
+        Write-Success "Slack yapılandırıldı."
+    }
+    Write-Host ""
+    
+    # Web Interface
+    Write-Host "━━━ Web Arayüzü ━━━" -ForegroundColor Cyan
+    if (Confirm-Choice -Prompt "Web arayüzü kurulacak (önerilir)?" -Default "Y") {
+        $selectedChannels += "web"
+        Write-Success "Web arayüzü eklendi."
+    }
+    Write-Host ""
+    
+    # API
+    Write-Host "━━━ REST API ━━━" -ForegroundColor Cyan
+    if (Confirm-Choice -Prompt "REST API erişimi açılsın mı?" -Default "Y") {
+        $selectedChannels += "api"
+        Write-Success "REST API eklendi."
+    }
+    Write-Host ""
+    
+    $script:SelectedChannels = $selectedChannels
+    
+    if ($selectedChannels.Count -eq 0) {
+        Write-Warning "Hiçbir kanal seçilmedi. Yerel kullanım için devam edilecek."
     } else {
-        Write-Host "⚠ Ollama PATH'te bulunamadı. Modeli manuel olarak indirin: ollama pull $SelectedModel" -ForegroundColor Yellow
+        Write-Success "Seçilen kanallar: $($selectedChannels -join ', ')"
     }
 }
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# ADIM 4: SENTIENT Kurulumu
-# ═══════════════════════════════════════════════════════════════════════════════
+# ─────────────────────────────────────────────────────────────────────────────
+# STEP 4: INSTALLATION
+# ─────────────────────────────────────────────────────────────────────────────
 
-Write-Host ""
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host "  ADIM 4/5: SENTIENT KURULUMU" -ForegroundColor Cyan
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host ""
-
-$InstallDir = "$env:USERPROFILE\sentient"
-
-Write-Host "📂 SENTIENT OS indiriliyor..." -ForegroundColor Cyan
-
-if (Test-Path $InstallDir) {
-    Write-Host "⚠ $InstallDir zaten mevcut" -ForegroundColor Yellow
-    $Update = Read-Host "Güncellensin mi? (y/n)"
-    if ($Update -eq "y") {
-        Set-Location $InstallDir
-        git pull origin main 2>$null
+function Step-Installation {
+    Write-Header -Title "KURULUM" -Step "4" -Total "4"
+    
+    Write-Host "Seçimleriniz kaydedildi. Şimdi kurulum başlıyor..." -ForegroundColor White
+    Write-Host ""
+    
+    # Summary
+    Write-Host "Kurulum Özeti:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  LLM:     $($script:SelectedLLM)" -ForegroundColor Cyan
+    Write-Host "  Kanallar: $($script:SelectedChannels -join ', ')" -ForegroundColor Cyan
+    Write-Host "  Dizin:   $script:InstallDir" -ForegroundColor Cyan
+    Write-Host ""
+    
+    if (-not (Confirm-Choice -Prompt "Kuruluma devam edilsin mi?" -Default "Y")) {
+        Write-Info "Kurulum iptal edildi."
+        exit 0
     }
-} else {
-    git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git $InstallDir 2>$null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ SENTIENT OS indirildi" -ForegroundColor Green
+    
+    Write-Host ""
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+    Write-Host ""
+    
+    # 1. System Check
+    Write-Info "Sistem kontrol ediliyor..."
+    
+    # Check Rust
+    $RustPath = "$env:USERPROFILE\.cargo\bin\rustc.exe"
+    if (Test-Path $RustPath) {
+        $RustVersion = & $RustPath --version 2>$null
+        Write-Success "Rust mevcut: $RustVersion"
     } else {
-        Write-Host "✗ İndirme başarısız!" -ForegroundColor Red
+        Write-Info "Rust kuruluyor..."
+        
+        $RustupUrl = "https://win.rustup.rs/x86_64"
+        $RustupPath = "$env:TEMP\rustup-init.exe"
+        
+        try {
+            Invoke-WebRequest -Uri $RustupUrl -OutFile $RustupPath -UseBasicParsing
+            Start-Process -FilePath $RustupPath -ArgumentList "-y" -Wait -NoNewWindow
+            Remove-Item $RustupPath -Force -ErrorAction SilentlyContinue
+            
+            # Refresh PATH
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "User") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+            
+            Write-Success "Rust kuruldu."
+        } catch {
+            Write-Warning "Rust kurulumu başarısız: $_"
+            Write-Host "Lütfen manuel olarak https://rustup.rs adresinden kurun" -ForegroundColor Yellow
+        }
+    }
+    
+    # Check Git
+    Write-Host ""
+    Write-Info "Git kontrol ediliyor..."
+    if (Get-Command git -ErrorAction SilentlyContinue) {
+        Write-Success "Git mevcut."
+    } else {
+        Write-Warning "Git bulunamadı. https://git-scm.com/download/win adresinden kurun"
+    }
+    
+    # 2. Clone Repository
+    Write-Host ""
+    Write-Info "SENTIENT OS indiriliyor..."
+    
+    if (Test-Path $script:InstallDir) {
+        Write-Warning "$script:InstallDir zaten mevcut."
+        Set-Location $script:InstallDir
+        git pull origin main 2>$null
+        Write-Success "Depo güncellendi."
+    } else {
+        git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git $script:InstallDir 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Success "Depo klonlandı."
+        } else {
+            Write-Error "Klonlama başarısız!"
+            exit 1
+        }
+    }
+    
+    Set-Location $script:InstallDir
+    
+    # 3. Install Ollama if local model selected
+    if ($script:SelectedProvider -eq "ollama") {
+        Write-Host ""
+        Write-Info "Ollama kontrol ediliyor..."
+        
+        $OllamaPath = "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe"
+        
+        if (Test-Path $OllamaPath) {
+            Write-Success "Ollama mevcut."
+        } else {
+            Write-Info "Ollama kuruluyor..."
+            
+            $OllamaUrl = "https://ollama.com/download/OllamaSetup.exe"
+            $OllamaSetup = "$env:TEMP\OllamaSetup.exe"
+            
+            try {
+                Invoke-WebRequest -Uri $OllamaUrl -OutFile $OllamaSetup -UseBasicParsing
+                Write-Host "Ollama kurulumu başlatılıyor..." -ForegroundColor Cyan
+                Start-Process -FilePath $OllamaSetup -Wait
+                Remove-Item $OllamaSetup -Force -ErrorAction SilentlyContinue
+                
+                Write-Success "Ollama kuruldu."
+            } catch {
+                Write-Warning "Ollama kurulumu başarısız. Lütfen https://ollama.com/download adresinden manuel kurun."
+            }
+        }
+        
+        # Pull model
+        Write-Host ""
+        Write-Info "Model indiriliyor: $script:SelectedLLM"
+        
+        $OllamaExe = Get-Command ollama -ErrorAction SilentlyContinue
+        if ($OllamaExe) {
+            & ollama pull $script:SelectedLLM
+            Write-Success "Model hazır: $script:SelectedLLM"
+        } else {
+            Write-Warning "Ollama PATH'te bulunamadı. Modeli manuel olarak indirin: ollama pull $script:SelectedLLM"
+        }
+    }
+    
+    # 4. Build
+    Write-Host ""
+    Write-Info "SENTIENT derleniyor... (Bu işlem birkaç dakika sürebilir)"
+    
+    $CargoPath = "$env:USERPROFILE\.cargo\bin\cargo.exe"
+    if (Test-Path $CargoPath) {
+        & $CargoPath build --release
+        if ($LASTEXITCODE -eq 0) {
+            Write-Success "SENTIENT derlendi."
+        } else {
+            Write-Error "Derleme başarısız. Hataları kontrol edin."
+            exit 1
+        }
+    } else {
+        Write-Error "Cargo bulunamadı. Rust'ı kurun: https://rustup.rs"
         exit 1
     }
-}
-
-# Build
-Set-Location $InstallDir
-
-Write-Host ""
-Write-Host "🔨 SENTIENT derleniyor..." -ForegroundColor Cyan
-Write-Host "   İlk derleme 5-10 dakika sürebilir..." -ForegroundColor Yellow
-
-$CargoPath = "$env:USERPROFILE\.cargo\bin\cargo.exe"
-if (Test-Path $CargoPath) {
-    & $CargoPath build --release
-    Write-Host "✓ SENTIENT derlendi" -ForegroundColor Green
-} else {
-    Write-Host "✗ Cargo bulunamadı. Rust'ı kurun: https://rustup.rs" -ForegroundColor Red
-}
-
-# Create .env
-Write-Host ""
-Write-Host "⚙️  Yapılandırma oluşturuluyor..." -ForegroundColor Cyan
-
-$EnvContent = @"
+    
+    # 5. Create .env
+    Write-Host ""
+    Write-Info "Yapılandırma dosyası oluşturuluyor..."
+    
+    $envContent = @"
 # ═════════════════════════════════════════════════════════════
 #  SENTIENT OS Yapılandırma
 # ═════════════════════════════════════════════════════════════
 
-# Model Ayarları
-SENTIENT_MODEL=$SelectedModel
-SENTIENT_PROVIDER=$Provider
+# Model
+SENTIENT_MODEL=$script:SelectedLLM
+SENTIENT_PROVIDER=$script:SelectedProvider
 
 # API Keys
-$ApiKeyLine
-# OPENROUTER_API_KEY=sk-or-...
+"@
 
-# Yerel Model (Ollama)
-OLLAMA_HOST=http://localhost:11434
+    foreach ($key in $script:ApiKeys.Keys) {
+        $envContent += "`n$($key.ToUpper())=$($script:ApiKeys[$key])"
+    }
+
+    $envContent += @"
+
 
 # Gateway
 GATEWAY_HTTP_ADDR=0.0.0.0:8080
@@ -318,57 +521,83 @@ MEMORY_DB_PATH=data/sentient.db
 RUST_LOG=info
 "@
 
-$EnvContent | Out-File -FilePath "$InstallDir\.env" -Encoding utf8
-
-Write-Host "✓ .env dosyası oluşturuldu" -ForegroundColor Green
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# ADIM 5: Tamamlandı
-# ═══════════════════════════════════════════════════════════════════════════════
-
-Clear-Host
-Write-Host ""
-Write-Host "    ╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "    ║                                                               ║" -ForegroundColor Green
-Write-Host "    ║              🎉 SENTIENT OS KURULUMU TAMAMLANDI!             ║" -ForegroundColor Green
-Write-Host "    ║                                                               ║" -ForegroundColor Green
-Write-Host "    ╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
-Write-Host ""
-
-Write-Host "📋 Kurulum Özeti:" -ForegroundColor White
-Write-Host "  Model:     $ModelDesc" -ForegroundColor Cyan
-Write-Host "  Provider:  $Provider" -ForegroundColor Cyan
-Write-Host "  Dizin:     $InstallDir" -ForegroundColor Cyan
-Write-Host ""
-
-Write-Host "🚀 Başlatmak için:" -ForegroundColor White
-Write-Host ""
-Write-Host "  cd $InstallDir" -ForegroundColor White
-Write-Host "  .\target\release\sentient.exe" -ForegroundColor White
-Write-Host ""
-
-Write-Host "⚙️  Yapılandırma:" -ForegroundColor White
-Write-Host ""
-Write-Host "  notepad $InstallDir\.env" -ForegroundColor White
-Write-Host ""
-
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-Write-Host "🧠 SENTIENT OS - The Operating System That Thinks" -ForegroundColor Green
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
-
-# Add to PATH
-Write-Host ""
-$AddPath = Read-Host "SENTIENT'i PATH'e eklemek ister misiniz? (y/n)"
-
-if ($AddPath -eq "y") {
-    $CurrentPath = [Environment]::GetEnvironmentVariable("Path", "User")
-    $NewPath = "$InstallDir\target\release"
-    
-    if ($CurrentPath -notlike "*$NewPath*") {
-        [Environment]::SetEnvironmentVariable("Path", "$CurrentPath;$NewPath", "User")
-        Write-Host "✓ PATH'e eklendi. Yeni terminalde 'sentient' komutu çalışacaktır." -ForegroundColor Green
-    }
+    $envContent | Out-File -FilePath "$script:InstallDir\.env" -Encoding utf8
+    Write-Success ".env dosyası oluşturuldu."
 }
 
-Write-Host ""
-Write-Host "Kurulum tamamlandı! İyi kullanımlar! 🚀" -ForegroundColor Green
+# ─────────────────────────────────────────────────────────────────────────────
+# FINAL: SUCCESS SCREEN
+# ─────────────────────────────────────────────────────────────────────────────
+
+function Show-Success {
+    Write-Header -Title "KURULUM TAMAMLANDI"
+    
+    Write-Host "╔═════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Green
+    Write-Host "║                                                                           ║" -ForegroundColor Green
+    Write-Host "║              🎉 SENTIENT OS KURULUMU BAŞARIYLA TAMAMLANDI!               ║" -ForegroundColor Green
+    Write-Host "║                                                                           ║" -ForegroundColor Green
+    Write-Host "╚═════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host ""
+    
+    Write-Host "📋 Kurulum Özeti:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  Model:    $script:SelectedLLM" -ForegroundColor Cyan
+    Write-Host "  Provider: $script:SelectedProvider" -ForegroundColor Cyan
+    Write-Host "  Kanallar: $($script:SelectedChannels -join ', ')" -ForegroundColor Cyan
+    Write-Host "  Dizin:    $script:InstallDir" -ForegroundColor Cyan
+    Write-Host ""
+    
+    Write-Host "🚀 Başlatmak için:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  cd $script:InstallDir" -ForegroundColor White
+    Write-Host "  .\target\release\sentient-shell.exe" -ForegroundColor White
+    Write-Host ""
+    
+    Write-Host "⚙️  Yapılandırma:" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  notepad $script:InstallDir\.env" -ForegroundColor White
+    Write-Host ""
+    
+    if ($script:SelectedProvider -eq "ollama") {
+        Write-Host "🤖 Model Yönetimi:" -ForegroundColor White
+        Write-Host ""
+        Write-Host "  ollama list                  # Yüklü modeller" -ForegroundColor White
+        Write-Host "  ollama run $script:SelectedLLM  # Modeli çalıştır" -ForegroundColor White
+        Write-Host ""
+    }
+    
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+    Write-Host "🧠 SENTIENT OS - The Operating System That Thinks" -ForegroundColor Green
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Magenta
+    Write-Host ""
+    
+    # Add to PATH
+    $AddPath = Read-Host "SENTIENT'i PATH'e eklemek ister misiniz? (y/n)"
+    if ($AddPath -eq "y") {
+        $CurrentPath = [Environment]::GetEnvironmentVariable("Path", "User")
+        $NewPath = "$script:InstallDir\target\release"
+        
+        if ($CurrentPath -notlike "*$NewPath*") {
+            [Environment]::SetEnvironmentVariable("Path", "$CurrentPath;$NewPath", "User")
+            Write-Success "PATH'e eklendi. Yeni terminalde 'sentient' komutu çalışacaktır."
+        }
+    }
+    
+    Write-Host ""
+    Write-Host "Kurulum tamamlandı! İyi kullanımlar! 🚀" -ForegroundColor Green
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MAIN ENTRY POINT
+# ─────────────────────────────────────────────────────────────────────────────
+
+function Main {
+    Step-Welcome
+    Step-LLMSelection
+    Step-MessagingChannels
+    Step-Installation
+    Show-Success
+}
+
+# Run the wizard
+Main
