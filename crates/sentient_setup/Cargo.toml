@@ -6,11 +6,13 @@ description = "SENTIENT Setup Wizard v6.0.0 - Strategic UX Update: Sentient Onbo
 authors = ["SENTIENT Core Team"]
 
 [dependencies]
-tokio = { workspace = true }
-serde = { workspace = true }
-serde_json = { workspace = true }
+# NO workspace dependencies - fully standalone for Windows compatibility
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
 
-# Modern TUI Libraries
+# Modern TUI Libraries (pure Rust, no native deps)
 dialoguer = { version = "0.11", features = ["fuzzy-select"] }
 inquire = "0.7"
 console = "0.15"
@@ -19,7 +21,6 @@ indicatif = "0.17"
 # Config & Utils
 dirs = "5.0"
 toml = "0.8"
-anyhow = { workspace = true }
 
 # Async runtime for progress bars
 futures = "0.3"
