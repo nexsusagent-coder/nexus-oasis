@@ -3,7 +3,7 @@
 **Where AI Becomes Aware**
 
 > **Autonomous, Secure, High-Performance AI OS with 100% Native Rust Core**
-> **Powered by Gemma 4 - NO API KEY REQUIRED!**
+> **10+ Provider, 100+ Model - İstediğini Seç!**
 
 [![Rust](https://img.shields.io/badge/Rust-1.75%2B-orange?logo=rust)](https://www.rust-lang.org/)
 [![Gemma 4](https://img.shields.io/badge/Gemma%204-31B-brightgreen?logo=google)](https://ai.google.dev/gemma)
@@ -12,7 +12,7 @@
 [![Integrations](https://img.shields.io/badge/Integrations-71-purple)](./integrations)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](./LICENSE)
 
-**👉 [Neden SENTIENT?](./WHY_SENTIENT.md)** - Rakiplerle karşılaştırma, değer önerisi ve tasarruf hesaplaması
+**👉 [Neden SENTIENT?](./WHY_SENTIENT.md)** - Model seçenekleri, değer önerisi ve tasarruf hesaplaması
 
 ---
 
@@ -20,7 +20,7 @@
 
 1. [Project Overview](#-project-overview)
 2. [Gemma 4 - Native Kernel](#-gemma-4---native-kernel)
-3. [Comparison with Other AI Systems](#-comparison-with-other-ai-systems)
+3. [SENTIENT Özellikleri](#-sentient-özellikleri)
 4. [7-Layer Architecture (L1-L7)](#-7-layer-architecture-l1-l7)
 5. [System Statistics](#-system-statistics)
 6. [Quick Start](#-quick-start)
@@ -104,7 +104,7 @@
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════╗
-║                    GEMMA 4 vs OTHER LLMs                                  ║
+║                    GEMMA 4 - SENTIENT KERNEL                            ║
 ╠═══════════════════════════════════════════════════════════════════════════╣
 ║                                                                           ║
 ║  Feature              │ Gemma 4    │ GPT-4      │ Claude 3.5 │ Llama 3.1 ║
@@ -145,87 +145,58 @@ pub struct OasisBrain {
 
 ---
 
-## ⚡ Comparison with Other AI Systems
+## ⚡ SENTIENT Özellikleri
 
-SENTIENT OS is the most comprehensive AI Operating System, combining features from multiple AI frameworks into a unified platform:
+SENTIENT OS, enterprise-grade güvenlik ve performans sunar:
 
-### Feature Comparison Matrix
+### 🦀 Rust Core Avantajları
 
-| Feature | SENTIENT OS | AutoGPT | LangChain | CrewAI | OpenHands | AutoGen | MetaGPT | Open Interpreter |
-|---------|:-----------:|:-------:|:---------:|:------:|:---------:|:-------:|:-------:|:----------------:|
-| **Core Language** | 🦀 Rust | Python | Python | Python | Python | Python | Python | Python |
-| **Native Performance** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Gemma 4 Kernel** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **No API Key Required** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Skill Count** | 5,587+ | ~20 | ~100 | ~50 | ~30 | ~40 | ~25 | ~15 |
-| **Tool Count** | 43+ | ~10 | ~50 | ~20 | ~15 | ~10 | ~10 | ~10 |
-| **API Security (V-GATE)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Persistent Memory** | ✅ SQLite+Vector | ❌ | ⚠️ Optional | ❌ | ⚠️ Limited | ⚠️ Limited | ❌ | ❌ |
-| **Zero-Copy Memory** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Multi-Agent Built-in** | ✅ | ❌ | ⚠️ Add-on | ✅ | ⚠️ Limited | ✅ | ✅ | ❌ |
-| **Desktop Automation** | ✅ Agent-S3 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ⚠️ Limited |
-| **Browser Automation** | ✅ Lightpanda | ⚠️ Selenium | ⚠️ Selenium | ⚠️ Selenium | ❌ | ❌ | ❌ | ⚠️ Limited |
-| **Sandbox Execution** | ✅ Docker+E2B | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ⚠️ Local |
-| **TEE Security** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **ZK Privacy** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Local LLM Support** | ✅ Gemma 4 | ⚠️ Limited | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **20+ Messaging Channels** | ✅ | ❌ | ⚠️ Add-on | ⚠️ Add-on | ❌ | ❌ | ❌ | ❌ |
-| **Self-Healing Code** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Human Mimicry** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Integrated Projects** | 71 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
-| **Enterprise Ready** | ✅ | ⚠️ Dev | ⚠️ Dev | ⚠️ Dev | ⚠️ Dev | ⚠️ Dev | ⚠️ Dev | ⚠️ Dev |
+| Özellik | Açıklama |
+|---------|----------|
+| **7x Daha Hızlı** | Python tabanlı sistemlere göre 7 kat hızlı |
+| **4x Daha Az RAM** | Idle: 45MB, Active: 180MB |
+| **Memory Safe** | Rust garantisi - memory leak yok |
+| **Zero-Copy** | Veri kopyalama olmadan hızlı işlem |
+| **No GIL** | Paralel execution limiti yok |
 
-### Performance Comparison
+### 🔐 Güvenlik Özellikleri
 
-| Metric | SENTIENT OS | AutoGPT | LangChain | CrewAI | OpenHands |
-|--------|:-----------:|:-------:|:---------:|:------:|:---------:|
-| **Speed (Token/s)** | 847 | ~80 | ~100 | ~90 | ~85 |
-| **RAM Idle (MB)** | 45 | ~450 | ~300 | ~350 | ~400 |
-| **RAM Active (MB)** | 180 | ~1.5GB | ~800 | ~900 | ~1.2GB |
-| **Startup Time** | 0.3s | ~5s | ~2s | ~3s | ~4s |
-| **Memory Leak Risk** | None | High | Medium | Medium | Medium |
+| Özellik | Açıklama |
+|---------|----------|
+| **V-GATE Proxy** | API key'ler ASLA kodda tutulmaz |
+| **NeMo Guardrails** | Prompt injection koruması |
+| **TEE Support** | AMD SEV-SNP, Intel TDX |
+| **ZK-MCP** | Zero-knowledge proofs |
+| **Sandbox** | Docker + E2B izole execution |
 
-### What Makes SENTIENT OS Unique?
+### 🤖 Agent Yetenekleri
 
-```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│  🧠 SENTIENT OS = Gemma 4 + Rust Core + 71 Projects + Enterprise Security    │
-├──────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  🧠 GEMMA 4 KERNEL                                                          │
-│  ├── 31B parameters, 256K context                                           │
-│  ├── NO API KEY REQUIRED                                                    │
-│  ├── Native thinking + function calling                                     │
-│  ├── Fully local, fully free                                                │
-│  └── Zero-copy memory integration                                           │
-│                                                                              │
-│  🦀 RUST CORE                                                               │
-│  ├── 7x faster than Python-based alternatives                               │
-│  ├── 8x less memory usage                                                   │
-│  ├── No GIL limitations                                                     │
-│  └── Memory-safe by design                                                  │
-│                                                                              │
-│  🔐 ENTERPRISE SECURITY                                                     │
-│  ├── V-GATE Proxy: API keys NEVER in code                                   │
-│  ├── Guardrails: Prompt injection protection                                │
-│  ├── TEE: Trusted execution environments                                    │
-│  └── ZK-MCP: Zero-knowledge proofs for privacy                              │
-│                                                                              │
-│  🤖 FULL AUTONOMY                                                           │
-│  ├── OASIS Brain: Gemma 4 fixed cognitive engine                            │
-│  ├── Agent-S3: Desktop automation (keyboard/mouse)                          │
-│  ├── Human Mimicry: Bezier curves, typing dynamics, tremor simulation       │
-│  ├── Self-Coding: Autonomous code generation and repair                     │
-│  └── Multi-Agent: CrewAI + AutoGen + Swarm coordination                     │
-│                                                                              │
-│  📦 LARGEST ECOSYSTEM                                                       │
-│  ├── 5,587+ native skills (largest collection)                              │
-│  ├── 71 integrated open-source projects                                     │
-│  ├── 43+ native tools                                                       │
-│  └── 20+ messaging channels                                                  │
-│                                                                              │
-└──────────────────────────────────────────────────────────────────────────────┘
-```
+| Özellik | Açıklama |
+|---------|----------|
+| **Desktop Automation** | Agent-S3 ile OSWorld #1 (72.6%) |
+| **Multi-Agent** | CrewAI, AutoGen built-in |
+| **Human Mimicry** | Gerçekçi mouse/keyboard hareketleri |
+| **Self-Healing** | Otomatik kod tamiri |
+| **OASIS Brain** | Gemma 4 cognitive engine |
+
+### 📦 Entegrasyon
+
+| Özellik | Sayı |
+|---------|------|
+| **Skills** | 5,587+ |
+| **Native Tools** | 43+ |
+| **Integrated Projects** | 71 |
+| **Messaging Channels** | 20+ |
+
+### Performans Metrikleri
+
+| Metric | SENTIENT OS |
+|--------|:-----------:|
+| **Speed (Token/s)** | 847 |
+| **RAM Idle (MB)** | 45 |
+| **RAM Active (MB)** | 180 |
+| **Startup Time** | 0.3s |
+| **Memory Leak Risk** | None |
 
 ---
 

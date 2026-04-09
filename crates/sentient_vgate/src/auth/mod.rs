@@ -18,6 +18,12 @@ pub enum Provider {
     OpenAI,
     Anthropic,
     Groq,
+    Cohere,
+    Mistral,
+    Google,
+    DeepSeek,
+    Together,
+    Replicate,
     Local,
 }
 
@@ -28,6 +34,12 @@ impl Provider {
             Self::OpenAI => "openai",
             Self::Anthropic => "anthropic",
             Self::Groq => "groq",
+            Self::Cohere => "cohere",
+            Self::Mistral => "mistral",
+            Self::Google => "google",
+            Self::DeepSeek => "deepseek",
+            Self::Together => "together",
+            Self::Replicate => "replicate",
             Self::Local => "local",
         }
     }
@@ -38,6 +50,12 @@ impl Provider {
             "openai" => Some(Self::OpenAI),
             "anthropic" => Some(Self::Anthropic),
             "groq" => Some(Self::Groq),
+            "cohere" => Some(Self::Cohere),
+            "mistral" => Some(Self::Mistral),
+            "google" | "gemini" => Some(Self::Google),
+            "deepseek" => Some(Self::DeepSeek),
+            "together" => Some(Self::Together),
+            "replicate" => Some(Self::Replicate),
             "local" => Some(Self::Local),
             _ => None,
         }
@@ -49,6 +67,12 @@ impl Provider {
             Self::OpenAI => "https://api.openai.com/v1",
             Self::Anthropic => "https://api.anthropic.com/v1",
             Self::Groq => "https://api.groq.com/openai/v1",
+            Self::Cohere => "https://api.cohere.ai/v1",
+            Self::Mistral => "https://api.mistral.ai/v1",
+            Self::Google => "https://generativelanguage.googleapis.com/v1",
+            Self::DeepSeek => "https://api.deepseek.com/v1",
+            Self::Together => "https://api.together.xyz/v1",
+            Self::Replicate => "https://api.replicate.com/v1",
             Self::Local => "http://localhost:11434/v1",
         }
     }
@@ -59,6 +83,12 @@ impl Provider {
             Self::OpenAI => "OPENAI_API_KEY",
             Self::Anthropic => "ANTHROPIC_API_KEY",
             Self::Groq => "GROQ_API_KEY",
+            Self::Cohere => "COHERE_API_KEY",
+            Self::Mistral => "MISTRAL_API_KEY",
+            Self::Google => "GOOGLE_API_KEY",
+            Self::DeepSeek => "DEEPSEEK_API_KEY",
+            Self::Together => "TOGETHER_API_KEY",
+            Self::Replicate => "REPLICATE_API_KEY",
             Self::Local => "LOCAL_API_KEY",
         }
     }
@@ -104,7 +134,19 @@ impl ApiKeyManager {
         let mut providers = HashMap::new();
         
         // Tüm sağlayıcıları varsayılan ayarlarla ekle
-        for provider in [Provider::OpenRouter, Provider::OpenAI, Provider::Anthropic, Provider::Groq, Provider::Local] {
+        for provider in [
+            Provider::OpenRouter,
+            Provider::OpenAI,
+            Provider::Anthropic,
+            Provider::Groq,
+            Provider::Cohere,
+            Provider::Mistral,
+            Provider::Google,
+            Provider::DeepSeek,
+            Provider::Together,
+            Provider::Replicate,
+            Provider::Local,
+        ] {
             let config = ProviderConfig {
                 provider,
                 base_url: provider.default_base_url().to_string(),
