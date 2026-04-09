@@ -63,6 +63,8 @@ members = [
     "crates/sentient_skills_import",
     # v9.0.0 Kubernetes Operator (Distributed Agents)
     "crates/sentient_cluster",
+    # v10.0.0 LanceDB Memory (Long-term Context)
+    "crates/sentient_lancedb",
     # Skills System
     "skills",
     "scripts",

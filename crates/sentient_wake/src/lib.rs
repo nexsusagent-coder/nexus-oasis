@@ -27,6 +27,9 @@ pub mod vosk_;
 pub mod whisper_;
 pub mod audio;
 
+#[cfg(test)]
+mod tests;
+
 pub use config::WakeWordConfig;
 pub use detector::{WakeWordDetector, WakeEvent};
 

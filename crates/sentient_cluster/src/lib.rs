@@ -31,6 +31,9 @@ pub mod task;
 pub mod metrics;
 pub mod health;
 
+#[cfg(test)]
+mod tests;
+
 pub use crds::{SentientAgent, SentientTask};
 pub use operator::Operator;
 pub use agent::AgentDeployment;

@@ -24,6 +24,9 @@ pub mod registry;
 pub mod skill;
 pub mod install;
 
+#[cfg(test)]
+mod tests;
+
 pub use skill::{Skill, SkillManifest, SkillMetadata};
 pub use registry::SkillsRegistry;
 pub use install::{Installer, InstallProgress};

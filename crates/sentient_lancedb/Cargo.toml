@@ -1,0 +1,36 @@
+[package]
+name = "sentient_lancedb"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT LanceDB Memory - Long-term Context with Vector Search"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+log.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+chrono.workspace = true
+
+# LanceDB
+lancedb = "0.4"
+arrow = "53"
+
+# Embeddings
+fastembed = { version = "4", optional = true }
+
+# Vector operations
+ndarray = "0.15"
+
+# File system
+dirs = "5"
+
+sentient_common = { path = "../sentient_common" }
+
+[features]
+default = ["embeddings"]
+embeddings = ["dep:fastembed"]
