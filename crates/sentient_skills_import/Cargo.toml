@@ -1,0 +1,39 @@
+[package]
+name = "sentient_skills_import"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Skills Importer - ClawHub & Custom Skills Support"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+thiserror.workspace = true
+log.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+
+# YAML parsing
+serde_yaml = "0.9"
+
+# Archive extraction
+zip = "2"
+tar = "0.4"
+flate2 = "1"
+
+# Path utilities
+dirs = "5"
+walkdir = "2"
+
+# Code parsing
+syn = { version = "2", optional = true }
+quote = { version = "1", optional = true }
+
+sentient_common = { path = "../sentient_common" }
+
+[features]
+default = []
+code_generation = ["dep:syn", "dep:quote"]

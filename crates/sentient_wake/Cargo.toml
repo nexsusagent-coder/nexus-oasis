@@ -1,0 +1,36 @@
+[package]
+name = "sentient_wake"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Wake Word Detection - Porcupine & Vosk Integration"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+log.workspace = true
+cpal = "0.15"
+rubato = "0.15"
+hound = "3"
+bytes = "1"
+
+# Porcupine (Picovoice)
+# pv_porcupine = "3"  # Requires access key
+
+# Vosk (offline)
+vosk = { version = "0.3", optional = true }
+# vosk-sys = "0.4"
+
+# Whisper (local)
+whisper-rs = { version = "0.11", optional = true }
+
+sentient_common = { path = "../sentient_common" }
+
+[features]
+default = ["vosk"]
+porcupine = []
+vosk = ["dep:vosk"]
+whisper = ["dep:whisper-rs"]

@@ -57,6 +57,12 @@ members = [
     "crates/sentient_voice",
     # v8.0.0 Skills Marketplace
     "crates/sentient_marketplace",
+    # v9.0.0 Wake Word Detection (Porcupine, Vosk, Whisper)
+    "crates/sentient_wake",
+    # v9.0.0 Skills Importer (ClawHub compatible)
+    "crates/sentient_skills_import",
+    # v9.0.0 Kubernetes Operator (Distributed Agents)
+    "crates/sentient_cluster",
     # Skills System
     "skills",
     "scripts",

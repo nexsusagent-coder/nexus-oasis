@@ -1,0 +1,32 @@
+[package]
+name = "sentient-desktop"
+version = "0.1.0"
+edition = "2021"
+authors = ["SENTIENT AI"]
+description = "SENTIENT AI Desktop Application (Tauri)"
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
+
+[dependencies]
+tauri = { version = "2.0", features = ["tray-icon", "macos-private-api"] }
+tauri-plugin-shell = "2.0"
+tauri-plugin-notification = "2.0"
+tauri-plugin-fs = "2.0"
+tauri-plugin-http = "2.0"
+tauri-plugin-websocket = "2.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+log = "0.4"
+env_logger = "0.11"
+
+# SENTIENT Core
+sentient_core = { path = "../../../crates/sentient_core" }
+sentient_voice = { path = "../../../crates/sentient_voice" }
+sentient_channels = { path = "../../../crates/sentient_channels" }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
