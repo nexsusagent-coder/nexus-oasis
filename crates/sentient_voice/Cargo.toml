@@ -1,0 +1,42 @@
+[package]
+name = "sentient_voice"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Voice Module - STT (Whisper) and TTS integration"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+log.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+
+# Audio processing
+cpal = "0.15"
+hound = "3"
+rubato = "0.15"
+
+# Whisper (via whisper-rs or API)
+whisper-rs = { version = "0.11", optional = true }
+
+# TTS APIs
+elevenlabs-rs = { version = "0.2", optional = true }
+
+# Other
+bytes = "1"
+base64 = "0.22"
+futures.workspace = true
+
+sentient_common = { path = "../sentient_common" }
+
+[features]
+default = ["api"]
+api = []
+local-whisper = ["whisper-rs"]
+elevenlabs = ["elevenlabs-rs"]

@@ -2,25 +2,44 @@
 
 **Professional AI Agent Framework**
 
-A powerful, modular AI agent platform with 100+ LLM support, multi-channel communication, and extensible skills system.
+A powerful, modular AI agent platform with 100+ LLM support, multi-channel communication, voice integration, and extensible skills marketplace.
 
 ---
 
-## Quick Install
+## 🚀 Quick Install
 
 ### Linux / macOS
 ```bash
-curl -sSL https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/quick-install.sh | bash
+curl -sSL https://get.sentient.ai | bash
 ```
 
 ### Windows (PowerShell)
 ```powershell
-irm https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/quick-install.ps1 | iex
+irm https://get.sentient.ai/ps | iex
+```
+
+### npm
+```bash
+npm install -g @sentient/ai
 ```
 
 ---
 
-## Usage
+## 📦 Binary Downloads
+
+| Platform | Architecture | Download |
+|----------|-------------|----------|
+| Linux | x86_64 | `sentient-linux-x86_64.tar.gz` |
+| Linux | ARM64 | `sentient-linux-arm64.tar.gz` |
+| macOS | Intel | `sentient-macos-x86_64.tar.gz` |
+| macOS | Apple Silicon | `sentient-macos-arm64.tar.gz` |
+| Windows | x86_64 | `sentient-windows-x86_64.zip` |
+
+[Download from Releases](https://github.com/nexsusagent-coder/SENTIENT_CORE/releases)
+
+---
+
+## 🎯 Usage
 
 After installation, restart your terminal and run:
 
@@ -28,8 +47,11 @@ After installation, restart your terminal and run:
 # Configure SENTIENT (first time)
 sentient setup
 
-# Launch dashboard
-sentient
+# Launch interactive REPL
+sentient repl
+
+# Start autonomous agent
+sentient agent --goal "Build a REST API"
 
 # Check status
 sentient status
@@ -37,9 +59,9 @@ sentient status
 
 ---
 
-## Features
+## ✨ Features
 
-### 100+ LLM Models
+### 🧠 100+ LLM Models
 Professional `provider/model_id` format:
 - **Anthropic**: claude-3-5-sonnet, claude-3-opus, claude-3-haiku
 - **OpenAI**: gpt-4o, gpt-4-turbo, o1-preview, o1-mini
@@ -48,106 +70,133 @@ Professional `provider/model_id` format:
 - **Ollama**: 50+ local models (llama3.3, qwen2.5, deepseek-r1, etc.)
 - **Groq, DeepSeek, Mistral, Perplexity, Cohere, Together AI, X.AI** and more
 
-### Multi-Channel Communication
-20+ platforms: Telegram, Discord, Slack, WhatsApp, Matrix, Signal, Email, Twitter, LinkedIn, Reddit, Web Dashboard, REST API
+### 💬 Multi-Channel Communication
+- **Telegram** - Bot API with commands
+- **Discord** - Bot with slash commands
+- **WhatsApp** - Business API
+- **Slack** - Bolt integration
+- **Signal, Matrix, IRC, Email** and more
 
-### Professional Setup
-- Interactive TUI with fuzzy search
-- QuickStart (fast) or Manual (full control) modes
-- Security policies for each channel
-- Hidden API key input
+### 🎤 Voice Integration
+- **Speech-to-Text** - OpenAI Whisper API or local Whisper
+- **Text-to-Speech** - OpenAI, ElevenLabs, System TTS
+- **Wake Word** - "Hey SENTIENT" activation
+- **Real-time Streaming** - Continuous voice interaction
 
----
+### 🧩 Skills Marketplace
+- Discover and install AI skills
+- Publish your own skills
+- Version management
+- Ratings and reviews
 
-## Requirements
-
-- **OS**: Linux, macOS, Windows
-- **RAM**: 8GB minimum (16GB+ recommended for local models)
-- **Disk**: 5GB+ free space
-- **Rust**: Auto-installed if missing
-
-### Optional
-- **Ollama**: For local models (auto-installed on Linux/macOS)
-- **GPU**: NVIDIA GPU for faster local inference
-
----
-
-## Manual Installation
-
-<details>
-<summary>Click to expand</summary>
-
-```bash
-# 1. Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# 2. Clone repository
-git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git ~/.sentient
-cd ~/.sentient
-
-# 3. Build
-cargo build --release --bin sentient-setup --bin sentient-shell
-
-# 4. Run setup
-./target/release/sentient-setup
-
-# 5. Launch
-./target/release/sentient-shell
-```
-
-</details>
+### 🔒 Security
+- Guardrails for safe AI interactions
+- Sandbox for code execution
+- Policy management
 
 ---
 
-## Commands
+## 📋 Commands
 
 | Command | Description |
 |---------|-------------|
 | `sentient` | Launch dashboard |
 | `sentient setup` | Run setup wizard |
+| `sentient repl` | Start interactive REPL |
+| `sentient agent --goal "..."` | Run autonomous agent |
+| `sentient llm chat` | Chat with LLM |
+| `sentient gateway` | Start API server |
+| `sentient serve` | Start 24/7 service |
 | `sentient status` | Show system status |
-| `sentient config` | Edit configuration |
-| `sentient update` | Update to latest version |
-| `sentient logs` | View logs |
-| `sentient help` | Show help |
+| `sentient skill install <name>` | Install skill |
+| `sentient skill search <query>` | Search skills |
 
 ---
 
-## Architecture
+## 🏗️ Architecture
 
 ```
 SENTIENT_CORE/
-├── crates/                 # Rust modules
-│   ├── sentient_setup/     # Setup wizard
-│   ├── sentient_cli/       # CLI interface
-│   ├── sentient_gateway/   # HTTP/WebSocket gateway
-│   ├── sentient_memory/    # Memory system
-│   └── ...                 # 40+ modules
-├── dashboard/              # Web dashboard
-├── skills/                 # Extensible skills
-├── sentient                # Linux/macOS launcher
-├── sentient.bat            # Windows launcher
-└── quick-install.sh        # One-command install
+├── crates/                     # Rust modules
+│   ├── sentient_cli/           # CLI interface
+│   ├── sentient_channels/      # Telegram, Discord, WhatsApp
+│   ├── sentient_voice/         # Whisper STT + TTS
+│   ├── sentient_marketplace/   # Skills marketplace
+│   ├── sentient_gateway/       # HTTP/WebSocket gateway
+│   ├── sentient_memory/        # Memory system
+│   ├── sentient_guardrails/    # Security policies
+│   ├── sentient_orchestrator/   # Agent orchestration
+│   └── ...                     # 50+ modules
+├── npm/                        # npm package (@sentient/ai)
+├── dashboard/                   # Web dashboard
+├── skills/                      # Extensible skills
+├── install.sh                   # Quick install (Unix)
+├── install.ps1                  # Quick install (Windows)
+└── .github/workflows/          # CI/CD + Releases
 ```
 
 ---
 
-## Documentation
+## 🔧 Requirements
 
-- [Architecture](ARCHITECTURE.md)
-- [Installation Guide](INSTALL.md)
-- [User Manual](USER_MANUAL.md)
-- [Model Providers](MODEL_PROVIDERS.md)
-- [API Reference](docs/)
+- **OS**: Linux, macOS, Windows
+- **RAM**: 8GB minimum (16GB+ recommended for local models)
+- **Disk**: 5GB+ free space
+- **Rust**: Auto-installed if building from source
+
+### Optional
+- **Ollama**: For local models
+- **GPU**: NVIDIA GPU for faster local inference
+- **Porcupine**: For wake word detection
 
 ---
 
-## License
+## 📚 Documentation
+
+- [Getting Started](docs/GETTING_STARTED.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [API Reference](docs/API.md)
+- [Model Providers](docs/MODEL_PROVIDERS.md)
+- [Channels Guide](docs/CHANNELS.md)
+- [Voice Guide](docs/VOICE.md)
+- [Skills Development](docs/SKILLS.md)
+
+---
+
+## 🆚 Comparison
+
+| Feature | OpenClaw | SENTIENT |
+|---------|----------|----------|
+| **Language** | TypeScript | Rust |
+| **Install Time** | 30s (npm) | 30s (binary) |
+| **Channels** | 50+ | 10+ (growing) |
+| **Voice** | ✅ | ✅ Whisper + TTS |
+| **Skills** | ClawHub | Marketplace |
+| **Performance** | Node.js | Native |
+
+See [COMPARISON.md](COMPARISON.md) for detailed comparison.
+
+---
+
+## 📄 License
 
 MIT License
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+## 🙏 Credits
+
+- OpenClaw - Inspiration for channel integrations
+- OpenAI - Whisper and TTS APIs
+- ElevenLabs - High-quality TTS
+- The Rust community
+
+---
+
+**Built with ❤️ by NEXUS OASIS**

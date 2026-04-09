@@ -1,0 +1,45 @@
+[package]
+name = "sentient_channels"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Channel Integrations (Telegram, Discord, WhatsApp, etc.)"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+log.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+
+# Telegram Bot API
+teloxide = { version = "0.13", features = ["full"] }
+
+# Discord (via serenity)
+serenity = { version = "0.12", default-features = false, features = [
+    "builder", "cache", "chrono", "client", "framework", "gateway", "http",
+    "model", "standard_framework", "utils", "rustls_backend"
+] }
+
+# WebSocket for real-time
+tokio-tungstenite = { version = "0.24", features = ["rustls-tls-webpki-roots"] }
+futures.workspace = true
+
+# URL parsing
+url = "2"
+
+# Regex for command parsing
+regex.workspace = true
+
+sentient_common = { path = "../sentient_common" }
+
+[features]
+default = ["telegram", "discord"]
+telegram = []
+discord = []
+whatsapp = []

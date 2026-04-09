@@ -51,6 +51,12 @@ members = [
     "crates/sentient_skills",
     # v7.0.0 Cevahir AI Integration (Turkish LLM Cognitive Engine)
     "crates/sentient_cevahir",
+    # v8.0.0 Channel Integrations (Telegram, Discord, WhatsApp)
+    "crates/sentient_channels",
+    # v8.0.0 Voice Module (Whisper STT + TTS)
+    "crates/sentient_voice",
+    # v8.0.0 Skills Marketplace
+    "crates/sentient_marketplace",
     # Skills System
     "skills",
     "scripts",

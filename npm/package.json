@@ -1,0 +1,50 @@
+{
+  "name": "@sentient/ai",
+  "version": "4.0.0",
+  "description": "SENTIENT - AI Operating System with Autonomous Agents",
+  "main": "index.js",
+  "bin": {
+    "sentient": "./bin/sentient.js"
+  },
+  "scripts": {
+    "postinstall": "node install.js",
+    "preuninstall": "node uninstall.js"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "agent",
+    "autonomous",
+    "sentient",
+    "operating-system",
+    "openai",
+    "claude",
+    "gpt",
+    "automation",
+    "code-assistant",
+    "developer-tools"
+  ],
+  "author": "NEXUS OASIS <sentient@sentient-os.ai>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nexsusagent-coder/SENTIENT_CORE.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nexsusagent-coder/SENTIENT_CORE/issues"
+  },
+  "homepage": "https://github.com/nexsusagent-coder/SENTIENT_CORE#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "os": ["linux", "darwin", "win32"],
+  "cpu": ["x64", "arm64"],
+  "files": [
+    "bin/",
+    "install.js",
+    "uninstall.js",
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ]
+}

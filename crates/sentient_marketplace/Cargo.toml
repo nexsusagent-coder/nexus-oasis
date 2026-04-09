@@ -1,0 +1,42 @@
+[package]
+name = "sentient_marketplace"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Skills Marketplace - Discover, install and publish AI skills"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+log.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+
+# Semver for version handling
+semver = { version = "1", features = ["serde"] }
+
+# Git for skill cloning
+git2 = { version = "0.19", optional = true }
+
+# Archive extraction
+zip = "2"
+tar = "0.4"
+flate2 = "1"
+
+# TOML parsing
+toml = "0.8"
+
+# Path handling
+dirs = "5"
+
+sentient_common = { path = "../sentient_common" }
+sentient_skills = { path = "../sentient_skills" }
+
+[features]
+default = []
+git-support = ["git2"]

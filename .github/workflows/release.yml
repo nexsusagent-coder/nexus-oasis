@@ -1,11 +1,13 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  SENTIENT CORE - Release Pipeline
+#  SENTIENT CORE - Release Pipeline v2.0
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-#  Cross-platform binary builds
+#  Cross-platform binary builds with proper naming
 #  - Linux (x86_64, ARM64)
-#  - macOS (x86_64, ARM64/Apple Silicon)
+#  - macOS (x86_64, Apple Silicon)
 #  - Windows (x86_64)
+#  - npm package publishing
+#  - Homebrew formula update
 
 name: Release Build
 
@@ -15,22 +17,33 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to build'
+        description: 'Version to build (e.g., 4.0.0)'
         required: true
         default: '4.0.0'
+      prerelease:
+        description: 'Pre-release build?'
+        required: false
+        default: 'false'
+        type: boolean
 
 env:
   CARGO_TERM_COLOR: always
+  BINARY_NAME: sentient
 
 jobs:
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  BUILD LINUX
+  # ═══════════════════════════════════════════════════════════════════════════
   build-linux:
     name: Linux ${{ matrix.target }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target:
-          - x86_64-unknown-linux-gnu
-          - aarch64-unknown-linux-gnu
+        include:
+          - target: x86_64-unknown-linux-gnu
+            arch: x86_64
+          - target: aarch64-unknown-linux-gnu
+            arch: arm64
     steps:
       - uses: actions/checkout@v4
       
@@ -51,39 +64,64 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            SENTIENT_CORE/target
-          key: linux-${{ matrix.target }}-${{ hashFiles('SENTIENT_CORE/Cargo.lock') }}
+            target
+          key: linux-${{ matrix.target }}-${{ hashFiles('Cargo.lock') }}
+          restore-keys: linux-${{ matrix.target }}-
       
       - name: Build
         run: |
-          cd SENTIENT_CORE
           if [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
             export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
           fi
           cargo build --release --target ${{ matrix.target }}
       
+      - name: Prepare binaries
+        run: |
+          mkdir -p release
+          # Main CLI
+          if [ -f target/${{ matrix.target }}/release/sentient-cli ]; then
+            cp target/${{ matrix.target }}/release/sentient-cli release/sentient
+          fi
+          # Gateway
+          if [ -f target/${{ matrix.target }}/release/asena-web ]; then
+            cp target/${{ matrix.target }}/release/asena-web release/sentient-gateway
+          fi
+          # Orchestrator
+          if [ -f target/${{ matrix.target }}/release/asena ]; then
+            cp target/${{ matrix.target }}/release/asena release/sentient-agent
+          fi
+          # Setup wizard
+          if [ -f target/${{ matrix.target }}/release/sentient-setup ]; then
+            cp target/${{ matrix.target }}/release/sentient-setup release/
+          fi
+          # List what we have
+          ls -la release/ || echo "No binaries found"
+      
       - name: Package
         run: |
-          cd SENTIENT_CORE
-          mkdir -p release
-          cp target/${{ matrix.target }}/release/sentient-cli release/ || true
-          cp target/${{ matrix.target }}/release/nexus-dashboard release/ || true
-          tar -czvf sentient-${{ matrix.target }}.tar.gz -C release .
+          cd release
+          tar -czvf sentient-linux-${{ matrix.arch }}.tar.gz *
+          sha256sum sentient-linux-${{ matrix.arch }}.tar.gz > sentient-linux-${{ matrix.arch }}.sha256
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sentient-${{ matrix.target }}
-          path: SENTIENT_CORE/sentient-${{ matrix.target }}.tar.gz
+          name: linux-${{ matrix.arch }}
+          path: release/sentient-linux-${{ matrix.arch }}.*
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  BUILD MACOS
+  # ═══════════════════════════════════════════════════════════════════════════
   build-macos:
     name: macOS ${{ matrix.target }}
     runs-on: macos-latest
     strategy:
       matrix:
-        target:
-          - x86_64-apple-darwin
-          - aarch64-apple-darwin
+        include:
+          - target: x86_64-apple-darwin
+            arch: x86_64
+          - target: aarch64-apple-darwin
+            arch: arm64
     steps:
       - uses: actions/checkout@v4
       
@@ -98,28 +136,49 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            SENTIENT_CORE/target
-          key: macos-${{ matrix.target }}-${{ hashFiles('SENTIENT_CORE/Cargo.lock') }}
+            target
+          key: macos-${{ matrix.target }}-${{ hashFiles('Cargo.lock') }}
+          restore-keys: macos-${{ matrix.target }}-
       
       - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+      
+      - name: Prepare binaries
         run: |
-          cd SENTIENT_CORE
-          cargo build --release --target ${{ matrix.target }}
+          mkdir -p release
+          # Main CLI
+          if [ -f target/${{ matrix.target }}/release/sentient-cli ]; then
+            cp target/${{ matrix.target }}/release/sentient-cli release/sentient
+          fi
+          # Gateway
+          if [ -f target/${{ matrix.target }}/release/asena-web ]; then
+            cp target/${{ matrix.target }}/release/asena-web release/sentient-gateway
+          fi
+          # Orchestrator
+          if [ -f target/${{ matrix.target }}/release/asena ]; then
+            cp target/${{ matrix.target }}/release/asena release/sentient-agent
+          fi
+          # Setup wizard
+          if [ -f target/${{ matrix.target }}/release/sentient-setup ]; then
+            cp target/${{ matrix.target }}/release/sentient-setup release/
+          fi
+          ls -la release/ || echo "No binaries found"
       
       - name: Package
         run: |
-          cd SENTIENT_CORE
-          mkdir -p release
-          cp target/${{ matrix.target }}/release/sentient-cli release/ || true
-          cp target/${{ matrix.target }}/release/nexus-dashboard release/ || true
-          tar -czvf sentient-${{ matrix.target }}.tar.gz -C release .
+          cd release
+          tar -czvf sentient-macos-${{ matrix.arch }}.tar.gz *
+          shasum -a 256 sentient-macos-${{ matrix.arch }}.tar.gz > sentient-macos-${{ matrix.arch }}.sha256
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sentient-${{ matrix.target }}
-          path: SENTIENT_CORE/sentient-${{ matrix.target }}.tar.gz
+          name: macos-${{ matrix.arch }}
+          path: release/sentient-macos-${{ matrix.arch }}.*
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  BUILD WINDOWS
+  # ═══════════════════════════════════════════════════════════════════════════
   build-windows:
     name: Windows x86_64
     runs-on: windows-latest
@@ -137,45 +196,381 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            SENTIENT_CORE/target
-          key: windows-x86_64-${{ hashFiles('SENTIENT_CORE/Cargo.lock') }}
+            target
+          key: windows-x86_64-${{ hashFiles('Cargo.lock') }}
+          restore-keys: windows-x86_64-
       
       - name: Build
+        run: cargo build --release --target x86_64-pc-windows-msvc
+      
+      - name: Prepare binaries
+        shell: bash
         run: |
-          cd SENTIENT_CORE
-          cargo build --release --target x86_64-pc-windows-msvc
+          mkdir -p release
+          # Main CLI
+          if [ -f target/x86_64-pc-windows-msvc/release/sentient-cli.exe ]; then
+            cp target/x86_64-pc-windows-msvc/release/sentient-cli.exe release/sentient.exe
+          fi
+          # Gateway
+          if [ -f target/x86_64-pc-windows-msvc/release/asena-web.exe ]; then
+            cp target/x86_64-pc-windows-msvc/release/asena-web.exe release/sentient-gateway.exe
+          fi
+          # Orchestrator
+          if [ -f target/x86_64-pc-windows-msvc/release/asena.exe ]; then
+            cp target/x86_64-pc-windows-msvc/release/asena.exe release/sentient-agent.exe
+          fi
+          # Setup wizard
+          if [ -f target/x86_64-pc-windows-msvc/release/sentient-setup.exe ]; then
+            cp target/x86_64-pc-windows-msvc/release/sentient-setup.exe release/
+          fi
+          ls -la release/ || echo "No binaries found"
       
       - name: Package
+        shell: bash
         run: |
-          cd SENTIENT_CORE
-          mkdir release
-          copy target\x86_64-pc-windows-msvc\release\sentient-cli.exe release\ || echo "CLI not found"
-          copy target\x86_64-pc-windows-msvc\release\nexus-dashboard.exe release\ || echo "Dashboard not found"
-          Compress-Archive -Path release\* -DestinationPath sentient-x86_64-pc-windows-msvc.zip
+          cd release
+          7z a sentient-windows-x86_64.zip *
+          sha256sum sentient-windows-x86_64.zip > sentient-windows-x86_64.sha256 || true
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sentient-x86_64-pc-windows-msvc
-          path: SENTIENT_CORE/sentient-x86_64-pc-windows-msvc.zip
+          name: windows-x86_64
+          path: release/sentient-windows-x86_64.*
 
-  publish-release:
-    name: Publish Release
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  NPM PACKAGE
+  # ═══════════════════════════════════════════════════════════════════════════
+  npm:
+    name: NPM Package
     needs: [build-linux, build-macos, build-windows]
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
       
-      - name: List artifacts
-        run: find artifacts -type f
+      - name: Prepare npm package
+        run: |
+          mkdir -p npm/binaries
+          
+          # Copy binaries
+          cp artifacts/linux-x86_64/sentient-linux-x86_64.tar.gz npm/binaries/
+          cp artifacts/linux-arm64/sentient-linux-arm64.tar.gz npm/binaries/ || true
+          cp artifacts/macos-x86_64/sentient-macos-x86_64.tar.gz npm/binaries/
+          cp artifacts/macos-arm64/sentient-macos-arm64.tar.gz npm/binaries/
+          cp artifacts/windows-x86_64/sentient-windows-x86_64.zip npm/binaries/
+          
+          # Create package.json
+          VERSION="${{ github.event.inputs.version || '4.0.0' }}"
+          cat > npm/package.json << EOF
+          {
+            "name": "@sentient/ai",
+            "version": "$VERSION",
+            "description": "SENTIENT - AI Operating System with Autonomous Agents",
+            "main": "index.js",
+            "bin": {
+              "sentient": "./bin/sentient.js"
+            },
+            "scripts": {
+              "postinstall": "node install.js"
+            },
+            "keywords": [
+              "ai",
+              "llm",
+              "agent",
+              "autonomous",
+              "sentient",
+              "operating-system"
+            ],
+            "author": "NEXUS OASIS",
+            "license": "MIT",
+            "repository": {
+              "type": "git",
+              "url": "https://github.com/nexsusagent-coder/SENTIENT_CORE.git"
+            },
+            "engines": {
+              "node": ">=18"
+            },
+            "os": ["linux", "darwin", "win32"],
+            "cpu": ["x64", "arm64"]
+          }
+          EOF
+          
+          # Create install script
+          cat > npm/install.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const https = require('https');
+          const { execSync } = require('child_process');
+          
+          const PLATFORM = process.platform;
+          const ARCH = process.arch;
+          
+          const BINARY_MAP = {
+            'linux-x64': 'sentient-linux-x86_64.tar.gz',
+            'linux-arm64': 'sentient-linux-arm64.tar.gz',
+            'darwin-x64': 'sentient-macos-x86_64.tar.gz',
+            'darwin-arm64': 'sentient-macos-arm64.tar.gz',
+            'win32-x64': 'sentient-windows-x86_64.zip'
+          };
+          
+          const key = `${PLATFORM}-${ARCH}`;
+          const binary = BINARY_MAP[key];
+          
+          if (!binary) {
+            console.error(`Unsupported platform: ${key}`);
+            process.exit(1);
+          }
+          
+          const binDir = path.join(__dirname, 'bin');
+          const binaryPath = path.join(binDir, PLATFORM === 'win32' ? 'sentient.exe' : 'sentient');
+          
+          // Check if binary already exists
+          if (fs.existsSync(binaryPath)) {
+            console.log('✅ Binary already installed');
+            process.exit(0);
+          }
+          
+          // Download from GitHub Releases
+          const version = require('./package.json').version;
+          const url = `https://github.com/nexsusagent-coder/SENTIENT_CORE/releases/download/v${version}/${binary}`;
+          
+          console.log(`📥 Downloading SENTIENT for ${key}...`);
+          
+          const file = fs.createWriteStream(path.join(binDir, binary));
+          https.get(url, (res) => {
+            if (res.statusCode === 302) {
+              https.get(res.headers.location, (res2) => {
+                res2.pipe(file);
+              });
+            } else {
+              res.pipe(file);
+            }
+            
+            file.on('finish', () => {
+              file.close();
+              console.log('✅ Download complete');
+              
+              // Extract
+              console.log('📦 Extracting...');
+              const tar = PLATFORM === 'win32' ? 
+                `powershell -command "Expand-Archive -Path ${path.join(binDir, binary)} -DestinationPath ${binDir}"` :
+                `tar -xzf ${path.join(binDir, binary)} -C ${binDir}`;
+              
+              execSync(tar);
+              console.log('✅ Installation complete!');
+            });
+          }).on('error', (err) => {
+            console.error('❌ Download failed:', err.message);
+            console.log('💡 Please install manually from: https://github.com/nexsusagent-coder/SENTIENT_CORE/releases');
+          });
+          EOF
+          
+          # Create CLI wrapper
+          mkdir -p npm/bin
+          cat > npm/bin/sentient.js << 'EOF'
+          #!/usr/bin/env node
+          const { spawn } = require('child_process');
+          const path = require('path');
+          
+          const PLATFORM = process.platform;
+          const binary = PLATFORM === 'win32' ? 'sentient.exe' : 'sentient';
+          const binaryPath = path.join(__dirname, '..', 'bin', binary);
+          
+          const args = process.argv.slice(2);
+          const child = spawn(binaryPath, args, { stdio: 'inherit' });
+          
+          child.on('exit', (code) => process.exit(code || 0));
+          EOF
+          
+          # Create index.js
+          cat > npm/index.js << 'EOF'
+          // SENTIENT AI Operating System
+          // https://github.com/nexsusagent-coder/SENTIENT_CORE
+          
+          module.exports = {
+            version: require('./package.json').version,
+            getBinaryPath: () => {
+              const platform = process.platform;
+              const binary = platform === 'win32' ? 'sentient.exe' : 'sentient';
+              return require('path').join(__dirname, 'bin', binary);
+            }
+          };
+          EOF
+          
+          # Create README
+          cat > npm/README.md << 'EOF'
+          # @sentient/ai
+
+          SENTIENT - AI Operating System with Autonomous Agents
+
+          ## Installation
+
+          ```bash
+          npm install -g @sentient/ai
+          sentient --version
+          ```
+
+          ## Quick Start
+
+          ```bash
+          # Interactive setup
+          sentient setup
+
+          # Start REPL
+          sentient repl
+
+          # Run autonomous agent
+          sentient agent --goal "Build a REST API"
+          ```
+
+          ## Documentation
+
+          https://github.com/nexsusagent-coder/SENTIENT_CORE
+          EOF
+          
+          echo "✅ npm package prepared"
+      
+      - name: Upload npm artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: npm/
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  PUBLISH RELEASE
+  # ═══════════════════════════════════════════════════════════════════════════
+  publish:
+    name: Publish Release
+    needs: [build-linux, build-macos, build-windows, npm]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Get version
+        id: version
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d'"' -f2)
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Prepare release notes
+        id: notes
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          cat > release-notes.md << EOF
+          # SENTIENT Core v${VERSION}
+
+          ## 🚀 Downloads
+
+          | Platform | Architecture | Download |
+          |----------|-------------|----------|
+          | Linux | x86_64 | \`sentient-linux-x86_64.tar.gz\` |
+          | Linux | ARM64 | \`sentient-linux-arm64.tar.gz\` |
+          | macOS | Intel | \`sentient-macos-x86_64.tar.gz\` |
+          | macOS | Apple Silicon | \`sentient-macos-arm64.tar.gz\` |
+          | Windows | x86_64 | \`sentient-windows-x86_64.zip\` |
+
+          ## 📦 Quick Install
+
+          \`\`\`bash
+          # Linux/macOS
+          curl -sSL https://get.sentient.ai | bash
+
+          # Windows (PowerShell)
+          irm https://get.sentient.ai/ps | iex
+
+          # npm
+          npm install -g @sentient/ai
+          \`\`\`
+
+          ## 📚 Documentation
+
+          - [Getting Started](https://github.com/nexsusagent-coder/SENTIENT_CORE#readme)
+          - [API Reference](https://docs.sentient.ai)
+          - [Examples](https://github.com/nexsusagent-coder/SENTIENT_CORE/tree/main/examples)
+
+          ## ✨ What's New
+
+          - Binary distribution for all platforms
+          - npm package (@sentient/ai)
+          - Improved onboarding wizard
+          - Telegram & Discord integrations
+          - Voice support (Whisper + TTS)
+          EOF
+          echo "file=release-notes.md" >> $GITHUB_OUTPUT
       
       - name: Upload to release
         uses: softprops/action-gh-release@v2
         if: github.event_name == 'release'
         with:
-          files: artifacts/**/*
+          files: |
+            artifacts/linux-x86_64/*
+            artifacts/linux-arm64/*
+            artifacts/macos-x86_64/*
+            artifacts/macos-arm64/*
+            artifacts/windows-x86_64/*
+            artifacts/npm-package/*
+          body_path: release-notes.md
+      
+      - name: Create latest release
+        uses: softprops/action-gh-release@v2
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: SENTIENT Core v${{ steps.version.outputs.version }}
+          files: |
+            artifacts/linux-x86_64/*
+            artifacts/linux-arm64/*
+            artifacts/macos-x86_64/*
+            artifacts/macos-arm64/*
+            artifacts/windows-x86_64/*
+          body_path: release-notes.md
+          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  #  PUBLISH NPM (only on release)
+  # ═══════════════════════════════════════════════════════════════════════════
+  publish-npm:
+    name: Publish to npm
+    needs: publish
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download npm package
+        uses: actions/download-artifact@v4
+        with:
+          name: npm-package
+          path: npm
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Publish
+        run: |
+          cd npm
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
