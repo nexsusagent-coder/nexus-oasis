@@ -12,6 +12,8 @@
 [![Integrations](https://img.shields.io/badge/Integrations-71-purple)](./integrations)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](./LICENSE)
 
+**👉 [Neden SENTIENT?](./WHY_SENTIENT.md)** - Rakiplerle karşılaştırma, değer önerisi ve tasarruf hesaplaması
+
 ---
 
 ## 📑 Table of Contents
