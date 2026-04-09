@@ -1,0 +1,11 @@
+[package]
+name = "telegram-bot"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_channels = { path = "../../crates/sentient_channels" }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"

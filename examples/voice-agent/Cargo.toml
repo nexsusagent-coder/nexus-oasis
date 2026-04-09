@@ -1,0 +1,13 @@
+[package]
+name = "voice-agent"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_voice = { path = "../../crates/sentient_voice" }
+sentient_wake = { path = "../../crates/sentient_wake" }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+rodio = "0.19"

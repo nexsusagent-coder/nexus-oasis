@@ -1,0 +1,16 @@
+[package]
+name = "enterprise-sso"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_enterprise = { path = "../../crates/sentient_enterprise" }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+axum = "0.7"
+tower = "0.5"
+tower-http = { version = "0.5", features = ["cors"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

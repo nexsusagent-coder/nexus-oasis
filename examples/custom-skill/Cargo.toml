@@ -1,0 +1,14 @@
+[package]
+name = "custom-skill"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+sentient_skills = { path = "../../crates/sentient_skills" }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+async-trait = "0.1"

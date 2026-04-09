@@ -1,0 +1,678 @@
+openapi: 3.0.3
+info:
+  title: SENTIENT AI API
+  description: |
+    SENTIENT AI Operating System API
+    
+    A comprehensive API for AI agent interactions, voice processing,
+    channel management, and enterprise features.
+  version: 1.0.0
+  contact:
+    name: SENTIENT Support
+    email: support@sentient.ai
+    url: https://sentient.ai
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.sentient.ai/v1
+    description: Production
+  - url: http://localhost:8080/v1
+    description: Development
+
+tags:
+  - name: Chat
+    description: Chat operations
+  - name: Agents
+    description: Agent management
+  - name: Sessions
+    description: Session management
+  - name: Skills
+    description: Skill management
+  - name: Channels
+    description: Channel management
+  - name: Voice
+    description: Voice operations
+  - name: Memory
+    description: Memory operations
+  - name: Enterprise
+    description: Enterprise features
+
+paths:
+  /chat:
+    post:
+      tags: [Chat]
+      summary: Send a chat message
+      description: Send a message to the AI agent and receive a response
+      operationId: chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /chat/stream:
+    post:
+      tags: [Chat]
+      summary: Stream chat response
+      description: Send a message and receive streaming response via SSE
+      operationId: chatStream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: SSE stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /sessions:
+    get:
+      tags: [Sessions]
+      summary: List sessions
+      operationId: listSessions
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionList'
+
+  /sessions/{sessionId}:
+    get:
+      tags: [Sessions]
+      summary: Get session details
+      operationId: getSession
+      parameters:
+        - $ref: '#/components/parameters/SessionIdParam'
+      responses:
+        '200':
+          description: Session details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [Sessions]
+      summary: Delete a session
+      operationId: deleteSession
+      parameters:
+        - $ref: '#/components/parameters/SessionIdParam'
+      responses:
+        '204':
+          description: Session deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /agents:
+    get:
+      tags: [Agents]
+      summary: List agents
+      operationId: listAgents
+      responses:
+        '200':
+          description: List of agents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentList'
+
+    post:
+      tags: [Agents]
+      summary: Create an agent
+      operationId: createAgent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentCreate'
+      responses:
+        '201':
+          description: Agent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+
+  /agents/{agentId}:
+    get:
+      tags: [Agents]
+      summary: Get agent details
+      operationId: getAgent
+      parameters:
+        - $ref: '#/components/parameters/AgentIdParam'
+      responses:
+        '200':
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags: [Agents]
+      summary: Update an agent
+      operationId: updateAgent
+      parameters:
+        - $ref: '#/components/parameters/AgentIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentUpdate'
+      responses:
+        '200':
+          description: Agent updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+
+    delete:
+      tags: [Agents]
+      summary: Delete an agent
+      operationId: deleteAgent
+      parameters:
+        - $ref: '#/components/parameters/AgentIdParam'
+      responses:
+        '204':
+          description: Agent deleted
+
+  /skills:
+    get:
+      tags: [Skills]
+      summary: List available skills
+      operationId: listSkills
+      responses:
+        '200':
+          description: List of skills
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillList'
+
+  /channels:
+    get:
+      tags: [Channels]
+      summary: List configured channels
+      operationId: listChannels
+      responses:
+        '200':
+          description: List of channels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelList'
+
+    post:
+      tags: [Channels]
+      summary: Configure a channel
+      operationId: createChannel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChannelCreate'
+      responses:
+        '201':
+          description: Channel configured
+
+  /voice/transcribe:
+    post:
+      tags: [Voice]
+      summary: Transcribe audio
+      operationId: transcribeAudio
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                audio:
+                  type: string
+                  format: binary
+                language:
+                  type: string
+      responses:
+        '200':
+          description: Transcription result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranscriptionResult'
+
+  /voice/synthesize:
+    post:
+      tags: [Voice]
+      summary: Synthesize speech
+      operationId: synthesizeSpeech
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SynthesizeRequest'
+      responses:
+        '200':
+          description: Audio file
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+
+  /memory/search:
+    post:
+      tags: [Memory]
+      summary: Search memory
+      operationId: searchMemory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemorySearchRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemorySearchResult'
+
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User message
+        session_id:
+          type: string
+          description: Optional session ID
+        model:
+          type: string
+          default: gpt-4o
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+          default: 0.7
+        max_tokens:
+          type: integer
+          minimum: 1
+          maximum: 128000
+
+    ChatResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        response:
+          type: string
+        session_id:
+          type: string
+        model:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
+        created_at:
+          type: string
+          format: date-time
+
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        model:
+          type: string
+        system_prompt:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        channels:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [active, inactive, error]
+        created_at:
+          type: string
+          format: date-time
+
+    AgentCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        model:
+          type: string
+          default: gpt-4o
+        system_prompt:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        channels:
+          type: array
+          items:
+            type: string
+
+    AgentUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        model:
+          type: string
+        system_prompt:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        created_at:
+          type: string
+          format: date-time
+        last_active:
+          type: string
+          format: date-time
+
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, assistant, system]
+        content:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    Skill:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+
+    Channel:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [telegram, discord, slack, whatsapp, signal, matrix, irc, teams, wechat, line, messenger]
+        status:
+          type: string
+          enum: [active, inactive, error]
+        connected_at:
+          type: string
+          format: date-time
+        error:
+          type: string
+
+    TranscriptionResult:
+      type: object
+      properties:
+        text:
+          type: string
+        duration_seconds:
+          type: number
+        language:
+          type: string
+
+    SynthesizeRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+        voice:
+          type: string
+          default: alloy
+        format:
+          type: string
+          enum: [mp3, wav, ogg]
+          default: mp3
+
+    MemorySearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+        limit:
+          type: integer
+          default: 10
+
+    MemorySearchResult:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              content:
+                type: string
+              relevance_score:
+                type: number
+              timestamp:
+                type: string
+                format: date-time
+
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+        version:
+          type: string
+        uptime_secs:
+          type: integer
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+
+    AgentList:
+      type: object
+      properties:
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Agent'
+        total:
+          type: integer
+
+    SessionList:
+      type: object
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Session'
+        total:
+          type: integer
+
+    SkillList:
+      type: object
+      properties:
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+
+    ChannelList:
+      type: object
+      properties:
+        channels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Channel'
+
+  parameters:
+    SessionIdParam:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+
+    AgentIdParam:
+      name: agentId
+      in: path
+      required: true
+      schema:
+        type: string
+
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 20
+
+    OffsetParam:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        default: 0
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    RateLimited:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []

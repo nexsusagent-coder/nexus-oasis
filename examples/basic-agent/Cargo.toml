@@ -1,0 +1,10 @@
+[package]
+name = "basic-agent"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+sentient_core = { path = "../../crates/sentient_core" }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
