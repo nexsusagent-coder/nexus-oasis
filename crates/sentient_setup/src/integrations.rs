@@ -1,8 +1,5 @@
 //! Integration Setup - Entegrasyon kurulumları
 
-use anyhow::Result;
-use std::collections::HashMap;
-
 pub struct TelegramSetup;
 pub struct DiscordSetup;
 pub struct SlackSetup;

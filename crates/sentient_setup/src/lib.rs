@@ -1,8 +1,8 @@
 //! ═══════════════════════════════════════════════════════════════════════════════
-//!  SENTIENT SETUP WIZARD v4.0.0 - Universal Omni-Gateway
+//!  SENTIENT SETUP WIZARD v5.0.0 - Modern Interactive TUI
 //! ═══════════════════════════════════════════════════════════════════════════════
-//! 
-//!  İlk açılışta çalışan kurulum sihirbazı.
+//!
+//!  Arrow-key navigation, Space for multi-select, Enter to confirm
 //!  Universal LLM Gateway + 20+ Messaging Channels
 //!  Agent-S3 Hardware Permissions
 
@@ -13,7 +13,7 @@ pub mod permissions;
 
 pub use wizard::SetupWizard;
 pub use config::{
-    SetupConfig, ApiKeyConfig, IntegrationConfig, IntegrationConfigs, 
+    SetupConfig, ApiKeyConfig, IntegrationConfig, IntegrationConfigs,
     PermissionConfig, SetupStatus, SetupResult, RoutingModeConfig
 };
 pub use integrations::{TelegramSetup, DiscordSetup, SlackSetup, EmailSetup, GitHubSetup};

@@ -9,9 +9,17 @@ authors = ["SENTIENT Core Team"]
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-dialoguer = "0.11"
+
+# Modern TUI Libraries
+dialoguer = { version = "0.11", features = ["fuzzy-select"] }
+inquire = "0.7"
 console = "0.15"
 indicatif = "0.17"
+
+# Config & Utils
 dirs = "5.0"
 toml = "0.8"
 anyhow = { workspace = true }
+
+# Async runtime for progress bars
+futures = "0.3"
