@@ -12,21 +12,21 @@ $ErrorActionPreference = "Continue"
 Clear-Host
 
 Write-Host ""
-Write-Host "    ╔═══════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "    ║                                                                           ║" -ForegroundColor Cyan
-Write-Host "    ║     ███████╗███████╗███╗   ██╗████████╗██╗ ██████╗ █████╗                 ║" -ForegroundColor Cyan
-Write-Host "    ║     ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║██╔════╝██╔══██╗                ║" -ForegroundColor Cyan
-Write-Host "    ║     ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██║     ███████║                ║" -ForegroundColor Cyan
-Write-Host "    ║     ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║     ██╔══██║                ║" -ForegroundColor Cyan
-Write-Host "    ║     ███████║███████╗██║ ╚████║   ██║   ██║╚██████╗██║  ██║                ║" -ForegroundColor Cyan
-Write-Host "    ║     ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝                ║" -ForegroundColor Cyan
-Write-Host "    ║                                                                           ║" -ForegroundColor Cyan
-Write-Host "    ║              🧠 The Operating System That Thinks                          ║" -ForegroundColor Cyan
-Write-Host "    ║                                                                           ║" -ForegroundColor Cyan
-Write-Host "    ║              🎮 Interactive TUI Setup Wizard                              ║" -ForegroundColor Cyan
-Write-Host "    ║              ↑↓ Navigate    Space: Select    Enter: Confirm              ║" -ForegroundColor Cyan
-Write-Host "    ║                                                                           ║" -ForegroundColor Cyan
-Write-Host "    ╚═══════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Host "    ╔══════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+Write-Host "    ║                                                                              ║" -ForegroundColor Cyan
+Write-Host "    ║   ███████╗██╗███████╗███╗   ██╗██████╗ ███████╗██████╗ ██████╗ ██╗███╗   ██╗ ║" -ForegroundColor Cyan
+Write-Host "    ║   ██╔════╝██║██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗██╔══██╗██║████╗  ██║ ║" -ForegroundColor Cyan
+Write-Host "    ║   ███████╗██║█████╗  ██╔██╗ ██║██║  ██║█████╗  ██████╔╝██████╔╝██║██╔██╗ ██║ ║" -ForegroundColor Cyan
+Write-Host "    ║   ╚════██║██║██╔══╝  ██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗██╔══██╗██║██║╚██╗██║ ║" -ForegroundColor Cyan
+Write-Host "    ║   ███████║██║███████╗██║ ╚████║██████╔╝███████╗██║  ██║██║  ██║██║██║ ╚████║ ║" -ForegroundColor Cyan
+Write-Host "    ║   ╚══════╝╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ║" -ForegroundColor Cyan
+Write-Host "    ║                                                                              ║" -ForegroundColor Cyan
+Write-Host "    ║                     🧠 The Operating System That Thinks                     ║" -ForegroundColor Cyan
+Write-Host "    ║                                                                              ║" -ForegroundColor Cyan
+Write-Host "    ║                     🎮 Interactive TUI Setup Wizard                         ║" -ForegroundColor Cyan
+Write-Host "    ║                     ↑↓ Navigate    Space: Select    Enter: Confirm         ║" -ForegroundColor Cyan
+Write-Host "    ║                                                                              ║" -ForegroundColor Cyan
+Write-Host "    ╚══════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
 Write-Host ""
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -158,9 +158,9 @@ if (Test-Path $SetupExe) {
 # ─────────────────────────────────────────────────────────────────────────────
 
 Write-Host ""
-Write-Host "╔═══════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║  🎉 SENTIENT kurulumu tamamlandı!                                          ║" -ForegroundColor Green
-Write-Host "╚═══════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+Write-Host "╔══════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Green
+Write-Host "║  🎉 SENTIENT kurulumu tamamlandı!                                            ║" -ForegroundColor Green
+Write-Host "╚══════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Green
 Write-Host ""
 
 Write-Host "🚀 Başlatmak için:" -ForegroundColor White

@@ -20,21 +20,21 @@ NC='\033[0m'
 # ─────────────────────────────────────────────────────────────────────────────
 
 echo -e "${CYAN}"
-echo "╔═══════════════════════════════════════════════════════════════════════════╗"
-echo "║                                                                           ║"
-echo "║     ███████╗███████╗███╗   ██╗████████╗██╗ ██████╗ █████╗                 ║"
-echo "║     ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║██╔════╝██╔══██╗                ║"
-echo "║     ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██║     ███████║                ║"
-echo "║     ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║     ██╔══██║                ║"
-echo "║     ███████║███████╗██║ ╚████║   ██║   ██║╚██████╗██║  ██║                ║"
-echo "║     ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝                ║"
-echo "║                                                                           ║"
-echo "║              ${BOLD}🧠 The Operating System That Thinks${NC}${CYAN}                          ║"
-echo "║                                                                           ║"
-echo "║              🎮 Interactive TUI Setup Wizard                              ║"
-echo "║              ↑↓ Navigate    Space: Select    Enter: Confirm              ║"
-echo "║                                                                           ║"
-echo "╚═══════════════════════════════════════════════════════════════════════════╝"
+echo "╔══════════════════════════════════════════════════════════════════════════════╗"
+echo "║                                                                              ║"
+echo "║   ███████╗██╗███████╗███╗   ██╗██████╗ ███████╗██████╗ ██████╗ ██╗███╗   ██╗ ║"
+echo "║   ██╔════╝██║██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗██╔══██╗██║████╗  ██║ ║"
+echo "║   ███████╗██║█████╗  ██╔██╗ ██║██║  ██║█████╗  ██████╔╝██████╔╝██║██╔██╗ ██║ ║"
+echo "║   ╚════██║██║██╔══╝  ██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗██╔══██╗██║██║╚██╗██║ ║"
+echo "║   ███████║██║███████╗██║ ╚████║██████╔╝███████╗██║  ██║██║  ██║██║██║ ╚████║ ║"
+echo "║   ╚══════╝╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ║"
+echo "║                                                                              ║"
+echo "║                     ${BOLD}🧠 The Operating System That Thinks${NC}${CYAN}                     ║"
+echo "║                                                                              ║"
+echo "║                     🎮 Interactive TUI Setup Wizard                         ║"
+echo "║                     ↑↓ Navigate    Space: Select    Enter: Confirm         ║"
+echo "║                                                                              ║"
+echo "╚══════════════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 echo ""
 
@@ -62,10 +62,10 @@ fi
 
 # Check Git
 if ! command -v git &> /dev/null; then
-    echo -e "${YELLOW}⚠️  Git kurulu değil. Lütfen Git'i kurun.${NC}"
+    echo -e "${YELLOW}⚠️  Git bulunamadı. Lütfen kurun: apt install git / brew install git${NC}"
     exit 1
 fi
-echo -e "${GREEN}✅ Git: $(git --version | cut -d' ' -f3)${NC}"
+echo -e "${GREEN}✅ Git: $(git --version)${NC}"
 
 echo ""
 
@@ -75,12 +75,15 @@ echo ""
 
 INSTALL_DIR="${SENTIENT_DIR:-$HOME/sentient}"
 
-if [[ ! -d "$INSTALL_DIR" ]]; then
+if [ ! -d "$INSTALL_DIR" ]; then
     echo -e "${BOLD}📥 SENTIENT indiriliyor...${NC}"
     git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git "$INSTALL_DIR"
     echo -e "${GREEN}✅ Depo klonlandı: $INSTALL_DIR${NC}"
 else
     echo -e "${GREEN}✅ Depo mevcut: $INSTALL_DIR${NC}"
+    cd "$INSTALL_DIR"
+    echo -e "${BOLD}📥 Güncellemeler kontrol ediliyor...${NC}"
+    git pull || true
 fi
 
 cd "$INSTALL_DIR"
@@ -91,49 +94,65 @@ cd "$INSTALL_DIR"
 
 echo ""
 echo -e "${BOLD}🔨 TUI Sihirbazı derleniyor...${NC}"
+echo "   (Bu işlem birkaç dakika sürebilir...)"
 echo ""
 
-# Build the setup wizard binary
-cargo build --release --bin sentient-setup 2>/dev/null || {
-    echo -e "${YELLOW}⚠️  Setup binary derlenemedi, alternatif yöntem...${NC}"
-    
-    # Fallback: Run setup directly
-    if [[ -f "./target/release/sentient-shell" ]]; then
-        ./target/release/sentient-shell --setup
-    else
-        echo -e "${YELLOW}ℹ️  Manuel kurulum için README.md'yi okuyun${NC}"
-    fi
-    exit 0
-}
+cargo build --release --bin sentient-setup
+
+if [ $? -eq 0 ]; then
+    echo ""
+    echo -e "${GREEN}✅ TUI Sihirbazı derlendi!${NC}"
+else
+    echo ""
+    echo -e "${YELLOW}⚠️  Derleme başarısız oldu!${NC}"
+    echo ""
+    echo "Alternatif kurulum yöntemleri:"
+    echo ""
+    echo "1. Docker ile:"
+    echo "   docker run -it ghcr.io/nexsusagent-coder/sentient:latest"
+    echo ""
+    echo "2. Binary indir:"
+    echo "   https://github.com/nexsusagent-coder/SENTIENT_CORE/releases"
+    echo ""
+    exit 1
+fi
 
 # ─────────────────────────────────────────────────────────────────────────────
 # RUN TUI WIZARD
 # ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
-echo -e "${BOLD}🎮 Interactive TUI Sihirbazı başlatılıyor...${NC}"
-echo -e "${CYAN}   ↑↓ Ok tuşlarıyla gezinin${NC}"
-echo -e "${CYAN}   Space ile çoklu seçim yapın${NC}"
-echo -e "${CYAN}   Enter ile onaylayın${NC}"
+echo -e "${CYAN}🎮 Interactive TUI Sihirbazı başlatılıyor...${NC}"
+echo "   ↑↓ Ok tuşlarıyla gezinin"
+echo "   Space ile çoklu seçim yapın"
+echo "   Enter ile onaylayın"
 echo ""
+
 sleep 1
 
 # Run the interactive TUI wizard
-./target/release/sentient-setup
+SETUP_EXE="$INSTALL_DIR/target/release/sentient-setup"
+if [ -f "$SETUP_EXE" ]; then
+    "$SETUP_EXE"
+else
+    echo -e "${YELLOW}⚠️  Setup executable bulunamadı${NC}"
+fi
 
 # ─────────────────────────────────────────────────────────────────────────────
 # DONE
 # ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
-echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║  🎉 SENTIENT kurulumu tamamlandı!                                          ║${NC}"
-echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════════════════╝${NC}"
+echo -e "${GREEN}╔══════════════════════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${GREEN}║  🎉 SENTIENT kurulumu tamamlandı!                                            ║${NC}"
+echo -e "${GREEN}╚══════════════════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "${BOLD}🚀 Başlatmak için:${NC}"
+
+echo "🚀 Başlatmak için:"
 echo -e "   ${CYAN}cd $INSTALL_DIR${NC}"
 echo -e "   ${CYAN}./target/release/sentient-shell${NC}"
 echo ""
-echo -e "${BOLD}🌐 Dashboard:${NC}"
+
+echo "🌐 Dashboard:"
 echo -e "   ${CYAN}http://localhost:8080${NC}"
 echo ""
