@@ -1,0 +1,43 @@
+[package]
+name = "sentient_cevahir"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Cevahir AI Integration - Full-stack LLM Engine with Cognitive Reasoning"
+readme = "README.md"
+keywords = ["llm", "cognitive", "ai", "nlp", "turkish"]
+categories = ["science", "api-bindings", "text-processing"]
+
+[dependencies]
+# Workspace dependencies
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+log.workspace = true
+env_logger.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+
+# PyO3 for Python bridge
+pyo3 = { workspace = true }
+
+# Additional dependencies
+parking_lot = "0.12"
+once_cell = "1.19"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = ["full"]
+full = ["cognitive", "tokenizer", "model"]
+cognitive = []
+tokenizer = []
+model = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

@@ -48,6 +48,23 @@ Kaynak kodu SENTIENT deposuna dahil DEĞİLDİR.
 Bu projeler /integrations/ dizininde referans alınmıştır.
 SENTIENT, PyO3 köprüsü ile bu projeleri "native modül" olarak sarmalar.
 
+### 2.0: LLM Engine
+
+| Proje          | Lisans   | Kaynak                                    | Amaç                    |
+|----------------|----------|-------------------------------------------|-------------------------|
+| Cevahir AI     | Apache-2 | https://github.com/myylogic/cevahir-ai    | Türkçe LLM, Cognitive   |
+
+**Cevahir AI Detayları:**
+- **Geliştirici:** Muhammed Yasin Yılmaz ([@myylogic](https://github.com/myylogic))
+- **Versiyon:** V-7 Architecture
+- **Özellikler:**
+  - Neural Network: RoPE, RMSNorm, SwiGLU, KV Cache, MoE, GQA, YaRN
+  - Cognitive Strategies: Direct, Think, Debate, Tree of Thoughts
+  - Turkish BPE Tokenizer: 60K vocabulary, GPU batch processing
+  - Memory & RAG: Vector store, semantic cache
+  - Middleware: Cache, tracing, metrics, validation
+- **Entegrasyon:** `crates/sentient_cevahir/` (PyO3 bridge)
+
 ### 2.1: Agent Frameworks
 
 | Proje          | Lisans   | Kaynak                                    | Amaç                    |

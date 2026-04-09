@@ -88,6 +88,55 @@ Security filters for all input/output layers:
                      Stored on server
 ```
 
+### 8. CEVAHIR AI ENGINE (Local LLM & Cognitive Reasoning)
+
+**Full-stack LLM engine with cognitive reasoning capabilities.**
+
+Cevahir AI,SENTIENT OS'inyerel LLM motoru olarak entegre edilmiştir:
+
+- **Neural Network (V-7):** RoPE, RMSNorm, SwiGLU, KV Cache, MoE, GQA
+- **Cognitive Strategies:** Direct, Think, Debate, Tree of Thoughts
+- **Turkish BPE Tokenizer:** Native Türkçe tokenizer, GPU batch processing
+- **Memory & RAG:** Vector store, semantic cache, knowledge graph
+- **Tool Execution:** Dynamic tool registration ve execution
+- **Middleware Pipeline:** Cache, tracing, metrics, validation
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      SENTIENT OS Core                            │
+│                    (Rust Event Graph)                            │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    sentient_cevahir (Rust)                       │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐           │
+│  │CevahirBridge │  │ CognitiveMgr │  │TokenizerWrap │           │
+│  │  (PyO3)      │  │ (Strategies) │  │  (BPE)       │           │
+│  └──────────────┘  └──────────────┘  └──────────────┘           │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     Cevahir AI (Python/PyTorch)                  │
+│  - V-7 Neural Network (GPT-4/LLaMA seviyesi mimari)            │
+│  - Cognitive Management (Think/Debate/ToT stratejileri)        │
+│  - Turkish BPE Tokenizer (60K vocabulary)                      │
+│  - Memory & RAG (Vector store, semantic cache)                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Kullanım Alanları:**
+
+| Senaryo | Strateji | Açıklama |
+|---------|----------|----------|
+| Basit sorgular | Direct | Doğrudan yanıt |
+| Kod analizi | Think | Adım adım analiz |
+| Tasarım kararları | Debate | Çoklu perspektif |
+| Debug/reasoning | TreeOfThoughts | Ağaç yapısında düşünme |
+
+**Location:** `crates/sentient_cevahir/`
+
 ---
 
 ## ERROR MANAGEMENT AND IDENTITY
@@ -128,6 +177,7 @@ Raw errors from external systems (TypeError, Traceback, etc.) are not shown dire
 
 | Category | Projects | License |
 |----------|----------|---------|
+| **LLM Engine** | **Cevahir AI** | **Apache-2** |
 | Agent Framework | CrewAI, AutoGen, OpenHands | MIT |
 | Browser | Browser-Use, Lightpanda | MIT |
 | Memory | Mem0, MemGPT, ChromaDB | MIT/Apache-2 |
@@ -142,10 +192,62 @@ Raw errors from external systems (TypeError, Traceback, etc.) are not shown dire
 
 | Metric | Value |
 |--------|-------|
-| Rust Crate | 37 |
-| Rust Files | 553 |
-| Tests | 547 ✅ |
-| Integrated Projects | 71 |
+| Rust Crate | 38 |
+| Rust Files | 561 |
+| Tests | 560+ ✅ |
+| Integrated Projects | 72 |
+
+---
+
+## CEVAHIR AI INTEGRATION DETAILS
+
+### Mimari Özellikler
+
+| Özellik | Standart | Açıklama |
+|---------|----------|----------|
+| **RoPE** | GPT-3+/LLaMA | Rotary Position Embedding |
+| **RMSNorm** | GPT-3+/LLaMA | Root Mean Square Normalization |
+| **SwiGLU** | GPT-4/PaLM | Gated Linear Unit aktivasyon |
+| **KV Cache** | GPT-4/Claude | Inference optimizasyonu |
+| **GQA** | LLaMA-2/3/Mistral | Grouped Query Attention |
+| **MoE** | GPT-4/Gemini | Mixture of Experts |
+| **YaRN** | LLaMA-3.1 | Uzun context desteği |
+| **Flash Attention** | Endüstri | Memory-efficient attention |
+
+### Cognitive Stratejiler
+
+```rust
+use sentient_cevahir::{CevahirBridge, CognitiveStrategy};
+
+// Otomatik strateji seçimi
+let output = bridge.process_with_strategy(
+    "Bu kodu analiz et",
+    CognitiveStrategy::Think,
+).await?;
+
+// Tree of Thoughts ile karmaşık problem
+let output = bridge.process_with_strategy(
+    "Bu hatanın kök nedenini bul",
+    CognitiveStrategy::TreeOfThoughts,
+).await?;
+```
+
+### Entegrasyon Noktaları
+
+|SENTIENT Modül | Cevahir Bileşen | İşlev |
+|----------------|-----------------|-------|
+| sentient_memory | MemoryAdapter | Epizodik/semantik bellek |
+| sentient_vector | VectorStore | Semantic search |
+| sentient_graph | EventBus | Event emit |
+| sentient_guardrails | ValidationMiddleware | Güvenlik kontrolü |
+| oasis_browser | Tool (browser) | Web etkileşimi |
+| sentient_sandbox | Tool (sandbox) | Kod çalıştırma |
+
+### Kaynak
+
+- **GitHub:** https://github.com/myylogic/cevahir-ai
+- **Geliştirici:** Muhammed Yasin Yılmaz ([@myylogic](https://github.com/myylogic))
+- **Lisans:** Apache License 2.0
 
 ---
 

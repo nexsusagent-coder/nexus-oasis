@@ -49,6 +49,8 @@ members = [
     "crates/sentient_sync",
     # v6.0.0 Skills System (DeerFlow Integration)
     "crates/sentient_skills",
+    # v7.0.0 Cevahir AI Integration (Turkish LLM Cognitive Engine)
+    "crates/sentient_cevahir",
     # Skills System
     "skills",
     "scripts",
