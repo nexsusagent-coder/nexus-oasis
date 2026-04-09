@@ -69,29 +69,115 @@
 - ✅ Debian 12+
 - ✅ Fedora 39+
 - ✅ macOS 13+ (Apple Silicon)
-- ✅ Windows 10/11 (WSL2)
+- ✅ Windows 10/11 (Native + WSL2)
 
 ---
 
 ## 2. STEP-BY-STEP INSTALLATION
 
-### 2.1 Prerequisites
+### 2.0 Platform Selection
+
+| Platform | Setup Command | Notes |
+|----------|---------------|-------|
+| **🐧 Linux** | `./setup.sh` | Ubuntu/Debian/Fedora |
+| **🪟 Windows** | `powershell -ExecutionPolicy ByPass -File setup.ps1` | Native PowerShell |
+| **🍎 macOS** | `./setup.sh` | Homebrew required |
+
+---
+
+### 2.1 🐧 Linux / macOS Installation
 
 ```bash
 # Open terminal and clone the repository
-git clone https://github.com/nexsusagent-coder/sentient-os.git
-cd sentient-os
+git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
+cd SENTIENT_CORE
 
 # Give execution permission
 chmod +x setup.sh
-```
 
-### 2.2 Start Installation
-
-```bash
 # One-command installation
 ./setup.sh
 ```
+
+---
+
+### 2.2 🪟 Windows Installation (Native)
+
+#### YÖNTEM 1: Otomatik Kurulum (Önerilen)
+
+```powershell
+# ADIM 1: PowerShell'i YÖNETİCİ olarak açın
+# Sağ tık -> "Run as Administrator"
+
+# ADIM 2: Execution Policy ayarla
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
+# ADIM 3: Kurulum scriptini çalıştır
+# Seçenek A: Local dosyadan
+.\setup.ps1
+
+# Seçenek B: GitHub'dan doğrudan
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/setup.ps1'))
+
+# ADIM 4: Gemma 4 modelini seç
+# 1 = gemma4:31b (Önerilen, ~20GB)
+# 2 = gemma4:12b (~8GB)
+# 3 = gemma4:4b (~3GB)
+```
+
+#### YÖNTEM 2: Manuel Kurulum
+
+```powershell
+# 1. Visual Studio Build Tools kur
+# https://visualstudio.microsoft.com/visual-cpp-build-tools/
+# "Desktop development with C++" iş yükünü seç
+
+# 2. Rust kur
+# https://rustup.rs adresinden indir
+# Veya PowerShell'de:
+winget install Rustlang.Rustup
+
+# 3. Git kur
+winget install Git.Git
+
+# 4. Ollama kur (Gemma 4 Kernel)
+# https://ollama.com/download adresinden Windows sürümünü indir
+
+# 5. Projeyi klonla
+git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
+cd SENTIENT_CORE
+
+# 6. Derle
+cargo build --release
+
+# 7. Başlat
+.\target\release\sentient-shell.exe
+```
+
+#### Windows Gereksinimleri
+
+| Bileşen | Minimum | İndirme Linki |
+|---------|---------|---------------|
+| Windows | 10/11 64-bit | - |
+| Visual Studio Build Tools | 2022 | [İndir](https://visualstudio.microsoft.com/visual-cpp-build-tools/) |
+| Rust | 1.75+ | [İndir](https://rustup.rs) |
+| Git | 2.30+ | [İndir](https://git-scm.com/download/win) |
+| Ollama | Latest | [İndir](https://ollama.com/download) |
+| Docker Desktop | Latest | [İndir](https://www.docker.com/products/docker-desktop/) (Opsiyonel) |
+
+#### Windows Kurulum Sorunları
+
+| Sorun | Çözüm |
+|-------|-------|
+| `cargo not found` | Terminal'i yeniden aç veya `~/.cargo/bin` PATH'e ekle |
+| `linker 'link.exe' not found` | Visual Studio Build Tools kur |
+| `openssl error` | `cargo install openssl` veya vcpkg kullan |
+| `Permission denied` | PowerShell'i yönetici olarak çalıştır |
+| `Execution Policy` hatası | `Set-ExecutionPolicy Bypass -Scope Process` |
+
+---
+
+### 2.3 Installation Progress
 
 **Installation Steps (Automatic):**
 
@@ -129,7 +215,9 @@ chmod +x setup.sh
 ✅ SENTIENT OS installed successfully!
 ```
 
-### 2.3 First Launch
+### 2.4 First Launch
+
+#### Linux / macOS
 
 ```bash
 # Start SENTIENT Shell
@@ -137,6 +225,25 @@ sentient
 
 # Or use make
 make run
+
+# Dashboard
+cargo run --release --bin sentient-dashboard
+# http://localhost:8080
+```
+
+#### Windows
+
+```powershell
+# Start SENTIENT Shell
+.\target\release\sentient-shell.exe
+
+# Dashboard
+.\target\release\sentient-dashboard.exe
+# http://localhost:8080
+
+# Or with cargo
+cargo run --release --bin sentient-shell
+cargo run --release --bin sentient-dashboard
 ```
 
 **First Launch Output:**
