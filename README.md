@@ -4,6 +4,10 @@
 
 A powerful, modular AI agent platform with 100+ LLM support, multi-channel communication, voice integration, and extensible skills marketplace.
 
+[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-7289DA?logo=discord)](https://discord.gg/sentient)
+[![GitHub Discussions](https://img.shields.io/badge/Discussions-Ask%20Questions-blue?logo=github)](https://github.com/nexsusagent-coder/SENTIENT_CORE/discussions)
+[![Twitter Follow](https://img.shields.io/badge/Follow-@SentientAI__OS-1DA1F2?logo=twitter)](https://twitter.com/SentientAI_OS)
+
 ---
 
 ## 🚀 Quick Install

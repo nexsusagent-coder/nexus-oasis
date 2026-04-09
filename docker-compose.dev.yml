@@ -1,0 +1,136 @@
+# SENTIENT AI OS - Development Docker Compose
+# Hot-reload enabled development environment
+
+version: '3.8'
+
+services:
+  # ==========================================
+  # SENTIENT Gateway (Development)
+  # ==========================================
+  sentient-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: sentient/ai:dev
+    container_name: sentient-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "9229:9229"  # Debug port
+    environment:
+      - RUST_LOG=debug
+      - RUST_BACKTRACE=1
+      - DATABASE_URL=postgres://sentient:sentient@postgres:5432/sentient
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      # Mount source code for hot reload
+      - ./crates:/app/crates:ro
+      - ./Cargo.toml:/app/Cargo.toml:ro
+      - ./Cargo.lock:/app/Cargo.lock:ro
+      - sentient-dev-data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sentient-dev-network
+
+  # ==========================================
+  # PostgreSQL Database (Development)
+  # ==========================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: sentient-postgres-dev
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=sentient
+      - POSTGRES_PASSWORD=sentient
+      - POSTGRES_DB=sentient
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentient"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sentient-dev-network
+
+  # ==========================================
+  # Redis Cache (Development)
+  # ==========================================
+  redis:
+    image: redis:7-alpine
+    container_name: sentient-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-dev-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sentient-dev-network
+
+  # ==========================================
+  # Adminer (Database GUI)
+  # ==========================================
+  adminer:
+    image: adminer:latest
+    container_name: sentient-adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    networks:
+      - sentient-dev-network
+
+  # ==========================================
+  # Redis Commander (Redis GUI)
+  # ==========================================
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: sentient-redis-ui
+    restart: unless-stopped
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8082:8081"
+    networks:
+      - sentient-dev-network
+
+  # ==========================================
+  # Mailhog (Email testing)
+  # ==========================================
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: sentient-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP
+      - "8083:8025"  # Web UI
+    networks:
+      - sentient-dev-network
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  sentient-dev-network:
+    driver: bridge
+
+# ==========================================
+# Volumes
+# ==========================================
+volumes:
+  sentient-dev-data:
+  postgres-dev-data:
+  redis-dev-data:

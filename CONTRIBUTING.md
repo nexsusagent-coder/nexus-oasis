@@ -18,6 +18,12 @@ First off, thank you for considering contributing to SENTIENT! It's people like 
 
 This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
+## 💬 Community
+
+- **Discord**: [Join our Discord](https://discord.gg/sentient)
+- **GitHub Discussions**: [Ask questions, share ideas](https://github.com/nexsusagent-coder/SENTIENT_CORE/discussions)
+- **Twitter**: [@SentientAI_OS](https://twitter.com/SentientAI_OS)
+
 ---
 
 ## 🚀 Getting Started

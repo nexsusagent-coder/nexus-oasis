@@ -67,6 +67,8 @@ members = [
     "crates/sentient_lancedb",
     # v11.0.0 Enterprise Features (RBAC, Audit, SSO)
     "crates/sentient_enterprise",
+    # v11.0.0 Performance Benchmarks
+    "crates/sentient_benchmarks",
     # Skills System
     "skills",
     "scripts",
