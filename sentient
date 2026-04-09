@@ -1,164 +1,155 @@
 #!/bin/bash
-# ╔════════════════════════════════════════════════════════════════════════════════╗
-# ║  SENTIENT NEXUS OS - Global Launcher v7.0.0                                   ║
-# ║  Professional AI Agent Framework                                              ║
-# ╚════════════════════════════════════════════════════════════════════════════════╝
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT NEXUS OS - Global Launcher v1.0.0
+#  Usage: sentient [command]
+# ═══════════════════════════════════════════════════════════════════════════════
 
 set -e
+
+# Installation directory
+SENTIENT_DIR="${SENTIENT_HOME:-$HOME/.sentient}"
+SENTIENT_BIN="$SENTIENT_DIR/target/release"
 
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m'
 
-# Sentinel installation directory
-SENTIENT_DIR="${SENTIENT_HOME:-$HOME/.sentient}"
-SENTIENT_CORE="/opt/sentient"
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Check if installed
+check_installation() {
+    if [ ! -d "$SENTIENT_DIR" ]; then
+        echo -e "${RED}SENTIENT not installed.${NC}"
+        echo ""
+        echo "Install with:"
+        echo -e "  ${CYAN}curl -sSL https://get.sentient.ai | bash${NC}"
+        echo ""
+        exit 1
+    fi
+}
 
-# Find the actual installation
-if [ -d "$SENTIENT_CORE" ]; then
-    INSTALL_DIR="$SENTIENT_CORE"
-elif [ -f "$REPO_DIR/Cargo.toml" ]; then
-    INSTALL_DIR="$REPO_DIR"
-elif [ -d "$SENTIENT_DIR" ]; then
-    INSTALL_DIR="$SENTIENT_DIR"
-else
-    echo -e "${RED}ERROR: SENTIENT installation not found.${NC}"
-    echo "Please run setup.sh first to install SENTIENT."
-    exit 1
-fi
-
-cd "$INSTALL_DIR"
-
-# Parse arguments
-MODE="${1:-dashboard}"
-
+# Show help
 show_help() {
-    echo -e "${CYAN}SENTIENT NEXUS OS - Global Launcher${NC}"
+    echo -e "${CYAN}SENTIENT NEXUS OS - Professional AI Agent Framework${NC}"
     echo ""
     echo "Usage: sentient [command]"
     echo ""
     echo "Commands:"
-    echo "  dashboard, ui    Launch the web dashboard (default)"
-    echo "  shell, cli       Launch the interactive CLI"
+    echo "  dashboard, ui    Launch the interactive dashboard (default)"
+    echo "  shell, cli       Launch the CLI interface"
     echo "  setup            Run the setup wizard"
-    echo "  config           Open configuration"
+    echo "  config           Edit configuration"
     echo "  status           Show system status"
     echo "  update           Update to latest version"
-    echo "  logs             View system logs"
-    echo "  help, --help     Show this help message"
+    echo "  logs             View logs"
+    echo "  help             Show this help"
     echo ""
     echo "Examples:"
     echo "  sentient              # Launch dashboard"
-    echo "  sentient shell        # Launch CLI"
-    echo "  sentient setup        # Reconfigure"
+    echo "  sentient setup        # Configure SENTIENT"
+    echo "  sentient status       # Check status"
     echo ""
 }
 
+# Show status
 show_status() {
+    check_installation
+    
     echo -e "${CYAN}SENTIENT System Status${NC}"
     echo ""
-    echo "Installation: $INSTALL_DIR"
+    echo -e "  ${BOLD}Installation:${NC} $SENTIENT_DIR"
     
-    # Check if dashboard is running
-    if pgrep -f "sentient-dashboard" > /dev/null 2>&1; then
-        echo -e "Dashboard: ${GREEN}Running${NC}"
+    # Check binary
+    if [ -f "$SENTIENT_BIN/sentient-shell" ]; then
+        echo -e "  ${BOLD}Status:${NC}       ${GREEN}Installed${NC}"
     else
-        echo -e "Dashboard: ${YELLOW}Not running${NC}"
+        echo -e "  ${BOLD}Status:${NC}       ${YELLOW}Not built (run: cd $SENTIENT_DIR && cargo build --release)${NC}"
     fi
     
     # Check config
-    if [ -f "$HOME/.config/sentient/config.toml" ]; then
-        echo -e "Config: ${GREEN}Configured${NC}"
+    if [ -f "$SENTIENT_DIR/.env" ]; then
+        echo -e "  ${BOLD}Config:${NC}       ${GREEN}Configured${NC}"
     else
-        echo -e "Config: ${YELLOW}Not configured (run 'sentient setup')${NC}"
+        echo -e "  ${BOLD}Config:${NC}       ${YELLOW}Not configured (run: sentient setup)${NC}"
     fi
     
     # Check Ollama
     if command -v ollama &> /dev/null; then
-        echo -e "Ollama: ${GREEN}Installed${NC}"
+        echo -e "  ${BOLD}Ollama:${NC}       ${GREEN}Installed${NC}"
     else
-        echo -e "Ollama: ${YELLOW}Not installed${NC}"
+        echo -e "  ${BOLD}Ollama:${NC}       ${YELLOW}Not installed (for local models: https://ollama.com)${NC}"
     fi
     
     echo ""
 }
 
-# Main execution
-case "$MODE" in
+# Update
+do_update() {
+    check_installation
+    
+    echo -e "${CYAN}Updating SENTIENT...${NC}"
+    cd "$SENTIENT_DIR"
+    
+    git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || {
+        echo -e "${YELLOW}Git pull failed. Trying anyway...${NC}"
+    }
+    
+    echo -e "${YELLOW}Building...${NC}"
+    cargo build --release --bin sentient-setup --bin sentient-shell
+    
+    echo -e "${GREEN}Update complete!${NC}"
+}
+
+# Main
+case "${1:-dashboard}" in
     dashboard|ui|"")
-        echo -e "${CYAN}Starting SENTIENT Dashboard...${NC}"
-        echo ""
+        check_installation
         
-        # Check if Rust binary exists
-        if [ -f "$INSTALL_DIR/target/release/sentient-dashboard" ]; then
-            "$INSTALL_DIR/target/release/sentient-dashboard"
-        elif [ -f "$INSTALL_DIR/target/debug/sentient-dashboard" ]; then
-            "$INSTALL_DIR/target/debug/sentient-dashboard"
-        elif [ -d "$INSTALL_DIR/dashboard" ]; then
-            cd "$INSTALL_DIR/dashboard"
-            if [ -f "package.json" ]; then
-                # Node.js dashboard
-                if command -v npm &> /dev/null; then
-                    npm run dev 2>/dev/null || npm start
-                else
-                    echo -e "${RED}ERROR: npm not found. Please install Node.js.${NC}"
-                    exit 1
-                fi
-            fi
+        if [ -f "$SENTIENT_BIN/sentient-shell" ]; then
+            cd "$SENTIENT_DIR"
+            exec "$SENTIENT_BIN/sentient-shell" "$@"
         else
-            # Fallback: start all services
-            echo -e "${YELLOW}Starting all services...${NC}"
-            if [ -f "$INSTALL_DIR/sentient_start.sh" ]; then
-                bash "$INSTALL_DIR/sentient_start.sh"
-            else
-                echo -e "${RED}ERROR: No dashboard binary found.${NC}"
-                echo "Please build the project first: cargo build --release"
-                exit 1
-            fi
+            echo -e "${RED}sentient-shell not found. Building...${NC}"
+            cd "$SENTIENT_DIR"
+            cargo build --release --bin sentient-shell
+            exec "$SENTIENT_BIN/sentient-shell" "$@"
         fi
         ;;
     
     shell|cli|repl)
-        echo -e "${CYAN}Starting SENTIENT Shell...${NC}"
-        echo ""
+        check_installation
         
-        if [ -f "$INSTALL_DIR/target/release/sentient-shell" ]; then
-            "$INSTALL_DIR/target/release/sentient-shell"
-        elif [ -f "$INSTALL_DIR/target/debug/sentient-shell" ]; then
-            "$INSTALL_DIR/target/debug/sentient-shell"
+        if [ -f "$SENTIENT_BIN/sentient-shell" ]; then
+            cd "$SENTIENT_DIR"
+            exec "$SENTIENT_BIN/sentient-shell" "$@"
         else
-            echo -e "${RED}ERROR: sentient-shell binary not found.${NC}"
-            echo "Please build the project first: cargo build --release"
+            echo -e "${RED}sentient-shell not found.${NC}"
             exit 1
         fi
         ;;
     
     setup|configure|init)
-        echo -e "${CYAN}Starting SENTIENT Setup Wizard...${NC}"
-        echo ""
+        check_installation
         
-        if [ -f "$INSTALL_DIR/target/release/sentient-setup" ]; then
-            "$INSTALL_DIR/target/release/sentient-setup"
-        elif [ -f "$INSTALL_DIR/target/debug/sentient-setup" ]; then
-            "$INSTALL_DIR/target/debug/sentient-setup"
-        elif [ -f "$INSTALL_DIR/setup.sh" ]; then
-            bash "$INSTALL_DIR/setup.sh"
+        if [ -f "$SENTIENT_BIN/sentient-setup" ]; then
+            exec "$SENTIENT_BIN/sentient-setup"
         else
-            echo -e "${RED}ERROR: Setup wizard not found.${NC}"
-            exit 1
+            echo -e "${YELLOW}Building sentient-setup...${NC}"
+            cd "$SENTIENT_DIR"
+            cargo build --release --bin sentient-setup
+            exec "$SENTIENT_BIN/sentient-setup"
         fi
         ;;
     
     config)
-        CONFIG_FILE="$HOME/.config/sentient/config.toml"
-        if [ -f "$CONFIG_FILE" ]; then
-            ${EDITOR:-nano} "$CONFIG_FILE"
+        check_installation
+        
+        if [ -f "$SENTIENT_DIR/.env" ]; then
+            ${EDITOR:-nano} "$SENTIENT_DIR/.env"
         else
-            echo -e "${YELLOW}Config file not found. Run 'sentient setup' first.${NC}"
+            echo -e "${YELLOW}Config not found. Run: sentient setup${NC}"
         fi
         ;;
     
@@ -167,19 +158,13 @@ case "$MODE" in
         ;;
     
     update|upgrade)
-        echo -e "${CYAN}Updating SENTIENT...${NC}"
-        cd "$INSTALL_DIR"
-        if [ -d ".git" ]; then
-            git pull origin main
-            cargo build --release
-            echo -e "${GREEN}Update complete!${NC}"
-        else
-            echo -e "${YELLOW}Not a git repository. Manual update required.${NC}"
-        fi
+        do_update
         ;;
     
     logs)
-        LOG_DIR="$HOME/.local/share/sentient/logs"
+        check_installation
+        
+        LOG_DIR="$SENTIENT_DIR/logs"
         if [ -d "$LOG_DIR" ]; then
             tail -f "$LOG_DIR"/*.log 2>/dev/null || ls -la "$LOG_DIR"
         else
@@ -192,7 +177,7 @@ case "$MODE" in
         ;;
     
     *)
-        echo -e "${RED}Unknown command: $MODE${NC}"
+        echo -e "${RED}Unknown command: $1${NC}"
         echo ""
         show_help
         exit 1
