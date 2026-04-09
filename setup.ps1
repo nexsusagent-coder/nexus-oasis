@@ -81,10 +81,13 @@ $InstallDir = if ($env:SENTIENT_DIR) { $env:SENTIENT_DIR } else { "$env:USERPROF
 
 if (-not (Test-Path $InstallDir)) {
     Write-Host "📥 SENTIENT indiriliyor..." -ForegroundColor White
-    git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git $InstallDir 2>$null
+    git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git $InstallDir
     Write-Host "✅ Depo klonlandı: $InstallDir" -ForegroundColor Green
 } else {
     Write-Host "✅ Depo mevcut: $InstallDir" -ForegroundColor Green
+    Set-Location $InstallDir
+    Write-Host "📥 Güncellemeler kontrol ediliyor..." -ForegroundColor White
+    git pull
 }
 
 Set-Location $InstallDir
@@ -95,24 +98,34 @@ Set-Location $InstallDir
 
 Write-Host ""
 Write-Host "🔨 TUI Sihirbazı derleniyor..." -ForegroundColor White
+Write-Host "   (Bu işlem birkaç dakika sürebilir...)" -ForegroundColor Gray
 Write-Host ""
 
 $CargoPath = "$env:USERPROFILE\.cargo\bin\cargo.exe"
 
 if (Test-Path $CargoPath) {
-    & $CargoPath build --release --bin sentient-setup 2>$null
+    # Show errors for debugging
+    & $CargoPath build --release --bin sentient-setup
     
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✅ TUI Sihirbazı derlendi" -ForegroundColor Green
+        Write-Host ""
+        Write-Host "✅ TUI Sihirbazı derlendi!" -ForegroundColor Green
     } else {
-        Write-Host "⚠️  Derleme başarısız, alternatif yöntem..." -ForegroundColor Yellow
-        
-        # Fallback: Run setup directly
-        $SentientShell = Join-Path $InstallDir "target\release\sentient-shell.exe"
-        if (Test-Path $SentientShell) {
-            & $SentientShell --setup
-        }
-        exit 0
+        Write-Host ""
+        Write-Host "⚠️  Derleme başarısız oldu!" -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "Alternatif kurulum yöntemleri:" -ForegroundColor Cyan
+        Write-Host ""
+        Write-Host "1. Docker ile:" -ForegroundColor White
+        Write-Host "   docker run -it ghcr.io/nexsusagent-coder/sentient:latest" -ForegroundColor Gray
+        Write-Host ""
+        Write-Host "2. Binary indir:" -ForegroundColor White
+        Write-Host "   https://github.com/nexsusagent-coder/SENTIENT_CORE/releases" -ForegroundColor Gray
+        Write-Host ""
+        Write-Host "3. Manuel derleme:" -ForegroundColor White
+        Write-Host "   cargo install sentient-cli" -ForegroundColor Gray
+        Write-Host ""
+        exit 1
     }
 } else {
     Write-Host "❌ Cargo bulunamadı. Rust'ı kurun: https://rustup.rs" -ForegroundColor Red
