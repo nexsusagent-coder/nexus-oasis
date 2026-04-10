@@ -17,6 +17,7 @@ pub mod audio;
 pub mod config;
 pub mod wake;
 pub mod streaming;
+pub mod diarization;
 
 use std::sync::Arc;
 use tokio::sync::{RwLock, mpsc};

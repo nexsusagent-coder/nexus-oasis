@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idea-plugin>
+    <id>ai.sentient.sentient-os</id>
+    <name>SENTIENT OS</name>
+    <vendor email="support@sentient-os.ai" url="https://sentient-os.ai">SENTIENT OS</vendor>
+    
+    <description><![CDATA[
+        <h1>SENTIENT OS - AI-Powered Coding Assistant</h1>
+        <p>Integrate SENTIENT OS directly into your JetBrains IDE for intelligent code assistance.</p>
+        
+        <h2>Features</h2>
+        <ul>
+            <li>🤖 AI Chat - Interactive conversation with AI</li>
+            <li>📝 Explain Code - Understand any code instantly</li>
+            <li>🔧 Refactor - Improve code quality</li>
+            <li>🐛 Fix Bugs - Find and fix issues automatically</li>
+            <li>🧪 Generate Tests - Create unit tests</li>
+            <li>📚 Generate Docs - Auto-generate documentation</li>
+            <li>🌐 Translate - Convert between languages</li>
+            <li>⚡ Optimize - Improve performance</li>
+            <li>👀 Code Review - Get detailed feedback</li>
+            <li>💬 Commit Messages - Generate conventional commits</li>
+        </ul>
+        
+        <h2>Supported Languages</h2>
+        <p>Works with all JetBrains-supported languages including Java, Kotlin, Python, JavaScript, TypeScript, Rust, Go, and more.</p>
+    ]]></description>
+    
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Tool Window -->
+        <toolWindow id="SENTIENT OS"
+                    secondary="true"
+                    icon="/META-INF/pluginIcon.svg"
+                    anchor="right"
+                    factoryClass="ai.sentient.plugin.ui.SentientToolWindowFactory"/>
+        
+        <!-- Settings -->
+        <applicationConfigurable 
+            parentId="tools"
+            instance="ai.sentient.plugin.settings.SentientSettingsConfigurable"
+            id="ai.sentient.settings"
+            displayName="SENTIENT OS"/>
+        
+        <!-- Code Insight -->
+        <intentionAction>
+            <className>ai.sentient.plugin.intentions.ExplainIntention</className>
+            <category>SENTIENT OS</category>
+        </intentionAction>
+        <intentionAction>
+            <className>ai.sentient.plugin.intentions.RefactorIntention</className>
+            <category>SENTIENT OS</category>
+        </intentionAction>
+        <intentionAction>
+            <className>ai.sentient.plugin.intentions.FixIntention</className>
+            <category>SENTIENT OS</category>
+        </intentionAction>
+        <intentionAction>
+            <className>ai.sentient.plugin.intentions.DocumentIntention</className>
+            <category>SENTIENT OS</category>
+        </intentionAction>
+        <intentionAction>
+            <className>ai.sentient.plugin.intentions.TestIntention</className>
+            <category>SENTIENT OS</category>
+        </intentionAction>
+        
+        <!-- Status Bar -->
+        <statusBarWidgetFactory 
+            id="ai.sentient.statusBar"
+            order="after Position"
+            implementation="ai.sentient.plugin.statusbar.SentientStatusBarFactory"/>
+    </extensions>
+    
+    <actions>
+        <!-- Chat Action -->
+        <action id="Sentient.Chat"
+                class="ai.sentient.plugin.actions.ChatAction"
+                text="SENTIENT Chat"
+                description="Open SENTIENT chat"
+                icon="/META-INF/pluginIcon.svg">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift S"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        
+        <!-- Editor Popup Actions -->
+        <group id="Sentient.EditorPopup" text="SENTIENT OS" popup="true" icon="/META-INF/pluginIcon.svg">
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            
+            <action id="Sentient.Explain"
+                    class="ai.sentient.plugin.actions.ExplainAction"
+                    text="Explain Code"
+                    description="Explain selected code">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift E"/>
+            </action>
+            
+            <action id="Sentient.Refactor"
+                    class="ai.sentient.plugin.actions.RefactorAction"
+                    text="Refactor Code"
+                    description="Refactor selected code">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift R"/>
+            </action>
+            
+            <action id="Sentient.Fix"
+                    class="ai.sentient.plugin.actions.FixAction"
+                    text="Fix Code"
+                    description="Fix issues in selected code">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift F"/>
+            </action>
+            
+            <action id="Sentient.Test"
+                    class="ai.sentient.plugin.actions.TestAction"
+                    text="Generate Tests"
+                    description="Generate unit tests for selected code">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift T"/>
+            </action>
+            
+            <action id="Sentient.Document"
+                    class="ai.sentient.plugin.actions.DocumentAction"
+                    text="Generate Documentation"
+                    description="Generate documentation for selected code"/>
+            
+            <action id="Sentient.Optimize"
+                    class="ai.sentient.plugin.actions.OptimizeAction"
+                    text="Optimize Code"
+                    description="Optimize selected code"/>
+            
+            <action id="Sentient.Translate"
+                    class="ai.sentient.plugin.actions.TranslateAction"
+                    text="Translate Code"
+                    description="Translate code to another language"/>
+            
+            <action id="Sentient.Review"
+                    class="ai.sentient.plugin.actions.ReviewAction"
+                    text="Code Review"
+                    description="Review selected code"/>
+        </group>
+        
+        <!-- Commit Message Action -->
+        <action id="Sentient.CommitMessage"
+                class="ai.sentient.plugin.actions.CommitMessageAction"
+                text="Generate Commit Message"
+                description="Generate commit message from changes"
+                icon="/META-INF/pluginIcon.svg">
+            <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>

@@ -21,6 +21,7 @@ pub mod install;
 pub mod publish;
 pub mod search;
 pub mod config;
+pub mod monetization;
 
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -31,6 +32,11 @@ pub use registry::SkillRegistry;
 pub use install::{SkillInstaller, InstallResult};
 pub use search::{SkillSearch, SearchResult};
 pub use config::{MarketplaceConfig, RegistryConfig};
+pub use monetization::{
+    MonetizationManager, PricingModel, SkillLicense, LicenseType,
+    Purchase, PaymentMethod, PaymentStatus, Refund, RefundReason,
+    DeveloperEarnings, RevenueShare,
+};
 
 /// ─── Marketplace Client ───
 

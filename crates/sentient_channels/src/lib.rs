@@ -7,6 +7,23 @@ pub mod config;
 pub mod telegram;
 pub mod discord;
 pub mod slack;
+pub mod whatsapp;
+pub mod messenger;
+pub mod instagram;
+pub mod twitter;
+pub mod linkedin;
+pub mod teams;
+pub mod google_chat;
+pub mod signal;
+pub mod viber;
+pub mod line;
+pub mod snapchat;
+pub mod wechat;
+pub mod imessage;
+pub mod chime;
+pub mod zoom;
+pub mod webex;
+pub mod mattermost;
 
 use async_trait::async_trait;
 use std::sync::Arc;
@@ -17,6 +34,23 @@ pub use config::{ChannelsConfig, ChannelConfig};
 pub use telegram::TelegramChannel;
 pub use discord::DiscordChannel as DiscordBot;
 pub use slack::SlackChannel as SlackBot;
+pub use whatsapp::WhatsAppChannel;
+pub use messenger::MessengerChannel;
+pub use instagram::InstagramChannel;
+pub use twitter::TwitterChannel;
+pub use linkedin::LinkedInChannel;
+pub use teams::TeamsChannel;
+pub use google_chat::GoogleChatChannel;
+pub use signal::SignalChannel;
+pub use viber::ViberChannel;
+pub use line::LineChannel;
+pub use snapchat::SnapchatChannel;
+pub use wechat::WeChatChannel;
+pub use imessage::IMessageChannel;
+pub use chime::ChimeChannel;
+pub use zoom::ZoomChannel;
+pub use webex::WebexChannel;
+pub use mattermost::MattermostChannel;
 
 /// ─── Channel Trait ───
 

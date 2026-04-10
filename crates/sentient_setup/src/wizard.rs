@@ -265,6 +265,17 @@ impl SetupWizard {
         println!("{}", style("   Format: provider/model_id | Fuzzy search enabled").dim());
         println!();
         
+        // ═══════════════════════════════════════════════════════════════════════════════
+        // STEP 1: Use Case Selection - Model Recommendation System
+        // ═══════════════════════════════════════════════════════════════════════════════
+        
+        let use_case = self.select_use_case()?;
+        
+        // Show recommendations based on use case
+        if use_case != "all" {
+            self.show_model_recommendations(&use_case)?;
+        }
+        
         // 100+ Models - Professional provider/model format (NO emojis, NO subjective descriptions)
         let providers: Vec<(&str, &str, &str)> = vec![
             // === ANTHROPIC ===
@@ -1816,6 +1827,239 @@ impl SetupWizard {
         }
         
         enabled
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Model Recommendation System - Use Case Based Selection
+    // ═══════════════════════════════════════════════════════════════════════════════
+    
+    /// Select use case for model recommendations
+    fn select_use_case(&self) -> anyhow::Result<String> {
+        println!();
+        println!("{}", style("What will you use SENTIENT for?").bold().yellow());
+        println!("{}", style("   This helps us recommend the best models for your needs.").dim());
+        println!();
+        
+        let use_cases = vec![
+            ("Code Development", "Code generation, debugging, refactoring, code review"),
+            ("Research & Analysis", "Deep analysis, summarization, fact-checking"),
+            ("Reasoning & Math", "Complex reasoning, logic, mathematical proofs"),
+            ("Chat & Assistant", "General conversation, Q&A, daily tasks"),
+            ("Content Creation", "Writing, editing, creative work"),
+            ("Data Processing", "ETL, data transformation, analysis"),
+            ("Automation", "Workflow automation, task scheduling"),
+            ("Security & Audit", "Penetration testing, security analysis, audit"),
+            ("Show All Models", "Browse all 600+ models without filtering"),
+        ];
+        
+        let use_case_names: Vec<&str> = use_cases.iter().map(|(name, _)| *name).collect();
+        
+        let selection = Select::new()
+            .with_prompt("Select your primary use case")
+            .items(&use_case_names)
+            .default(0)
+            .interact()?;
+        
+        // Return identifier for each use case
+        Ok(match selection {
+            0 => "code".to_string(),
+            1 => "research".to_string(),
+            2 => "reasoning".to_string(),
+            3 => "chat".to_string(),
+            4 => "content".to_string(),
+            5 => "data".to_string(),
+            6 => "automation".to_string(),
+            7 => "security".to_string(),
+            _ => "all".to_string(),
+        })
+    }
+    
+    /// Show model recommendations based on use case
+    fn show_model_recommendations(&mut self, use_case: &str) -> anyhow::Result<()> {
+        println!();
+        println!("{}", style("══════════════════════════════════════════════════════════════════════════").cyan());
+        println!("{}", style("  RECOMMENDED MODELS").bold().cyan());
+        println!("{}", style("══════════════════════════════════════════════════════════════════════════").cyan());
+        println!();
+        
+        let recommendations = self.get_recommended_models(use_case);
+        
+        // Group by category
+        println!("{}", style("  🆓 FREE (Local/Ollama)").bold().green());
+        println!("{}", style("  ─────────────────────────────────────────────────────────────────────").dim());
+        for (model, desc) in recommendations.iter().filter(|(m, _)| m.starts_with("ollama/")) {
+            println!("  {}  {}", style(format!("{:40}", model)).cyan(), style(desc).dim());
+        }
+        println!();
+        
+        println!("{}", style("  💰 PAID (Cloud APIs)").bold().yellow());
+        println!("{}", style("  ─────────────────────────────────────────────────────────────────────").dim());
+        for (model, desc) in recommendations.iter().filter(|(m, _)| !m.starts_with("ollama/") && !m.starts_with("g4f/")) {
+            println!("  {}  {}", style(format!("{:40}", model)).cyan(), style(desc).dim());
+        }
+        println!();
+        
+        // Show free options
+        let free_models: Vec<_> = recommendations.iter().filter(|(m, _)| m.starts_with("ollama/")).collect();
+        if !free_models.is_empty() {
+            println!("{}", style("  💡 TIP: Free models run locally via Ollama. Install: curl -fsSL https://ollama.com/install.sh | sh").yellow());
+            println!();
+        }
+        
+        // Ask if user wants to use a recommendation
+        let use_recommendation = Confirm::new()
+            .with_prompt("Select from recommended models?")
+            .default(true)
+            .interact()?;
+        
+        if use_recommendation {
+            let rec_models: Vec<&str> = recommendations.iter().map(|(m, _)| m.as_str()).collect();
+            let selection = Select::new()
+                .with_prompt("Select a recommended model")
+                .items(&rec_models)
+                .default(0)
+                .interact()?;
+            
+            let selected_model = recommendations[selection].0.clone();
+            
+            // Parse provider and model
+            let parts: Vec<&str> = selected_model.split('/').collect();
+            if parts.len() >= 2 {
+                let provider = parts[0].to_string();
+                let model = parts[1..].join("/");
+                self.config.llm.provider = provider.clone();
+                self.config.llm.model = model;
+                
+                println!();
+                println!("[OK] Selected: {}", selected_model);
+                
+                // Prompt API key if needed
+                if !provider.starts_with("ollama") && !provider.starts_with("g4f") {
+                    self.prompt_api_key(&provider)?;
+                } else {
+                    println!();
+                    println!("{}", style("Note: Ollama installation required:").yellow());
+                    println!("   curl -fsSL https://ollama.com/install.sh | sh");
+                    println!("   ollama pull {}", self.config.llm.model);
+                }
+            }
+        }
+        
+        Ok(())
+    }
+    
+    /// Get recommended models for a use case
+    fn get_recommended_models(&self, use_case: &str) -> Vec<(String, String)> {
+        match use_case {
+            "code" => vec![
+                // FREE - Local Models
+                ("ollama/deepseek-coder-v2:236b".to_string(), "Best local code model (236B params)".to_string()),
+                ("ollama/qwen2.5-coder:32b".to_string(), "Excellent code generation (32B)".to_string()),
+                ("ollama/qwen2.5-coder:7b".to_string(), "Fast code assistant (7B)".to_string()),
+                ("ollama/codellama:70b".to_string(), "Meta's code Llama (70B)".to_string()),
+                ("ollama/codellama:34b".to_string(), "Balanced code model (34B)".to_string()),
+                ("ollama/starcoder2:7b".to_string(), "Lightweight code model".to_string()),
+                // PAID - Cloud APIs
+                ("openai/gpt-4.1".to_string(), "Best overall for code".to_string()),
+                ("openai/o3-mini".to_string(), "Efficient reasoning + code".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Excellent code understanding".to_string()),
+                ("anthropic/claude-sonnet-4".to_string(), "Latest Claude for coding".to_string()),
+                ("deepseek/deepseek-coder-v3".to_string(), "Specialized code model".to_string()),
+                ("mistral/codestral-2501".to_string(), "Mistral's code specialist".to_string()),
+            ],
+            "research" => vec![
+                // FREE
+                ("ollama/gemma4:31b".to_string(), "KERNEL DEFAULT - Great research".to_string()),
+                ("ollama/llama3.3:70b".to_string(), "Excellent for analysis".to_string()),
+                ("ollama/qwen2.5:72b".to_string(), "Strong research capabilities".to_string()),
+                ("ollama/mixtral:8x22b".to_string(), "MoE for complex analysis".to_string()),
+                // PAID
+                ("openai/gpt-4.1".to_string(), "Best for research".to_string()),
+                ("anthropic/claude-opus-4".to_string(), "Deepest analysis".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Extended thinking mode".to_string()),
+                ("google/gemini-2.5-pro-preview".to_string(), "1M context for documents".to_string()),
+                ("perplexity/sonar-pro".to_string(), "Research + web search".to_string()),
+            ],
+            "reasoning" => vec![
+                // FREE
+                ("ollama/deepseek-r1:671b".to_string(), "Best local reasoning (671B)".to_string()),
+                ("ollama/deepseek-r1:70b".to_string(), "Reasoning distill (70B)".to_string()),
+                ("ollama/qwq:32b".to_string(), "Qwen reasoning model".to_string()),
+                ("ollama/deepseek-r1:32b".to_string(), "Reasoning distill (32B)".to_string()),
+                ("ollama/deepseek-r1:7b".to_string(), "Lightweight reasoning".to_string()),
+                // PAID
+                ("openai/o1".to_string(), "Best reasoning model".to_string()),
+                ("openai/o1-pro".to_string(), "Professional reasoning".to_string()),
+                ("openai/o3-mini".to_string(), "Efficient reasoning".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Extended thinking".to_string()),
+                ("deepseek/deepseek-r1".to_string(), "DeepSeek R1 reasoning".to_string()),
+            ],
+            "chat" => vec![
+                // FREE
+                ("ollama/gemma4:31b".to_string(), "KERNEL DEFAULT - Great chat".to_string()),
+                ("ollama/llama3.3:70b".to_string(), "Excellent conversation".to_string()),
+                ("ollama/mistral:7b".to_string(), "Fast and capable".to_string()),
+                ("ollama/gemma2:27b".to_string(), "Good conversation".to_string()),
+                ("ollama/phi4:14b".to_string(), "Efficient chat model".to_string()),
+                // PAID
+                ("openai/gpt-4o".to_string(), "Best general purpose".to_string()),
+                ("openai/gpt-4o-mini".to_string(), "Fast and cheap".to_string()),
+                ("anthropic/claude-3-5-sonnet".to_string(), "Natural conversation".to_string()),
+                ("google/gemini-2.0-flash".to_string(), "Fast multimodal".to_string()),
+                ("xai/grok-3".to_string(), "X.AI's latest".to_string()),
+            ],
+            "content" => vec![
+                // FREE
+                ("ollama/gemma4:31b".to_string(), "Creative writing".to_string()),
+                ("ollama/llama3.3:70b".to_string(), "Content generation".to_string()),
+                ("ollama/qwen2.5:72b".to_string(), "Writing assistant".to_string()),
+                // PAID
+                ("openai/gpt-4.5-preview".to_string(), "Best for content".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Excellent writer".to_string()),
+                ("google/gemini-2.5-pro-preview".to_string(), "Creative + long context".to_string()),
+            ],
+            "data" => vec![
+                // FREE
+                ("ollama/qwen2.5:72b".to_string(), "Data analysis".to_string()),
+                ("ollama/deepseek-v3:671b".to_string(), "Complex data tasks".to_string()),
+                ("ollama/gemma4:31b".to_string(), "Data processing".to_string()),
+                // PAID
+                ("openai/gpt-4.1".to_string(), "Best for data".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Data analysis".to_string()),
+                ("google/gemini-2.5-pro-preview".to_string(), "Large datasets".to_string()),
+            ],
+            "automation" => vec![
+                // FREE
+                ("ollama/gemma4:31b".to_string(), "KERNEL DEFAULT".to_string()),
+                ("ollama/llama3.3:70b".to_string(), "Task automation".to_string()),
+                ("ollama/qwen2.5:72b".to_string(), "Workflow automation".to_string()),
+                // PAID
+                ("openai/gpt-4.1".to_string(), "Best automation".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Reliable automation".to_string()),
+                ("groq/llama-3.3-70b-versatile".to_string(), "Fast automation".to_string()),
+            ],
+            "security" => vec![
+                // FREE
+                ("ollama/deepseek-r1:70b".to_string(), "Security analysis".to_string()),
+                ("ollama/qwen2.5-coder:32b".to_string(), "Code audit".to_string()),
+                ("ollama/gemma4:31b".to_string(), "General security".to_string()),
+                // PAID
+                ("openai/o1".to_string(), "Best security analysis".to_string()),
+                ("openai/gpt-4.1".to_string(), "Penetration testing".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Security audit".to_string()),
+            ],
+            _ => vec![
+                // All - show top picks from each category
+                ("ollama/gemma4:31b".to_string(), "KERNEL DEFAULT - Best all-around".to_string()),
+                ("ollama/llama3.3:70b".to_string(), "Meta Llama 3.3 (70B)".to_string()),
+                ("ollama/qwen2.5:72b".to_string(), "Alibaba Qwen 2.5 (72B)".to_string()),
+                ("ollama/deepseek-r1:671b".to_string(), "DeepSeek R1 Reasoning".to_string()),
+                ("openai/gpt-4.1".to_string(), "OpenAI GPT-4.1".to_string()),
+                ("anthropic/claude-3-7-sonnet".to_string(), "Anthropic Claude 3.7".to_string()),
+                ("google/gemini-2.5-pro-preview".to_string(), "Google Gemini 2.5".to_string()),
+                ("xai/grok-3".to_string(), "X.AI Grok 3".to_string()),
+            ],
+        }
     }
 }
 

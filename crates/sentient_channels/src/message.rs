@@ -7,11 +7,31 @@ use uuid::Uuid;
 /// Channel type enumeration
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ChannelType {
+    // Messaging Apps
     Telegram,
     Discord,
     WhatsApp,
     Slack,
     Signal,
+    Messenger,      // Facebook Messenger
+    Instagram,
+    Twitter,
+    LinkedIn,
+    WeChat,
+    Viber,
+    Line,
+    Snapchat,
+    iMessage,
+    
+    // Enterprise
+    Teams,          // Microsoft Teams
+    GoogleChat,
+    Chime,          // Amazon Chime
+    Zoom,
+    Webex,
+    Mattermost,
+    
+    // Other
     Matrix,
     IRC,
     Webhook,
@@ -128,6 +148,21 @@ impl std::fmt::Display for ChannelType {
             ChannelType::WhatsApp => write!(f, "whatsapp"),
             ChannelType::Slack => write!(f, "slack"),
             ChannelType::Signal => write!(f, "signal"),
+            ChannelType::Messenger => write!(f, "messenger"),
+            ChannelType::Instagram => write!(f, "instagram"),
+            ChannelType::Twitter => write!(f, "twitter"),
+            ChannelType::LinkedIn => write!(f, "linkedin"),
+            ChannelType::WeChat => write!(f, "wechat"),
+            ChannelType::Viber => write!(f, "viber"),
+            ChannelType::Line => write!(f, "line"),
+            ChannelType::Snapchat => write!(f, "snapchat"),
+            ChannelType::iMessage => write!(f, "imessage"),
+            ChannelType::Teams => write!(f, "teams"),
+            ChannelType::GoogleChat => write!(f, "google_chat"),
+            ChannelType::Chime => write!(f, "chime"),
+            ChannelType::Zoom => write!(f, "zoom"),
+            ChannelType::Webex => write!(f, "webex"),
+            ChannelType::Mattermost => write!(f, "mattermost"),
             ChannelType::Matrix => write!(f, "matrix"),
             ChannelType::IRC => write!(f, "irc"),
             ChannelType::Webhook => write!(f, "webhook"),

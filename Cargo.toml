@@ -87,6 +87,12 @@ members = [
     "crates/sentient_finetuning",
     # v20.0.0 Web Server
     "crates/sentient_web",
+    "crates/sentient_backup",
+    "crates/sentient_dr",
+    # v21.0.0 SOC 2 Compliance
+    "crates/sentient_compliance",
+    # v22.0.0 SLA Monitoring
+    "crates/sentient_sla",
     # Skills System
     "skills",
     "scripts",

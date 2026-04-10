@@ -1,0 +1,23 @@
+[package]
+name = "sentient_dr"
+version = "4.0.0"
+edition = "2021"
+description = "SENTIENT OS Disaster Recovery System"
+license = "MIT"
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+
+[dependencies]
+tokio = { version = "1.37", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.8", features = ["v4", "serde"] }
+async-trait = "0.1"
+futures = "0.3"
+reqwest = { version = "0.12", features = ["json"] }
+
+[dev-dependencies]
+tokio-test = "0.4"

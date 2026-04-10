@@ -1,0 +1,43 @@
+[package]
+name = "sentient_backup"
+version = "4.0.0"
+edition = "2021"
+description = "SENTIENT OS Backup and Restore System"
+license = "MIT"
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+
+[dependencies]
+tokio = { version = "1.37", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.8", features = ["v4", "serde"] }
+async-trait = "0.1"
+tar = "0.4"
+flate2 = "1.0"
+sha2 = "0.10"
+hex = "0.4"
+regex = "1.10"
+rand = "0.8"
+pbkdf2 = "0.12"
+hmac = "0.12"
+aes-gcm = "0.10"
+tokio-util = "0.7"
+reqwest = { version = "0.12", features = ["json"] }
+
+# Storage backends
+aws-config = { version = "1.5", optional = true }
+aws-sdk-s3 = { version = "1.40", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3.10"
+
+[features]
+default = ["local"]
+local = []
+s3 = ["aws-config", "aws-sdk-s3"]
+full = ["local", "s3"]

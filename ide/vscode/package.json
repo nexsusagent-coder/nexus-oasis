@@ -1,0 +1,332 @@
+{
+  "name": "sentient-os",
+  "displayName": "SENTIENT OS - AI Operating System",
+  "description": "AI-powered coding assistant with SENTIENT OS integration",
+  "version": "4.0.0",
+  "publisher": "sentient-os",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "assistant",
+    "chatgpt",
+    "copilot",
+    "llm",
+    "code generation"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1a1a2e",
+    "theme": "dark"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "sentient.chat",
+        "title": "SENTIENT: Open Chat",
+        "icon": "$(hubot)"
+      },
+      {
+        "command": "sentient.explain",
+        "title": "SENTIENT: Explain Code"
+      },
+      {
+        "command": "sentient.refactor",
+        "title": "SENTIENT: Refactor Code"
+      },
+      {
+        "command": "sentient.fix",
+        "title": "SENTIENT: Fix Code"
+      },
+      {
+        "command": "sentient.test",
+        "title": "SENTIENT: Generate Tests"
+      },
+      {
+        "command": "sentient.document",
+        "title": "SENTIENT: Generate Documentation"
+      },
+      {
+        "command": "sentient.translate",
+        "title": "SENTIENT: Translate Code"
+      },
+      {
+        "command": "sentient.optimize",
+        "title": "SENTIENT: Optimize Code"
+      },
+      {
+        "command": "sentient.review",
+        "title": "SENTIENT: Code Review"
+      },
+      {
+        "command": "sentient.commit",
+        "title": "SENTIENT: Generate Commit Message"
+      },
+      {
+        "command": "sentient.settings",
+        "title": "SENTIENT: Open Settings"
+      },
+      {
+        "command": "sentient.models",
+        "title": "SENTIENT: Select Model"
+      },
+      {
+        "command": "sentient.skills",
+        "title": "SENTIENT: Browse Skills"
+      },
+      {
+        "command": "sentient.clearHistory",
+        "title": "SENTIENT: Clear Chat History"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "sentient.explain",
+          "when": "editorHasSelection",
+          "group": "sentient@1"
+        },
+        {
+          "command": "sentient.refactor",
+          "when": "editorHasSelection",
+          "group": "sentient@2"
+        },
+        {
+          "command": "sentient.fix",
+          "when": "editorHasSelection",
+          "group": "sentient@3"
+        },
+        {
+          "command": "sentient.test",
+          "when": "editorHasSelection",
+          "group": "sentient@4"
+        },
+        {
+          "command": "sentient.document",
+          "when": "editorHasSelection",
+          "group": "sentient@5"
+        },
+        {
+          "command": "sentient.optimize",
+          "when": "editorHasSelection",
+          "group": "sentient@6"
+        },
+        {
+          "command": "sentient.translate",
+          "when": "editorHasSelection",
+          "group": "sentient@7"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "sentient.chat",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sentient-sidebar",
+          "title": "SENTIENT OS",
+          "icon": "images/sidebar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "sentient-sidebar": [
+        {
+          "id": "sentient.chatView",
+          "name": "Chat"
+        },
+        {
+          "id": "sentient.modelsView",
+          "name": "Models"
+        },
+        {
+          "id": "sentient.skillsView",
+          "name": "Skills"
+        },
+        {
+          "id": "sentient.historyView",
+          "name": "History"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SENTIENT OS",
+      "properties": {
+        "sentient.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:8080",
+          "description": "SENTIENT OS API endpoint"
+        },
+        "sentient.model": {
+          "type": "string",
+          "default": "gpt-4-turbo",
+          "enum": [
+            "gpt-4-turbo",
+            "gpt-4o",
+            "gpt-3.5-turbo",
+            "claude-3-opus",
+            "claude-3-sonnet",
+            "claude-3-haiku",
+            "gemini-1.5-pro",
+            "gemini-1.5-flash",
+            "llama-3.1-70b",
+            "llama-3.1-405b",
+            "mixtral-8x7b",
+            "qwen-2.5-72b",
+            "gemma-4-27b",
+            "o1-preview",
+            "o1-mini"
+          ],
+          "description": "Default LLM model"
+        },
+        "sentient.maxTokens": {
+          "type": "number",
+          "default": 4096,
+          "description": "Maximum tokens for responses"
+        },
+        "sentient.temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Response creativity (0-2)"
+        },
+        "sentient.autoSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-save chat history"
+        },
+        "sentient.streaming": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable streaming responses"
+        },
+        "sentient.contextLines": {
+          "type": "number",
+          "default": 50,
+          "description": "Context lines to include around selection"
+        },
+        "sentient.language": {
+          "type": "string",
+          "default": "en",
+          "enum": ["en", "tr", "de", "fr", "es", "ja", "zh", "ko"],
+          "description": "Response language"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "sentient.chat",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s"
+      },
+      {
+        "command": "sentient.explain",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "sentient.refactor",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "sentient.fix",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "sentient.test",
+        "key": "ctrl+shift+t",
+        "mac": "cmd+shift+t",
+        "when": "editorHasSelection"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "sentient.welcome",
+        "title": "Welcome to SENTIENT OS",
+        "description": "AI-powered coding assistant",
+        "steps": [
+          {
+            "id": "chat",
+            "title": "Open Chat Panel",
+            "description": "Press Ctrl+Shift+S or click the SENTIENT icon in the sidebar",
+            "media": {
+              "image": "images/welcome-chat.png",
+              "altText": "Chat panel"
+            }
+          },
+          {
+            "id": "select-code",
+            "title": "Select Code",
+            "description": "Select code and right-click to see SENTIENT options",
+            "media": {
+              "image": "images/welcome-context.png",
+              "altText": "Context menu"
+            }
+          },
+          {
+            "id": "settings",
+            "title": "Configure Settings",
+            "description": "Set your preferred model and API endpoint",
+            "media": {
+              "image": "images/welcome-settings.png",
+              "altText": "Settings"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.5",
+    "ws": "^8.16.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nexsusagent-coder/SENTIENT_CORE/issues"
+  },
+  "homepage": "https://github.com/nexsusagent-coder/SENTIENT_CORE#readme"
+}

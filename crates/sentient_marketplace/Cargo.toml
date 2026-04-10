@@ -16,6 +16,7 @@ thiserror.workspace = true
 log.workspace = true
 chrono.workspace = true
 uuid.workspace = true
+rand = "0.8"
 
 # Semver for version handling
 semver = { version = "1", features = ["serde"] }

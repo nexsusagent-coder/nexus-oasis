@@ -1,0 +1,9 @@
+{
+  "name": "sentient-vscode",
+  "version": "4.0.0",
+  "description": "SENTIENT OS VS Code Extension - AI-powered coding assistant",
+  "main": "out/extension.js",
+  "author": "SENTIENT OS Team",
+  "license": "MIT",
+  "private": true
+}
