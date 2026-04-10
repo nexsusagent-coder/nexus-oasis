@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -92,7 +92,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get version
         id: version
@@ -166,7 +166,7 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - name: Checkout tap
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: nexsusagent-coder/homebrew-sentient
           token: ${{ secrets.HOMEBREW_TOKEN }}
