@@ -29,7 +29,7 @@ parking_lot.workspace = true
 async-trait.workspace = true
 
 # Rate limiting
-governor = "0.8"
+governor = "0.10"
 nonzero_ext = "0.3"
 
 [dev-dependencies]
