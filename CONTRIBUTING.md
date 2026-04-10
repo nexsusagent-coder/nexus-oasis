@@ -1,347 +1,203 @@
-# 🤝 Contributing to SENTIENT
+# 🤝 Contributing to SENTIENT OS
 
-First off, thank you for considering contributing to SENTIENT! It's people like you that make SENTIENT such a great tool.
-
-## 📜 Table of Contents
-
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [How to Contribute](#how-to-contribute)
-- [Development Setup](#development-setup)
-- [Pull Request Process](#pull-request-process)
-- [Coding Standards](#coding-standards)
-- [Commit Guidelines](#commit-guidelines)
-
----
+Thank you for your interest in contributing to SENTIENT OS! This document provides guidelines and instructions for contributing.
 
 ## 📜 Code of Conduct
 
-This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## 💬 Community
-
-- **Discord**: [Join our Discord](https://discord.gg/sentient)
-- **GitHub Discussions**: [Ask questions, share ideas](https://github.com/nexsusagent-coder/SENTIENT_CORE/discussions)
-- **Twitter**: [@SentientAI_OS](https://twitter.com/SentientAI_OS)
-
----
-
-## 🚀 Getting Started
+## 🛠️ Development Setup
 
 ### Prerequisites
 
-- **Rust** 1.75+ (`rustup install stable`)
-- **Cargo** (comes with Rust)
-- **Git**
-- **Docker** (for integration tests)
-- **Just** (task runner, optional but recommended)
+- **Rust 1.75+**: Install via [rustup](https://rustup.rs/)
+- **Ollama**: For local LLM testing
+- **Git**: Version control
 
-### Fork and Clone
+### Clone and Build
 
 ```bash
-# Fork the repo on GitHub, then:
-git clone https://github.com/YOUR_USERNAME/SENTIENT_CORE.git
+# Clone the repository
+git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
 cd SENTIENT_CORE
-git remote add upstream https://github.com/nexsusagent-coder/SENTIENT_CORE.git
-```
 
-### Build
-
-```bash
-# Debug build
+# Build
 cargo build
-
-# Release build (optimized)
-cargo build --release
 
 # Run tests
 cargo test
 
-# Run all tests including integration
-cargo test --all-features
+# Run clippy
+cargo clippy -- -W clippy::all
+
+# Format check
+cargo fmt --all -- --check
 ```
 
----
+## 📋 How to Contribute
 
-## 🛠️ How to Contribute
+### 1. Report Bugs
 
-### 🐛 Reporting Bugs
+- Check [existing issues](https://github.com/nexsusagent-coder/SENTIENT_CORE/issues)
+- Use the bug report template
+- Include reproduction steps
 
-Before creating a bug report, please check existing issues. When creating a bug report, include:
+### 2. Suggest Features
 
-- **Title**: Clear, descriptive title
-- **Description**: What happened vs. what you expected
-- **Steps to Reproduce**: Minimal code example
-- **Environment**: OS, Rust version, SENTIENT version
-- **Logs**: Relevant log output with `RUST_LOG=debug`
+- Check [existing discussions](https://github.com/nexsusagent-coder/SENTIENT_CORE/discussions)
+- Use the feature request template
+- Explain the use case
 
-### 💡 Suggesting Features
+### 3. Submit Pull Requests
 
-We love feature suggestions! Please include:
+1. **Fork** the repository
+2. **Create a branch**: `git checkout -b feature/my-feature`
+3. **Make changes** following our coding standards
+4. **Test**: `cargo test`
+5. **Lint**: `cargo clippy && cargo fmt`
+6. **Commit**: Use conventional commits
+7. **Push**: `git push origin feature/my-feature`
+8. **Open PR**: Describe your changes
 
-- **Use Case**: Why is this feature needed?
-- **Proposed Solution**: How should it work?
-- **Alternatives**: What alternatives have you considered?
-
-### 📝 Improving Documentation
-
-Documentation improvements are always welcome:
-
-- Fix typos or unclear explanations
-- Add code examples
-- Translate documentation
-- Write tutorials
-
-### 🔧 Submitting Code
-
-1. **Create a branch**: `git checkout -b feature/my-feature`
-2. **Make changes**: Follow coding standards
-3. **Add tests**: All new code needs tests
-4. **Run tests**: `cargo test`
-5. **Format code**: `cargo fmt`
-6. **Lint**: `cargo clippy`
-7. **Commit**: Follow commit guidelines
-8. **Push**: `git push origin feature/my-feature`
-9. **Open PR**: Fill out PR template
-
----
-
-## 🏗️ Development Setup
-
-### Project Structure
-
-```
-SENTIENT_CORE/
-├── crates/                 # All crates (50+)
-│   ├── sentient_core/      # Core types and traits
-│   ├── sentient_cli/       # CLI application
-│   ├── sentient_channels/  # Channel integrations
-│   ├── sentient_voice/     # Voice processing
-│   ├── sentient_memory/    # Memory management
-│   └── ...
-├── apps/                   # Native applications
-│   ├── desktop/            # Tauri desktop app
-│   └── mobile/             # iOS + Android
-├── docs/                   # Documentation
-├── npm/                    # npm package
-└── tests/                  # Integration tests
-```
-
-### Running Tests
-
-```bash
-# Unit tests
-cargo test
-
-# Specific crate
-cargo test -p sentient_channels
-
-# With coverage
-cargo tarpaulin --out Html
-
-# Integration tests
-cargo test --test integration
-
-# Doc tests
-cargo test --doc
-```
-
-### Debugging
-
-```bash
-# Enable debug logging
-RUST_LOG=debug cargo run
-
-# Specific module
-RUST_LOG=sentient_channels=debug cargo run
-
-# Trace all
-RUST_LOG=trace cargo run
-```
-
----
-
-## 📋 Pull Request Process
-
-1. **Update Documentation**: Add/update docs in `docs/`
-2. **Add Tests**: Maintain or improve test coverage
-3. **Update CHANGELOG**: Add entry to CHANGELOG.md
-4. **PR Title**: Follow conventional commits format
-5. **Link Issues**: Link related issues
-6. **Request Review**: Request review from maintainers
-
-### PR Checklist
-
-- [ ] Code compiles without errors
-- [ ] All tests pass
-- [ ] New code has tests
-- [ ] Documentation updated
-- [ ] CHANGELOG updated
-- [ ] Commit messages follow guidelines
-- [ ] PR title follows format
-
----
-
-## 📏 Coding Standards
+## 📐 Coding Standards
 
 ### Rust Style
 
-```bash
-# Format code
-cargo fmt
-
-# Check with clippy
-cargo clippy -- -D warnings
-```
-
-### Code Organization
-
 ```rust
-// Good: Module structure
-mod channels {
-    pub mod telegram;
-    pub mod discord;
-    pub mod slack;
+// ✅ Good
+pub fn process_data(input: &str) -> Result<String, Error> {
+    let sanitized = sanitize(input)?;
+    let processed = transform(&sanitized)?;
+    Ok(processed)
 }
 
-// Good: Public API
-pub struct Channel {
-    // Private fields
-    inner: ChannelInner,
-}
-
-impl Channel {
-    /// Creates a new channel.
-    pub fn new(config: Config) -> Result<Self> {
-        // ...
-    }
+// ❌ Bad
+pub fn process_data(input: &str) -> String {
+    let sanitized = sanitize(input).unwrap(); // Never use unwrap!
+    transform(&sanitized).unwrap()
 }
 ```
 
-### Error Handling
+### Guidelines
 
-```rust
-// Use thiserror for custom errors
-use thiserror::Error;
+1. **No `unwrap()`**: Use `.expect("descriptive message")` or `?`
+2. **No panics**: Handle errors gracefully
+3. **Document public APIs**: Use `///` doc comments
+4. **Write tests**: Unit tests for all public functions
+5. **Keep it simple**: Avoid premature optimization
 
-#[derive(Error, Debug)]
-pub enum ChannelError {
-    #[error("Connection failed: {0}")]
-    ConnectionFailed(String),
-    
-    #[error("Authentication error")]
-    AuthError(#[from] AuthError),
-}
-```
-
-### Documentation
-
-```rust
-/// Sends a message to the channel.
-///
-/// # Arguments
-///
-/// * `message` - The message to send
-///
-/// # Returns
-///
-/// Returns the message ID on success.
-///
-/// # Errors
-///
-/// Returns an error if the message fails to send.
-///
-/// # Example
-///
-/// ```
-/// let channel = Channel::new(config)?;
-/// let id = channel.send("Hello!").await?;
-/// ```
-pub async fn send(&self, message: &str) -> Result<MessageId> {
-    // ...
-}
-```
-
----
-
-## 📝 Commit Guidelines
-
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
-
-### Format
+### Code Structure
 
 ```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer]
+crates/
+├── crate_name/
+│   ├── Cargo.toml
+│   ├── README.md
+│   └── src/
+│       ├── lib.rs      # Public API
+│       ├── error.rs    # Error types
+│       ├── types.rs    # Public types
+│       └── internal/   # Internal modules
 ```
 
-### Types
+## 🧪 Testing
 
-| Type | Description |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Code style (formatting, etc.) |
-| `refactor` | Code refactoring |
-| `perf` | Performance improvement |
-| `test` | Adding/updating tests |
-| `chore` | Maintenance tasks |
-| `ci` | CI/CD changes |
-
-### Examples
+### Run All Tests
 
 ```bash
-# Feature
-feat(channels): add WeChat integration
-
-# Bug fix
-fix(voice): resolve wake word detection delay
-
-# Documentation
-docs(api): update channel configuration docs
-
-# Breaking change
-feat(core)!: change Agent trait interface
-
-BREAKING CHANGE: The Agent trait now requires async methods.
+cargo test --workspace --all-features
 ```
 
----
+### Run Specific Tests
 
-## 🏷️ Labels
+```bash
+cargo test -p sentient_core
+cargo test test_agent_creation
+```
 
-| Label | Description |
-|-------|-------------|
-| `good first issue` | Good for newcomers |
-| `help wanted` | Extra attention needed |
-| `bug` | Something isn't working |
-| `enhancement` | New feature or request |
-| `documentation` | Improvements to docs |
-| `performance` | Performance related |
-| `security` | Security related |
+### Test Coverage
 
----
+We aim for >80% coverage on critical paths.
 
-## 🙏 Recognition
+## 📝 Commit Messages
 
-Contributors are recognized in:
+Use [Conventional Commits](https://www.conventionalcommits.org/):
 
-- **README.md**: All contributors listed
-- **CHANGELOG.md**: Significant contributions noted
-- **Release Notes**: Major contributions highlighted
+```
+feat: add speaker diarization
+fix: resolve memory leak in agent loop
+docs: update README with new examples
+test: add tests for RAG pipeline
+refactor: simplify orchestrator logic
+chore: update dependencies
+```
 
----
+## 🔀 Pull Request Process
+
+1. **Small PRs**: Keep changes focused
+2. **Description**: Explain what and why
+3. **Tests**: Include tests for new features
+4. **Docs**: Update documentation
+5. **CI**: Ensure all checks pass
+
+### PR Template
+
+```markdown
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation
+
+## Testing
+- [ ] Unit tests added
+- [ ] Integration tests added
+- [ ] Manual testing done
+
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] No new warnings
+```
+
+## 🏷️ Release Process
+
+1. Update `CHANGELOG.md`
+2. Update version in `Cargo.toml`
+3. Create git tag: `git tag v4.1.0`
+4. Push tag: `git push origin v4.1.0`
+5. GitHub Actions handles the rest
+
+## 🗺️ Project Structure
+
+| Directory | Description |
+|-----------|-------------|
+| `crates/` | Rust crates |
+| `examples/` | Example applications |
+| `integrations/` | Third-party integrations |
+| `dashboard/` | Web dashboard |
+| `ide/` | IDE plugins |
+| `docs/` | Documentation |
+
+## 📚 Resources
+
+- [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/)
+- [The Rust Book](https://doc.rust-lang.org/book/)
+- [Async Book](https://rust-lang.github.io/async-book/)
 
 ## ❓ Questions?
 
-- **GitHub Discussions**: For general questions
-- **GitHub Issues**: For bugs and features
-- **Discord**: [Join our server](https://discord.gg/sentient)
+- [GitHub Discussions](https://github.com/nexsusagent-coder/SENTIENT_CORE/discussions)
+- [Discord](https://discord.gg/sentient)
+
+## 📄 License
+
+By contributing, you agree that your contributions will be licensed under the Apache 2.0 License.
 
 ---
 
-Thank you for contributing! 🎉
+Thank you for contributing to SENTIENT OS! 🧠

@@ -1,46 +1,44 @@
 ---
-name: 💡 Feature Request
-about: Suggest an idea for this project
+name: Feature Request
+about: Suggest a new feature for SENTIENT OS
 title: '[FEATURE] '
 labels: enhancement
 assignees: ''
 ---
 
-## 💡 Feature Description
+## 🚀 Feature Description
 
 A clear and concise description of the feature you'd like to see.
 
-## 🎯 Problem Statement
+## 🎯 Use Case
 
-Is your feature request related to a problem? Please describe.
+Describe the use case this feature would solve:
 
-**Example**: I'm always frustrated when [...]
+```
+As a [type of user],
+I want [some goal]
+So that [some reason]
+```
 
-## 💭 Proposed Solution
+## 💡 Proposed Solution
 
-Describe the solution you'd like to see implemented.
+Describe how you envision this feature working.
 
 ## 🔄 Alternatives Considered
 
-A clear and concise description of any alternative solutions or features you've considered.
+A clear description of any alternative solutions or features you've considered.
 
-## 📊 Use Cases
+## 📊 Impact
 
-Describe specific use cases for this feature:
+- **Who benefits**: [e.g., all users, enterprise users, developers]
+- **Priority**: [e.g., critical, high, medium, low]
 
-1. Use case 1: ...
-2. Use case 2: ...
+## 📎 Additional Context
 
-## 🎨 Mockups/Examples
+Add any other context, mockups, or screenshots about the feature request here.
 
-If applicable, add mockups, diagrams, or examples of the desired functionality.
+## ✅ Checklist
 
-## 📈 Impact
-
-- **Priority**: [Low / Medium / High]
-- **Users Affected**: [Few / Some / Many / All]
-- **Breaking Change**: [Yes / No]
-
-## 🔗 Related
-
-Link any related issues, discussions, or pull requests.
+- [ ] I have searched for existing feature requests
+- [ ] I have provided a clear use case
+- [ ] I have considered alternatives

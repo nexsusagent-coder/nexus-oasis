@@ -1,31 +1,45 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  SENTIENT CORE - Dependabot Configuration
+#  SENTIENT OS - Dependabot Configuration
 # ═══════════════════════════════════════════════════════════════════════════════
 
 version: 2
+
 updates:
   # Rust dependencies
   - package-ecosystem: "cargo"
-    directory: "/SENTIENT_CORE"
+    directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "06:00"
     open-pull-requests-limit: 10
+    reviewers:
+      - "nexsusagent-coder"
     labels:
       - "dependencies"
       - "rust"
     commit-message:
-      prefix: "cargo"
+      prefix: "deps"
       include: "scope"
-    reviewers:
-      - "sentient-ai"
-    
+    groups:
+      tokio:
+        patterns:
+          - "tokio"
+          - "tokio-*"
+      serde:
+        patterns:
+          - "serde"
+          - "serde_*"
+      tower:
+        patterns:
+          - "tower"
+          - "tower-*"
+
   # GitHub Actions
   - package-ecosystem: "github-actions"
-    directory: "/SENTIENT_CORE/.github/workflows"
+    directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
       day: "monday"
       time: "06:00"
     open-pull-requests-limit: 5
@@ -34,4 +48,3 @@ updates:
       - "github-actions"
     commit-message:
       prefix: "ci"
-      include: "scope"

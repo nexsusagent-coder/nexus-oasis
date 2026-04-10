@@ -1,0 +1,123 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT OS - Security Audit Pipeline
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: Security
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run weekly security scan
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  #  Dependency Audit
+  # ────────────────────────────────────────────────────────────────────────────
+  audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit
+
+      - name: Run security audit
+        run: cargo audit
+
+      - name: Generate audit report
+        if: always()
+        run: |
+          echo "# 🔒 Security Audit Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cargo audit 2>&1 >> $GITHUB_STEP_SUMMARY || true
+
+  # ────────────────────────────────────────────────────────────────────────────
+  #  Secret Scanning
+  # ────────────────────────────────────────────────────────────────────────────
+  secrets:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          extra_args: --only-verified
+
+  # ────────────────────────────────────────────────────────────────────────────
+  #  CodeQL Analysis
+  # ────────────────────────────────────────────────────────────────────────────
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: rust
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build
+        run: cargo build --workspace
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  # ────────────────────────────────────────────────────────────────────────────
+  #  Dependency Review
+  # ────────────────────────────────────────────────────────────────────────────
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+
+  # ────────────────────────────────────────────────────────────────────────────
+  #  Summary
+  # ────────────────────────────────────────────────────────────────────────────
+  summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [audit, secrets, codeql]
+    if: always()
+    steps:
+      - name: Security Status
+        run: |
+          echo "# 🔒 SENTIENT OS Security Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency Audit | ${{ needs.audit.result == 'success' && '✅ No vulnerabilities' || '⚠️ Check logs' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret Scanning | ${{ needs.secrets.result == 'success' && '✅ No secrets found' || '⚠️ Check logs' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| CodeQL Analysis | ${{ needs.codeql.result == 'success' && '✅ Passed' || '⚠️ Check logs' }} |" >> $GITHUB_STEP_SUMMARY

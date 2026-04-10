@@ -1,5 +1,5 @@
 [package]
-name = "sentient-multi-agent"
+name = "sentient-chatbot"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,4 +7,4 @@ edition = "2021"
 tokio = { version = "1", features = ["full"] }
 sentient_core = { path = "../../crates/sentient_core" }
 sentient_gateway = { path = "../../crates/sentient_gateway" }
-sentient_orchestrator = { path = "../../crates/sentient_orchestrator" }
+sentient_memory = { path = "../../crates/sentient_memory" }

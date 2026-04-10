@@ -1,6 +1,6 @@
 ---
-name: 🐛 Bug Report
-about: Report a bug to help us improve
+name: Bug Report
+about: Report a bug in SENTIENT OS
 title: '[BUG] '
 labels: bug
 assignees: ''
@@ -13,40 +13,40 @@ A clear and concise description of what the bug is.
 ## 📋 Steps to Reproduce
 
 1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+2. Run command '...'
+3. See error
 
 ## ✅ Expected Behavior
 
-A clear and concise description of what you expected to happen.
+A clear description of what you expected to happen.
 
 ## ❌ Actual Behavior
 
-A clear and concise description of what actually happened.
+A clear description of what actually happened.
 
-## 📸 Screenshots
+## 📊 Environment
 
-If applicable, add screenshots to help explain your problem.
-
-## 🔧 Environment
-
-- **OS**: [e.g. macOS 14.0, Ubuntu 22.04, Windows 11]
-- **Rust Version**: [e.g. 1.75.0]
-- **SENTIENT Version**: [e.g. 0.1.0]
-- **Installation Method**: [e.g. cargo install, npm, binary]
+- **SENTIENT Version**: [e.g., 4.0.0]
+- **Rust Version**: [e.g., 1.75.0]
+- **OS**: [e.g., Ubuntu 22.04]
+- **LLM Provider**: [e.g., Ollama]
 
 ## 📝 Logs
-
-<details>
-<summary>Click to expand logs</summary>
 
 ```
 Paste relevant logs here
 ```
 
-</details>
+## 🔧 Configuration
 
-## 🔍 Additional Context
+```toml
+# Relevant configuration
+```
+
+## 📷 Screenshots
+
+If applicable, add screenshots to help explain your problem.
+
+## 📎 Additional Context
 
 Add any other context about the problem here.

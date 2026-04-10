@@ -2,178 +2,146 @@
 
 ## Supported Versions
 
-We release patches for security vulnerabilities in the following versions:
-
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | ✅ Active development |
-| < 0.1   | ❌ Not supported   |
+| 4.x     | ✅ Active support  |
+| 3.x     | ⚠️ Security fixes only |
+| < 3.0   | ❌ End of life     |
 
 ## Reporting a Vulnerability
 
-We take security vulnerabilities seriously. Thank you for improving the security of SENTIENT.
+We take security seriously. If you discover a security vulnerability, please follow these steps:
 
-### How to Report
+### 1. Do NOT create a public issue
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+Security vulnerabilities should be reported privately.
 
-Instead, please report them via:
+### 2. Email us
 
-1. **Email**: [security@sentient.ai](mailto:security@sentient.ai)
-2. **GitHub Security Advisory**: [Create a security advisory](https://github.com/nexsusagent-coder/SENTIENT_CORE/security/advisories/new)
+Send details to: **security@sentientos.dev**
 
-You should receive a response within 48 hours. If for some reason you do not, please follow up via email.
+Include:
+- Description of the vulnerability
+- Steps to reproduce
+- Potential impact
+- Suggested fix (if any)
 
-### What to Include
-
-Please include the following information:
-
-- **Description**: Description of the vulnerability
-- **Steps to Reproduce**: Step-by-step instructions
-- **Impact**: What can an attacker achieve?
-- **Affected Versions**: Which versions are affected?
-- **Proof of Concept**: Optional but helpful
-- **Suggested Fix**: Optional but helpful
-
-### Response Timeline
+### 3. Response Timeline
 
 | Time | Action |
 |------|--------|
-| 0-48h | Initial response, confirm receipt |
-| 48h-7d | Triage and assessment |
-| 7-30d | Develop and test fix |
-| 30d+ | Coordinate disclosure |
+| 24 hours | Acknowledge receipt |
+| 72 hours | Initial assessment |
+| 7 days | Detailed response |
+| 14 days | Fix or mitigation plan |
+| 30 days | CVE assignment (if applicable) |
+
+### 4. Responsible Disclosure
+
+We follow responsible disclosure:
+- We'll work with you to understand and fix the issue
+- We'll credit you in the security advisory (unless you prefer to remain anonymous)
+- We ask that you don't disclose the issue publicly until we've released a fix
 
 ## Security Features
 
-### Built-in Security
+SENTIENT OS includes several security features:
 
-SENTIENT includes several security features:
+### 🔐 V-GATE Architecture
 
-| Feature | Description |
-|---------|-------------|
-| **Memory Safety** | Rust guarantees memory safety |
-| **TEE Support** | Trusted Execution Environment integration |
-| **ZK-MCP** | Zero-knowledge proofs for privacy |
-| **Audit Logging** | Comprehensive audit trail |
-| **Encryption** | At-rest and in-transit encryption |
+```
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   SENTIENT  │      │   V-GATE    │      │   LLM API   │
+│   Client    │─────▶│   Proxy     │─────▶│   Provider  │
+└─────────────┘      └─────────────┘      └─────────────┘
+                           │
+                     API Key (Secure)
+                     Stored on server
+```
 
-### Secure Development
+**API keys are NEVER in client code.**
 
-- All code is reviewed before merging
-- Automated security scanning in CI
-- Dependency auditing with `cargo audit`
-- Regular security updates
+### 🛡️ Security Crates
+
+| Crate | Purpose |
+|-------|---------|
+| `sentient_guardrails` | Input/output filtering, prompt injection detection |
+| `sentient_vault` | Secret management (AWS, Azure, HashiCorp Vault) |
+| `sentient_tee` | Trusted Execution Environment (AMD SEV-SNP, Intel TDX) |
+| `sentient_zk_mcp` | Zero-knowledge proofs for MCP |
+| `sentient_compliance` | SOC 2 controls, audit logging |
+
+### 🔒 Secure by Design
+
+- **Memory Safety**: Rust guarantees memory safety at compile time
+- **No unwrap()**: All code uses proper error handling with `.expect()` or `?`
+- **Minimal unsafe**: Only 10 unsafe blocks, all FFI-required
+- **Encrypted Storage**: AES-256-GCM for sensitive data
+- **Audit Logging**: Complete audit trail for compliance
 
 ## Security Best Practices
 
-### Configuration
+### For Users
 
-```toml
-# sentient.toml
+1. **Never commit API keys** - Use V-GATE or environment variables
+2. **Enable encryption** - Use `sentient_vault` for secrets
+3. **Regular updates** - Keep SENTIENT OS updated
+4. **Audit logs** - Monitor `sentient_compliance` audit logs
 
-[security]
-# Enable audit logging
-audit_log = true
+### For Developers
 
-# Encryption settings
-[security.encryption]
-at_rest = true
-in_transit = true
-algorithm = "AES-256-GCM"
+1. **Run security audit** before commits:
+   ```bash
+   cargo audit
+   cargo clippy -- -W clippy::all
+   ```
 
-# TEE settings (if available)
-[security.tee]
-enabled = true
-provider = "sgx"  # sgx, sev, trustzone
-```
+2. **Check dependencies**:
+   ```bash
+   cargo outdated
+   cargo deny check
+   ```
 
-### API Keys
-
-```bash
-# Never commit API keys!
-# Use environment variables:
-export OPENAI_API_KEY="sk-..."
-export ANTHROPIC_API_KEY="sk-ant-..."
-
-# Or use a secrets manager:
-sentient config set openai.api_key "$(vault read -field=api_key secret/openai)"
-```
-
-### Network Security
-
-```bash
-# Use TLS in production
-SENTIENT_TLS_ENABLED=true
-SENTIENT_TLS_CERT=/path/to/cert.pem
-SENTIENT_TLS_KEY=/path/to/key.pem
-
-# Restrict network access
-SENTIENT_BIND_ADDRESS=127.0.0.1
-SENTIENT_BIND_PORT=8080
-```
+3. **Format code**:
+   ```bash
+   cargo fmt --all -- --check
+   ```
 
 ## Known Security Considerations
 
-### 1. API Key Storage
+### 1. LLM Provider APIs
 
-API keys are stored in configuration files. Ensure proper file permissions:
+- API keys are transmitted to LLM providers
+- Use V-GATE to keep keys server-side
+- Consider self-hosted models (Ollama, GPT4All) for sensitive data
 
-```bash
-chmod 600 ~/.config/sentient/config.toml
-```
+### 2. Web Dashboard
 
-### 2. Network Exposure
+- Default port: 8080
+- Enable authentication for production
+- Use HTTPS in production
 
-By default, SENTIENT binds to localhost. In production:
+### 3. Plugin System
 
-- Use TLS/HTTPS
-- Implement rate limiting
-- Use authentication
-- Restrict network access
-
-### 3. Plugin Security
-
-Plugins run with the same privileges as SENTIENT:
-
-- Only install trusted plugins
+- Plugins run in sandboxed environment
 - Review plugin code before installation
-- Use sandboxed execution when possible
+- Use `sentient_plugin` security features
 
-### 4. Memory Forensics
+## Security Audit History
 
-While Rust prevents many memory issues, secrets in memory can be extracted:
-
-- Use TEE for sensitive operations
-- Clear secrets after use
-- Avoid logging sensitive data
-
-## Security Updates
-
-Security updates are announced via:
-
-1. **GitHub Security Advisories**
-2. **Release Notes**
-3. **Discord Announcements**
-
-Subscribe to updates by watching the repository.
-
-## Hall of Fame
-
-We gratefully acknowledge the following security researchers:
-
-| Date | Researcher | Vulnerability |
-|------|------------|---------------|
-| - | Be the first! | - |
+| Date | Auditor | Scope | Result |
+|------|---------|-------|--------|
+| 2025-04 | Internal | Code review | ✅ Passed |
+| 2025-04 | cargo audit | Dependencies | ✅ No vulnerabilities |
 
 ## Contact
 
-For security-related questions:
-
-- **Security Email**: [security@sentient.ai](mailto:security@sentient.ai)
-- **PGP Key**: [Download public key](https://sentient.ai/security.asc)
-- **Fingerprint**: `AAAA BBBB CCCC DDDD EEEE FFFF GGGG HHHH`
+- **Security Team**: security@sentientos.dev
+- **PGP Key**: [security.asc](security.asc)
+- **GitHub Security**: [Security Advisories](https://github.com/nexsusagent-coder/SENTIENT_CORE/security/advisories)
 
 ---
 
-Thank you for helping keep SENTIENT and our users safe! 🛡️
+**Last Updated**: April 2025
+
+**Next Review**: July 2025

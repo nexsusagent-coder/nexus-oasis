@@ -1,54 +1,65 @@
 ## 📝 Description
 
-<!-- Provide a clear and concise description of your changes -->
+<!-- Provide a brief description of your changes -->
 
 ## 🔗 Related Issue
 
-<!-- Link to the issue this PR addresses -->
-Closes #
+<!-- Link to the issue this PR resolves -->
+Fixes #
 
-## 📋 Type of Change
+## 🎯 Type of Change
 
-<!-- Mark the relevant option with an 'x' -->
-
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
+<!-- Mark all that apply -->
+- [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
+- [ ] ✨ New feature (non-breaking change that adds functionality)
 - [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] 📚 Documentation update
 - [ ] 🔧 Refactoring (no functional changes)
-- [ ] ⚡ Performance improvement
-- [ ] ✅ Test addition/improvement
+- [ ] ✅ Test improvement
+- [ ] 🧹 Chore (maintenance)
 
-## 🧪 How Has This Been Tested?
+## 🧪 Testing
 
-<!-- Describe the tests you ran to verify your changes -->
+<!-- Describe testing done for these changes -->
+- [ ] Unit tests added
+- [ ] Integration tests added
+- [ ] Manual testing completed
 
-- [ ] Unit tests pass
-- [ ] Integration tests pass
-- [ ] Manual testing performed
-
-**Test Configuration**:
-- OS: 
-- Rust version: 
-- SENTIENT version: 
+**Test Instructions:**
+```bash
+# Commands to test the changes
+cargo test -p crate_name
+```
 
 ## 📸 Screenshots (if applicable)
 
-<!-- Add screenshots to help explain your changes -->
+<!-- Add screenshots for UI changes -->
 
 ## ✅ Checklist
 
-<!-- Mark completed items with an 'x' -->
+<!-- Mark all that apply -->
+- [ ] Code follows the project's style guidelines
+- [ ] Self-review of code completed
+- [ ] Comments added for complex logic
+- [ ] Documentation updated (README, CHANGELOG, etc.)
+- [ ] No new warnings introduced
+- [ ] Tests pass locally (`cargo test`)
+- [ ] Code formatted (`cargo fmt`)
+- [ ] Clippy passes (`cargo clippy`)
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published
+## 📊 Performance Impact
 
-## 📝 Additional Notes
+<!-- If this PR affects performance, describe the impact -->
+- [ ] No performance impact
+- [ ] Performance improved
+- [ ] Performance degraded (explain why necessary)
 
-<!-- Add any additional notes or context about the PR here -->
+## 🔒 Security Considerations
+
+<!-- If this PR has security implications, describe them -->
+- [ ] No security implications
+- [ ] Security implications reviewed
+
+## 📎 Additional Notes
+
+<!-- Add any additional notes or context -->
