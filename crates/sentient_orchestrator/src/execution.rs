@@ -2,7 +2,7 @@
 //!
 //! Görev yürütme sonuçları ve raporlama veri yapıları.
 
-use crate::goal::{Goal, Task, TaskResult, TaskStatus};
+use crate::goal::{Goal, Task, TaskResult};
 use crate::state::AgentState;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;

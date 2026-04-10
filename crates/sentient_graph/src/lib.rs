@@ -469,22 +469,22 @@ impl EventGraph {
         // Bağlantıları kur
         // init -> search
         self.add_edge(
-            *nodes.get("init").unwrap(),
-            *nodes.get("search").unwrap(),
+            *nodes.get("init").expect("operation failed"),
+            *nodes.get("search").expect("operation failed"),
             Some(vec![EventType::BrowserReady]),
         )?;
         
         // search -> research
         self.add_edge(
-            *nodes.get("search").unwrap(),
-            *nodes.get("research").unwrap(),
+            *nodes.get("search").expect("operation failed"),
+            *nodes.get("research").expect("operation failed"),
             Some(vec![EventType::BrowserResult]),
         )?;
         
         // research -> extract
         self.add_edge(
-            *nodes.get("research").unwrap(),
-            *nodes.get("extract").unwrap(),
+            *nodes.get("research").expect("operation failed"),
+            *nodes.get("extract").expect("operation failed"),
             Some(vec![EventType::ResearchComplete]),
         )?;
         
@@ -526,7 +526,7 @@ mod tests {
             created_at: Utc::now(),
         };
         
-        let _id = graph.add_node(def).unwrap();
+        let _id = graph.add_node(def).expect("operation failed");
         assert_eq!(graph.node_count(), 1);
         
         let nodes = graph.list_nodes();
@@ -554,10 +554,10 @@ mod tests {
             created_at: Utc::now(),
         };
         
-        let source_id = graph.add_node(source_def).unwrap();
-        let target_id = graph.add_node(target_def).unwrap();
+        let source_id = graph.add_node(source_def).expect("operation failed");
+        let target_id = graph.add_node(target_def).expect("operation failed");
         
-        let _edge_id = graph.add_edge(source_id, target_id, None).unwrap();
+        let _edge_id = graph.add_edge(source_id, target_id, None).expect("operation failed");
         assert_eq!(graph.edge_count(), 1);
     }
 
@@ -575,10 +575,10 @@ mod tests {
         
         let node_id = graph
             .add_node_with_handler("processor", NodeType::Processor, handler)
-            .unwrap();
+            .expect("operation failed");
         
         let event = SENTIENTEvent::new(EventType::GraphTick, "test", serde_json::json!({}));
-        let results = graph.send_to(node_id, event).unwrap();
+        let results = graph.send_to(node_id, event).expect("operation failed");
         
         assert_eq!(results.len(), 1);
     }

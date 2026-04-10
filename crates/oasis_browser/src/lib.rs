@@ -90,7 +90,6 @@ pub use lightpanda_ffi::{LightpandaFFI, LightpandaPage, FFIError, FFIResult};
 // New Tools Re-exports
 pub use tools::{BrowserTool, BrowserToolInput, BrowserToolOutput, BrowserMetadata, ToolContext, Tool};
 
-use sentient_common::error::SENTIENTResult;
 
 /// Browser-Use asimilasyon sürümü
 pub const OASIS_BROWSER_VERSION: &str = "0.1.0-sentient";

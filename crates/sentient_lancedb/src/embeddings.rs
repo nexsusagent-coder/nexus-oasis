@@ -39,14 +39,15 @@ impl EmbeddingEngine {
     pub fn new(config: EmbeddingConfig) -> Result<Self> {
         let model = fastembed::TextEmbedding::try_new(
             fastembed::InitOptions::new(fastembed::EmbeddingModel::AllMiniLML6V2)
+                .with_cache_dir(std::path::PathBuf::from("/tmp/fastembed_cache"))
         ).map_err(|e| MemoryError::Embedding(e.to_string()))?;
         
         Ok(Self { model, config })
     }
     
     /// Embed single text
-    pub async fn embed(&self, text: &str) -> Result<Vec<f32>> {
-        let embeddings = self.model.embed(vec![text], None)
+    pub fn embed(&self, text: &str) -> Result<Vec<f32>> {
+        let embeddings = self.model.embed(vec![text.to_string()], None)
             .map_err(|e| MemoryError::Embedding(e.to_string()))?;
         
         embeddings.into_iter()
@@ -56,7 +57,7 @@ impl EmbeddingEngine {
     }
     
     /// Embed batch
-    pub async fn embed_batch(&self, texts: Vec<&str>) -> Result<Vec<Vec<f32>>> {
+    pub fn embed_batch(&self, texts: Vec<String>) -> Result<Vec<Vec<f32>>> {
         let embeddings = self.model.embed(texts, None)
             .map_err(|e| MemoryError::Embedding(e.to_string()))?;
         
@@ -78,13 +79,13 @@ impl EmbeddingEngine {
         Ok(Self)
     }
     
-    pub async fn embed(&self, _text: &str) -> Result<Vec<f32>> {
+    pub fn embed(&self, _text: &str) -> Result<Vec<f32>> {
         Err(MemoryError::Embedding(
             "Embeddings disabled. Enable 'embeddings' feature.".into()
         ))
     }
     
-    pub async fn embed_batch(&self, _texts: Vec<&str>) -> Result<Vec<Vec<f32>>> {
+    pub fn embed_batch(&self, _texts: Vec<String>) -> Result<Vec<Vec<f32>>> {
         Err(MemoryError::Embedding(
             "Embeddings disabled. Enable 'embeddings' feature.".into()
         ))

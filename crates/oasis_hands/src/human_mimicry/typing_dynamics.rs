@@ -65,7 +65,7 @@ impl KeyDistance {
                 
                 // Tek karakterli tuşları kaydet
                 if key.len() == 1 {
-                    let key_char = key.chars().next().unwrap();
+                    let key_char = key.chars().next().expect("operation failed");
                     key_positions.insert(key_char, KeyPosition {
                         row: row_idx,
                         col: col_idx,

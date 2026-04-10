@@ -6,9 +6,7 @@ use crate::{BrainConfig, BrainError, memory_bridge::MemoryBridge, KERNEL_MODEL};
 use sentient_local::LocalEngine;
 use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
-use std::sync::Arc;
-use tokio::sync::RwLock;
-use log::{info, debug};
+use log::info;
 
 /// Cognitive Loop Engine
 pub struct CognitiveLoop {

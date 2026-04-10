@@ -6,7 +6,6 @@ use crate::BrainError;
 use sentient_local::LocalEngine;
 use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
-use log::debug;
 
 /// Action Engine
 pub struct ActionEngine;
@@ -21,7 +20,7 @@ impl ActionEngine {
         let start = std::time::Instant::now();
         
         // Generate action plan
-        let plan = self.plan_action(&action, gemma4).await?;
+        let _plan = self.plan_action(&action, gemma4).await?;
         
         // Execute based on action type
         let _plan = self.plan_action(&action, gemma4).await?;

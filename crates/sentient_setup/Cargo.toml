@@ -1,6 +1,6 @@
 [package]
 name = "sentient-setup"
-version = "6.0.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Setup Wizard v6.0.0 - Strategic UX Update: Sentient Onboarding with 25+ LLM Providers, 20+ Communication Channels"
 authors = ["SENTIENT Core Team"]

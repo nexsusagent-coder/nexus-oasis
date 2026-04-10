@@ -1,14 +1,5 @@
 //! Distributed tracing setup using OpenTelemetry
 
-use opentelemetry::{
-    global,
-    trace::{Tracer, TracerProvider},
-    sdk::trace::{self, BatchSpanProcessor, RandomIdGenerator, Sampler},
-    sdk::Resource,
-    KeyValue,
-};
-use opentelemetry_otlp::WithExportConfig;
-use opentelemetry_semantic_conventions::resource::SERVICE_NAME;
 use tracing_subscriber::{
     layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Layer,
 };
@@ -42,33 +33,7 @@ impl Default for TracingConfig {
 
 /// Initialize distributed tracing
 pub fn init_tracing(config: TracingConfig) -> Result<(), Box<dyn std::error::Error>> {
-    let resource = Resource::new(vec![KeyValue::new(
-        SERVICE_NAME,
-        config.service_name.clone(),
-    )]);
-
     let mut layers = Vec::new();
-
-    // OTLP layer (for Jaeger, Tempo, etc.)
-    if let Some(endpoint) = &config.otlp_endpoint {
-        let exporter = opentelemetry_otlp::new_exporter()
-            .tonic()
-            .with_endpoint(endpoint);
-
-        let tracer_provider = trace::TracerProvider::builder()
-            .with_resource(resource.clone())
-            .with_sampler(Sampler::TraceIdRatioBased(config.sampling_ratio))
-            .with_id_generator(RandomIdGenerator::default())
-            .with_span_processor(BatchSpanProcessor::builder(exporter.build_span_exporter()?)
-                .build())
-            .build();
-
-        let tracer = tracer_provider.tracer("sentient");
-        global::set_tracer_provider(tracer_provider);
-
-        let telemetry_layer = tracing_opentelemetry::layer().with_tracer(tracer);
-        layers.push(telemetry_layer.boxed());
-    }
 
     // Console output layer
     if config.console_output {
@@ -81,7 +46,7 @@ pub fn init_tracing(config: TracingConfig) -> Result<(), Box<dyn std::error::Err
 
     // Environment filter
     let env_filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new("info,sentient=debug"));
+        .unwrap_or_else(|_| EnvFilter::new(&format!("info,{}=debug", config.service_name)));
 
     // Initialize subscriber
     tracing_subscriber::registry()
@@ -94,7 +59,7 @@ pub fn init_tracing(config: TracingConfig) -> Result<(), Box<dyn std::error::Err
 
 /// Shutdown tracing
 pub fn shutdown_tracing() {
-    global::shutdown_tracer_provider();
+    // No-op for now - OTLP shutdown would go here
 }
 
 /// Create a tracing span for agent operations

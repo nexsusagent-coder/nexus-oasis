@@ -1,6 +1,6 @@
 [package]
 name = "sentient_session"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "A3 Session Tree/Compaction - Native Session Management for SENTIENT"
 authors = ["NEXUS OASIS"]

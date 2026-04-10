@@ -69,6 +69,24 @@ members = [
     "crates/sentient_enterprise",
     # v11.0.0 Performance Benchmarks
     "crates/sentient_benchmarks",
+    # v12.0.0 Observability (OpenTelemetry, Prometheus)
+    "crates/sentient_observability",
+    # v13.0.0 Internationalization (i18n)
+    "crates/sentient_i18n",
+    # v14.0.0 Autonomous Desktop Agent
+    "crates/oasis_autonomous",
+    # v15.0.0 MCP Protocol (Model Context Protocol)
+    "crates/sentient_mcp",
+    # v16.0.0 Vision/Multimodal Support
+    "crates/sentient_vision",
+    # v17.0.0 Plugin/Extension System
+    "crates/sentient_plugin",
+    # v18.0.0 Native RAG Engine
+    "crates/sentient_rag",
+    # v19.0.0 Fine-tuning Support
+    "crates/sentient_finetuning",
+    # v20.0.0 Web Server
+    "crates/sentient_web",
     # Skills System
     "skills",
     "scripts",
@@ -97,7 +115,7 @@ chrono = { version = "0.4", features = ["serde"] }
 rusqlite = { version = "0.35", features = ["bundled"] }
 
 # V-Gate / HTTP
-reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "multipart"], default-features = false }
 axum = { version = "0.8", features = ["ws"] }
 tower = "0.5"
 tower-http = "0.6"

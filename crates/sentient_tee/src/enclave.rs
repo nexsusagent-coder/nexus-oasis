@@ -249,7 +249,7 @@ impl TeeEnclave {
 
     pub async fn status(&self) -> TeeStatus {
         let init = self.initialized.read().await;
-        let measurement = self.measurement.read().await;
+        let _measurement = self.measurement.read().await;
         
         TeeStatus {
             available: true,
@@ -435,7 +435,7 @@ mod tests {
     #[tokio::test]
     async fn test_enclave_initialization() {
         let enclave = TeeEnclave::new(TeeConfig::default());
-        enclave.initialize().await.unwrap();
+        enclave.initialize().await.expect("operation failed");
         
         let status = enclave.status().await;
         assert!(status.initialized);
@@ -444,27 +444,27 @@ mod tests {
     #[tokio::test]
     async fn test_enclave_execute() {
         let enclave = TeeEnclave::new(TeeConfig::default());
-        enclave.initialize().await.unwrap();
+        enclave.initialize().await.expect("operation failed");
         
-        let result: i32 = enclave.execute(|| 42).await.unwrap();
+        let result: i32 = enclave.execute(|| 42).await.expect("operation failed");
         assert_eq!(result, 42);
     }
     
     #[tokio::test]
     async fn test_attestation_report() {
         let enclave = TeeEnclave::new(TeeConfig::default());
-        enclave.initialize().await.unwrap();
+        enclave.initialize().await.expect("operation failed");
         
-        let report = enclave.generate_attestation_report(b"nonce123").await.unwrap();
+        let report = enclave.generate_attestation_report(b"nonce123").await.expect("operation failed");
         assert!(!report.signature.is_empty());
     }
     
     #[tokio::test]
     async fn test_tee_runtime() {
         let runtime = TeeRuntime::new(TeeConfig::default());
-        runtime.initialize().await.unwrap();
+        runtime.initialize().await.expect("operation failed");
         
-        let result = runtime.secure_execute(|| "secure_result").await.unwrap();
+        let result = runtime.secure_execute(|| "secure_result").await.expect("operation failed");
         assert_eq!(result, "secure_result");
         
         let stats = runtime.stats().await;

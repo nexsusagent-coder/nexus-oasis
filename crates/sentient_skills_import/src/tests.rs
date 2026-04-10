@@ -38,7 +38,7 @@ mod tests {
     #[test]
     fn test_manifest_yaml() {
         let yaml = crate::skill::EXAMPLE_MANIFEST;
-        let manifest: SkillManifest = serde_yaml::from_str(yaml).unwrap();
+        let manifest: SkillManifest = serde_yaml::from_str(yaml).expect("operation failed");
         
         assert_eq!(manifest.name, "translator");
         assert_eq!(manifest.version, "1.0.0");

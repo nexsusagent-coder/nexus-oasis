@@ -1,6 +1,6 @@
 [package]
 name = "sentient_reporting"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "A8 Research Reporting - Native Report Generation for SENTIENT"
 authors = ["NEXUS OASIS"]

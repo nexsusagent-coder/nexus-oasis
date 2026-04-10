@@ -123,7 +123,8 @@ jobs:
         with:
           name: sentient-${{ matrix.target }}
           path: |
-            SENTIENT_CORE/target/${{ matrix.target }}/release/sentient-cli
+            SENTIENT_CORE/target/${{ matrix.target }}/release/sentient
+            SENTIENT_CORE/target/${{ matrix.target }}/release/sentient-shell
             SENTIENT_CORE/target/${{ matrix.target }}/release/nexus-dashboard
           retention-days: 7
 

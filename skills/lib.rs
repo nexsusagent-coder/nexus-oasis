@@ -208,7 +208,7 @@ impl SkillManager {
     pub fn find_by_trigger(&self, text: &str) -> Option<&str> {
         let text_lower = text.to_lowercase();
         
-        for (name, skill) in &self.skills {
+        for (_name, _skill) in &self.skills {
             // Basit keyword eşleştirme
             // Gerçek impl'de regex pattern kullanılır
         }

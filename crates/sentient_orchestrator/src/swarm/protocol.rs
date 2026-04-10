@@ -9,7 +9,7 @@ use std::collections::HashMap;
 
 use super::{SwarmAgentId, SwarmTask};
 use super::agent_type::{AgentType, AgentCapability, AgentPersona};
-use super::message::{SwarmMessage, MessageType, MessagePriority};
+use super::message::MessagePriority;
 
 /// ─── SWARM PROTOCOL ───
 /// 
@@ -319,7 +319,7 @@ mod tests {
             from, AgentType::Coordinator, to, vec![]
         );
         
-        let accepted = protocol.accept_handshake(&handshake.id).unwrap();
+        let accepted = protocol.accept_handshake(&handshake.id).expect("operation failed");
         assert_eq!(accepted.status, HandshakeStatus::Accepted);
     }
     
@@ -342,7 +342,7 @@ mod tests {
         ]);
         
         // Researcher daha yüksek skor almalı
-        assert!(neg.best_proposal().unwrap().agent_type == AgentType::Researcher);
+        assert!(neg.best_proposal().expect("operation failed").agent_type == AgentType::Researcher);
     }
     
     #[test]
@@ -357,7 +357,7 @@ mod tests {
             (agent.clone(), persona)
         ]);
         
-        let resolved = protocol.select_agent(&neg.id, agent).unwrap();
+        let resolved = protocol.select_agent(&neg.id, agent).expect("operation failed");
         assert_eq!(resolved.status, NegotiationStatus::Resolved);
     }
 }

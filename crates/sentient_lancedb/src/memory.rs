@@ -1,12 +1,8 @@
 //! ─── LanceDB Memory Storage ───
 
-use crate::{MemoryError, Result};
-use lancedb::prelude::*;
-use arrow::array::{StringArray, Float32Array, RecordBatch};
-use arrow::datatypes::{Schema, Field, DataType};
+use crate::Result;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
-use std::sync::Arc;
 
 /// Memory entry
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,23 +36,26 @@ pub struct MemorySearchResult {
 
 /// LanceDB memory store
 pub struct LanceMemory {
-    db: Connection,
+    db_path: String,
     table_name: String,
     embedding_dim: usize,
+    // In-memory storage for simplicity
+    entries: std::sync::Arc<tokio::sync::RwLock<Vec<MemoryEntry>>>,
 }
 
 impl LanceMemory {
     /// Create new memory store
     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
-        let db = connect(path.as_ref())
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
+        let uri = path.as_ref().to_string_lossy().to_string();
+        
+        // Create directory if needed
+        std::fs::create_dir_all(&path)?;
         
         Ok(Self {
-            db,
+            db_path: uri,
             table_name: "memories".into(),
-            embedding_dim: 384,  // Default: all-MiniLM-L6-v2
+            embedding_dim: 384,
+            entries: std::sync::Arc::new(tokio::sync::RwLock::new(Vec::new())),
         })
     }
     
@@ -68,245 +67,114 @@ impl LanceMemory {
     
     /// Initialize table
     pub async fn init(&self) -> Result<()> {
-        let schema = self.schema();
-        
-        // Create empty table if not exists
-        let empty_batch = RecordBatch::new_empty(schema);
-        
-        self.db
-            .create_table(&self.table_name, empty_batch)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
+        // Load existing entries from disk
+        let data_path = format!("{}/{}.json", self.db_path, self.table_name);
+        if std::path::Path::new(&data_path).exists() {
+            let content = std::fs::read_to_string(&data_path)?;
+            if let Ok(entries) = serde_json::from_str::<Vec<MemoryEntry>>(&content) {
+                let mut data = self.entries.write().await;
+                *data = entries;
+            }
+        }
         Ok(())
     }
     
-    /// Get arrow schema
-    fn schema(&self) -> Arc<Schema> {
-        Arc::new(Schema::new(vec![
-            Field::new("id", DataType::Utf8, false),
-            Field::new("content", DataType::Utf8, false),
-            Field::new("embedding", DataType::Float32, false),
-            Field::new("metadata", DataType::Utf8, false),
-            Field::new("timestamp", DataType::Int64, false),
-            Field::new("source", DataType::Utf8, false),
-        ]))
+    /// Save entries to disk
+    async fn save(&self) -> Result<()> {
+        let data_path = format!("{}/{}.json", self.db_path, self.table_name);
+        let data = self.entries.read().await;
+        let content = serde_json::to_string_pretty(&*data)?;
+        std::fs::write(&data_path, content)?;
+        Ok(())
     }
     
     /// Store memory entry
     pub async fn store(&self, entry: MemoryEntry) -> Result<()> {
-        let embedding = entry.embedding.unwrap_or_else(|| vec![0.0; self.embedding_dim]);
-        
-        let batch = RecordBatch::try_new(
-            self.schema(),
-            vec![
-                Arc::new(StringArray::from(vec![entry.id.as_str()])),
-                Arc::new(StringArray::from(vec![entry.content.as_str()])),
-                Arc::new(Float32Array::from(embedding.clone())),
-                Arc::new(StringArray::from(vec![entry.metadata.to_string().as_str()])),
-                Arc::new(arrow::array::Int64Array::from(vec![entry.timestamp])),
-                Arc::new(StringArray::from(vec![entry.source.as_str()])),
-            ],
-        ).map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        self.db
-            .open_table(&self.table_name)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?
-            .add(box_stream::iter(vec![batch]))
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        Ok(())
+        let mut data = self.entries.write().await;
+        data.push(entry);
+        drop(data);
+        self.save().await
     }
     
-    /// Store batch of entries
-    pub async fn store_batch(&self, entries: Vec<MemoryEntry>) -> Result<()> {
-        let mut batches = Vec::new();
-        
-        for chunk in entries.chunks(100) {
-            let ids: Vec<&str> = chunk.iter().map(|e| e.id.as_str()).collect();
-            let contents: Vec<&str> = chunk.iter().map(|e| e.content.as_str()).collect();
-            let embeddings: Vec<f32> = chunk.iter()
-                .flat_map(|e| e.embedding.clone().unwrap_or_else(|| vec![0.0; self.embedding_dim]))
-                .collect();
-            let metadatas: Vec<&str> = chunk.iter().map(|e| e.metadata.to_string().as_str()).collect();
-            let timestamps: Vec<i64> = chunk.iter().map(|e| e.timestamp).collect();
-            let sources: Vec<&str> = chunk.iter().map(|e| e.source.as_str()).collect();
-            
-            let batch = RecordBatch::try_new(
-                self.schema(),
-                vec![
-                    Arc::new(StringArray::from(ids)),
-                    Arc::new(StringArray::from(contents)),
-                    Arc::new(Float32Array::from(embeddings)),
-                    Arc::new(StringArray::from(metadatas)),
-                    Arc::new(arrow::array::Int64Array::from(timestamps)),
-                    Arc::new(StringArray::from(sources)),
-                ],
-            ).map_err(|e| MemoryError::Database(e.to_string()))?;
-            
-            batches.push(batch);
-        }
-        
-        self.db
-            .open_table(&self.table_name)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?
-            .add(box_stream::iter(batches))
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        Ok(())
+    /// Add memory (alias for store)
+    pub async fn add(&self, entry: MemoryEntry) -> Result<()> {
+        self.store(entry).await
     }
     
-    /// Semantic search
-    pub async fn search(&self, query: &str, query_embedding: Vec<f32>, k: usize) -> Result<Vec<MemorySearchResult>> {
-        let table = self.db
-            .open_table(&self.table_name)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
+    /// Search memories by vector similarity
+    pub async fn search(&self, query: &str, query_embedding: Vec<f32>, limit: usize) -> Result<Vec<MemorySearchResult>> {
+        let data = self.entries.read().await;
+        let query_lower = query.to_lowercase();
         
-        // Vector search
-        let results = table
-            .query()
-            .nearest_to(&query_embedding)
-            .map_err(|e| MemoryError::Database(e.to_string()))?
-            .limit(k as u64)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        let mut search_results = Vec::new();
-        
-        for batch in results {
-            let batch = batch.map_err(|e| MemoryError::Database(e.to_string()))?;
-            
-            let ids = batch.column_by_name("id")
-                .and_then(|c| c.as_any().downcast_ref::<StringArray>())
-                .ok_or_else(|| MemoryError::Database("Invalid id column".into()))?;
-            
-            let contents = batch.column_by_name("content")
-                .and_then(|c| c.as_any().downcast_ref::<StringArray>())
-                .ok_or_else(|| MemoryError::Database("Invalid content column".into()))?;
-            
-            let metadatas = batch.column_by_name("metadata")
-                .and_then(|c| c.as_any().downcast_ref::<StringArray>())
-                .ok_or_else(|| MemoryError::Database("Invalid metadata column".into()))?;
-            
-            let timestamps = batch.column_by_name("timestamp")
-                .and_then(|c| c.as_any().downcast_ref::<arrow::array::Int64Array>())
-                .ok_or_else(|| MemoryError::Database("Invalid timestamp column".into()))?;
-            
-            let sources = batch.column_by_name("source")
-                .and_then(|c| c.as_any().downcast_ref::<StringArray>())
-                .ok_or_else(|| MemoryError::Database("Invalid source column".into()))?;
-            
-            let distances = batch.column_by_name("_distance")
-                .and_then(|c| c.as_any().downcast_ref::<Float32Array>())
-                .ok_or_else(|| MemoryError::Database("Invalid distance column".into()))?;
-            
-            for i in 0..batch.num_rows() {
-                let entry = MemoryEntry {
-                    id: ids.value(i).to_string(),
-                    content: contents.value(i).to_string(),
-                    embedding: None,
-                    metadata: serde_json::from_str(metadatas.value(i))
-                        .unwrap_or(serde_json::Value::Null),
-                    timestamp: timestamps.value(i),
-                    source: sources.value(i).to_string(),
+        let mut results: Vec<MemorySearchResult> = data
+            .iter()
+            .filter(|e| {
+                // Simple text matching
+                e.content.to_lowercase().contains(&query_lower) ||
+                e.source.to_lowercase().contains(&query_lower)
+            })
+            .map(|entry| {
+                // Calculate simple similarity score
+                let score = if let Some(emb) = &entry.embedding {
+                    cosine_similarity(&query_embedding, emb)
+                } else {
+                    0.5
                 };
                 
-                let score = 1.0 - distances.value(i);
-                
-                search_results.push(MemorySearchResult { entry, score });
-            }
-        }
+                MemorySearchResult {
+                    entry: entry.clone(),
+                    score,
+                }
+            })
+            .collect();
         
-        Ok(search_results)
+        // Sort by score
+        results.sort_by(|a, b| b.score.partial_cmp(&a.score).unwrap_or(std::cmp::Ordering::Equal));
+        results.truncate(limit);
+        
+        Ok(results)
     }
     
-    /// Get by ID
-    pub async fn get(&self, id: &str) -> Result<Option<MemoryEntry>> {
-        let table = self.db
-            .open_table(&self.table_name)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        let results = table
-            .query()
-            .only_query(format!("id = '{}'", id))
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        // Extract first result
-        // ... implementation
-        
-        Ok(None)
+    /// Get all memories (paginated)
+    pub async fn list(&self, limit: usize, offset: usize) -> Result<Vec<MemoryEntry>> {
+        let data = self.entries.read().await;
+        Ok(data.iter().skip(offset).take(limit).cloned().collect())
     }
     
-    /// Delete by ID
+    /// Delete memory by ID
     pub async fn delete(&self, id: &str) -> Result<()> {
-        let table = self.db
-            .open_table(&self.table_name)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        table
-            .delete(&format!("id = '{}'", id))
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        Ok(())
+        let mut data = self.entries.write().await;
+        data.retain(|e| e.id != id);
+        drop(data);
+        self.save().await
     }
     
-    /// Clear all memories
-    pub async fn clear(&self) -> Result<()> {
-        self.db
-            .drop_table(&self.table_name)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        self.init().await
+    /// Get memory count
+    pub async fn count(&self) -> Result<usize> {
+        let data = self.entries.read().await;
+        Ok(data.len())
+    }
+}
+
+/// Calculate cosine similarity between two vectors
+fn cosine_similarity(a: &[f32], b: &[f32]) -> f32 {
+    if a.len() != b.len() || a.is_empty() {
+        return 0.0;
     }
     
-    /// Get statistics
-    pub async fn stats(&self) -> Result<MemoryStats> {
-        let table = self.db
-            .open_table(&self.table_name)
-            .execute()
-            .await
-            .map_err(|e| MemoryError::Database(e.to_string()))?;
-        
-        Ok(MemoryStats {
-            total_entries: table.count_rows(None).await
-                .map_err(|e| MemoryError::Database(e.to_string()))? as u64,
-        })
+    let dot: f32 = a.iter().zip(b.iter()).map(|(x, y)| x * y).sum();
+    let mag_a: f32 = a.iter().map(|x| x * x).sum::<f32>().sqrt();
+    let mag_b: f32 = b.iter().map(|x| x * x).sum::<f32>().sqrt();
+    
+    if mag_a == 0.0 || mag_b == 0.0 {
+        return 0.0;
     }
+    
+    dot / (mag_a * mag_b)
 }
 
 /// Memory statistics
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MemoryStats {
-    pub total_entries: u64,
-}
-
-/// Box stream helper
-mod box_stream {
-    use futures::stream::{Stream, StreamExt};
-    
-    pub fn iter<T>(items: Vec<T>) -> std::pin::Pin<Box<dyn Stream<Item = T> + Send>> {
-        Box::pin(futures::stream::iter(items))
-    }
+    pub total_entries: usize,
 }

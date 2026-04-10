@@ -178,7 +178,7 @@ mod tests {
     fn test_json_formatter() {
         let formatter = JsonFormatter::new(true);
         let tool = create_test_tool();
-        let output = formatter.format(&tool).unwrap();
+        let output = formatter.format(&tool).expect("operation failed");
         assert!(output.contains("test"));
     }
     
@@ -186,7 +186,7 @@ mod tests {
     fn test_markdown_formatter() {
         let formatter = MarkdownFormatter::new(true);
         let tool = create_test_tool();
-        let output = formatter.format(&tool).unwrap();
+        let output = formatter.format(&tool).expect("operation failed");
         assert!(output.contains("# test"));
     }
 }

@@ -14,7 +14,7 @@
 //!  5. Token Budget   → MAX_OBSERVATION_TOKENS sınırla
 //! ═──────────────────────────────────────────────────────────────────────────────
 
-use crate::error::{BrowserError, BrowserResult};
+use crate::error::BrowserResult;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -284,7 +284,7 @@ impl ObservationPipeline {
     }
     
     /// DOM parse et (basitleştirilmiş)
-    fn parse_dom(&self, raw_dom: &str) -> BrowserResult<Vec<DOMElement>> {
+    fn parse_dom(&self, _raw_dom: &str) -> BrowserResult<Vec<DOMElement>> {
         // Gerçek implementasyonda html5ever veya scraper kullanılır
         // Şimdilik mock data dönüyoruz
         Ok(vec![])
@@ -590,7 +590,7 @@ mod tests {
         };
         
         let pipeline = ObservationPipeline::new();
-        let result = pipeline.enforce_token_budget(observation).unwrap();
+        let result = pipeline.enforce_token_budget(observation).expect("operation failed");
         
         assert!(result.estimated_tokens <= pipeline.max_tokens * 2); // Esnek bütçe
     }

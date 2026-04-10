@@ -429,7 +429,7 @@ mod tests {
         assert!(!path.is_empty());
         
         // Son nokta hedefe yakın olmalı
-        let last = path.last().unwrap();
+        let last = path.last().expect("operation failed");
         assert!((last.0 - 100.0).abs() < 0.1);
         assert!((last.1 - 100.0).abs() < 0.1);
     }

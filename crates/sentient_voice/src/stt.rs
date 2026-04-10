@@ -136,6 +136,21 @@ impl LocalWhisper {
     }
 }
 
+/// Simulation mode Local Whisper (when native library not available)
+#[cfg(not(feature = "local-whisper"))]
+pub struct LocalWhisper {
+    model_path: String,
+}
+
+#[cfg(not(feature = "local-whisper"))]
+impl LocalWhisper {
+    pub fn new(model_path: String) -> Self {
+        log::info!("LocalWhisper simulation mode - no native library");
+        log::info!("Model path: {}", model_path);
+        Self { model_path }
+    }
+}
+
 #[cfg(feature = "local-whisper")]
 #[async_trait]
 impl SpeechToText for LocalWhisper {
@@ -243,4 +258,49 @@ struct WhisperSegment {
     start: f32,
     end: f32,
     text: String,
+}
+
+/// Simulation mode implementation (when native library not available)
+#[cfg(not(feature = "local-whisper"))]
+#[async_trait]
+impl SpeechToText for LocalWhisper {
+    async fn transcribe(&self, audio: &[f32]) -> Result<TranscriptionResult, VoiceError> {
+        log::debug!("LocalWhisper simulation mode - returning mock transcription");
+        
+        // Calculate audio properties for simulation
+        let duration_secs = audio.len() as f32 / 16000.0;
+        let energy: f32 = audio.iter().map(|s| s.abs()).sum::<f32>() / audio.len().max(1) as f32;
+        
+        // Simulate transcription based on audio energy
+        let (text, confidence) = if energy < 0.01 {
+            ("[silence]".to_string(), 0.5)
+        } else if energy < 0.05 {
+            ("[inaudible speech]".to_string(), 0.6)
+        } else {
+            (format!("[Simulated transcription - {} seconds of audio]", duration_secs as i32), 0.85)
+        };
+        
+        Ok(TranscriptionResult {
+            text,
+            language: "en".into(),
+            confidence,
+            duration_secs,
+            segments: vec![TranscriptionSegment {
+                start: 0.0,
+                end: duration_secs,
+                text: "Simulated segment".into(),
+            }],
+        })
+    }
+    
+    async fn transcribe_file(&self, path: &str) -> Result<TranscriptionResult, VoiceError> {
+        log::debug!("LocalWhisper simulation mode - transcribing file: {}", path);
+        let bytes = std::fs::read(path)?;
+        let audio = wav_to_float(&bytes)?;
+        self.transcribe(&audio).await
+    }
+    
+    fn supported_languages(&self) -> Vec<&str> {
+        vec!["en", "es", "fr", "de", "it", "pt", "zh", "ja", "ko", "ru", "tr", "ar"]
+    }
 }

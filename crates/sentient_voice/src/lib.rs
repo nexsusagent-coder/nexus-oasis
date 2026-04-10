@@ -5,27 +5,29 @@
 //!  Features:
 //!  - Whisper STT (OpenAI API or local)
 //!  - Multiple TTS providers (OpenAI, ElevenLabs, System)
-//!  - Real-time audio streaming
+//!  - Real-time audio streaming with VAD
 //!  - Voice activity detection
 //!  - Wake word detection
 //!  - Multi-language support
+//!  - Voice cloning (ElevenLabs)
 
 pub mod stt;
 pub mod tts;
 pub mod audio;
 pub mod config;
 pub mod wake;
+pub mod streaming;
 
-use serde::{Deserialize, Serialize};
-use async_trait::async_trait;
 use std::sync::Arc;
-use tokio::sync::RwLock;
+use tokio::sync::{RwLock, mpsc};
+pub use parking_lot::Mutex;
 
 pub use config::VoiceConfig;
 pub use stt::{SpeechToText, TranscriptionResult};
 pub use tts::{TextToSpeech, SpeechResult};
-pub use audio::{AudioBuffer, AudioFormat};
+pub use audio::{AudioBuffer, AudioFormat, VoiceActivityDetector};
 pub use wake::{WakeWordDetector, WakeWord};
+pub use streaming::{VoiceStream, StreamConfig, StreamEvent};
 
 /// ─── Voice Engine ───
 
@@ -34,6 +36,7 @@ pub struct VoiceEngine {
     stt: Arc<RwLock<Box<dyn SpeechToText>>>,
     tts: Arc<RwLock<Box<dyn TextToSpeech>>>,
     wake_detector: Option<Arc<RwLock<WakeWordDetector>>>,
+    vad: Arc<Mutex<VoiceActivityDetector>>,
 }
 
 impl VoiceEngine {
@@ -44,12 +47,17 @@ impl VoiceEngine {
         let wake_detector = config.wake_word.as_ref().map(|w| {
             Arc::new(RwLock::new(WakeWordDetector::new(w.clone())))
         });
+        let vad = Arc::new(Mutex::new(VoiceActivityDetector::new(
+            config.vad_sensitivity,
+            (config.sample_rate / 100) as usize, // 10ms frames
+        )));
         
         Self {
             config,
             stt: Arc::new(RwLock::new(stt)),
             tts: Arc::new(RwLock::new(tts)),
             wake_detector,
+            vad,
         }
     }
     
@@ -59,9 +67,22 @@ impl VoiceEngine {
         stt.transcribe(audio).await
     }
     
+    /// Transcribe audio file
+    pub async fn transcribe_file(&self, path: &str) -> Result<TranscriptionResult, VoiceError> {
+        let stt = self.stt.read().await;
+        stt.transcribe_file(path).await
+    }
+    
     /// Synthesize speech
     pub async fn synthesize(&self, text: &str) -> Result<SpeechResult, VoiceError> {
         let tts = self.tts.read().await;
+        tts.synthesize(text).await
+    }
+    
+    /// Synthesize with custom voice (voice cloning)
+    pub async fn synthesize_with_voice(&self, text: &str, voice_id: &str) -> Result<SpeechResult, VoiceError> {
+        let mut tts = self.tts.write().await;
+        tts.set_voice(voice_id);
         tts.synthesize(text).await
     }
     
@@ -75,10 +96,37 @@ impl VoiceEngine {
         }
     }
     
-    /// Stream audio for real-time transcription
-    pub async fn stream_transcribe(&self) -> Result<VoiceStream, VoiceError> {
-        // TODO: Implement streaming
-        Err(VoiceError::NotImplemented("Streaming not yet implemented".into()))
+    /// Check voice activity
+    pub fn detect_voice_activity(&self, frame: &[f32]) -> bool {
+        let mut vad = self.vad.lock();
+        vad.process(frame)
+    }
+    
+    /// Reset VAD state
+    pub fn reset_vad(&self) {
+        let mut vad = self.vad.lock();
+        vad.reset();
+    }
+    
+    /// Create real-time streaming transcription session
+    pub async fn create_stream(&self, config: StreamConfig) -> Result<VoiceStream, VoiceError> {
+        VoiceStream::new(
+            self.stt.clone(),
+            self.vad.clone(),
+            config,
+            self.config.clone(),
+        )
+    }
+    
+    /// Get available TTS voices
+    pub async fn get_voices(&self) -> Vec<String> {
+        let tts = self.tts.read().await;
+        tts.voices()
+    }
+    
+    /// Get configuration
+    pub fn config(&self) -> &VoiceConfig {
+        &self.config
     }
 }
 
@@ -88,7 +136,7 @@ fn create_stt(config: &VoiceConfig) -> Box<dyn SpeechToText> {
         config::SttProvider::OpenAI { api_key } => {
             Box::new(stt::OpenAiWhisper::new(api_key.clone()))
         }
-        config::SttProvider::Local { model_path } => {
+        config::SttProvider::Local { model_path: _ } => {
             #[cfg(feature = "local-whisper")]
             {
                 Box::new(stt::LocalWhisper::new(model_path.clone()))
@@ -118,9 +166,8 @@ fn create_tts(config: &VoiceConfig) -> Box<dyn TextToSpeech> {
 }
 
 /// Voice stream for real-time processing
-pub struct VoiceStream {
-    // TODO: Implement
-}
+/// Implemented in streaming.rs
+// pub use streaming::VoiceStream;
 
 /// ─── Errors ───
 

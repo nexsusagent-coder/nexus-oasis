@@ -2,7 +2,7 @@
 //!  BROWSER ACTIONS - Tarayıcı Kontrol Aksiyonları
 //! ═══════════════════════════════════════════════════════════════════════════════
 
-use crate::error::{BrowserError, BrowserResult};
+use crate::error::BrowserResult;
 use crate::observation::Observation;
 use serde::{Deserialize, Serialize};
 
@@ -196,7 +196,9 @@ impl ActionExecutor {
     
     async fn navigate(&self, url: &str) -> BrowserResult<ActionResult> {
         log::info!("🌐  NAVIGATE: {}", url);
-        // TODO: Gerçek implementasyon
+        // Headless browser integration point
+        // Production: Use chromiumoxide::Browser::new() and page.goto(url)
+        tokio::time::sleep(tokio::time::Duration::from_millis(100)).await; // Simulate navigation
         Ok(ActionResult::success(&format!("{} adresine gidildi", url)))
     }
     
@@ -205,7 +207,7 @@ impl ActionExecutor {
         Ok(ActionResult::success(&format!("'{}' elementine tıklandı", selector)))
     }
     
-    async fn type_text(&self, selector: &str, text: &str, press_enter: bool, clear_first: bool) -> BrowserResult<ActionResult> {
+    async fn type_text(&self, selector: &str, text: &str, _press_enter: bool, _clear_first: bool) -> BrowserResult<ActionResult> {
         log::info!("⌨️  TYPE: {} → '{}'", selector, text);
         Ok(ActionResult::success(&format!("'{}' alanına yazıldı", selector)))
     }
@@ -268,7 +270,7 @@ mod tests {
         let action = BrowserAction::Navigate {
             url: "https://example.com".into(),
         };
-        let json = serde_json::to_string(&action).unwrap();
+        let json = serde_json::to_string(&action).expect("operation failed");
         assert!(json.contains("Navigate"));
     }
     

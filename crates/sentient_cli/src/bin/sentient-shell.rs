@@ -7,8 +7,6 @@ use std::collections::HashMap;
 use std::io::{self, Write};
 use std::path::PathBuf;
 use std::process::Command;
-use std::sync::Arc;
-use tokio::sync::RwLock;
 
 /// SENTIENT Shell Ana Yapısı
 pub struct SENTIENTShell {

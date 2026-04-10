@@ -24,8 +24,6 @@ pub enum MessageContent {
     Text(String),
     /// Markdown formatted text
     Markdown(String),
-    /// HTML formatted text
-    Html { body: String, formatted: String },
     /// Image with optional caption
     Image {
         url: String,
@@ -35,33 +33,14 @@ pub enum MessageContent {
     File {
         name: String,
         url: String,
-        size: u64,
     },
     /// Audio message
     Audio {
         url: String,
-        duration_secs: u32,
     },
     /// Video
     Video {
         url: String,
-        duration_secs: u32,
-    },
-    /// Location
-    Location {
-        latitude: f64,
-        longitude: f64,
-        title: Option<String>,
-    },
-    /// Contact
-    Contact {
-        name: String,
-        phone: String,
-    },
-    /// Interactive buttons
-    Buttons {
-        text: String,
-        buttons: Vec<Button>,
     },
     /// Card/Embed
     Card {
@@ -69,45 +48,7 @@ pub enum MessageContent {
         description: String,
         image: Option<String>,
         url: Option<String>,
-        color: Option<u32>,
     },
-    /// Slack blocks
-    Blocks {
-        text: String,
-        blocks: Vec<Block>,
-    },
-    /// Unknown/Unsupported
-    Unknown,
-}
-
-/// Slack-style block
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Block {
-    pub block_type: String,
-    pub text: Option<String>,
-}
-
-/// Button for interactive messages
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Button {
-    pub text: String,
-    pub action: ButtonAction,
-    pub style: ButtonStyle,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum ButtonAction {
-    Postback(String),
-    Url(String),
-    Callback(String),
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub enum ButtonStyle {
-    Primary,
-    Secondary,
-    Danger,
-    Success,
 }
 
 /// Message sender information
@@ -116,8 +57,18 @@ pub struct MessageSender {
     pub id: String,
     pub name: Option<String>,
     pub username: Option<String>,
-    pub avatar_url: Option<String>,
     pub is_bot: bool,
+}
+
+impl Default for MessageSender {
+    fn default() -> Self {
+        Self {
+            id: "sentient".into(),
+            name: Some("SENTIENT".into()),
+            username: Some("sentient_ai".into()),
+            is_bot: true,
+        }
+    }
 }
 
 /// Channel message
@@ -143,9 +94,6 @@ pub struct ChannelMessage {
     
     /// Timestamp
     pub timestamp: DateTime<Utc>,
-    
-    /// Extra metadata
-    pub metadata: serde_json::Value,
 }
 
 impl ChannelMessage {
@@ -154,42 +102,12 @@ impl ChannelMessage {
         Self {
             id: Uuid::new_v4(),
             channel,
-            sender: MessageSender {
-                id: "sentient".into(),
-                name: Some("SENTIENT".into()),
-                username: Some("sentient_ai".into()),
-                avatar_url: None,
-                is_bot: true,
-            },
+            sender: MessageSender::default(),
             chat_id: chat_id.into(),
             content,
             reply_to: None,
             timestamp: Utc::now(),
-            metadata: serde_json::Value::Null,
         }
-    }
-    
-    /// Set sender
-    pub fn with_sender(mut self, sender: MessageSender) -> Self {
-        self.sender = sender;
-        self
-    }
-    
-    /// Reply to another message
-    pub fn reply_to(mut self, message_id: Uuid) -> Self {
-        self.reply_to = Some(message_id);
-        self
-    }
-    
-    /// Add metadata
-    pub fn with_metadata(mut self, key: &str, value: serde_json::Value) -> Self {
-        if self.metadata.is_null() {
-            self.metadata = serde_json::json!({});
-        }
-        if let Some(obj) = self.metadata.as_object_mut() {
-            obj.insert(key.into(), value);
-        }
-        self
     }
     
     /// Get text content (if text message)
@@ -198,15 +116,6 @@ impl ChannelMessage {
             MessageContent::Text(t) => Some(t),
             MessageContent::Markdown(t) => Some(t),
             _ => None,
-        }
-    }
-    
-    /// Check if message mentions someone
-    pub fn mentions(&self, user_id: &str) -> bool {
-        if let Some(text) = self.as_text() {
-            text.contains(&format!("@{}", user_id)) || text.contains(&format!("<@{}>", user_id))
-        } else {
-            false
         }
     }
 }

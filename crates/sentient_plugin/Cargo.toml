@@ -1,0 +1,71 @@
+[package]
+name = "sentient_plugin"
+version.workspace = true
+edition.workspace = true
+description = "Plugin and extension system for SENTIENT OS"
+authors = ["Pi <pi@sentient.os>"]
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["plugin", "extension", "wasm", "dynamic-loading", "module"]
+categories = ["api-bindings", "development-tools"]
+
+[dependencies]
+# Internal dependencies
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Async traits
+async-trait = "0.1"
+
+# Logging
+tracing = { workspace = true }
+
+# UUID for plugin IDs
+uuid = { workspace = true }
+
+# Semver for version checking
+semver = { version = "1.0", features = ["serde"] }
+
+# Dynamic library loading (optional)
+libloading = { version = "0.8", optional = true }
+
+# WASM runtime (optional)
+wasmtime = { version = "21", optional = true }
+
+# Plugin discovery
+notify = { version = "6", optional = true }
+walkdir = "2"
+
+# Time
+chrono = { workspace = true }
+
+# HTTP for plugin downloads
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], optional = true }
+
+# Zip extraction
+zip = { version = "2", optional = true }
+
+# Path handling
+dirs = "5"
+
+[features]
+default = ["discovery"]
+dynamic = ["libloading"]
+wasm = ["wasmtime"]
+discovery = ["notify"]
+download = ["reqwest", "zip"]
+full = ["dynamic", "wasm", "discovery", "download"]
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3"

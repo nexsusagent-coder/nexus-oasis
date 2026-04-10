@@ -1,6 +1,6 @@
 [package]
 name = "sentient-settings"
-version = "4.0.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Settings Manager v4.0.0 - Multi-Key Vault & Dynamic Routing"
 authors = ["SENTIENT Core Team"]

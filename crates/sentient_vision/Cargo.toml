@@ -1,0 +1,67 @@
+[package]
+name = "sentient_vision"
+version.workspace = true
+edition.workspace = true
+description = "Vision and multimodal AI capabilities for SENTIENT OS"
+authors = ["Pi <pi@sentient.os>"]
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["vision", "multimodal", "ocr", "image-processing", "ai"]
+categories = ["computer-vision", "multimedia", "api-bindings"]
+
+[dependencies]
+# Internal dependencies
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Image processing
+image = "0.25"
+
+# Base64 encoding for image transport
+base64 = "0.22"
+
+# MIME types
+mime = "0.3"
+mime_guess = "2.0"
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Async traits
+async-trait = "0.1"
+
+# Logging
+tracing = { workspace = true }
+
+# Time
+chrono = { workspace = true }
+
+# UUID
+uuid = { workspace = true }
+
+# HTTP client for API-based vision models
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "stream"], optional = true }
+
+# PDF processing (optional)
+pdf2image = { version = "0.1", optional = true }
+
+# ONNX Runtime for local inference (optional)
+ort = { version = "=2.0.0-rc.5", optional = true }
+ndarray = { version = "0.15", optional = true }
+
+[features]
+default = ["api"]
+api = ["reqwest"]
+pdf = ["pdf2image"]
+onnx = ["ort", "ndarray"]
+full = ["api", "pdf"]
+
+[dev-dependencies]
+tokio-test = "0.4"

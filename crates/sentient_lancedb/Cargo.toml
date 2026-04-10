@@ -16,10 +16,6 @@ async-trait.workspace = true
 futures.workspace = true
 chrono.workspace = true
 
-# LanceDB
-lancedb = "0.4"
-arrow = "53"
-
 # Embeddings
 fastembed = { version = "4", optional = true }
 
@@ -32,5 +28,5 @@ dirs = "5"
 sentient_common = { path = "../sentient_common" }
 
 [features]
-default = ["embeddings"]
+default = []
 embeddings = ["dep:fastembed"]

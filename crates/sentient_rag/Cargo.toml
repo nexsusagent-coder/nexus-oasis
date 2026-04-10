@@ -1,0 +1,59 @@
+[package]
+name = "sentient_rag"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Native RAG Engine for SENTIENT OS - Document chunking, embeddings, semantic search"
+keywords = ["rag", "retrieval", "semantic", "search", "embeddings"]
+categories = ["science", "text-processing"]
+
+[dependencies]
+# Core
+sentient_common = { path = "../sentient_common" }
+tokio = { version = "1.35", features = ["rt-multi-thread", "macros", "sync", "time", "fs"] }
+async-trait = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+tracing = "0.1"
+
+# Document processing
+regex = "1.10"
+unicode-segmentation = "1.10"
+tokenizers = { version = "0.19", optional = true }
+
+# Embeddings
+fastembed = { version = "3", optional = true }
+ndarray = { version = "0.15", optional = true }
+
+# Vector store
+lancedb = { version = "0.4", optional = true }
+arrow = { version = "53", optional = true }
+
+# HTTP client (for remote embeddings)
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"], optional = true }
+
+# Caching
+lru = "0.12"
+
+# Parallel processing
+rayon = "1.10"
+
+# UUID
+uuid = { version = "1.6", features = ["v4", "serde"] }
+
+# Chrono
+chrono = { version = "0.4", features = ["serde"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = ["chunking", "memory-store"]
+chunking = []
+embeddings = ["fastembed", "ndarray"]
+remote-embeddings = ["reqwest"]
+vector-store = ["lancedb", "arrow"]
+full = ["chunking", "embeddings", "remote-embeddings", "vector-store", "tokenizers"]
+memory-store = []

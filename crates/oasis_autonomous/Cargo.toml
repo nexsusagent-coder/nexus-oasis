@@ -1,0 +1,86 @@
+[package]
+name = "oasis_autonomous"
+version.workspace = true
+edition = "2021"
+description = "OASIS Autonomous Desktop Agent - Fully autonomous computer operation"
+authors = ["SENTIENT Team"]
+license = "MIT"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
+
+# DateTime
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID
+uuid = { version = "1.6", features = ["v4", "serde"] }
+
+# Random
+rand = "0.8"
+
+# Image processing
+image = "0.24"
+base64 = "0.22"
+
+# HTTP Client (for AI planning)
+reqwest = { version = "0.12", features = ["json"] }
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  NATIVE DESKTOP INTEGRATION (Feature-gated)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Cross-platform screen capture
+screenshots = { version = "0.8", optional = true }
+
+# Cross-platform mouse/keyboard control
+enigo = { version = "0.3", optional = true }
+
+# Mouse/keyboard events
+rdev = { version = "0.5", optional = true }
+
+# Linux X11 support
+x11rb = { version = "0.13", features = ["shm"], optional = true }
+
+# OCR support
+tesseract = { version = "0.15", optional = true }
+
+# Active window detection
+active-win-pos-rs = { version = "0.8", optional = true }
+
+[features]
+default = []  # No native features by default - enable on target machine
+
+# Screen capture
+screen-capture = ["screenshots"]
+
+# Mouse/keyboard control
+input-control = ["enigo", "rdev"]
+
+# Linux X11 native
+x11-native = ["x11rb"]
+
+# OCR support
+ocr = ["tesseract"]
+
+# Active window detection
+active-window = ["active-win-pos-rs"]
+
+# Full native desktop support (requires system libraries)
+full-native = ["screenshots", "enigo", "rdev", "x11rb", "tesseract", "active-win-pos-rs"]
+
+[dev-dependencies]
+tokio-test = "0.4"

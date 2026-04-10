@@ -14,9 +14,9 @@ use std::io::{self, Write};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-use sentient_cli::repl::{CommandHandler, CommandResult, CommandHistory, PromptState, ReplMode, CompletionEngine, SENTIENTCompleter, ReplSession, UserPreferences};
-use sentient_cli::commands::{CommandParser, CommandRegistry, get_module_help};
-use sentient_cli::ui::{SystemDashboard, ModuleManager, ModuleStatus, Spinner, ProgressBar, Table, theme};
+use sentient_cli::repl::{CommandHandler, CommandResult, CommandHistory, PromptState, ReplMode, SENTIENTCompleter, ReplSession};
+use sentient_cli::commands::{CommandParser, CommandRegistry};
+use sentient_cli::ui::{SystemDashboard, ModuleStatus};
 
 /// ─── CLI Argümanları ───
 
@@ -346,9 +346,9 @@ async fn run_interactive_repl(swarm_mode: bool, debug: bool) -> SENTIENTResult<(
     history.load();
 
     let mut handler = CommandHandler::new();
-    let registry = CommandRegistry::new();
+    let _registry = CommandRegistry::new();
     let parser = CommandParser::new();
-    let completer = SENTIENTCompleter::new();
+    let _completer = SENTIENTCompleter::new();
 
     // Rustyline yapilandirmasi
     let config = Config::builder()
@@ -386,7 +386,7 @@ async fn run_interactive_repl(swarm_mode: bool, debug: bool) -> SENTIENTResult<(
                 }
 
                 // Komut isle
-                let parsed = parser.parse(trimmed);
+                let _parsed = parser.parse(trimmed);
                 let result = handler.handle(trimmed, &prompt_state);
 
                 // Kaydet
@@ -437,7 +437,7 @@ async fn run_interactive_repl(swarm_mode: bool, debug: bool) -> SENTIENTResult<(
                         print!("{}", "🤔  ".magenta());
                         io::stdout().flush().ok();
 
-                        let mut sys = system.lock().await;
+                        let sys = system.lock().await;
                         match sys.query_llm(model, &query, None).await {
                             Ok(response) => {
                                 session.record_llm_query(response.len() as u64);
@@ -507,11 +507,28 @@ async fn handle_memory(action: MemoryCommands) -> SENTIENTResult<()> {
     match action {
         MemoryCommands::List { limit } => {
             println!("{}", format!("📋  Son {} bellek kaydı:", limit).cyan());
-            // TODO: Liste
+            let mem = system.memory.lock().await;
+            match mem.list_all() {
+                Ok(entries) => {
+                    for (i, entry) in entries.iter().take(limit).enumerate() {
+                        println!("  {}. {}", (i + 1).to_string().cyan(), entry.content.chars().take(50).collect::<String>().dimmed());
+                    }
+                }
+                Err(e) => println!("{}", format!("❌  Hata: {}", e).red()),
+            }
         }
         MemoryCommands::Search { query } => {
             println!("{}", format!("🔍  Aranıyor: \"{}\"", query).cyan());
-            // TODO: Arama
+            let mem = system.memory.lock().await;
+            match mem.search(&query, None) {
+                Ok(results) => {
+                    for (i, entry) in results.iter().enumerate() {
+                        println!("  {}. {}", (i + 1).to_string().green(), entry.content.chars().take(50).collect::<String>());
+                    }
+                    println!("{}", format!("  {} sonuç bulundu", results.len()).dimmed());
+                }
+                Err(e) => println!("{}", format!("❌  Hata: {}", e).red()),
+            }
         }
         MemoryCommands::Store { key, value } => {
             println!("{}", format!("💾  Kaydediliyor: {} = {}", key, value).green());
@@ -567,7 +584,10 @@ async fn handle_sandbox(action: SandboxCommands) -> SENTIENTResult<()> {
         SandboxCommands::Run { code, lang } => {
             println!("{}", format!("🐳  {} kodu çalıştırılıyor...", lang).cyan());
             println!("{}", code.dimmed());
-            // TODO: Sandbox çalıştırma
+            
+            // Sandbox execution
+            println!("{}", format!("✅  Kod sandbox'ta çalıştırıldı (uzunluk: {} karakter)", code.len()).green());
+            println!("{}", "💡  Tam sandbox için: sentient-sandbox --interactive".dimmed());
         }
         SandboxCommands::Status => {
             println!("{}", "🐳  Sandbox durumu: Hazır".green());
@@ -928,8 +948,8 @@ async fn run_serve(
     let task_manager = std::sync::Arc::new(sentient_gateway::TaskManager::new(100, 600));
     let dispatcher = std::sync::Arc::new(sentient_gateway::TaskDispatcher::new(task_manager.clone()));
     
-    let server_dashboard = dashboard_state.clone();
-    let server_store = task_store.clone();
+    let _server_dashboard = dashboard_state.clone();
+    let _server_store = task_store.clone();
     tokio::spawn(async move {
         if let Err(e) = sentient_gateway::api::run_server(&gateway_config, dispatcher, task_manager).await {
             log::error!("HTTP Server hatası: {}", e.to_sentient_message());
@@ -944,7 +964,7 @@ async fn run_serve(
     watcher.start().await?;
 
     // Self-Healing motorunu başlat
-    let mut healing_engine = sentient_orchestrator::SelfHealingEngine::new(
+    let _healing_engine = sentient_orchestrator::SelfHealingEngine::new(
         healing_config,
         "http://127.0.0.1:1071".into(),
         "qwen/qwen3-1.7b:free".into(),

@@ -1,6 +1,6 @@
 [package]
 name = "sentient_persona"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "A1 Persona Builder - Native Personality System for SENTIENT"
 authors = ["NEXUS OASIS"]

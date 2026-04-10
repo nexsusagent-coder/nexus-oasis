@@ -1,6 +1,6 @@
 //! ─── Skill Installer ───
 
-use crate::{Skill, SkillsError, skill::SkillManifest};
+use crate::{SkillsError, skill::SkillManifest};
 use std::path::{Path, PathBuf};
 use tokio::sync::mpsc;
 

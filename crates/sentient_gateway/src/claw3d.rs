@@ -23,7 +23,6 @@ use tokio::sync::RwLock;
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 
-use crate::websocket::ConnectionManager;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  CLAW3D MESSAGE PROTOCOL
@@ -593,7 +592,7 @@ async fn handle_claw_message(
             }
         }
         
-        ClawMessage::TimeControl { action, speed: _ } => {
+        ClawMessage::TimeControl { action: _, speed: _ } => {
             // Zaman kontrolü simülasyonu
             let response = ClawMessage::SceneState {
                 scene: state.get_scene_state().await,
@@ -671,7 +670,7 @@ mod tests {
             glow_intensity: 0.8,
         };
         
-        let json = serde_json::to_string(&agent).unwrap();
+        let json = serde_json::to_string(&agent).expect("operation failed");
         assert!(json.contains("Scout-001"));
         assert!(json.contains("thinking"));
     }
@@ -689,7 +688,7 @@ mod tests {
             },
         };
         
-        let json = serde_json::to_string(&msg).unwrap();
+        let json = serde_json::to_string(&msg).expect("operation failed");
         assert!(json.contains("scene_state"));
     }
     
@@ -738,7 +737,7 @@ mod tests {
             memory_refs: vec![Uuid::new_v4()],
         };
         
-        let json = serde_json::to_string(&decision).unwrap();
+        let json = serde_json::to_string(&decision).expect("operation failed");
         assert!(json.contains("observe"));
         assert!(json.contains("Kullanıcı"));
     }

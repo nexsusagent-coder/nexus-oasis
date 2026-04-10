@@ -10,7 +10,7 @@
 //! - Audit trail without compromising privacy
 //! - Rate limiting with privacy preservation
 
-use crate::{ProofContext, ZkError, ZkProof, ZkProver, ZkResult, PrivacyLevel, ProofAlgorithm};
+use crate::{ProofContext, ZkError, ZkProof, ZkProver, ZkResult, PrivacyLevel};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -137,7 +137,8 @@ impl ZkMcpRequest {
     }
     
     fn generate_nonce() -> String {
-        blake3::hash(&chrono::Utc::now().timestamp_nanos().to_le_bytes())
+        let timestamp = chrono::Utc::now().timestamp_nanos_opt().unwrap_or(0);
+        blake3::hash(&timestamp.to_le_bytes())
             .to_hex()
             .to_string()[..16].to_string()
     }
@@ -153,7 +154,7 @@ impl ZkMcpRequest {
     }
     
     /// Verify request signature
-    pub fn verify_signature(&self, public_key: &[u8]) -> bool {
+    pub fn verify_signature(&self, _public_key: &[u8]) -> bool {
         if let Some(sig) = &self.signature {
             // Simplified signature verification
             let expected = blake3::hash(
@@ -561,7 +562,7 @@ mod tests {
         
         let prover = ZkProver::new();
         let params = serde_json::json!({});
-        let request = ZkMcpRequest::new("test_tool", &params, &prover).await.unwrap();
+        let request = ZkMcpRequest::new("test_tool", &params, &prover).await.expect("operation failed");
         
         let response = handler.process_request(&request).await;
         assert!(response.is_ok());
@@ -592,12 +593,12 @@ mod tests {
         let params = serde_json::json!({});
         
         // First request should succeed
-        let request1 = ZkMcpRequest::new("test_tool", &params, &prover).await.unwrap();
+        let request1 = ZkMcpRequest::new("test_tool", &params, &prover).await.expect("operation failed");
         let response1 = handler.process_request(&request1).await;
         assert!(response1.is_ok());
         
         // Same nonce should be rejected (replay attack)
-        let mut request2 = ZkMcpRequest::new("test_tool", &params, &prover).await.unwrap();
+        let mut request2 = ZkMcpRequest::new("test_tool", &params, &prover).await.expect("operation failed");
         request2.nonce = request1.nonce.clone();
         
         let response2 = handler.process_request(&request2).await;

@@ -57,8 +57,8 @@ mod config_unit_tests {
             ..Default::default()
         };
         
-        let toml = toml::to_string(&config).unwrap();
-        let decoded: AgentConfig = toml::from_str(&toml).unwrap();
+        let toml = toml::to_string(&config).expect("operation failed");
+        let decoded: AgentConfig = toml::from_str(&toml).expect("operation failed");
         
         assert_eq!(config.name, decoded.name);
         assert_eq!(config.temperature, decoded.temperature);
@@ -72,8 +72,8 @@ mod config_unit_tests {
             ..Default::default()
         };
         
-        let json = serde_json::to_string(&config).unwrap();
-        let decoded: AgentConfig = serde_json::from_str(&json).unwrap();
+        let json = serde_json::to_string(&config).expect("operation failed");
+        let decoded: AgentConfig = serde_json::from_str(&json).expect("operation failed");
         
         assert_eq!(config.name, decoded.name);
     }
@@ -103,7 +103,7 @@ mod config_unit_tests {
         };
         
         assert!(config.system_prompt.is_some());
-        assert_eq!(config.system_prompt.unwrap(), prompt);
+        assert_eq!(config.system_prompt.expect("operation failed"), prompt);
     }
 
     #[test]

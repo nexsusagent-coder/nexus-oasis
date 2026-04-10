@@ -7,6 +7,7 @@ impl super::SkillsImporter {
     pub async fn install_from_git(&self, repo_url: &str) -> Result<Skill, SkillsError> {
         // Clone repository
         let skill_id = extract_skill_id_from_url(repo_url);
+        let skill_id_clone = skill_id.clone();
         
         let output = tokio::process::Command::new("git")
             .arg("clone")
@@ -33,7 +34,7 @@ impl super::SkillsImporter {
         let manifest: crate::skill::SkillManifest = serde_yaml::from_str(&manifest_content)?;
         
         Ok(Skill {
-            id: skill_id,
+            id: skill_id_clone,
             manifest,
             metadata: crate::skill::SkillMetadata {
                 category: "custom".into(),

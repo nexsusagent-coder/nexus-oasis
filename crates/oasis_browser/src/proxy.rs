@@ -229,7 +229,7 @@ impl ProxyPool {
             .push(id.clone());
         
         log::debug!("🌐 PROXY-POOL: Proxy eklendi -> {} ({})", 
-            id, self.proxies.last().unwrap().location.country);
+            id, self.proxies.last().expect("operation failed").location.country);
     }
     
     /// Toplu proxy ekle
@@ -411,7 +411,7 @@ impl ProxyPool {
             // Yanıt süresini güncelle (exponential moving average)
             if let Some(rt) = response_time_ms {
                 proxy.health.response_time_ms = Some(
-                    proxy.health.response_time_ms.map(|prev: u64| ((prev as f64 * 0.7 + rt as f64 * 0.3) as u64)).unwrap_or(rt)
+                    proxy.health.response_time_ms.map(|prev: u64| (prev as f64 * 0.7 + rt as f64 * 0.3) as u64).unwrap_or(rt)
                 );
             }
             
@@ -614,8 +614,8 @@ mod tests {
         pool.add_proxy(create_test_proxy("1", "US"));
         pool.add_proxy(create_test_proxy("2", "DE"));
         
-        let first = pool.next().unwrap();
-        let second = pool.next().unwrap();
+        let first = pool.next().expect("operation failed");
+        let second = pool.next().expect("operation failed");
         
         assert_ne!(first.id, second.id);
     }
@@ -628,7 +628,7 @@ mod tests {
         pool.record_result("1", true, Some(500), None);
         pool.record_result("1", false, Some(1000), Some("Timeout".into()));
         
-        let proxy = pool.proxies.iter().find(|p| p.id == "1").unwrap();
+        let proxy = pool.proxies.iter().find(|p| p.id == "1").expect("operation failed");
         assert_eq!(proxy.health.total_requests, 2);
         assert!((proxy.health.success_rate - 0.5).abs() < 0.01);
     }

@@ -92,57 +92,57 @@ impl GuardrailEngine {
         self.patterns.insert(
             "prompt_injection".into(),
             vec![
-                Regex::new(r"(?i)ignore\s+(previous|all)\s+(instructions|rules|prompts)").unwrap(),
-                Regex::new(r"(?i)system\s*:\s*override").unwrap(),
-                Regex::new(r"(?i)ACT\s+AS").unwrap(),
-                Regex::new(r"(?i)you\s+are\s+no\s+longer").unwrap(),
+                Regex::new(r"(?i)ignore\s+(previous|all)\s+(instructions|rules|prompts)").expect("guardrails: invalid prompt_injection regex"),
+                Regex::new(r"(?i)system\s*:\s*override").expect("guardrails: invalid regex"),
+                Regex::new(r"(?i)ACT\s+AS").expect("guardrails: invalid regex"),
+                Regex::new(r"(?i)you\s+are\s+no\s+longer").expect("guardrails: invalid regex"),
             ],
         );
 
         self.patterns.insert(
             "data_exfiltration".into(),
             vec![
-                Regex::new(r"(?i)api[_-]?key").unwrap(),
-                Regex::new(r"(?i)secret[_-]?key").unwrap(),
-                Regex::new(r"sk-[a-zA-Z0-9]{20,}").unwrap(),
-                Regex::new(r"ghp_[a-zA-Z0-9]{30,}").unwrap(),
+                Regex::new(r"(?i)api[_-]?key").expect("guardrails: invalid data_exfiltration regex"),
+                Regex::new(r"(?i)secret[_-]?key").expect("guardrails: invalid regex"),
+                Regex::new(r"sk-[a-zA-Z0-9]{20,}").expect("guardrails: invalid regex"),
+                Regex::new(r"ghp_[a-zA-Z0-9]{30,}").expect("guardrails: invalid regex"),
             ],
         );
 
         self.patterns.insert(
             "system_prompt_leak".into(),
             vec![
-                Regex::new(r"(?i)your\s+(initial|system)\s+(prompt|instruction)s?\s+(are|is|were)").unwrap(),
-                Regex::new(r"(?i)repeat\s+(the|your)\s+(system\s+)?prompt").unwrap(),
-                Regex::new(r"(?i)what\s+are\s+your\s+(instructions|rules|constraints)").unwrap(),
+                Regex::new(r"(?i)your\s+(initial|system)\s+(prompt|instruction)s?\s+(are|is|were)").expect("guardrails: invalid system_prompt_leak regex"),
+                Regex::new(r"(?i)repeat\s+(the|your)\s+(system\s+)?prompt").expect("guardrails: invalid regex"),
+                Regex::new(r"(?i)what\s+are\s+your\s+(instructions|rules|constraints)").expect("guardrails: invalid regex"),
             ],
         );
 
         self.patterns.insert(
             "sql_injection".into(),
             vec![
-                Regex::new(r"(?i)union\s+select").unwrap(),
-                Regex::new(r"(?i)drop\s+table").unwrap(),
-                Regex::new(r"(?i)insert\s+into").unwrap(),
-                Regex::new(r"(?i)delete\s+from").unwrap(),
-                Regex::new(r"(?i)1\s*=\s*1").unwrap(),
-                Regex::new(r"(?i)OR\s+1\s*=\s*1").unwrap(),
+                Regex::new(r"(?i)union\s+select").expect("guardrails: invalid sql_injection regex"),
+                Regex::new(r"(?i)drop\s+table").expect("guardrails: invalid regex"),
+                Regex::new(r"(?i)insert\s+into").expect("guardrails: invalid regex"),
+                Regex::new(r"(?i)delete\s+from").expect("guardrails: invalid regex"),
+                Regex::new(r"(?i)1\s*=\s*1").expect("guardrails: invalid regex"),
+                Regex::new(r"(?i)OR\s+1\s*=\s*1").expect("guardrails: invalid regex"),
             ],
         );
 
         self.patterns.insert(
             "xss_attack".into(),
             vec![
-                Regex::new(r"<script[^>]*>").unwrap(),
-                Regex::new(r"(?i)javascript\s*:").unwrap(),
-                Regex::new(r"<iframe[^>]*>").unwrap(),
+                Regex::new(r"<script[^>]*>").expect("guardrails: invalid xss regex"),
+                Regex::new(r"(?i)javascript\s*:").expect("guardrails: invalid regex"),
+                Regex::new(r"<iframe[^>]*>").expect("guardrails: invalid regex"),
             ],
         );
 
         self.patterns.insert(
             "profanity_filter".into(),
             vec![
-                Regex::new(r"(?i)\b(hack|exploit|malware|rootkit)\b").unwrap(),
+                Regex::new(r"(?i)\b(hack|exploit|malware|rootkit)\b").expect("guardrails: invalid profanity regex"),
             ],
         );
     }

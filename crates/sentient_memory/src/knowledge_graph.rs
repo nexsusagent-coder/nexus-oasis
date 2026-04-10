@@ -461,9 +461,9 @@ mod tests {
         let db = test_db("create");
         cleanup(&db);
         {
-            let graph = KnowledgeGraph::new(&db).unwrap();
-            assert_eq!(graph.node_count().unwrap(), 0);
-            assert_eq!(graph.edge_count().unwrap(), 0);
+            let graph = KnowledgeGraph::new(&db).expect("operation failed");
+            assert_eq!(graph.node_count().expect("operation failed"), 0);
+            assert_eq!(graph.edge_count().expect("operation failed"), 0);
         }
         cleanup(&db);
     }
@@ -473,7 +473,7 @@ mod tests {
         let db = test_db("traverse");
         cleanup(&db);
         {
-            let graph = KnowledgeGraph::new(&db).unwrap();
+            let graph = KnowledgeGraph::new(&db).expect("operation failed");
             
             let id1 = Uuid::new_v4();
             let id2 = Uuid::new_v4();
@@ -491,18 +491,18 @@ mod tests {
             );
             
             // Önce düğümleri kaydet
-            graph.add_node(&mem1).unwrap();
-            graph.add_node(&mem2).unwrap();
-            graph.add_node(&mem3).unwrap();
+            graph.add_node(&mem1).expect("operation failed");
+            graph.add_node(&mem2).expect("operation failed");
+            graph.add_node(&mem3).expect("operation failed");
             
             // Kenarlar ekle
-            graph.add_edge(id1, id2, RelationType::Causes, None).unwrap();
-            graph.add_edge(id2, id3, RelationType::Causes, None).unwrap();
+            graph.add_edge(id1, id2, RelationType::Causes, None).expect("operation failed");
+            graph.add_edge(id2, id3, RelationType::Causes, None).expect("operation failed");
             
             // Yürü
-            let path = graph.shortest_path(id1, id3).unwrap();
+            let path = graph.shortest_path(id1, id3).expect("operation failed");
             assert!(path.is_some());
-            let path = path.unwrap();
+            let path = path.expect("operation failed");
             assert_eq!(path.len(), 3);
         }
         cleanup(&db);

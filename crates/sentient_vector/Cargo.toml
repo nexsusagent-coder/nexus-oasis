@@ -1,6 +1,6 @@
 [package]
 name = "sentient_vector"
-version = "3.0.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Vector Database Integration - ChromaDB, Qdrant, Weaviate"
 authors = ["SENTIENT Core Team"]

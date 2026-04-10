@@ -3,9 +3,8 @@
 //! Fluent API ile persona oluşturma
 
 use crate::{Persona, PersonaError, PersonaResult};
-use crate::persona::{OceanModel, BehaviorRule, Expertise, CommunicationStyle, CodeStyle, PersonaIdentity, PersonalityTraits};
+use crate::persona::{OceanModel, BehaviorRule, Expertise};
 use uuid::Uuid;
-use std::collections::HashMap;
 
 /// Persona builder - fluent API
 pub struct PersonaBuilder {
@@ -314,7 +313,7 @@ mod tests {
         let persona = PersonaBuilder::new()
             .with_name("Test")
             .build()
-            .unwrap();
+            .expect("operation failed");
         
         assert_eq!(persona.name, "Test");
     }
@@ -326,20 +325,20 @@ mod tests {
             .with_trait("creativity", 0.8)
             .with_trait("precision", 0.9)
             .build()
-            .unwrap();
+            .expect("operation failed");
         
-        assert_eq!(*persona.traits.values.get("creativity").unwrap(), 0.8);
+        assert_eq!(*persona.traits.values.get("creativity").expect("operation failed"), 0.8);
     }
     
     #[test]
     fn test_builder_presets() {
-        let researcher = PersonaBuilder::researcher().build().unwrap();
+        let researcher = PersonaBuilder::researcher().build().expect("operation failed");
         assert_eq!(researcher.name, "Araştırmacı");
         
-        let developer = PersonaBuilder::developer().build().unwrap();
+        let developer = PersonaBuilder::developer().build().expect("operation failed");
         assert_eq!(developer.name, "Geliştirici");
         
-        let sentient = PersonaBuilder::sentient_default().build().unwrap();
+        let sentient = PersonaBuilder::sentient_default().build().expect("operation failed");
         assert_eq!(sentient.name, "SENTIENT");
     }
     
@@ -358,9 +357,9 @@ mod tests {
             .with_name("Test")
             .with_trait("test", 1.5) // Out of range
             .build()
-            .unwrap();
+            .expect("operation failed");
         
         // Değer 0.0-1.0 aralığına normalize edilmeli
-        assert_eq!(*persona.traits.values.get("test").unwrap(), 1.0);
+        assert_eq!(*persona.traits.values.get("test").expect("operation failed"), 1.0);
     }
 }

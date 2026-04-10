@@ -63,7 +63,7 @@ pub use planner::{Planner, ExecutionPlan};
 pub use state::{AgentState, AgentContext};
 pub use execution::{ExecutionResult, StepResult};
 
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
+use sentient_common::error::SENTIENTResult;
 
 /// SENTIENT Sistem Promptu (agent.rs'den re-export)
 pub const SYSTEM_PROMPT: &str = agent::SYSTEM_PROMPT;
@@ -128,6 +128,8 @@ pub struct Orchestrator {
     agents: std::sync::Arc<tokio::sync::RwLock<Vec<Agent>>>,
     /// Global bağlam
     context: std::sync::Arc<tokio::sync::RwLock<AgentContext>>,
+    /// Başlangıç zamanı
+    start_time: std::time::Instant,
 }
 
 /// Orchestrator yapılandırması
@@ -194,6 +196,7 @@ impl Orchestrator {
             sandbox,
             agents: std::sync::Arc::new(tokio::sync::RwLock::new(Vec::new())),
             context,
+            start_time: std::time::Instant::now(),
         })
     }
     
@@ -309,11 +312,13 @@ impl Orchestrator {
     /// Durum raporu
     pub async fn status(&self) -> OrchestratorStatus {
         let agents = self.agents.read().await;
+        let memory = self.memory.read().await;
+        let memory_count = memory.count().unwrap_or(0);
         
         OrchestratorStatus {
             active_agents: agents.len(),
-            memory_entries: 0, // TODO: MemoryCube count method
-            uptime_secs: 0, // TODO: Track uptime
+            memory_entries: memory_count as usize,
+            uptime_secs: self.start_time.elapsed().as_secs(),
         }
     }
 }

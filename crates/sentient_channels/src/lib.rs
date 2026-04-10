@@ -1,40 +1,22 @@
 //! ═══════════════════════════════════════════════════════════════════════════════
 //!  SENTIENT Channels - Multi-Platform Messaging Integration
 //! ═══════════════════════════════════════════════════════════════════════════════
-//!
-//!  Supported platforms:
-//!  - Telegram (Bot API)
-//!  - Discord (Bot API)
-//!  - WhatsApp (Business API)
-//!  - Slack (Bot API)
-//!  - Signal (signal-cli REST API)
-//!  - Matrix (Client-Server API)
-//!  - IRC (RFC 1459)
-//!  - Generic Webhook
-//!
-//!  Features:
-//!  - Unified message interface
-//!  - Command handling
-//!  - Natural language processing
-//!  - Multi-channel broadcasting
-//!  - Rate limiting
-//!  - Message queuing
 
+pub mod message;
+pub mod config;
 pub mod telegram;
 pub mod discord;
-pub mod webhook;
-pub mod message;
-pub mod commands;
-pub mod config;
-pub mod platforms;
+pub mod slack;
 
-use serde::{Deserialize, Serialize};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
 pub use message::{ChannelMessage, ChannelType, MessageContent, MessageSender};
 pub use config::{ChannelsConfig, ChannelConfig};
+pub use telegram::TelegramChannel;
+pub use discord::DiscordChannel as DiscordBot;
+pub use slack::SlackChannel as SlackBot;
 
 /// ─── Channel Trait ───
 
@@ -130,26 +112,6 @@ impl ChannelManager {
         Err(ChannelError::NotFound(format!("{:?}", channel_type)))
     }
     
-    /// Receive from all channels
-    pub async fn receive_all(&self) -> Vec<ChannelMessage> {
-        let mut all_messages = Vec::new();
-        
-        for channel in &self.channels {
-            let ch = channel.read().await;
-            if let Ok(messages) = ch.receive().await {
-                all_messages.extend(messages);
-            }
-        }
-        
-        all_messages
-    }
-    
-    /// Get connected channels
-    pub fn connected_channels(&self) -> Vec<ChannelType> {
-        // Would need async to check is_connected
-        vec![]
-    }
-    
     /// Shutdown all channels
     pub async fn shutdown_all(&mut self) {
         for channel in &mut self.channels {
@@ -159,15 +121,18 @@ impl ChannelManager {
     }
 }
 
+impl Default for ChannelManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// ─── Errors ───
 
 #[derive(Debug, thiserror::Error)]
 pub enum ChannelError {
     #[error("Connection failed: {0}")]
     Connection(String),
-    
-    #[error("Connection failed: {0}")]
-    ConnectionFailed(String),
     
     #[error("Authentication failed: {0}")]
     AuthFailed(String),
@@ -181,38 +146,20 @@ pub enum ChannelError {
     #[error("Parse error: {0}")]
     Parse(String),
     
-    #[error("IO error: {0}")]
-    Io(String),
-    
     #[error("Rate limited: {0}")]
     RateLimited(String),
     
     #[error("Invalid message: {0}")]
     InvalidMessage(String),
     
-    #[error("Unsupported content type")]
-    UnsupportedContentType,
-    
     #[error("Channel not found: {0}")]
     NotFound(String),
-    
-    #[error("Broadcast errors: {0:?}")]
-    Broadcast(Vec<ChannelError>),
-    
-    #[error("IO error: {0}")]
-    StdIo(#[from] std::io::Error),
     
     #[error("JSON error: {0}")]
     Json(#[from] serde_json::Error),
     
     #[error("Internal error: {0}")]
     Internal(String),
-}
-
-impl Default for ChannelManager {
-    fn default() -> Self {
-        Self::new()
-    }
 }
 
 #[cfg(test)]
@@ -222,11 +169,5 @@ mod tests {
     #[test]
     fn test_channel_type() {
         assert!(matches!(ChannelType::Telegram, ChannelType::Telegram));
-        assert!(matches!(ChannelType::Discord, ChannelType::Discord));
-        assert!(matches!(ChannelType::WhatsApp, ChannelType::WhatsApp));
-        assert!(matches!(ChannelType::Slack, ChannelType::Slack));
-        assert!(matches!(ChannelType::Signal, ChannelType::Signal));
-        assert!(matches!(ChannelType::Matrix, ChannelType::Matrix));
-        assert!(matches!(ChannelType::IRC, ChannelType::IRC));
     }
 }

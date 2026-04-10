@@ -169,8 +169,8 @@ mod tests {
         let persona = Persona::default();
         let id = persona.id;
         
-        registry.register(persona).await.unwrap();
-        let retrieved = registry.get(&id).await.unwrap();
+        registry.register(persona).await.expect("operation failed");
+        let retrieved = registry.get(&id).await.expect("operation failed");
         
         assert_eq!(retrieved.id, id);
     }
@@ -181,8 +181,8 @@ mod tests {
         let persona = Persona::default();
         let id = persona.id;
         
-        registry.register(persona).await.unwrap();
-        registry.set_active(id).await.unwrap();
+        registry.register(persona).await.expect("operation failed");
+        registry.set_active(id).await.expect("operation failed");
         
         let active = registry.get_active().await;
         assert!(active.is_some());

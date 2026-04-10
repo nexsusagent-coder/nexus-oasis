@@ -305,10 +305,16 @@ impl ScoutAgent {
     
     /// Rate limit kontrolu
     async fn check_rate_limit(&self, platform: Platform) -> SENTIENTResult<()> {
-        let session = self.session.read().await;
-        let rate_limiter = session.rate_limiter(platform);
+        // Use rate limiter with default platform-specific limits
+        let limiter = RateLimiter::new();
         
-        // TODO: Governor rate limiting implementasyonu
+        // Check if we can make a request
+        if !limiter.can_request(platform) {
+            // Wait for available permit
+            if let Some(wait) = limiter.wait_duration(platform) {
+                tokio::time::sleep(wait).await;
+            }
+        }
         
         Ok(())
     }

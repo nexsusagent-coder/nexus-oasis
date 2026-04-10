@@ -111,7 +111,7 @@ struct ExtractedLink {
 
 fn extract_links(html: &str, domain: &str) -> Vec<ExtractedLink> {
     // Basit regex tabanli link cikarma
-    let re = regex::Regex::new(r#"<a[^>]*href="([^"]*)"[^>]*>([^<]*)</a>"#).unwrap();
+    let re = regex::Regex::new(r#"<a[^>]*href="([^"]*)"[^>]*>([^<]*)</a>"#).expect("operation failed");
     
     re.captures_iter(html)
         .filter_map(|cap| {

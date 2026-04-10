@@ -5,11 +5,10 @@
 
 use sentient_common::error::{SENTIENTError, SENTIENTResult};
 use sentient_orchestrator::{
-    Agent, AgentConfig, Goal, ExecutionResult, 
+    Agent, AgentConfig, Goal, 
     SYSTEM_PROMPT,
 };
 use std::sync::Arc;
-use tokio::sync::RwLock;
 use uuid::Uuid;
 use chrono::Utc;
 

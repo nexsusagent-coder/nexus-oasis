@@ -1,0 +1,309 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT CORE - DETAYLI GAP ANALİZİ (Güncel)
+# ═══════════════════════════════════════════════════════════════════════════════
+# Tarih: 2026-04-09
+# Durum: Build başarılı, 940 test geçiyor
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  1. CRITICAL ISSUES (17)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 1.1. TEE (Trusted Execution Environment) - 4 issue
+
+| # | Sorun | Dosya | Öncelik |
+|---|-------|-------|---------|
+| 1 | AMD SEV-SNP attestation - şu an simülasyon modunda | `attestation.rs` | HIGH |
+| 2 | Intel TDX attestation - şu an simülasyon modunda | `attestation.rs` | HIGH |
+| 3 | Hardware-backed memory encryption aktif değil | `enclave.rs` | HIGH |
+| 4 | Real-time TEE monitoring eksik | `monitor.rs` | MEDIUM |
+
+**Mevcut Durum:**
+- ✅ TEE trait ve yapıları tanımlı
+- ✅ Simülasyon modu çalışıyor
+- ❌ Gerçek AMD SEV-SNP implementasyonu yok
+- ❌ Gerçek Intel TDX implementasyonu yok
+
+### 1.2. ZK-MCP (Zero-Knowledge Proofs) - 4 issue
+
+| # | Sorun | Dosya | Öncelik |
+|---|-------|-------|---------|
+| 1 | Groth16 proof generation - simülasyon | `proof.rs` | HIGH |
+| 2 | PLONK universal setup eksik | `circuit.rs` | MEDIUM |
+| 3 | Bulletproofs implementation yok | `proof.rs` | MEDIUM |
+| 4 | Real verification key generation | `verifier.rs` | HIGH |
+
+**Mevcut Durum:**
+- ✅ ZK proof trait'leri tanımlı
+- ✅ Simülasyon proof generation çalışıyor
+- ❌ Gerçek ZK-SNARK kütüphanesi entegrasyonu yok
+- ❌ Trusted setup mekanizması yok
+
+### 1.3. Oasis Vault (Secrets Manager) - 3 issue
+
+| # | Sorun | Dosya | Öncelik |
+|---|-------|-------|---------|
+| 1 | HSM integration eksik | `vault.rs` | HIGH |
+| 2 | Key rotation implementasyonu yok | `crypto.rs` | MEDIUM |
+| 3 | Secure enclave sealing eksik | `sealing.rs` | HIGH |
+
+**Mevcut Durum:**
+- ✅ Vault API tanımlı
+- ✅ AES-256-GCM encryption
+- ❌ HashiCorp Vault entegrasyonu yok
+- ❌ AWS KMS / Azure Key Vault destek yok
+
+### 1.4. Security Core - 6 issue
+
+| # | Sorun | Açıklama | Öncelik |
+|---|-------|----------|---------|
+| 1 | Real key derivation | PBKDF2/Argon2 yerine basit hash | HIGH |
+| 2 | Secure boot verification | UEFI Secure Boot kontrolü yok | MEDIUM |
+| 3 | Certificate pinning | TLS certificate pinning yok | MEDIUM |
+| 4 | API key vault | API key'ler plaintext config'de | HIGH |
+| 5 | Session token encryption | Session token'lar şifrelenmemiş | MEDIUM |
+| 6 | Audit log encryption | Audit log'lar plaintext | LOW |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  2. CHANNELS ISSUES (35)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 2.1. Platform Implementations - 20 issue
+
+| # | Platform | Durum | Sorun |
+|---|----------|-------|-------|
+| 1 | Telegram | ❌ SİLİNDİ | teloxide API değişiklikleri nedeniyle kaldırıldı |
+| 2 | Discord | ❌ SİLİNDİ | serenity API değişiklikleri nedeniyle kaldırıldı |
+| 3 | Slack | ❌ SİLİNDİ | slack-api değişiklikleri nedeniyle kaldırıldı |
+| 4 | WhatsApp | ❌ SİLİNDİ | Business API gerekli |
+| 5 | IRC | ❌ SİLİNDİ | irc crate desteği yok |
+| 6 | Matrix | ❌ SİLİNDİ | matrix-sdk API değişiklikleri |
+| 7 | Guilded | ❌ SİLİNDİ | API dokümantasyonu yok |
+| 8 | LINE | ⚠️ STUB | Sadece tanımlar var, gerçek implementasyon yok |
+| 9 | Webhook | ❌ SİLİNDİ | HTTP webhook desteği yok |
+| 10 | Email (SMTP) | ❌ YOK | Hiç implementasyon yok |
+| 11 | SMS (Twilio) | ❌ YOK | Hiç implementasyon yok |
+| 12 | Facebook Messenger | ❌ YOK | Hiç implementasyon yok |
+| 13 | Instagram DM | ❌ YOK | Hiç implementasyon yok |
+| 14 | Twitter DM | ❌ YOK | Hiç implementasyon yok |
+| 15 | Microsoft Teams | ❌ YOK | Hiç implementasyon yok |
+| 16 | Google Chat | ❌ YOK | Hiç implementasyon yok |
+| 17 | Mattermost | ❌ YOK | Hiç implementasyon yok |
+| 18 | Rocket.Chat | ❌ YOK | Hiç implementasyon yok |
+| 19 | Zulip | ❌ YOK | Hiç implementasyon yok |
+| 20 | Signal | ❌ YOK | Hiç implementasyon yok |
+
+### 2.2. Core Channel Features - 10 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | Rate limiting | Platform rate limit'leri yönetilmiyor |
+| 2 | Message queuing | Offline mesaj kuyruğu yok |
+| 3 | Retry mechanism | Başarısız mesajlar için retry yok |
+| 4 | Message templating | Template engine yok |
+| 5 | Rich messages | Embed, card, button desteği eksik |
+| 6 | File attachments | Dosya gönderme/alma yok |
+| 7 | Voice messages | Ses mesajı desteği yok |
+| 8 | Message editing | Mesaj düzenleme desteği yok |
+| 9 | Thread support | Conversation threading yok |
+| 10 | Reaction tracking | Emoji reaction takibi yok |
+
+### 2.3. Channel Management - 5 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | Dynamic channel loading | Runtime'da kanal ekleme/çıkarma yok |
+| 2 | Channel health monitoring | Kanal sağlık kontrolü yok |
+| 3 | Load balancing | Çoklu kanal load balancing yok |
+| 4 | Channel priority | Öncelik tabanlı mesaj gönderme yok |
+| 5 | Fallback channels | Yedek kanal mekanizması yok |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  3. VOICE ISSUES (6)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 3.1. STT (Speech-to-Text) - 2 issue
+
+| # | Sorun | Dosya | Açıklama |
+|---|-------|-------|----------|
+| 1 | Whisper integration | `whisper_.rs` | whisper-rs native library gerekli |
+| 2 | Real-time streaming | `lib.rs:78` | Streaming STT implementasyonu yok |
+
+### 3.2. TTS (Text-to-Speech) - 2 issue
+
+| # | Sorun | Dosya | Açıklama |
+|---|-------|-------|----------|
+| 1 | MP3 decoding | `tts.rs:249` | Gerçek MP3 decode implementasyonu yok |
+| 2 | Voice cloning | - | Custom voice desteği yok |
+
+### 3.3. Wake Word Detection - 2 issue
+
+| # | Sorun | Dosya | Açıklama |
+|---|-------|-------|----------|
+| 1 | Actual detection | `wake.rs:33` | Gerçek wake word detection yok |
+| 2 | Vosk native library | `vosk_.rs` | libvosk native library gerekli |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  4. SKILLS ISSUES (6)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 4.1. Skill Execution - 3 issue
+
+| # | Sorun | Dosya | Açıklama |
+|---|-------|-------|----------|
+| 1 | LLM integration | `executor.rs:183` | Gerçek LLM çağrısı yok |
+| 2 | Subagent LLM | `subagent.rs:290` | Gerçek LLM çağrısı yok |
+| 3 | Skill sandboxing | - | Skill'ler sandbox'ta çalışmıyor |
+
+### 4.2. Marketplace - 2 issue
+
+| # | Sorun | Dosya | Açıklama |
+|---|-------|-------|----------|
+| 1 | Skill packaging | `publish.rs:44` | Package oluşturma implementasyonu yok |
+| 2 | Version management | - | Skill versiyonlama yok |
+
+### 4.3. Skill Import - 1 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | ClawHub sync | Gerçek ClawHub API entegrasyonu yok |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  5. ENTERPRISE ISSUES (10)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 5.1. SSO (Single Sign-On) - 4 issue
+
+| # | Provider | Durum | Sorun |
+|---|----------|-------|-------|
+| 1 | Okta | ⚠️ STUB | Gerçek OAuth2 flow yok |
+| 2 | Auth0 | ⚠️ STUB | Gerçek OAuth2 flow yok |
+| 3 | Azure AD | ⚠️ STUB | Gerçek OAuth2 flow yok |
+| 4 | Keycloak | ⚠️ STUB | Gerçek OAuth2 flow yok |
+
+### 5.2. RBAC (Role-Based Access Control) - 3 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | Dynamic roles | Runtime'da rol oluşturma yok |
+| 2 | Permission inheritance | Rol hiyerarşisi yok |
+| 3 | Resource-level permissions | Kaynak bazlı izinler yok |
+
+### 5.3. Multi-tenancy - 3 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | Tenant isolation | Veritabanı izolasyonu yok |
+| 2 | Tenant quotas | Kaynak kotaları enforcement yok |
+| 3 | Billing integration | Faturalandırma entegrasyonu yok |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  6. APPS ISSUES (3)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 6.1. Oasis Autonomous (Desktop Agent) - 3 issue
+
+| # | Sorun | Dosya | Açıklama |
+|---|-------|-------|----------|
+| 1 | Screen capture | `screen.rs:358` | Gerçek ekran yakalama yok |
+| 2 | UI automation | `planner.rs:640-804` | Gerçek UI automation yok |
+| 3 | Vision/OCR | `vision.rs:345-427` | Gerçek OCR ve vision yok |
+
+**Detaylı Sorunlar:**
+- `screen.rs:358` - x11rb/scnsave ile gerçek ekran yakalama gerekli
+- `screen.rs:372` - ML model veya accessibility API ile UI detection
+- `screen.rs:421` - Tesseract/PaddleOCR entegrasyonu
+- `screen.rs:427` - x11rb/enigo ile fare kontrolü
+- `vision.rs:345` - ML model ile gerçek UI element tespiti
+- `vision.rs:393` - Tesseract/PaddleOCR OCR
+- `vision.rs:399` - OpenCV template matching
+- `planner.rs:688` - V-GATE ile Gemma 4 kullanarak aksiyon kararı
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  7. TEST/QUALITY ISSUES (4)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 7.1. Benchmark Implementations - 6 issue
+
+| # | Modül | Dosya | Sorun |
+|---|-------|-------|-------|
+| 1 | Channel benchmarks | `channel.rs:4` | Implementasyon yok |
+| 2 | Agent benchmarks | `agent.rs:4` | Implementasyon yok |
+| 3 | Latency measurement | `latency.rs:4` | Implementasyon yok |
+| 4 | Throughput measurement | `throughput.rs:4` | Implementasyon yok |
+| 5 | Voice benchmarks | `voice.rs:4` | Implementasyon yok |
+| 6 | Memory benchmarks | `memory.rs:4` | Implementasyon yok |
+
+### 7.2. Test Coverage - 2 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | Integration tests | End-to-end test coverage düşük |
+| 2 | Performance tests | Performans test suite yok |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  8. DOCUMENTATION ISSUES (6)
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### 8.1. API Documentation - 3 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | OpenAPI/Swagger | REST API dokümantasyonu yok |
+| 2 | GraphQL Schema | GraphQL schema tanımları yok |
+| 3 | Examples | Kullanım örnekleri yetersiz |
+
+### 8.2. User Documentation - 3 issue
+
+| # | Sorun | Açıklama |
+|---|-------|----------|
+| 1 | Getting Started Guide | Yeni kullanıcılar için rehber yok |
+| 2 | Architecture docs | Sistem mimarisi dokümantasyonu yok |
+| 3 | Deployment guide | Production deployment rehberi yok |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  ÖZET
+## ═══════════════════════════════════════════════════════════════════════════════
+
+| Kategori | Toplam | Kritik | Orta | Düşük |
+|----------|--------|--------|------|-------|
+| Critical (Security) | 17 | 10 | 5 | 2 |
+| Channels | 35 | 20 | 10 | 5 |
+| Voice | 6 | 4 | 2 | 0 |
+| Skills | 6 | 3 | 2 | 1 |
+| Enterprise | 10 | 4 | 4 | 2 |
+| Apps | 3 | 2 | 1 | 0 |
+| Test/Quality | 8 | 4 | 4 | 0 |
+| Documentation | 6 | 2 | 2 | 2 |
+| **TOPLAM** | **91** | **49** | **30** | **12** |
+
+## ═══════════════════════════════════════════════════════════════════════════════
+##  ÖNERİLEN ÖNCELİK SIRASI
+## ═══════════════════════════════════════════════════════════════════════════════
+
+### Phase 1: Kritik Güvenlik (1-2 hafta)
+1. API key vault entegrasyonu
+2. Session token encryption
+3. Real key derivation (Argon2)
+4. HSM integration stub
+
+### Phase 2: Kanal Entegrasyonları (2-3 hafta)
+1. Telegram (teloxide güncel API)
+2. Discord (serenity güncel API)
+3. Slack (slack-api güncel)
+4. Webhook (HTTP POST)
+
+### Phase 3: Voice & Skills (1-2 hafta)
+1. Whisper STT (whisper-rs)
+2. Wake word detection
+3. Skill LLM integration
+4. Marketplace packaging
+
+### Phase 4: Enterprise (1-2 hafta)
+1. SSO OAuth2 flow
+2. RBAC implementation
+3. Tenant isolation
+
+### Phase 5: Test & Docs (1 hafta)
+1. Benchmark implementations
+2. API documentation
+3. Getting started guide

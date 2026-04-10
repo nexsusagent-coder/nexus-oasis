@@ -164,9 +164,9 @@ mod tests {
         let mut bridge = ResearchMemoryBridge::new();
         let graph = SearchGraph::new("Test query");
         
-        bridge.save_research("test-session", &graph).await.unwrap();
+        bridge.save_research("test-session", &graph).await.expect("operation failed");
         
-        let loaded = bridge.load_research("test-session").await.unwrap();
+        let loaded = bridge.load_research("test-session").await.expect("operation failed");
         assert!(loaded.is_some());
     }
     
@@ -186,9 +186,9 @@ mod tests {
             notes: vec![],
         });
         
-        bridge.add_tag("test", "important").unwrap();
+        bridge.add_tag("test", "important").expect("operation failed");
         
-        let session = bridge.sessions.get("test").unwrap();
+        let session = bridge.sessions.get("test").expect("operation failed");
         assert!(session.tags.contains(&"important".to_string()));
     }
 }

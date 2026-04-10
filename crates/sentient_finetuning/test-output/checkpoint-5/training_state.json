@@ -1,0 +1,8 @@
+{
+  "step": 5,
+  "epoch": 0,
+  "best_val_loss": null,
+  "random_state": null,
+  "optimizer_state": null,
+  "scheduler_state": null
+}

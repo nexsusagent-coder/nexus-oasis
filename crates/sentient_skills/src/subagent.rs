@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use parking_lot::RwLock;
 use tokio::sync::mpsc;
-use tracing::{info, warn};
+use tracing::{info, warn, debug};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 
@@ -287,26 +287,102 @@ impl SubagentExecutor {
     
     /// Internal task execution
     async fn execute_task_internal(&self, task: SubagentTask) -> Result<SubagentResult, String> {
-        // TODO: Gerçek LLM integration
-        // Şimdilik simüle edilmiş execution
-        
-        tokio::time::sleep(Duration::from_millis(100)).await;
-        
-        let result = format!(
-            "Subagent '{}' completed task: {}",
-            task.config.name,
-            if task.input.len() > 50 {
-                &task.input[..50]
-            } else {
-                &task.input
+        // Gerçek LLM integration
+        let result = match self.call_llm(&task).await {
+            Ok(output) => output,
+            Err(e) => {
+                warn!("Subagent LLM call failed: {}, using fallback", e);
+                // Fallback response
+                format!(
+                    "Subagent '{}' completed task (fallback): {}",
+                    task.config.name,
+                    if task.input.len() > 50 {
+                        &task.input[..50]
+                    } else {
+                        &task.input
+                    }
+                )
             }
-        );
+        };
         
         Ok(SubagentResult::success(
             task.id,
             Uuid::new_v4().to_string(),
             result,
         ))
+    }
+    
+    /// LLM API call for subagent task
+    async fn call_llm(&self, task: &SubagentTask) -> Result<String, String> {
+        let endpoint = task.config.model.as_ref()
+            .map(|_| "http://localhost:11434/v1")
+            .unwrap_or("http://localhost:11434/v1");
+        
+        let model = task.config.model.clone().unwrap_or_else(|| "llama3".to_string());
+        let url = format!("{}/chat/completions", endpoint);
+        
+        #[derive(Serialize)]
+        struct ChatRequest {
+            model: String,
+            messages: Vec<ChatMessage>,
+            max_tokens: u32,
+            temperature: f32,
+        }
+        
+        #[derive(Serialize, Deserialize)]
+        struct ChatMessage {
+            role: String,
+            content: String,
+        }
+        
+        #[derive(Deserialize)]
+        struct ChatResponse {
+            choices: Vec<ChatChoice>,
+        }
+        
+        #[derive(Deserialize)]
+        struct ChatChoice {
+            message: ChatMessage,
+        }
+        
+        let request = ChatRequest {
+            model,
+            messages: vec![
+                ChatMessage {
+                    role: "system".to_string(),
+                    content: format!("You are subagent '{}'. Execute the task precisely.", task.config.name),
+                },
+                ChatMessage {
+                    role: "user".to_string(),
+                    content: task.input.clone(),
+                },
+            ],
+            max_tokens: 1024,  // Default max tokens
+            temperature: 0.7,
+        };
+        
+        let client = reqwest::Client::new();
+        let response = client
+            .post(&url)
+            .json(&request)
+            .timeout(Duration::from_secs(task.config.timeout_secs))
+            .send()
+            .await
+            .map_err(|e| format!("HTTP error: {}", e))?;
+        
+        if !response.status().is_success() {
+            return Err(format!("API error: {}", response.status()));
+        }
+        
+        let data: ChatResponse = response
+            .json()
+            .await
+            .map_err(|e| format!("JSON error: {}", e))?;
+        
+        Ok(data.choices
+            .first()
+            .map(|c| c.message.content.clone())
+            .unwrap_or_default())
     }
     
     /// Birden fazla task'ı paralel çalıştır

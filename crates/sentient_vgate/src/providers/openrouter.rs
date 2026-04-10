@@ -32,11 +32,11 @@ impl OpenRouterProvider {
         let mut headers = reqwest::header::HeaderMap::new();
         headers.insert(
             "Authorization",
-            format!("Bearer {}", self.api_key).parse().unwrap(),
+            format!("Bearer {}", self.api_key).parse().expect("operation failed"),
         );
-        headers.insert("Content-Type", "application/json".parse().unwrap());
-        headers.insert("HTTP-Referer", "https://sentient.local".parse().unwrap());
-        headers.insert("X-Title", "SENTIENT".parse().unwrap());
+        headers.insert("Content-Type", "application/json".parse().expect("operation failed"));
+        headers.insert("HTTP-Referer", "https://sentient.local".parse().expect("operation failed"));
+        headers.insert("X-Title", "SENTIENT".parse().expect("operation failed"));
         headers
     }
 }

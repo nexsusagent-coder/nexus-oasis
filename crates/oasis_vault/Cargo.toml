@@ -10,6 +10,7 @@ oasis_core = { path = "../oasis_core" }
 
 # Async runtime
 tokio.workspace = true
+async-trait = "0.1"
 
 # Serialization
 serde.workspace = true
@@ -36,10 +37,24 @@ hex = "0.4"
 rand.workspace = true
 zeroize = "1.8"
 base64 = "0.22"
+constant_time_eq = "0.3"
 
 # Concurrency
 parking_lot.workspace = true
 
+# HTTP client (for external backends)
+reqwest = { version = "0.12", features = ["json"] }
+
+# URL encoding (for AWS)
+urlencoding = "2.1"
+
 [features]
 default = []
-hardware_security = []  # Enable HSM support
+
+# External backend support
+hashicorp_vault = []
+aws = []
+azure = []
+
+# Hardware security
+hardware_security = []

@@ -17,11 +17,11 @@ pub mod mcp;
 pub mod verifier;
 
 pub use proof::*;
-pub use circuit::*;
+pub use circuit::{Circuit, CircuitBuilder as CircuitBuild, Wire, CompiledCircuit, CircuitCompiler};
 pub use mcp::*;
 pub use verifier::*;
 
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
+use sentient_common::error::SENTIENTError;
 use serde::{Deserialize, Serialize};
 
 // ═══════════════════════════════════════════════════════════════════════════════

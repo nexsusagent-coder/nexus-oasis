@@ -12,18 +12,16 @@
 
 use sentient_common::error::{SENTIENTError, SENTIENTResult};
 use sentient_memory::{
-    MemoryCube, MemoryType, MemoryInput, MemorySource,
-    Importance, SearchResult, SearchType,
+    MemoryCube, MemoryType, SearchResult, SearchType,
 };
 use sentient_research::{
-    SENTIENTResearch, ResearchConfig, ResearchResult,
+    SENTIENTResearch, ResearchConfig,
     graph::SearchGraph,
     web_search::WebSearchEngine,
-    citation::{CitationManager, Citation, ReferenceStyle},
+    citation::{CitationManager, ReferenceStyle},
 };
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use uuid::Uuid;
@@ -165,7 +163,7 @@ impl ResearchBridge {
         
         // AutoResearch ile plan oluştur
         let mut research = self.research.write().await;
-        let plan = research.research(topic).await
+        let _plan = research.research(topic).await
             .map_err(|e| SENTIENTError::Research(format!("Plan hatası: {}", e)))?;
         
         // Araştırma yap

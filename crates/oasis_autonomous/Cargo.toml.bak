@@ -1,0 +1,46 @@
+[package]
+name = "oasis_autonomous"
+version = "0.1.0"
+edition = "2021"
+description = "OASIS Autonomous Desktop Agent - Fully autonomous computer operation"
+authors = ["SENTIENT Team"]
+license = "MIT"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
+
+# DateTime
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID
+uuid = { version = "1.6", features = ["v4", "serde"] }
+
+# Random
+rand = "0.8"
+
+# Image processing
+image = "0.24"
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Internal crates - temporarily disabled for standalone compilation
+# oasis_core = { path = "../oasis_core" }
+# oasis_hands = { path = "../oasis_hands" }
+# oasis_browser = { path = "../oasis_browser" }
+# oasis_brain = { path = "../oasis_brain" }
+# oasis_vault = { path = "../oasis_vault" }
+
+[dev-dependencies]
+tokio-test = "0.4"

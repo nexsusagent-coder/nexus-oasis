@@ -151,7 +151,7 @@ pub struct SessionNode {
 }
 
 impl SessionNode {
-    pub fn new(id: NodeId) -> Self {
+    pub fn new(_id: NodeId) -> Self {
         Self {
             session: Session::new(crate::session::SessionConfig::default()),
             children: Vec::new(),
@@ -188,7 +188,7 @@ mod tests {
         let mut tree = SessionTree::new();
         let id = Uuid::new_v4();
         
-        tree.add_node(id, None).unwrap();
+        tree.add_node(id, None).expect("operation failed");
         assert_eq!(tree.node_count(), 1);
         assert_eq!(tree.get_roots().len(), 1);
     }
@@ -199,8 +199,8 @@ mod tests {
         let parent_id = Uuid::new_v4();
         let child_id = Uuid::new_v4();
         
-        tree.add_node(parent_id, None).unwrap();
-        tree.add_node(child_id, Some(parent_id)).unwrap();
+        tree.add_node(parent_id, None).expect("operation failed");
+        tree.add_node(child_id, Some(parent_id)).expect("operation failed");
         
         assert_eq!(tree.node_count(), 2);
         assert_eq!(tree.get_children(&parent_id).len(), 1);

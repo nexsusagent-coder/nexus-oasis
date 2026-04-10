@@ -291,7 +291,7 @@ mod tests {
         let data = serde_json::json!({"count": 42});
         let result = SentientToolResult::success_with_data("Tamamlandi", data.clone());
         assert!(result.data.is_some());
-        assert_eq!(result.data.unwrap()["count"], 42);
+        assert_eq!(result.data.expect("operation failed")["count"], 42);
     }
 
     #[test]

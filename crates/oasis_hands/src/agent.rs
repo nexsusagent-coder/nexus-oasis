@@ -10,10 +10,7 @@ use crate::screen::{ScreenCapture, ScreenCapturer};
 use crate::input::{InputController, MouseAction, KeyboardAction, MouseButton};
 use crate::vision::{VisionEngine, UIElement};
 use crate::vgate::HandsVGate;
-use crate::session::HandsSession;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
 // ───────────────────────────────────────────────────────────────────────────────
 //  AGENT DURUMU
@@ -514,7 +511,7 @@ mod tests {
     async fn test_agent_creation() {
         let config = AgentConfig::default();
         let policy = SovereignPolicy::strict();
-        let agent = DesktopAgent::new(config, policy).await.unwrap();
+        let agent = DesktopAgent::new(config, policy).await.expect("operation failed");
         assert_eq!(agent.state(), AgentState::Idle);
     }
 }

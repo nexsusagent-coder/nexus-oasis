@@ -1,0 +1,58 @@
+[package]
+name = "sentient_web"
+version = "0.1.0"
+edition = "2021"
+description = "Web server for SENTIENT OS - REST API, WebSocket, Dashboard"
+license = "Apache-2.0"
+authors = ["Pi <pi@sentient.ai>"]
+keywords = ["web", "api", "server", "dashboard", "websocket"]
+categories = ["web-programming", "api-bindings"]
+readme = "README.md"
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Web framework
+axum = { version = "0.7", features = ["ws", "multipart"] }
+tower = { version = "0.5", features = ["util", "timeout"] }
+tower-http = { version = "0.6", features = ["cors", "fs", "trace", "compression-gzip"] }
+hyper = { version = "1.0", features = ["server", "http1", "http2"] }
+hyper-util = { version = "0.1", features = ["tokio"] }
+
+# Authentication
+jsonwebtoken = "9.3"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# Configuration
+config = "0.14"
+
+[dev-dependencies]
+reqwest = { version = "0.12", features = ["json"] }
+tokio-tungstenite = "0.24"
+
+[features]
+default = []
+dashboard = []
+full = ["dashboard"]
+
+[package.metadata.docs.rs]
+all-features = true

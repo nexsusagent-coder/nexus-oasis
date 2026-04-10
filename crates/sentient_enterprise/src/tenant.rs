@@ -38,7 +38,7 @@ pub struct Tenant {
 }
 
 /// Tenant status
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 pub enum TenantStatus {
     Active,
     Suspended,
@@ -47,7 +47,7 @@ pub enum TenantStatus {
 }
 
 /// Tenant plan
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 pub enum TenantPlan {
     Free,
     Starter,
@@ -429,13 +429,13 @@ mod tests {
     #[tokio::test]
     async fn test_create_tenant() {
         let config = TenantConfig::default();
-        let mut manager = TenantManager::new(config).await.unwrap();
+        let mut manager = TenantManager::new(config).await.expect("operation failed");
 
         let tenant = manager.create_tenant(
             "Test Company".to_string(),
             "test-company".to_string(),
             TenantPlan::Professional,
-        ).await.unwrap();
+        ).await.expect("operation failed");
 
         assert_eq!(tenant.name, "Test Company");
         assert_eq!(tenant.slug, "test-company");

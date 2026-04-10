@@ -295,7 +295,7 @@ mod tests {
         let result = wrapper.research("test topic").await;
         
         assert!(result.is_ok());
-        let plan = result.unwrap();
+        let plan = result.expect("operation failed");
         assert_eq!(plan.status, PlanStatus::Draft);
     }
 }

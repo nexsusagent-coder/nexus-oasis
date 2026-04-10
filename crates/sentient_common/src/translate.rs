@@ -7,9 +7,9 @@ use lazy_static::lazy_static;
 
 lazy_static! {
     // Python traceback, TypeError vb. ham hataları yakala
-    static ref PYTHON_ERR_RE: Regex = Regex::new(r"(?i)(traceback|typeerror|valueerror|keyerror|attributeerror|indexerror|runtimeerror|syntaxerror|module not found|importerror|nonetype)").unwrap();
+    static ref PYTHON_ERR_RE: Regex = Regex::new(r"(?i)(traceback|typeerror|valueerror|keyerror|attributeerror|indexerror|runtimeerror|syntaxerror|module not found|importerror|nonetype)").expect("operation failed");
     // JS/Node.js hatası yakala
-    static ref JS_ERR_RE: Regex = Regex::new(r"(?i)(typeerror|referenceerror|syntaxerror|rangeerror|uncaught exception|promise rejection|stacktrace)").unwrap();
+    static ref JS_ERR_RE: Regex = Regex::new(r"(?i)(typeerror|referenceerror|syntaxerror|rangeerror|uncaught exception|promise rejection|stacktrace)").expect("operation failed");
 }
 
 /// Dış kaynaktan gelen ham hata mesajını yakalar ve

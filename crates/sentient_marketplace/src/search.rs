@@ -1,7 +1,6 @@
 //! ─── Skill Search ───
 
 use serde::{Deserialize, Serialize};
-use crate::Category;
 
 /// Search result
 #[derive(Debug, Clone, Serialize, Deserialize)]

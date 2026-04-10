@@ -289,7 +289,7 @@ mod tests {
             query: None,
             limit: None,
         };
-        let result = tool.execute(store_input, &context).await.unwrap();
+        let result = tool.execute(store_input, &context).await.expect("operation failed");
         assert!(result.success);
         
         // Recall
@@ -301,7 +301,7 @@ mod tests {
             query: None,
             limit: None,
         };
-        let result = tool.execute(recall_input, &context).await.unwrap();
+        let result = tool.execute(recall_input, &context).await.expect("operation failed");
         assert!(result.success);
     }
 }

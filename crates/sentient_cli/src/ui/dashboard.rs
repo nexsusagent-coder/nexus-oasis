@@ -329,7 +329,7 @@ impl SystemDashboard {
             self.active_tasks,
             self.memory_usage_mb,
             if self.api_stats.total_requests > 0 {
-                (self.api_stats.successful_requests * 100 / self.api_stats.total_requests.max(1))
+                self.api_stats.successful_requests * 100 / self.api_stats.total_requests.max(1)
             } else {
                 100
             }

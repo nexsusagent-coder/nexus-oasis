@@ -62,7 +62,7 @@ WORKDIR /app
 
 # Copy binaries
 COPY --from=builder /app/target/release/sentient /usr/local/bin/
-COPY --from=builder /app/target/release/sentient-gateway /usr/local/bin/
+COPY --from=builder /app/target/release/asena-web /usr/local/bin/sentient-web
 
 # Copy configuration
 COPY config/ /app/config/
@@ -88,6 +88,6 @@ CMD ["sentient", "gateway"]
 # ============================================
 LABEL org.opencontainers.image.title="SENTIENT AI OS"
 LABEL org.opencontainers.image.description="Production-ready AI Agent Operating System"
-LABEL org.opencontainers.image.version="11.0.0"
+LABEL org.opencontainers.image.version="4.0.0"
 LABEL org.opencontainers.image.vendor="SENTIENT"
 LABEL org.opencontainers.image.source="https://github.com/nexsusagent-coder/SENTIENT_CORE"

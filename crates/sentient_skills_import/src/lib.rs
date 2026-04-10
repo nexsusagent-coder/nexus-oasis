@@ -1,21 +1,4 @@
 //! ─── Skills Importer ───
-//!
-//! Import skills from various sources:
-//! - ClawHub (OpenClaw-compatible)
-//! - Custom Git repositories
-//! - Local directories
-//! - NPM packages
-//!
-//! Usage:
-//! ```rust
-//! let importer = SkillsImporter::new();
-//! 
-//! // Search ClawHub
-//! let skills = importer.search("translator").await?;
-//! 
-//! // Install skill
-//! importer.install("translator-pro").await?;
-//! ```
 
 pub mod clawhub;
 pub mod git;
@@ -31,16 +14,19 @@ pub use skill::{Skill, SkillManifest, SkillMetadata};
 pub use registry::SkillsRegistry;
 pub use install::{Installer, InstallProgress};
 
+use std::sync::Arc;
+use tokio::sync::RwLock;
+
 /// Skills importer
 pub struct SkillsImporter {
-    registry: SkillsRegistry,
+    registry: Arc<RwLock<SkillsRegistry>>,
     http: reqwest::Client,
 }
 
 impl SkillsImporter {
     pub fn new() -> Self {
         Self {
-            registry: SkillsRegistry::new(),
+            registry: Arc::new(RwLock::new(SkillsRegistry::new())),
             http: reqwest::Client::new(),
         }
     }
@@ -55,7 +41,8 @@ impl SkillsImporter {
         }
         
         // Search local registry
-        if let Ok(local_skills) = self.registry.search(query) {
+        let registry = self.registry.read().await;
+        if let Ok(local_skills) = registry.search(query) {
             results.extend(local_skills);
         }
         
@@ -69,13 +56,15 @@ impl SkillsImporter {
     }
     
     /// List installed skills
-    pub fn list_installed(&self) -> Result<Vec<Skill>, SkillsError> {
-        self.registry.list_installed()
+    pub async fn list_installed(&self) -> Result<Vec<Skill>, SkillsError> {
+        let registry = self.registry.read().await;
+        registry.list_installed()
     }
     
     /// Uninstall skill
     pub async fn uninstall(&self, skill_id: &str) -> Result<(), SkillsError> {
-        self.registry.uninstall(skill_id)
+        let mut registry = self.registry.write().await;
+        registry.unregister(skill_id)
     }
     
     /// Update skill

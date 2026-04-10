@@ -2,7 +2,7 @@
 //!
 //! Verilen bir hedefi mantıksal alt görevlere bölen planlama sistemi.
 
-use crate::goal::{Goal, Task, TaskPriority, TaskStatus, ToolType};
+use crate::goal::{Goal, Task, TaskStatus, ToolType};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use std::collections::HashMap;
@@ -391,7 +391,7 @@ mod tests {
         // İlk olarak Task 1 dönmeli
         let next = plan.next_task();
         assert!(next.is_some());
-        assert_eq!(next.unwrap().description, "Task 1");
+        assert_eq!(next.expect("operation failed").description, "Task 1");
         
         // Task 1'i tamamla
         plan.tasks[0].status = TaskStatus::Completed;
@@ -399,7 +399,7 @@ mod tests {
         // Şimdi Task 2 dönmeli
         let next = plan.next_task();
         assert!(next.is_some());
-        assert_eq!(next.unwrap().description, "Task 2");
+        assert_eq!(next.expect("operation failed").description, "Task 2");
     }
     
     #[test]

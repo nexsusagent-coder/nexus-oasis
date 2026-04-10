@@ -1,26 +1,8 @@
 //! ─── Skill Registry ───
 
 use reqwest::Client;
-use serde::{Deserialize, Serialize};
 use crate::{MarketplaceSkill, MarketplaceError, SkillManifest};
-
-/// Registry configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RegistryConfig {
-    pub api_url: String,
-    pub api_key: Option<String>,
-    pub cache_ttl_secs: u64,
-}
-
-impl Default for RegistryConfig {
-    fn default() -> Self {
-        Self {
-            api_url: "https://registry.sentient.ai/api/v1".into(),
-            api_key: None,
-            cache_ttl_secs: 3600,
-        }
-    }
-}
+use crate::config::RegistryConfig;
 
 /// Skill registry client
 pub struct SkillRegistry {
@@ -57,7 +39,7 @@ impl SkillRegistry {
         }
         
         let results: Vec<crate::SearchResult> = response.json().await
-            .map_err(|e| MarketplaceError::Json(e))?;
+            .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         Ok(results)
     }
@@ -92,7 +74,7 @@ impl SkillRegistry {
         }
         
         let skill: MarketplaceSkill = response.json().await
-            .map_err(|e| MarketplaceError::Json(e))?;
+            .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         Ok(skill)
     }
@@ -105,7 +87,7 @@ impl SkillRegistry {
             .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         let categories: Vec<crate::Category> = response.json().await
-            .map_err(|e| MarketplaceError::Json(e))?;
+            .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         Ok(categories)
     }
@@ -118,7 +100,7 @@ impl SkillRegistry {
             .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         let skills: Vec<MarketplaceSkill> = response.json().await
-            .map_err(|e| MarketplaceError::Json(e))?;
+            .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         Ok(skills)
     }
@@ -131,7 +113,7 @@ impl SkillRegistry {
             .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         let skills: Vec<MarketplaceSkill> = response.json().await
-            .map_err(|e| MarketplaceError::Json(e))?;
+            .map_err(|e| MarketplaceError::Network(e.to_string()))?;
         
         Ok(skills)
     }

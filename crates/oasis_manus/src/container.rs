@@ -6,7 +6,7 @@
 //! Önceden oluşturulmuş container'lar ile hızlı çalıştırma.
 
 use crate::error::{ManusError, ManusResult, translate_error};
-use crate::sovereign::{SandboxPolicy, ResourceLimits};
+use crate::sovereign::SandboxPolicy;
 use crate::{Language, PoolStatus};
 use bollard::Docker;
 use bollard::container::{
@@ -162,7 +162,7 @@ impl ContainerPool {
         let config = ContainerConfig::from_policy(&self.default_policy, language);
         let name = format!("manus_{}_{}", 
             language.extension().trim_start_matches('.'),
-            uuid::Uuid::new_v4().to_string().split('-').next().unwrap()
+            uuid::Uuid::new_v4().to_string().split('-').next().expect("operation failed")
         );
         
         log::info!("🐳  MANUS-POOL: Container oluşturuluyor → {} ({:?})", name, language);

@@ -11,7 +11,6 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use uuid::Uuid;
 
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  CREWAI WRAPPER

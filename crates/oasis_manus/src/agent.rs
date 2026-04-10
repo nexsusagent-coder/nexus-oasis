@@ -4,8 +4,8 @@
 //!
 //! Kod yazma ve çalıştırma döngüsü.
 
-use crate::error::{ManusError, ManusResult};
-use crate::executor::{CodeExecutor, ExecutionResult};
+use crate::error::ManusResult;
+use crate::executor::CodeExecutor;
 use crate::planner::{TaskPlanner, TaskPlan, TaskStep, StepStatus};
 use crate::vgate::ManusVGate;
 use crate::Language;

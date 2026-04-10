@@ -196,7 +196,7 @@ mod tests {
         let result = wrapper.search_native("test query").await;
         
         assert!(result.is_ok());
-        let graph = result.unwrap();
+        let graph = result.expect("operation failed");
         assert!(graph.node_count() >= 1);
     }
 }

@@ -182,15 +182,15 @@ impl SovereignSandbox {
         
         // RFC 1918 private IP ranges
         let private_ip_patterns = vec![
-            Regex::new(r"^127\.").unwrap(),
-            Regex::new(r"^10\.").unwrap(),
-            Regex::new(r"^172\.(1[6-9]|2[0-9]|3[0-1])\.").unwrap(),
-            Regex::new(r"^192\.168\.").unwrap(),
-            Regex::new(r"^169\.254\.").unwrap(), // Link-local
-            Regex::new(r"^0\.0\.0\.0").unwrap(),
-            Regex::new(r"^::1$").unwrap(), // IPv6 loopback
-            Regex::new(r"^fc00:").unwrap(), // IPv6 ULA
-            Regex::new(r"^fe80:").unwrap(), // IPv6 link-local
+            Regex::new(r"^127\.").expect("operation failed"),
+            Regex::new(r"^10\.").expect("operation failed"),
+            Regex::new(r"^172\.(1[6-9]|2[0-9]|3[0-1])\.").expect("operation failed"),
+            Regex::new(r"^192\.168\.").expect("operation failed"),
+            Regex::new(r"^169\.254\.").expect("operation failed"), // Link-local
+            Regex::new(r"^0\.0\.0\.0").expect("operation failed"),
+            Regex::new(r"^::1$").expect("operation failed"), // IPv6 loopback
+            Regex::new(r"^fc00:").expect("operation failed"), // IPv6 ULA
+            Regex::new(r"^fe80:").expect("operation failed"), // IPv6 link-local
         ];
         
         log::info!("🔒  SOVEREIGN: {} engellenmiş şema, {} özel IP pattern", 

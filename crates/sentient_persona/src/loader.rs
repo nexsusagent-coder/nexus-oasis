@@ -4,7 +4,6 @@
 
 use crate::{Persona, PersonaError, PersonaResult};
 use std::path::Path;
-use std::collections::HashMap;
 
 /// Persona formatı
 #[derive(Debug, Clone, Copy)]

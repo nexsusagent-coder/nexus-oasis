@@ -19,15 +19,15 @@
 //! │              Orchestrator    Webhook Response               │
 //! └─────────────────────────────────────────────────────────────┘
 
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
-use sentient_orchestrator::{Goal, TaskPriority};
+use sentient_common::error::SENTIENTResult;
+use sentient_orchestrator::TaskPriority;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::{mpsc, RwLock};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 
-use crate::webhooks::{WebhookEvent, WebhookProvider, EventType, EventAction, EventPriority};
+use crate::webhooks::{WebhookEvent, WebhookProvider, EventAction, EventPriority};
 
 /// ─── EVENT LISTENER CONFIG ───
 

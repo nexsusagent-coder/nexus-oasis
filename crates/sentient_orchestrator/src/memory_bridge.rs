@@ -60,9 +60,8 @@
 use sentient_common::error::{SENTIENTError, SENTIENTResult};
 use sentient_memory::{
     MemOS, MemOSConfig, CubeType,
-    MemoryType, MemoryInput, MemorySource, Importance,
-    HybridWeights, HybridResult, FtsOptions,
-    SearchResult,
+    MemoryType, MemoryInput, Importance,
+    HybridWeights, HybridResult,
 };
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -180,7 +179,7 @@ impl MemoryBridge {
     
     /// Kullanıcı için küp oluştur/aktif et
     pub async fn activate_user_cube(&self, user_id: &str) -> SENTIENTResult<Uuid> {
-        let mut memos = self.memos.write().await;
+        let memos = self.memos.write().await;
         
         // Mevcut küpü ara
         let cubes = memos.list_cubes().await
@@ -206,7 +205,7 @@ impl MemoryBridge {
     
     /// Ajan için küp oluştur/aktif et
     pub async fn activate_agent_cube(&self, agent_id: &str) -> SENTIENTResult<Uuid> {
-        let mut memos = self.memos.write().await;
+        let memos = self.memos.write().await;
         
         let cubes = memos.list_cubes().await
             .map_err(|e| SENTIENTError::Memory(format!("Küp listesi alınamadı: {}", e)))?;
@@ -736,7 +735,7 @@ impl WorkingMemory {
         // Kapasite kontrolü
         if self.items.len() > self.capacity {
             // En az önemli öğeyi çıkar
-            self.items.sort_by(|a, b| b.importance.partial_cmp(&a.importance).unwrap());
+            self.items.sort_by(|a, b| b.importance.partial_cmp(&a.importance).expect("operation failed"));
             self.items.truncate(self.capacity);
         }
     }

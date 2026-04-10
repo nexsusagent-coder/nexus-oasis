@@ -76,8 +76,8 @@ mod message_unit_tests {
             timestamp: Some(chrono::Utc::now()),
         };
         
-        let json = serde_json::to_string(&original).unwrap();
-        let decoded: Message = serde_json::from_str(&json).unwrap();
+        let json = serde_json::to_string(&original).expect("operation failed");
+        let decoded: Message = serde_json::from_str(&json).expect("operation failed");
         
         assert_eq!(original.role, decoded.role);
         assert_eq!(original.content, decoded.content);
@@ -91,8 +91,8 @@ mod message_unit_tests {
             Message::assistant("Hello!"),
         ];
         
-        let json = serde_json::to_string(&messages).unwrap();
-        let decoded: Vec<Message> = serde_json::from_str(&json).unwrap();
+        let json = serde_json::to_string(&messages).expect("operation failed");
+        let decoded: Vec<Message> = serde_json::from_str(&json).expect("operation failed");
         
         assert_eq!(messages.len(), decoded.len());
     }

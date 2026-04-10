@@ -139,7 +139,7 @@ impl CommandHandler {
                 if self.current_module.is_some() {
                     // Modul icindeyken komut module yonlendirilir
                     CommandResult::ContinueToLlm(format!("[{}] {}", 
-                        self.current_module.as_ref().unwrap(), trimmed))
+                        self.current_module.as_ref().expect("operation failed"), trimmed))
                 } else {
                     CommandResult::ContinueToLlm(trimmed.to_string())
                 }
@@ -371,7 +371,7 @@ impl Default for CommandHandler {
 
 // ─── Yardimci Fonksiyonlar ───
 
-fn print_help_menu(state: &PromptState) -> String {
+fn print_help_menu(_state: &PromptState) -> String {
     let mut output = String::new();
     
     output.push_str(&format!("{}", "\n════════════════════════════════════════════════════════════\n".cyan()));

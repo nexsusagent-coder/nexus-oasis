@@ -10,7 +10,7 @@ mod memory_unit_tests {
     fn create_test_memory() -> MemoryCube {
         let dir = tempdir().expect("Failed to create temp dir");
         let path = dir.path().join("test_memory.db");
-        MemoryCube::new(path.to_str().unwrap()).expect("Failed to create memory")
+        MemoryCube::new(path.to_str().expect("operation failed")).expect("Failed to create memory")
     }
 
     #[test]
@@ -90,9 +90,9 @@ mod memory_unit_tests {
         let memory = create_test_memory();
         
         // Store multiple related entries
-        memory.create("The quick brown fox".to_string(), MemoryType::Semantic, None, None).unwrap();
-        memory.create("A fast fox jumped".to_string(), MemoryType::Semantic, None, None).unwrap();
-        memory.create("Dogs are loyal pets".to_string(), MemoryType::Semantic, None, None).unwrap();
+        memory.create("The quick brown fox".to_string(), MemoryType::Semantic, None, None).expect("operation failed");
+        memory.create("A fast fox jumped".to_string(), MemoryType::Semantic, None, None).expect("operation failed");
+        memory.create("Dogs are loyal pets".to_string(), MemoryType::Semantic, None, None).expect("operation failed");
         
         // Search for fox-related content
         let results = memory.search("fox", 10).expect("Failed to search");
@@ -116,7 +116,7 @@ mod memory_unit_tests {
             None,
         ).expect("Failed to create memory");
         
-        let entry = memory.get(id).expect("Failed to get memory").unwrap();
+        let entry = memory.get(id).expect("Failed to get memory").expect("operation failed");
         assert_eq!(entry.metadata["source"], "telegram");
         assert_eq!(entry.metadata["user_id"], "12345");
     }
@@ -134,7 +134,7 @@ mod memory_unit_tests {
         
         memory.update(id, "Updated content".to_string(), None).expect("Failed to update");
         
-        let entry = memory.get(id).expect("Failed to get memory").unwrap();
+        let entry = memory.get(id).expect("Failed to get memory").expect("operation failed");
         assert_eq!(entry.content, "Updated content");
     }
 
@@ -159,7 +159,7 @@ mod memory_unit_tests {
     fn test_memory_count() {
         let memory = create_test_memory();
         
-        assert_eq!(memory.count().unwrap(), 0);
+        assert_eq!(memory.count().expect("operation failed"), 0);
         
         for i in 0..10 {
             memory.create(
@@ -167,10 +167,10 @@ mod memory_unit_tests {
                 MemoryType::Working,
                 None,
                 None,
-            ).unwrap();
+            ).expect("operation failed");
         }
         
-        assert_eq!(memory.count().unwrap(), 10);
+        assert_eq!(memory.count().expect("operation failed"), 10);
     }
 
     #[test]
@@ -178,13 +178,13 @@ mod memory_unit_tests {
         let memory = create_test_memory();
         
         for i in 0..5 {
-            memory.create(format!("Content {}", i), MemoryType::Working, None, None).unwrap();
+            memory.create(format!("Content {}", i), MemoryType::Working, None, None).expect("operation failed");
         }
         
-        assert_eq!(memory.count().unwrap(), 5);
+        assert_eq!(memory.count().expect("operation failed"), 5);
         
         memory.clear().expect("Failed to clear memory");
         
-        assert_eq!(memory.count().unwrap(), 0);
+        assert_eq!(memory.count().expect("operation failed"), 0);
     }
 }

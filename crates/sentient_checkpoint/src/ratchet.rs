@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use sha2::{Sha256, Digest};
-use crate::{RatchetError, RatchetResult};
+use crate::RatchetResult;
 
 /// Ratchet - Çark mekanizması
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -188,7 +188,7 @@ mod tests {
             metadata: HashMap::new(),
         };
         
-        let state = ratchet.advance(step).unwrap();
+        let state = ratchet.advance(step).expect("operation failed");
         assert_eq!(state.step_count, 1);
     }
     
@@ -203,7 +203,7 @@ mod tests {
             data: serde_json::json!({}),
             metadata: HashMap::new(),
         };
-        ratchet.advance(step1).unwrap();
+        ratchet.advance(step1).expect("operation failed");
         let hash1 = ratchet.state.current_hash.clone();
         
         let step2 = RatchetStep {
@@ -211,7 +211,7 @@ mod tests {
             data: serde_json::json!({}),
             metadata: HashMap::new(),
         };
-        ratchet.advance(step2).unwrap();
+        ratchet.advance(step2).expect("operation failed");
         let hash2 = ratchet.state.current_hash.clone();
         
         // Hash'ler farklı olmalı

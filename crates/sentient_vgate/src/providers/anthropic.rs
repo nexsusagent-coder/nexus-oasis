@@ -29,9 +29,9 @@ impl AnthropicProvider {
 
     fn build_headers(&self) -> reqwest::header::HeaderMap {
         let mut headers = reqwest::header::HeaderMap::new();
-        headers.insert("x-api-key", self.api_key.parse().unwrap());
-        headers.insert("Content-Type", "application/json".parse().unwrap());
-        headers.insert("anthropic-version", "2023-06-01".parse().unwrap());
+        headers.insert("x-api-key", self.api_key.parse().expect("operation failed"));
+        headers.insert("Content-Type", "application/json".parse().expect("operation failed"));
+        headers.insert("anthropic-version", "2023-06-01".parse().expect("operation failed"));
         headers
     }
 
@@ -94,7 +94,7 @@ impl AnthropicProvider {
             }),
             created: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
+                .expect("operation failed")
                 .as_secs(),
         }
     }

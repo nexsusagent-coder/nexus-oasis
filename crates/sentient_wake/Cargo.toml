@@ -30,7 +30,10 @@ whisper-rs = { version = "0.11", optional = true }
 sentient_common = { path = "../sentient_common" }
 
 [features]
-default = ["vosk"]
+default = []
 porcupine = []
 vosk = ["dep:vosk"]
 whisper = ["dep:whisper-rs"]
+
+[dev-dependencies]
+# No vosk for tests - it requires the native library

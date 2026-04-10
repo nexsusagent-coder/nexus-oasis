@@ -5,7 +5,6 @@
 use crate::BrainError;
 use sentient_local::LocalEngine;
 use serde::{Deserialize, Serialize};
-use log::debug;
 
 /// Perception Engine
 pub struct PerceptionEngine;

@@ -194,7 +194,7 @@ impl SandboxManager {
             return Ok(sandbox_id);
         }
         
-        let docker = self.docker.as_ref().unwrap();
+        let docker = self.docker.as_ref().expect("operation failed");
         
         let host_config = HostConfig {
             memory: Some(self.config.memory_limit),
@@ -270,7 +270,7 @@ impl SandboxManager {
         let container_id = self.active_sandboxes.get(sandbox_id)
             .ok_or_else(|| SENTIENTError::Docker(format!("Sandbox yok: {}", sandbox_id)))?;
         
-        let docker = self.docker.as_ref().unwrap();
+        let docker = self.docker.as_ref().expect("operation failed");
         let filename = format!("/tmp/code{}", execution.language.extension());
         
         // Kodu yaz
@@ -312,9 +312,9 @@ impl SandboxManager {
         
         let (stdout, stderr) = match output {
             StartExecResults::Attached { output: stream, .. } => {
-                use futures::StreamExt;
+                
                 let mut out = String::new();
-                let mut err = String::new();
+                let err = String::new();
                 
                 // Simplified - just collect output
                 let _ = stream;
@@ -341,7 +341,7 @@ impl SandboxManager {
         let container_id = self.active_sandboxes.get(sandbox_id)
             .ok_or_else(|| SENTIENTError::Docker(format!("Sandbox yok: {}", sandbox_id)))?;
         
-        let docker = self.docker.as_ref().unwrap();
+        let docker = self.docker.as_ref().expect("operation failed");
         
         docker.stop_container(container_id, Some(StopContainerOptions { t: 10 }))
             .await.map_err(|e| {
@@ -362,7 +362,7 @@ impl SandboxManager {
         let container_id = self.active_sandboxes.get(sandbox_id)
             .ok_or_else(|| SENTIENTError::Docker(format!("Sandbox yok: {}", sandbox_id)))?;
         
-        let docker = self.docker.as_ref().unwrap();
+        let docker = self.docker.as_ref().expect("operation failed");
         
         docker.remove_container(container_id, Some(RemoveContainerOptions { force: true, ..Default::default() }))
             .await.map_err(|e| {

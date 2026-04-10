@@ -753,7 +753,7 @@ mod tests {
     fn test_find_model() {
         let model = find_model("google/gemma-4-31b-it:free");
         assert!(model.is_some());
-        assert_eq!(model.unwrap().context_length, 262_144);
+        assert_eq!(model.expect("operation failed").context_length, 262_144);
     }
 
     #[test]

@@ -24,7 +24,6 @@ pub mod human_emulation;
 pub mod keyring;
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tokio::sync::RwLock;

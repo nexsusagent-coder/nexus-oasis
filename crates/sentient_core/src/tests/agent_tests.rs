@@ -90,7 +90,7 @@ mod agent_unit_tests {
         };
         
         assert!(msg.metadata.is_some());
-        let meta = msg.metadata.unwrap();
+        let meta = msg.metadata.expect("operation failed");
         assert_eq!(meta["source"], "telegram");
     }
 

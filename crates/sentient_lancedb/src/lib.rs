@@ -10,17 +10,27 @@
 //! - Embedding generation
 //!
 //! Usage:
-//! ```rust
-//! let memory = LanceMemory::new("./memory").await?;
+//! ```rust,ignore
+//! use sentient_lancedb::{LanceMemory, MemoryEntry};
 //!
-//! // Store memory
-//! memory.store(MemoryEntry {
-//!     content: "User likes Rust programming",
-//!     metadata: json!({"user": "john"}),
-//! }).await?;
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let memory = LanceMemory::new("./memory").await?;
 //!
-//! // Search
-//! let results = memory.search("programming preferences", 10).await?;
+//!     // Store memory
+//!     memory.store(MemoryEntry {
+//!         id: "1".to_string(),
+//!         content: "User likes Rust programming".to_string(),
+//!         embedding: None,
+//!         metadata: serde_json::json!({"user": "john"}),
+//!         timestamp: chrono::Utc::now().timestamp(),
+//!         source: "chat".to_string(),
+//!     }).await?;
+//!
+//!     // Search
+//!     let results = memory.search("programming", vec![], 10).await?;
+//!     Ok(())
+//! }
 //! ```
 
 pub mod memory;

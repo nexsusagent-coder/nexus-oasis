@@ -4,7 +4,6 @@
 //!
 //! Manus oturumları ve istatistikler.
 
-use crate::error::ManusResult;
 use crate::executor::ExecutionResult;
 use serde::{Deserialize, Serialize};
 

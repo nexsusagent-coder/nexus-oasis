@@ -142,7 +142,7 @@ mod tests {
         let mut chain = Chain::new();
         let id = Uuid::new_v4();
         
-        chain.add_block(id, 1, "hash1".into(), serde_json::json!({})).unwrap();
+        chain.add_block(id, 1, "hash1".into(), serde_json::json!({})).expect("operation failed");
         
         assert_eq!(chain.block_count(id), 1);
     }

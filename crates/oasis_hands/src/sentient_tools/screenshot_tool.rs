@@ -149,6 +149,6 @@ mod tests {
         ]);
         let result = tool.execute(params).await;
         assert!(result.success);
-        assert!(result.data.unwrap().get("ocr_text").is_some());
+        assert!(result.data.expect("operation failed").get("ocr_text").is_some());
     }
 }

@@ -1,9 +1,8 @@
 //! Formatters for locale-aware output
 
 use super::Language;
-use super::locale::{date_format, time_format, number_format, NumberFormat};
-use chrono::{DateTime, Utc, TimeZone};
-use std::fmt::Display;
+use super::locale::{date_format, time_format, number_format};
+use chrono::{DateTime, Utc};
 
 /// Format a date for a specific language
 pub fn format_date(date: &DateTime<Utc>, language: Language) -> String {
@@ -200,10 +199,11 @@ pub fn format_bytes(bytes: u64, language: Language) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::TimeZone;
 
     #[test]
     fn test_format_date() {
-        let date = Utc.ymd(2024, 1, 15).and_hms(12, 30, 0);
+        let date = Utc.with_ymd_and_hms(2024, 1, 15, 12, 30, 0).single().expect("operation failed");
         let formatted = format_date(&date, Language::English);
         assert!(formatted.contains("2024"));
     }

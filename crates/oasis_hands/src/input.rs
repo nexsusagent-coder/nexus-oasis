@@ -537,17 +537,17 @@ mod tests {
     #[tokio::test]
     async fn test_input_controller_creation() {
         let policy = SovereignPolicy::strict();
-        let controller = InputController::new(policy).unwrap();
+        let controller = InputController::new(policy).expect("operation failed");
         assert!(controller.is_active());
     }
     
     #[tokio::test]
     async fn test_mouse_move() {
         let policy = SovereignPolicy::strict();
-        let mut controller = InputController::new(policy).unwrap();
+        let mut controller = InputController::new(policy).expect("operation failed");
         
         let action = MouseAction::Move { x: 500, y: 300 };
-        controller.execute_mouse(action).await.unwrap();
+        controller.execute_mouse(action).await.expect("operation failed");
         
         let pos = controller.mouse_position();
         assert_eq!(pos.x, 500);
@@ -557,7 +557,7 @@ mod tests {
     #[tokio::test]
     async fn test_emergency_release() {
         let policy = SovereignPolicy::strict();
-        let mut controller = InputController::new(policy).unwrap();
+        let mut controller = InputController::new(policy).expect("operation failed");
         
         controller.pressed_keys.push(Key::Ctrl);
         controller.pressed_buttons.push(MouseButton::Left);

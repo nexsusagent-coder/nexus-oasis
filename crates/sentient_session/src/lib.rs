@@ -21,12 +21,9 @@ pub use compaction::{Compactor, CompactionConfig, CompactionResult};
 pub use checkpoint::{Checkpoint, CheckpointManager};
 pub use history::{SessionHistory, HistoryEntry};
 
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use uuid::Uuid;
-use chrono::{DateTime, Utc};
 use lru::LruCache;
 use std::num::NonZeroUsize;
 
@@ -77,7 +74,7 @@ impl SessionManager {
     pub fn new() -> Self {
         Self {
             tree: Arc::new(RwLock::new(SessionTree::new())),
-            cache: Arc::new(RwLock::new(LruCache::new(NonZeroUsize::new(100).unwrap()))),
+            cache: Arc::new(RwLock::new(LruCache::new(NonZeroUsize::new(100).expect("operation failed")))),
             compactor: Compactor::new(CompactionConfig::default()),
             checkpoint_manager: CheckpointManager::new("data/sessions"),
             history: Arc::new(RwLock::new(SessionHistory::new())),
@@ -228,7 +225,7 @@ mod tests {
         let manager = SessionManager::new();
         let config = SessionConfig::default();
         
-        let session = manager.create_session(config).await.unwrap();
+        let session = manager.create_session(config).await.expect("operation failed");
         assert!(session.is_active());
     }
     
@@ -236,8 +233,8 @@ mod tests {
     async fn test_child_session() {
         let manager = SessionManager::new();
         
-        let parent = manager.create_session(SessionConfig::default()).await.unwrap();
-        let child = manager.create_child(parent.id, SessionConfig::default()).await.unwrap();
+        let parent = manager.create_session(SessionConfig::default()).await.expect("operation failed");
+        let child = manager.create_child(parent.id, SessionConfig::default()).await.expect("operation failed");
         
         assert_eq!(child.parent_id, Some(parent.id));
     }
@@ -245,9 +242,9 @@ mod tests {
     #[tokio::test]
     async fn test_session_compaction() {
         let manager = SessionManager::new();
-        let session = manager.create_session(SessionConfig::default()).await.unwrap();
+        let session = manager.create_session(SessionConfig::default()).await.expect("operation failed");
         
-        let result = manager.compact(session.id).await.unwrap();
+        let result = manager.compact(session.id).await.expect("operation failed");
         assert!(!result.summary.is_empty());
     }
 }

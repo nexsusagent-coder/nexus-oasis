@@ -110,14 +110,14 @@ impl StealthEngine {
         let mut rng = rand::thread_rng();
         
         Fingerprint {
-            user_agent: self.user_agents.choose(&mut rng).unwrap().clone(),
-            platform: self.platforms.choose(&mut rng).unwrap().clone(),
+            user_agent: self.user_agents.choose(&mut rng).expect("operation failed").clone(),
+            platform: self.platforms.choose(&mut rng).expect("operation failed").clone(),
             language: "en-US".into(),
             screen_width: 1920,
             screen_height: 1080,
             pixel_ratio: 1.0,
             color_depth: 24,
-            timezone: self.timezones.choose(&mut rng).unwrap().clone(),
+            timezone: self.timezones.choose(&mut rng).expect("operation failed").clone(),
             webgl_vendor: "Google Inc. (NVIDIA)".into(),
             webgl_renderer: "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Direct3D11 vs_5_0 ps_5_0)".into(),
             canvas_hash: Self::random_hash(&mut rng),
@@ -239,6 +239,6 @@ mod tests {
         let path = engine.generate_mouse_path((0.0, 0.0), (100.0, 100.0));
         
         assert!(path.len() > 1);
-        assert_eq!(path.first().unwrap(), &(0.0, 0.0));
+        assert_eq!(path.first().expect("operation failed"), &(0.0, 0.0));
     }
 }

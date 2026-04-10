@@ -1,0 +1,56 @@
+[package]
+name = "sentient_finetuning"
+version = "0.1.0"
+edition = "2021"
+description = "Fine-tuning support for SENTIENT OS - LoRA, QLoRA, dataset preparation"
+license = "Apache-2.0"
+authors = ["Pi <pi@sentient.ai>"]
+keywords = ["fine-tuning", "lora", "qlora", "ml", "ai"]
+categories = ["science", "ai", "algorithms"]
+readme = "README.md"
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# ML/Data processing (optional)
+candle-core = { version = "0.8", optional = true }
+candle-nn = { version = "0.8", optional = true }
+candle-transformers = { version = "0.8", optional = true }
+tokenizers = { version = "0.19", optional = true }
+
+# File handling
+walkdir = "2.5"
+regex = "1.10"
+sha2 = "0.10"
+hex = "0.4"
+chrono = "0.4"
+
+# Random
+rand = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3.10"
+
+[features]
+default = []
+lora = ["candle-core", "candle-nn", "tokenizers"]
+qlora = ["lora", "candle-transformers"]
+full = ["qlora"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

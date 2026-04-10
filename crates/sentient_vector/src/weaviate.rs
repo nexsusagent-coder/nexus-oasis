@@ -17,15 +17,15 @@ impl WeaviateClient {
         }
     }
     
-    pub async fn create_schema(&self, class_name: &str) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn create_schema(&self, _class_name: &str) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         Ok(())
     }
     
-    pub async fn add_objects(&self, class: &str, docs: Vec<VectorDocument>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn add_objects(&self, _class: &str, _docs: Vec<VectorDocument>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         Ok(())
     }
     
-    pub async fn search(&self, class: &str, query: &str, limit: usize) -> Result<Vec<SearchResult>, Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn search(&self, _class: &str, _query: &str, _limit: usize) -> Result<Vec<SearchResult>, Box<dyn std::error::Error + Send + Sync>> {
         Ok(vec![])
     }
 }

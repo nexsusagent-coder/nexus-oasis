@@ -536,7 +536,7 @@ impl SkillsHub {
             return Err(SENTIENTError::ValidationError("Geçersiz skill action formatı".into()));
         }
         
-        let action = action.strip_prefix("skill://").unwrap();
+        let action = action.strip_prefix("skill://").expect("operation failed");
         let parts: Vec<&str> = action.split('?').collect();
         let skill_name = parts[0];
         
@@ -583,9 +583,9 @@ mod tests {
         let hub = SkillsHub::new();
         
         // MindSearch aktifleştir
-        hub.activate_skill(SkillType::MindSearch).await.unwrap();
+        hub.activate_skill(SkillType::MindSearch).await.expect("operation failed");
         
-        let skill = hub.get_skill(&SkillType::MindSearch).await.unwrap();
+        let skill = hub.get_skill(&SkillType::MindSearch).await.expect("operation failed");
         assert!(skill.enabled);
         assert_eq!(skill.status, SkillStatus::Active);
     }
@@ -595,11 +595,11 @@ mod tests {
         let hub = SkillsHub::new();
         
         // İlk toggle: aç
-        let result = hub.toggle_skill(SkillType::WebSearch).await.unwrap();
+        let result = hub.toggle_skill(SkillType::WebSearch).await.expect("operation failed");
         assert!(result);
         
         // İkinci toggle: kapat
-        let result = hub.toggle_skill(SkillType::WebSearch).await.unwrap();
+        let result = hub.toggle_skill(SkillType::WebSearch).await.expect("operation failed");
         assert!(!result);
     }
     
@@ -608,14 +608,14 @@ mod tests {
         let hub = SkillsHub::new();
         
         // Web Search aktifleştir
-        hub.activate_skill(SkillType::WebSearch).await.unwrap();
+        hub.activate_skill(SkillType::WebSearch).await.expect("operation failed");
         
         let input = SkillInput {
             query: Some("test query".into()),
             ..Default::default()
         };
         
-        let output = hub.execute(SkillType::WebSearch, input).await.unwrap();
+        let output = hub.execute(SkillType::WebSearch, input).await.expect("operation failed");
         assert!(output.success);
     }
     

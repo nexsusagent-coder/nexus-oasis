@@ -73,7 +73,7 @@ impl BriefTool {
             summary.push_str(" ... ");
             
             // Son cümleler
-            let remaining = max_length - current_len - 10;
+            let _remaining = max_length - current_len - 10;
             for sentence in sentences.iter().rev().take(2) {
                 if summary.len() + sentence.len() > max_length {
                     break;

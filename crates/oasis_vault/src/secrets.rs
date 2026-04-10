@@ -2,7 +2,7 @@
 //!  SECRETS - High-Level Secret Types
 //! ═══════════════════════════════════════════════════════════════════════════════
 
-use crate::{AccessLevel, SecureBytes, VaultResult};
+use crate::AccessLevel;
 use serde::{Deserialize, Serialize};
 
 // ═══════════════════════════════════════════════════════════════════════════════

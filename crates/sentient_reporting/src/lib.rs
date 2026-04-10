@@ -21,10 +21,8 @@ pub use generator::{ReportGenerator, GeneratorConfig};
 pub use citation::{CitationManager, Citation, CitationStyle};
 pub use templates::{ReportTemplate, TemplateLibrary};
 
-use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use uuid::Uuid;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // REPORT ERROR
@@ -135,7 +133,7 @@ mod tests {
     #[tokio::test]
     async fn test_report_creation() {
         let engine = ReportEngine::new();
-        let report = engine.create_report("Test Raporu").await.unwrap();
+        let report = engine.create_report("Test Raporu").await.expect("operation failed");
         
         assert_eq!(report.title, "Test Raporu");
     }
@@ -143,11 +141,11 @@ mod tests {
     #[tokio::test]
     async fn test_report_generation() {
         let engine = ReportEngine::new();
-        let mut report = engine.create_report("Test").await.unwrap();
+        let mut report = engine.create_report("Test").await.expect("operation failed");
         
         report.add_section(ReportSection::new("Giriş", "Bu bir test raporudur."));
         
-        let output = engine.generate(&report, OutputFormat::Markdown).await.unwrap();
+        let output = engine.generate(&report, OutputFormat::Markdown).await.expect("operation failed");
         assert!(output.contains("# Test"));
     }
 }

@@ -7,7 +7,8 @@ use crate::guardrails::GuardrailMiddleware;
 use crate::subagent::{SubagentExecutor, SubagentConfig, SubagentTask, SubagentResult};
 use std::sync::Arc;
 use std::collections::HashMap;
-use tracing::{info, debug};
+use tracing::{info, debug, warn};
+use serde::{Deserialize, Serialize};
 
 /// Skill Execution Context
 #[derive(Debug, Clone)]
@@ -115,6 +116,60 @@ impl ExecutionResult {
     }
 }
 
+/// LLM Configuration for skill execution
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LLMConfig {
+    /// API endpoint (e.g., "https://api.openai.com/v1")
+    pub endpoint: String,
+    /// API key
+    pub api_key: Option<String>,
+    /// Model to use
+    pub model: String,
+    /// Max tokens
+    pub max_tokens: u32,
+    /// Temperature
+    pub temperature: f32,
+}
+
+impl Default for LLMConfig {
+    fn default() -> Self {
+        Self {
+            endpoint: "http://localhost:11434/v1".to_string(), // Ollama default
+            api_key: None,
+            model: "llama3".to_string(),
+            max_tokens: 2048,
+            temperature: 0.7,
+        }
+    }
+}
+
+/// LLM Chat Message
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ChatMessage {
+    pub role: String,
+    pub content: String,
+}
+
+/// LLM Chat Request
+#[derive(Debug, Clone, Serialize)]
+struct ChatRequest {
+    model: String,
+    messages: Vec<ChatMessage>,
+    max_tokens: u32,
+    temperature: f32,
+}
+
+/// LLM Chat Response
+#[derive(Debug, Clone, Deserialize)]
+struct ChatResponse {
+    choices: Vec<ChatChoice>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct ChatChoice {
+    message: ChatMessage,
+}
+
 /// Skill Executor
 pub struct SkillExecutor {
     /// Skill manager
@@ -128,6 +183,12 @@ pub struct SkillExecutor {
     
     /// Auto-load skills
     auto_load: bool,
+    
+    /// LLM configuration
+    llm_config: LLMConfig,
+    
+    /// HTTP client
+    http_client: reqwest::Client,
 }
 
 impl SkillExecutor {
@@ -138,6 +199,8 @@ impl SkillExecutor {
             guardrail: GuardrailMiddleware::with_rules(),
             subagent_executor: SubagentExecutor::new(),
             auto_load: true,
+            llm_config: LLMConfig::default(),
+            http_client: reqwest::Client::new(),
         }
     }
     
@@ -148,7 +211,15 @@ impl SkillExecutor {
             guardrail: GuardrailMiddleware::with_rules(),
             subagent_executor: SubagentExecutor::new(),
             auto_load: false,
+            llm_config: LLMConfig::default(),
+            http_client: reqwest::Client::new(),
         }
+    }
+    
+    /// LLM config ile oluştur
+    pub fn with_llm(mut self, config: LLMConfig) -> Self {
+        self.llm_config = config;
+        self
     }
     
     /// Skill'leri yükle
@@ -178,21 +249,77 @@ impl SkillExecutor {
         info!("Matched skill: {}", skill.metadata.name);
         
         // Skill içeriğini hazırla
-        let _prompt = self.build_prompt(&skill, &ctx);
+        let prompt = self.build_prompt(&skill, &ctx);
         
-        // TODO: Gerçek LLM integration
-        // Şimdilik simüle edilmiş execution
-        let output = format!(
-            "Executed skill '{}' with input: {}\n\nSkill content preview:\n{}",
-            skill.metadata.name,
-            ctx.input,
-            skill.summary()
-        );
+        // Gerçek LLM integration
+        let output = match self.call_llm(&prompt).await {
+            Ok(response) => response,
+            Err(e) => {
+                warn!("LLM call failed: {}, using fallback", e);
+                // Fallback: Simulated execution
+                format!(
+                    "Executed skill '{}' with input: {}\n\nSkill content preview:\n{}",
+                    skill.metadata.name,
+                    ctx.input,
+                    skill.summary()
+                )
+            }
+        };
         
         let mut result = ExecutionResult::success(skill, output);
         result.execution_time_ms = start.elapsed().as_millis() as u64;
         
         result
+    }
+    
+    /// LLM API çağrısı
+    async fn call_llm(&self, prompt: &str) -> Result<String, String> {
+        let url = format!("{}/chat/completions", self.llm_config.endpoint);
+        
+        let request = ChatRequest {
+            model: self.llm_config.model.clone(),
+            messages: vec![
+                ChatMessage {
+                    role: "system".to_string(),
+                    content: "You are a helpful AI assistant executing skills. Follow the skill instructions precisely.".to_string(),
+                },
+                ChatMessage {
+                    role: "user".to_string(),
+                    content: prompt.to_string(),
+                },
+            ],
+            max_tokens: self.llm_config.max_tokens,
+            temperature: self.llm_config.temperature,
+        };
+        
+        let mut req = self.http_client.post(&url).json(&request);
+        
+        // Add API key if available
+        if let Some(ref api_key) = self.llm_config.api_key {
+            req = req.bearer_auth(api_key);
+        }
+        
+        let response = req
+            .timeout(std::time::Duration::from_secs(60))
+            .send()
+            .await
+            .map_err(|e| format!("HTTP error: {}", e))?;
+        
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            return Err(format!("API error ({}): {}", status, text));
+        }
+        
+        let data: ChatResponse = response
+            .json()
+            .await
+            .map_err(|e| format!("JSON parse error: {}", e))?;
+        
+        Ok(data.choices
+            .first()
+            .map(|c| c.message.content.clone())
+            .unwrap_or_default())
     }
     
     /// Skill ve subagent ile çalıştır

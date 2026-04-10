@@ -444,9 +444,9 @@ mod tests {
     
     #[test]
     fn test_provider_from_str() {
-        assert_eq!(WebhookProvider::from_str("github").unwrap(), WebhookProvider::GitHub);
-        assert_eq!(WebhookProvider::from_str("stripe").unwrap(), WebhookProvider::Stripe);
-        assert_eq!(WebhookProvider::from_str("custom_service").unwrap(), 
+        assert_eq!(WebhookProvider::from_str("github").expect("operation failed"), WebhookProvider::GitHub);
+        assert_eq!(WebhookProvider::from_str("stripe").expect("operation failed"), WebhookProvider::Stripe);
+        assert_eq!(WebhookProvider::from_str("custom_service").expect("operation failed"), 
             WebhookProvider::Custom("custom_service".into()));
     }
     
@@ -466,7 +466,7 @@ mod tests {
             }
         }"#;
         
-        let payload: GitHubPayload = serde_json::from_str(json).unwrap();
+        let payload: GitHubPayload = serde_json::from_str(json).expect("operation failed");
         assert_eq!(payload.event, "push");
         assert_eq!(payload.r#ref, Some("refs/heads/main".into()));
     }
@@ -482,7 +482,7 @@ mod tests {
             }
         }"#;
         
-        let payload: StripePayload = serde_json::from_str(json).unwrap();
+        let payload: StripePayload = serde_json::from_str(json).expect("operation failed");
         assert_eq!(payload.event_type, "payment_intent.succeeded");
         assert_eq!(payload.summary(), "Payment succeeded");
     }
@@ -496,7 +496,7 @@ mod tests {
             "result": "success"
         }"#;
         
-        let payload: N8nPayload = serde_json::from_str(json).unwrap();
+        let payload: N8nPayload = serde_json::from_str(json).expect("operation failed");
         assert_eq!(payload.workflow_name, Some("Test Workflow".into()));
         assert_eq!(payload.summary(), "n8n: Test Workflow - completed");
     }

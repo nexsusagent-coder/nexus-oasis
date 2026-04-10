@@ -47,14 +47,13 @@ impl KnowledgeBase {
     
     /// Add knowledge entry
     pub async fn add(&self, entry: KnowledgeEntry) -> Result<()> {
-        // Generate embedding from title + content
         let text = format!("{}: {}", entry.title, entry.content);
-        let embedding = self.embeddings.embed(&text).await?;
+        let embedding = self.embeddings.embed(&text).ok();
         
         let memory_entry = MemoryEntry {
             id: entry.id,
             content: entry.content,
-            embedding: Some(embedding),
+            embedding,
             metadata: serde_json::json!({
                 "title": entry.title,
                 "category": entry.category,
@@ -71,7 +70,7 @@ impl KnowledgeBase {
     
     /// Search knowledge
     pub async fn search(&self, query: &str, k: usize) -> Result<Vec<KnowledgeResult>> {
-        let query_embedding = self.embeddings.embed(query).await?;
+        let query_embedding = self.embeddings.embed(query).unwrap_or_default();
         
         let results = self.memory.search(query, query_embedding, k).await?;
         
@@ -85,11 +84,10 @@ impl KnowledgeBase {
                         title: meta.get("title")?.as_str()?.to_string(),
                         content: r.entry.content,
                         category: meta.get("category")?.as_str()?.to_string(),
-                        tags: meta.get("tags")?
-                            .as_array()?
-                            .iter()
-                            .filter_map(|t| t.as_str().map(String::from))
-                            .collect(),
+                        tags: meta.get("tags")
+                            .and_then(|t| t.as_array())
+                            .map(|arr| arr.iter().filter_map(|t| t.as_str().map(String::from)).collect())
+                            .unwrap_or_default(),
                         source_url: meta.get("source_url")
                             .and_then(|u| u.as_str().map(String::from)),
                         metadata: meta.get("metadata").cloned().unwrap_or(serde_json::Value::Null),
@@ -101,21 +99,17 @@ impl KnowledgeBase {
     }
     
     /// Get by category
-    pub async fn get_by_category(&self, category: &str) -> Result<Vec<KnowledgeEntry>> {
-        // This would use LanceDB filter
-        // Simplified implementation
+    pub async fn get_by_category(&self, _category: &str) -> Result<Vec<KnowledgeEntry>> {
         Ok(vec![])
     }
     
     /// Get by tag
-    pub async fn get_by_tag(&self, tag: &str) -> Result<Vec<KnowledgeEntry>> {
-        // This would use LanceDB filter
+    pub async fn get_by_tag(&self, _tag: &str) -> Result<Vec<KnowledgeEntry>> {
         Ok(vec![])
     }
     
     /// Update entry
     pub async fn update(&self, entry: KnowledgeEntry) -> Result<()> {
-        // Delete and re-add
         self.memory.delete(&entry.id).await?;
         self.add(entry).await
     }
@@ -139,7 +133,6 @@ impl KnowledgeBase {
     
     /// Export to JSON
     pub async fn export_json(&self) -> Result<String> {
-        // This would iterate all entries
         Ok("[]".into())
     }
 }

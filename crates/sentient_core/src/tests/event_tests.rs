@@ -51,8 +51,8 @@ mod event_unit_tests {
             serde_json::json!({"chat_id": 12345}),
         );
         
-        let json = serde_json::to_string(&event).unwrap();
-        let decoded: SENTIENTEvent = serde_json::from_str(&json).unwrap();
+        let json = serde_json::to_string(&event).expect("operation failed");
+        let decoded: SENTIENTEvent = serde_json::from_str(&json).expect("operation failed");
         
         assert_eq!(event.id, decoded.id);
         assert_eq!(event.event_type, decoded.event_type);
@@ -98,7 +98,7 @@ mod event_unit_tests {
         );
         
         assert!(event2.parent_id.is_some());
-        assert_eq!(event2.parent_id.unwrap(), event1.id);
+        assert_eq!(event2.parent_id.expect("operation failed"), event1.id);
     }
 
     #[test]

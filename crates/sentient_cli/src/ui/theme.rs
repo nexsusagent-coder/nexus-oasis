@@ -5,6 +5,7 @@
 use colored::Color;
 
 /// SENTIENT Tema rengi
+#[derive(Clone, Debug)]
 pub struct Theme {
     /// Birincil renk
     pub primary: Color,
@@ -88,8 +89,10 @@ impl Theme {
     }
 }
 
-/// Global tema
-static mut CURRENT_THEME: Theme = Theme {
+use std::sync::RwLock;
+
+/// Global tema (thread-safe)
+static CURRENT_THEME: RwLock<Theme> = RwLock::new(Theme {
     primary: Color::Cyan,
     secondary: Color::Blue,
     success: Color::Green,
@@ -98,18 +101,18 @@ static mut CURRENT_THEME: Theme = Theme {
     info: Color::Blue,
     text: Color::White,
     muted: Color::BrightBlack,
-};
+});
 
 /// Temayi ayarla
 pub fn set_theme(theme: Theme) {
-    unsafe {
-        CURRENT_THEME = theme;
+    if let Ok(mut current) = CURRENT_THEME.write() {
+        *current = theme;
     }
 }
 
 /// Mevcut temayi al
-pub fn current_theme() -> &'static Theme {
-    unsafe { &CURRENT_THEME }
+pub fn current_theme() -> Theme {
+    CURRENT_THEME.read().map(|t| t.clone()).unwrap_or_default()
 }
 
 /// Emoji sablonlari

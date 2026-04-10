@@ -417,7 +417,7 @@ impl RagEngineSync {
     
     pub fn retrieve(&self, query: &str) -> MemoryResult<RagContext> {
         let query_embedding = self.embedding.embed(query)?;
-        let memory = self.memory.lock().unwrap();
+        let memory = self.memory.lock().expect("operation failed");
         
         let results = memory.search_vector(&query_embedding, self.config.max_memories)?;
         
@@ -458,7 +458,7 @@ impl RagEngineSync {
     
     pub fn memorize(&self, content: &str, memory_type: MemoryType) -> MemoryResult<uuid::Uuid> {
         let embedding = self.embedding.embed(content)?;
-        let mut memory = self.memory.lock().unwrap();
+        let mut memory = self.memory.lock().expect("operation failed");
         
         let input = MemoryInput::new(content).with_type(memory_type);
         memory.create_with_embedding(input, Some(embedding))

@@ -17,7 +17,7 @@ COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
 
 # Build release binary
-RUN cargo build --release --bin asena -p asena_cli
+RUN cargo build --release --bin sentient -p sentient_cli
 
 # Runtime stage
 FROM debian:bookworm-slim
@@ -32,17 +32,17 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
-RUN useradd -r -s /bin/false asena
+RUN useradd -r -s /bin/false sentient
 
 # Copy binary
-COPY --from=builder /build/target/release/asena /app/asena
+COPY --from=builder /build/target/release/sentient /app/sentient
 
 # Create directories
 RUN mkdir -p /data/logs /data/memory && \
-    chown -R asena:asena /app /data
+    chown -R sentient:sentient /app /data
 
 # Switch to non-root user
-USER asena
+USER sentient
 
 # Expose port
 EXPOSE 8080
@@ -52,4 +52,4 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=30s \
     CMD curl -f http://localhost:8080/health || exit 1
 
 # Run
-CMD ["./asena", "gateway", "--http-addr", "0.0.0.0:8080"]
+CMD ["./sentient", "gateway", "--http-addr", "0.0.0.0:8080"]

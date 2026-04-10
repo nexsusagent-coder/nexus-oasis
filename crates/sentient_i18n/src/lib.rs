@@ -194,17 +194,17 @@ pub static I18N: Lazy<std::sync::RwLock<I18n>> = Lazy::new(|| {
 
 /// Get translation (convenience function)
 pub fn t(key: &str) -> String {
-    I18N.read().unwrap().t(key)
+    I18N.read().expect("operation failed").t(key)
 }
 
 /// Translate with variables (convenience function)
 pub fn tv(key: &str, vars: &HashMap<&str, &str>) -> String {
-    I18N.read().unwrap().tv(key, vars)
+    I18N.read().expect("operation failed").tv(key, vars)
 }
 
 /// Set global language
 pub fn set_language(language: Language) {
-    I18N.write().unwrap().set_language(language);
+    I18N.write().expect("operation failed").set_language(language);
 }
 
 #[cfg(test)]

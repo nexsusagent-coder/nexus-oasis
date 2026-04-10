@@ -11,7 +11,6 @@ use std::sync::Arc;
 
 use super::blackboard::{KnowledgeEntry, Blackboard};
 use super::{SwarmAgentId, SwarmTask};
-use super::agent_type::AgentType;
 
 /// ─── COLLECTIVE MEMORY ───
 /// 
@@ -137,7 +136,8 @@ impl CollectiveMemory {
         let caches = self.agent_cache.read();
         caches.keys()
             .map(|id| {
-                let agent_id = SwarmAgentId::new(); // TODO: Parse from string
+                // Parse agent ID from cache key
+                let agent_id = SwarmAgentId::parse(id).unwrap_or_else(|_| SwarmAgentId::new());
                 self.sync_agent_cache(&agent_id)
             })
             .collect()
@@ -297,7 +297,7 @@ mod tests {
         let entry_id = memory.store(&agent, "test_key", serde_json::json!(42));
         assert!(!entry_id.is_empty());
         
-        let entry = memory.retrieve("test_key").unwrap();
+        let entry = memory.retrieve("test_key").expect("operation failed");
         assert_eq!(entry.value, 42);
     }
     

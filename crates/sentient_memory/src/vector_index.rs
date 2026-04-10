@@ -122,7 +122,9 @@ impl VectorIndex {
         // Önbelleğe ekle
         if self.use_cache {
             let record = VectorRecord { id, memory_id, vector, norm };
-            self.cache.write().unwrap().insert(memory_id, record);
+            if let Ok(mut cache) = self.cache.write() {
+                cache.insert(memory_id, record);
+            }
         }
         
         Ok(())
@@ -136,7 +138,9 @@ impl VectorIndex {
         ).map_err(|e| MemoryError::DatabaseError(format!("Vektör silme hatası: {}", e)))?;
         
         if self.use_cache {
-            self.cache.write().unwrap().remove(&memory_id);
+            if let Ok(mut cache) = self.cache.write() {
+                cache.remove(&memory_id);
+            }
         }
         
         Ok(affected > 0)
@@ -146,9 +150,10 @@ impl VectorIndex {
     pub fn get(&self, memory_id: Uuid) -> MemoryResult<Option<Vec<f32>>> {
         // Önce önbellekte ara
         if self.use_cache {
-            let cache = self.cache.read().unwrap();
-            if let Some(record) = cache.get(&memory_id) {
-                return Ok(Some(record.vector.clone()));
+            if let Ok(cache) = self.cache.read() {
+                if let Some(record) = cache.get(&memory_id) {
+                    return Ok(Some(record.vector.clone()));
+                }
             }
         }
         
@@ -198,9 +203,12 @@ impl VectorIndex {
     /// Tüm vektörleri yükle
     fn load_all_vectors(&self) -> MemoryResult<Vec<(Uuid, Vec<f32>)>> {
         // Önce önbellekte varsa oradan al
-        if self.use_cache && !self.cache.read().unwrap().is_empty() {
-            let cache = self.cache.read().unwrap();
-            return Ok(cache.values().map(|r| (r.memory_id, r.vector.clone())).collect());
+        if self.use_cache {
+            if let Ok(cache) = self.cache.read() {
+                if !cache.is_empty() {
+                    return Ok(cache.values().map(|r| (r.memory_id, r.vector.clone())).collect());
+                }
+            }
         }
         
         // Veritabanından yükle
@@ -241,7 +249,9 @@ impl VectorIndex {
     
     /// Önbelleği temizle
     pub fn clear_cache(&self) {
-        self.cache.write().unwrap().clear();
+        if let Ok(mut cache) = self.cache.write() {
+            cache.clear();
+        }
     }
     
     /// Vektör boyutu
@@ -300,12 +310,12 @@ impl InMemoryVectorIndex {
                 format!("Vektör boyutu hatalı")
             ));
         }
-        self.vectors.write().unwrap().insert(id, vector);
+        self.vectors.write().expect("operation failed").insert(id, vector);
         Ok(())
     }
     
     pub fn search(&self, query: &[f32], limit: usize, min_sim: f32) -> MemoryResult<Vec<(Uuid, f32)>> {
-        let vectors = self.vectors.read().unwrap();
+        let vectors = self.vectors.read().expect("operation failed");
         let mut results: Vec<_> = vectors
             .iter()
             .map(|(id, vec)| (*id, cosine_similarity(query, vec)))
@@ -318,7 +328,7 @@ impl InMemoryVectorIndex {
     }
     
     pub fn count(&self) -> usize {
-        self.vectors.read().unwrap().len()
+        self.vectors.read().expect("operation failed").len()
     }
 }
 
@@ -344,9 +354,9 @@ mod tests {
         let db = test_db("creation");
         cleanup(&db);
         {
-            let index = VectorIndex::new(&db, 128).unwrap();
+            let index = VectorIndex::new(&db, 128).expect("operation failed");
             assert_eq!(index.dimension(), 128);
-            assert_eq!(index.count().unwrap(), 0);
+            assert_eq!(index.count().expect("operation failed"), 0);
         }
         cleanup(&db);
     }
@@ -356,14 +366,14 @@ mod tests {
         let db = test_db("insert");
         cleanup(&db);
         {
-            let index = VectorIndex::new(&db, 3).unwrap();
+            let index = VectorIndex::new(&db, 3).expect("operation failed");
             let memory_id = Uuid::new_v4();
             let vector = vec![1.0, 0.0, 0.0];
             
-            index.insert(memory_id, vector.clone()).unwrap();
-            assert_eq!(index.count().unwrap(), 1);
+            index.insert(memory_id, vector.clone()).expect("operation failed");
+            assert_eq!(index.count().expect("operation failed"), 1);
             
-            let retrieved = index.get(memory_id).unwrap().unwrap();
+            let retrieved = index.get(memory_id).expect("operation failed").expect("operation failed");
             assert_eq!(retrieved.len(), 3);
         }
         cleanup(&db);
@@ -374,15 +384,15 @@ mod tests {
         let db = test_db("search");
         cleanup(&db);
         {
-            let index = VectorIndex::new(&db, 3).unwrap();
+            let index = VectorIndex::new(&db, 3).expect("operation failed");
             
             let id1 = Uuid::new_v4();
             let id2 = Uuid::new_v4();
             let id3 = Uuid::new_v4();
             
-            index.insert(id1, vec![1.0, 0.0, 0.0]).unwrap();
-            index.insert(id2, vec![0.0, 1.0, 0.0]).unwrap();
-            index.insert(id3, vec![0.9, 0.1, 0.0]).unwrap();
+            index.insert(id1, vec![1.0, 0.0, 0.0]).expect("operation failed");
+            index.insert(id2, vec![0.0, 1.0, 0.0]).expect("operation failed");
+            index.insert(id3, vec![0.9, 0.1, 0.0]).expect("operation failed");
             
             let query = vec![1.0, 0.0, 0.0];
             let opts = crate::SearchOptions {
@@ -395,7 +405,7 @@ mod tests {
                 search_type: SearchType::VectorSimilarity,
             };
             
-            let results = index.search(&query, &opts).unwrap();
+            let results = index.search(&query, &opts).expect("operation failed");
             assert_eq!(results.len(), 2);
             assert_eq!(results[0].0, id1); // Tam eşleşme
         }
@@ -407,10 +417,10 @@ mod tests {
         let index = InMemoryVectorIndex::new(3);
         
         let id = Uuid::new_v4();
-        index.insert(id, vec![1.0, 0.0, 0.0]).unwrap();
+        index.insert(id, vec![1.0, 0.0, 0.0]).expect("operation failed");
         assert_eq!(index.count(), 1);
         
-        let results = index.search(&[1.0, 0.0, 0.0], 1, 0.9).unwrap();
+        let results = index.search(&[1.0, 0.0, 0.0], 1, 0.9).expect("operation failed");
         assert_eq!(results.len(), 1);
     }
 }

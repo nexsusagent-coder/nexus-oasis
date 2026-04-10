@@ -143,7 +143,7 @@ impl HandsVGate {
 
     /// V-GATE'e istek gönder
     async fn send_authorization_request(&self, request: &AuthorizationRequest) -> HandsResult<AuthorizationResponse> {
-        let url = format!("{}/api/v1/authorize/hands", self.url);
+        let _url = format!("{}/api/v1/authorize/hands", self.url);
 
         // Mock yanıt (gerçek ortamda V-GATE'e HTTP isteği)
         // Gerçek implementasyonda:
@@ -279,7 +279,7 @@ mod tests {
     #[test]
     fn test_health_check() {
         let vgate = HandsVGate::new("http://localhost:1071");
-        assert!(vgate.health_check().unwrap());
+        assert!(vgate.health_check().expect("operation failed"));
     }
 
     #[tokio::test]

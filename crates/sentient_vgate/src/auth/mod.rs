@@ -309,11 +309,11 @@ mod tests {
 
     #[test]
     fn test_parse_model() {
-        let (provider, model) = RequestValidator::parse_model("openrouter/qwen/qwen3.6-plus:free").unwrap();
+        let (provider, model) = RequestValidator::parse_model("openrouter/qwen/qwen3.6-plus:free").expect("operation failed");
         assert_eq!(provider, Provider::OpenRouter);
         assert_eq!(model, "qwen/qwen3.6-plus:free");
 
-        let (provider, _) = RequestValidator::parse_model("gpt-4").unwrap();
+        let (provider, _) = RequestValidator::parse_model("gpt-4").expect("operation failed");
         assert_eq!(provider, Provider::OpenAI);
     }
 

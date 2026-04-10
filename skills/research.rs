@@ -2,11 +2,10 @@
 //!  Research Skill - Web Araştırması
 //! ═══════════════════════════════════════════════════════════════════════════════
 
-use crate::{Skill, SkillInput, SkillOutput, SkillOptions, Artifact, ArtifactType};
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
+use crate::{Skill, SkillInput, SkillOutput, Artifact, ArtifactType};
+use sentient_common::error::SENTIENTResult;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use std::collections::HashMap;
 
 /// Web araştırması yapan skill
 pub struct ResearchSkill {

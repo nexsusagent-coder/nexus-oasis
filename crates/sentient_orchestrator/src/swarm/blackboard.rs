@@ -10,8 +10,7 @@ use std::collections::HashMap;
 use parking_lot::RwLock;
 use std::sync::Arc;
 
-use super::{SwarmAgentId, SwarmTask};
-use super::agent_type::AgentType;
+use super::SwarmAgentId;
 
 /// ─── BLACKBOARD ───
 /// 
@@ -397,7 +396,7 @@ mod tests {
         
         let entry_id = bb.write("test_key", serde_json::json!({"value": 42}), agent);
         
-        let entry = bb.read("test_key").unwrap();
+        let entry = bb.read("test_key").expect("operation failed");
         assert_eq!(entry.value["value"], 42);
         assert_eq!(entry.id, entry_id);
     }
@@ -410,7 +409,7 @@ mod tests {
         let entry_id = bb.write("key", serde_json::json!(1), agent);
         bb.update(&entry_id, serde_json::json!(2));
         
-        let entry = bb.read_by_id(&entry_id).unwrap();
+        let entry = bb.read_by_id(&entry_id).expect("operation failed");
         assert_eq!(entry.value, 2);
         assert_eq!(entry.version, 2);
     }

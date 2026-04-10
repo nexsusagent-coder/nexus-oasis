@@ -31,9 +31,9 @@ impl OpenAIProvider {
         let mut headers = reqwest::header::HeaderMap::new();
         headers.insert(
             "Authorization",
-            format!("Bearer {}", self.api_key).parse().unwrap(),
+            format!("Bearer {}", self.api_key).parse().expect("operation failed"),
         );
-        headers.insert("Content-Type", "application/json".parse().unwrap());
+        headers.insert("Content-Type", "application/json".parse().expect("operation failed"));
         headers
     }
 }

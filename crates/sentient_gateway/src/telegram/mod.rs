@@ -15,7 +15,6 @@ use teloxide::{
     utils::command::BotCommands,
 };
 use std::sync::Arc;
-use uuid::Uuid;
 
 use crate::{GatewayRequest, RequestSource};
 use crate::dispatcher::TaskDispatcher;

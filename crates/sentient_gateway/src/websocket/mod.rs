@@ -317,7 +317,7 @@ async fn handle_client_message(
     dispatcher: &Arc<crate::dispatcher::TaskDispatcher>,
 ) {
     match msg {
-        ClientMessage::CreateTask { goal, model, params } => {
+        ClientMessage::CreateTask { goal, model, params: _ } => {
             let request = crate::GatewayRequest::new(
                 goal.clone(),
                 crate::RequestSource::WebSocket {
@@ -435,7 +435,7 @@ mod tests {
             params: serde_json::json!({}),
         };
         
-        let json = serde_json::to_string(&msg).unwrap();
+        let json = serde_json::to_string(&msg).expect("operation failed");
         assert!(json.contains("\"action\":\"create_task\""));
         assert!(json.contains("Test hedefi"));
     }
@@ -447,7 +447,7 @@ mod tests {
             queue_position: 5,
         };
         
-        let json = serde_json::to_string(&msg).unwrap();
+        let json = serde_json::to_string(&msg).expect("operation failed");
         assert!(json.contains("\"event\":\"task_created\""));
     }
     

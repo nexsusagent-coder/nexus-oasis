@@ -6,7 +6,6 @@
 use sentient_common::error::{SENTIENTError, SENTIENTResult};
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use serde_json::Value;
 
 use super::{
     WebhookProvider, WebhookResult, WebhookEvent,

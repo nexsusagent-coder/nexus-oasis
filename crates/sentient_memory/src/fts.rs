@@ -506,7 +506,7 @@ impl HybridSearchEngine {
         // Birleştirilmiş skora göre sırala
         let mut results: Vec<HybridResult> = combined.into_values().collect();
         results.sort_by(|a, b| {
-            b.combined_score.partial_cmp(&a.combined_score).unwrap()
+            b.combined_score.partial_cmp(&a.combined_score).expect("operation failed")
         });
         
         results.truncate(limit);
@@ -545,7 +545,7 @@ mod tests {
     #[test]
     fn test_normalize_turkish() {
         let fts = FtsEngine::new(
-            Arc::new(RwLock::new(Connection::open_in_memory().unwrap())),
+            Arc::new(RwLock::new(Connection::open_in_memory().expect("operation failed"))),
             Uuid::new_v4()
         );
         

@@ -35,6 +35,13 @@ toml = "0.8"
 dirs = "5"
 
 sentient_common = { path = "../sentient_common" }
+
+# URL parsing and encoding
+url = "2"
+urlencoding = "2"
+
+# Crypto
+sha2 = "0.10"
 sentient_skills = { path = "../sentient_skills" }
 
 [features]

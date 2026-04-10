@@ -175,7 +175,7 @@ impl MemoryDecay {
         let mut by_importance: Vec<f32> = entries.iter()
             .map(|e| e.importance.value())
             .collect();
-        by_importance.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        by_importance.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
         
         let avg_importance = if by_importance.is_empty() {
             0.0

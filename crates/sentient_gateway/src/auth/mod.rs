@@ -311,11 +311,11 @@ mod tests {
         let manager = AuthManager::new(config);
         
         // Token oluştur
-        let token = manager.create_token("user123", UserRole::User).unwrap();
+        let token = manager.create_token("user123", UserRole::User).expect("operation failed");
         assert!(!token.is_empty());
         
         // Doğrula
-        let claims = manager.verify_token(&token).unwrap();
+        let claims = manager.verify_token(&token).expect("operation failed");
         assert_eq!(claims.sub, "user123");
         assert_eq!(claims.role, UserRole::User);
     }

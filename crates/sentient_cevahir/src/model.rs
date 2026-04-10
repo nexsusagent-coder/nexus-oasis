@@ -29,7 +29,7 @@ impl ModelWrapper {
     }
     
     /// Metin üret (stub)
-    pub fn generate(&self, prompt: &str, max_new_tokens: usize) -> Result<String> {
+    pub fn generate(&self, prompt: &str, _max_new_tokens: usize) -> Result<String> {
         Ok(format!("[Cevahir stub response to: {}]", prompt))
     }
     

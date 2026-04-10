@@ -436,6 +436,16 @@ impl SetupWizard {
             ("ollama", "codellama:34b", "ollama/codellama:34b"),
             ("ollama", "codellama:13b", "ollama/codellama:13b"),
             ("ollama", "codellama:7b", "ollama/codellama:7b"),
+            // ═══════════════════════════════════════════════════════════════
+            // GEMMA 4 - SENTIENT OS KERNEL (DEFAULT LOCAL)
+            // ═══════════════════════════════════════════════════════════════
+            ("ollama", "gemma4:31b", "ollama/gemma4:31b (KERNEL)"),
+            ("ollama", "gemma4:26b-moe", "ollama/gemma4:26b-moe"),
+            ("ollama", "gemma4:e4b", "ollama/gemma4:e4b (Edge)"),
+            ("ollama", "gemma4:e2b", "ollama/gemma4:e2b (Mobile)"),
+            // ═══════════════════════════════════════════════════════════════
+            // GEMMA 2 - Previous Generation
+            // ═══════════════════════════════════════════════════════════════
             ("ollama", "gemma2:27b", "ollama/gemma2:27b"),
             ("ollama", "gemma2:9b", "ollama/gemma2:9b"),
             ("ollama", "gemma:7b", "ollama/gemma:7b"),
@@ -585,6 +595,153 @@ impl SetupWizard {
             ("watsonx", "meta-llama/llama-3-70b-instruct", "watsonx/meta-llama/llama-3-70b-instruct"),
             
             // === CUSTOM ===
+
+            // ═══════════════════════════════════════════════════════════════
+            // HUGGINGFACE - Açık Kaynak Model Hub (ÜCRETSİZ TIER)
+            // ═══════════════════════════════════════════════════════════════
+            ("huggingface", "meta-llama/Llama-3.3-70B-Instruct", "huggingface/meta-llama/Llama-3.3-70B-Instruct"),
+            ("huggingface", "meta-llama/Llama-3.1-405B-Instruct", "huggingface/meta-llama/Llama-3.1-405B-Instruct"),
+            ("huggingface", "mistralai/Mistral-Large-Instruct-2407", "huggingface/mistralai/Mistral-Large-Instruct"),
+            ("huggingface", "mistralai/Mixtral-8x22B-Instruct-v0.1", "huggingface/mistralai/Mixtral-8x22B-Instruct"),
+            ("huggingface", "mistralai/Mixtral-8x7B-Instruct-v0.1", "huggingface/mistralai/Mixtral-8x7B-Instruct"),
+            ("huggingface", "mistralai/Mistral-7B-Instruct-v0.3", "huggingface/mistralai/Mistral-7B-Instruct"),
+            ("huggingface", "google/gemma-2-27b-it", "huggingface/google/gemma-2-27b-it"),
+            ("huggingface", "google/gemma-2-9b-it", "huggingface/google/gemma-2-9b-it"),
+            ("huggingface", "google/gemma-2-2b-it", "huggingface/google/gemma-2-2b-it"),
+            ("huggingface", "Qwen/Qwen2.5-72B-Instruct", "huggingface/Qwen/Qwen2.5-72B-Instruct"),
+            ("huggingface", "Qwen/Qwen2.5-32B-Instruct", "huggingface/Qwen/Qwen2.5-32B-Instruct"),
+            ("huggingface", "Qwen/Qwen2.5-14B-Instruct", "huggingface/Qwen/Qwen2.5-14B-Instruct"),
+            ("huggingface", "Qwen/Qwen2.5-7B-Instruct", "huggingface/Qwen/Qwen2.5-7B-Instruct"),
+            ("huggingface", "Qwen/Qwen2.5-Coder-32B-Instruct", "huggingface/Qwen/Qwen2.5-Coder-32B-Instruct"),
+            ("huggingface", "deepseek-ai/DeepSeek-V3", "huggingface/deepseek-ai/DeepSeek-V3"),
+            ("huggingface", "deepseek-ai/DeepSeek-Coder-V2-Instruct", "huggingface/deepseek-ai/DeepSeek-Coder-V2"),
+            ("huggingface", "microsoft/Phi-4", "huggingface/microsoft/Phi-4"),
+            ("huggingface", "microsoft/Phi-3-medium-4k-instruct", "huggingface/microsoft/Phi-3-medium"),
+            ("huggingface", "microsoft/Phi-3-mini-4k-instruct", "huggingface/microsoft/Phi-3-mini"),
+            ("huggingface", "tiiuae/falcon-180B-chat", "huggingface/tiiuae/falcon-180B-chat"),
+            ("huggingface", "tiiuae/falcon-40B-instruct", "huggingface/tiiuae/falcon-40B-instruct"),
+            ("huggingface", "databricks/dbrx-instruct", "huggingface/databricks/dbrx-instruct"),
+            ("huggingface", "allenai/OLMo-7B-Instruct", "huggingface/allenai/OLMo-7B-Instruct"),
+            ("huggingface", "bigscience/bloom", "huggingface/bigscience/bloom"),
+            ("huggingface", "openchat/openchat-3.5-1210", "huggingface/openchat/openchat-3.5"),
+            ("huggingface", "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO", "huggingface/Nous-Hermes-2-Mixtral"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // FIREWORKS AI - Hızlı Inference (UCUZ)
+            // ═══════════════════════════════════════════════════════════════
+            ("fireworks", "accounts/fireworks/models/llama-v3p3-70b-instruct", "fireworks/llama-v3.3-70b"),
+            ("fireworks", "accounts/fireworks/models/llama-v3p1-405b-instruct", "fireworks/llama-v3.1-405b"),
+            ("fireworks", "accounts/fireworks/models/llama-v3p1-70b-instruct", "fireworks/llama-v3.1-70b"),
+            ("fireworks", "accounts/fireworks/models/llama-v3p1-8b-instruct", "fireworks/llama-v3.1-8b"),
+            ("fireworks", "accounts/fireworks/models/qwen2p5-72b-instruct", "fireworks/qwen2.5-72b"),
+            ("fireworks", "accounts/fireworks/models/qwen2p5-coder-32b-instruct", "fireworks/qwen2.5-coder-32b"),
+            ("fireworks", "accounts/fireworks/models/mixtral-8x7b-instruct", "fireworks/mixtral-8x7b"),
+            ("fireworks", "accounts/fireworks/models/mixtral-8x22b-instruct", "fireworks/mixtral-8x22b"),
+            ("fireworks", "accounts/fireworks/models/deepseek-v3", "fireworks/deepseek-v3"),
+            ("fireworks", "accounts/fireworks/models/gemma2-27b-it", "fireworks/gemma2-27b"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // NVIDIA NIM - Enterprise GPU Inference
+            // ═══════════════════════════════════════════════════════════════
+            ("nvidia", "meta/llama-3.3-70b-instruct", "nvidia/llama-3.3-70b"),
+            ("nvidia", "meta/llama-3.1-405b-instruct", "nvidia/llama-3.1-405b"),
+            ("nvidia", "meta/llama-3.1-70b-instruct", "nvidia/llama-3.1-70b"),
+            ("nvidia", "meta/llama-3.1-8b-instruct", "nvidia/llama-3.1-8b"),
+            ("nvidia", "mistralai/mistral-large", "nvidia/mistral-large"),
+            ("nvidia", "mistralai/mixtral-8x7b-instruct-v0.1", "nvidia/mixtral-8x7b"),
+            ("nvidia", "google/gemma-2-27b-it", "nvidia/gemma-2-27b"),
+            ("nvidia", "google/gemma-2-9b-it", "nvidia/gemma-2-9b"),
+            ("nvidia", "nvidia/nemotron-4-340b-instruct", "nvidia/nemotron-4-340b"),
+            ("nvidia", "microsoft/phi-3-mini-4k-instruct", "nvidia/phi-3-mini"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // NOVITA AI - Ucuz LLM API
+            // ═══════════════════════════════════════════════════════════════
+            ("novita", "meta-llama/llama-3.3-70b-instruct", "novita/llama-3.3-70b"),
+            ("novita", "meta-llama/llama-3.1-70b-instruct", "novita/llama-3.1-70b"),
+            ("novita", "meta-llama/llama-3.1-8b-instruct", "novita/llama-3.1-8b"),
+            ("novita", "mistralai/mistral-7b-instruct", "novita/mistral-7b"),
+            ("novita", "mistralai/mixtral-8x7b-instruct", "novita/mixtral-8x7b"),
+            ("novita", "google/gemma-2-9b-it", "novita/gemma-2-9b"),
+            ("novita", "qwen/qwen-2-7b-instruct", "novita/qwen-2-7b"),
+            ("novita", "deepseek/deepseek-r1", "novita/deepseek-r1"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // AI21 LABS - Jamba & Jurassic
+            // ═══════════════════════════════════════════════════════════════
+            ("ai21", "jamba-1-5-large", "ai21/jamba-1-5-large"),
+            ("ai21", "jamba-1-5-mini", "ai21/jamba-1-5-mini"),
+            ("ai21", "jamba-instruct", "ai21/jamba-instruct"),
+            ("ai21", "jurassic-2-mid", "ai21/jurassic-2-mid"),
+            ("ai21", "jurassic-2-large", "ai21/jurassic-2-large"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // STABILITY AI - StableLM
+            // ═══════════════════════════════════════════════════════════════
+            ("stability", "stablelm-2-12b-chat", "stability/stablelm-2-12b-chat"),
+            ("stability", "stablelm-2-7b-chat", "stability/stablelm-2-7b-chat"),
+            ("stability", "stablelm-2-1-6b-chat", "stability/stablelm-2-1-6b-chat"),
+            ("stability", "stablelm-zephyr-3b", "stability/stablelm-zephyr-3b"),
+            ("stability", "stable-code-3b", "stability/stable-code-3b"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // INFLECTION AI - Pi
+            // ═══════════════════════════════════════════════════════════════
+            ("inflection", "inflection-3-pi", "inflection/inflection-3-pi"),
+            ("inflection", "inflection-3-productivity", "inflection/inflection-3-productivity"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // SILICONFLOW - Çin Provider
+            // ═══════════════════════════════════════════════════════════════
+            ("siliconflow", "Qwen/Qwen2.5-72B-Instruct", "siliconflow/Qwen2.5-72B"),
+            ("siliconflow", "Qwen/Qwen2.5-32B-Instruct", "siliconflow/Qwen2.5-32B"),
+            ("siliconflow", "Qwen/Qwen2.5-7B-Instruct", "siliconflow/Qwen2.5-7B"),
+            ("siliconflow", "deepseek-ai/DeepSeek-V3", "siliconflow/DeepSeek-V3"),
+            ("siliconflow", "deepseek-ai/DeepSeek-R1", "siliconflow/DeepSeek-R1"),
+            ("siliconflow", "meta-llama/Llama-3.3-70B-Instruct", "siliconflow/Llama-3.3-70B"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // HYPERBOLIC - Decentralized Inference
+            // ═══════════════════════════════════════════════════════════════
+            ("hyperbolic", "meta-llama/llama-3.3-70b-instruct", "hyperbolic/llama-3.3-70b"),
+            ("hyperbolic", "meta-llama/llama-3.1-70b-instruct", "hyperbolic/llama-3.1-70b"),
+            ("hyperbolic", "mistralai/mistral-7b-instruct", "hyperbolic/mistral-7b"),
+            ("hyperbolic", "deepseek-ai/deepseek-v3", "hyperbolic/deepseek-v3"),
+            ("hyperbolic", "qwen/qwen-2.5-72b-instruct", "hyperbolic/qwen-2.5-72b"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // LEPTON AI - Serverless Inference
+            // ═══════════════════════════════════════════════════════════════
+            ("lepton", "llama3-70b", "lepton/llama3-70b"),
+            ("lepton", "llama3-8b", "lepton/llama3-8b"),
+            ("lepton", "mixtral-8x7b", "lepton/mixtral-8x7b"),
+            ("lepton", "qwen2.5-72b", "lepton/qwen2.5-72b"),
+            ("lepton", "gemma-2-27b", "lepton/gemma-2-27b"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // RUNPOD - Serverless GPU
+            // ═══════════════════════════════════════════════════════════════
+            ("runpod", "llama-3-70b", "runpod/llama-3-70b"),
+            ("runpod", "llama-3-8b", "runpod/llama-3-8b"),
+            ("runpod", "mixtral-8x7b", "runpod/mixtral-8x7b"),
+            ("runpod", "qwen-2.5-72b", "runpod/qwen-2.5-72b"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // MODAL - Serverless Inference
+            // ═══════════════════════════════════════════════════════════════
+            ("modal", "llama-3.3-70b", "modal/llama-3.3-70b"),
+            ("modal", "llama-3.1-405b", "modal/llama-3.1-405b"),
+            ("modal", "mixtral-8x22b", "modal/mixtral-8x22b"),
+            
+            // ═══════════════════════════════════════════════════════════════
+            // G4F - GPT4Free (ÜCRETSİZ)
+            // ═══════════════════════════════════════════════════════════════
+            ("g4f", "gpt-4", "g4f/gpt-4"),
+            ("g4f", "gpt-4-turbo", "g4f/gpt-4-turbo"),
+            ("g4f", "gpt-3.5-turbo", "g4f/gpt-3.5-turbo"),
+            ("g4f", "claude-3-opus", "g4f/claude-3-opus"),
+            ("g4f", "gemini-pro", "g4f/gemini-pro"),
+            
             ("custom", "custom", "custom/custom"),
             
             // === SKIP ===
@@ -615,7 +772,7 @@ impl SetupWizard {
         println!("[OK] Selected: {} ({})", default_model, provider_id);
         
         // API Key input (hidden) - except for local Ollama
-        if provider_id != "ollama" {
+        if provider_id != "ollama" && provider_id != "g4f" {
             self.prompt_api_key(provider_id)?;
         } else {
             println!();
@@ -657,6 +814,21 @@ impl SetupWizard {
             "cohere" => "Cohere API Key",
             "replicate" => "Replicate API Key",
             "watsonx" => "IBM WatsonX API Key",
+            // === YENİ PROVIDER'LAR ===
+            "huggingface" => "HuggingFace API Token (hf_...)",
+            "fireworks" => "Fireworks AI API Key",
+            "nvidia" => "NVIDIA API Key (nvapi-...)",
+            "novita" => "Novita AI API Key",
+            "ai21" => "AI21 Labs API Key",
+            "stability" => "Stability AI API Key (sk-...)",
+            "inflection" => "Inflection AI API Key",
+            "character" => "Character.AI Token",
+            "siliconflow" => "SiliconFlow API Key",
+            "hyperbolic" => "Hyperbolic API Key",
+            "lepton" => "Lepton AI API Key",
+            "runpod" => "RunPod API Key",
+            "modal" => "Modal API Key",
+            "g4f" => "G4F - Ücretsiz (API Key gerekmez)",
             _ => "API Key",
         };
         
@@ -1547,7 +1719,7 @@ impl SetupWizard {
         let pb = ProgressBar::new(100);
         pb.set_style(
             ProgressStyle::with_template("{spinner:.green} {msg} [{bar:40.cyan/blue}] {percent}%")
-                .unwrap()
+                .expect("operation failed")
                 .progress_chars("=> ")
         );
         

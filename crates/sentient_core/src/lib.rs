@@ -113,13 +113,13 @@ impl SENTIENTSystem {
             created_at: chrono::Utc::now(),
         };
         
-        let source_id = graph.add_node(source_node).unwrap();
-        let processor_id = graph.add_node(processor_node).unwrap();
-        let sink_id = graph.add_node(sink_node).unwrap();
+        let source_id = graph.add_node(source_node).expect("Failed to add source node");
+        let processor_id = graph.add_node(processor_node).expect("Failed to add processor node");
+        let sink_id = graph.add_node(sink_node).expect("Failed to add sink node");
         
         // Bağlantıları oluştur
-        graph.add_edge(source_id, processor_id, None).unwrap();
-        graph.add_edge(processor_id, sink_id, None).unwrap();
+        graph.add_edge(source_id, processor_id, None).expect("Failed to add edge source->processor");
+        graph.add_edge(processor_id, sink_id, None).expect("Failed to add edge processor->sink");
         
         log::info!("✅  GRAPH: Event graph düğümleri oluşturuldu ({} düğüm, {} bağlantı).", 
             graph.node_count(), graph.edge_count());

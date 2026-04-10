@@ -166,8 +166,8 @@ impl RuleEngine {
         let mut rules = Vec::new();
         
         // Başlıkları kontrol et
-        let heading_re = Regex::new(r"^#+\s+(.+)$").unwrap();
-        let checkbox_re = Regex::new(r"- \[([ xX])\]\s+(.+)$").unwrap();
+        let _heading_re = Regex::new(r"^#+\s+(.+)$").expect("operation failed");
+        let checkbox_re = Regex::new(r"- \[([ xX])\]\s+(.+)$").expect("operation failed");
         
         for line in content.lines() {
             // Checkbox kuralları

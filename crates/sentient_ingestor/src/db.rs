@@ -4,7 +4,7 @@
 
 use crate::error::{IngestorError, IngestorResult};
 use crate::unified_yaml::UnifiedSkill;
-use rusqlite::{Connection, params, OptionalExtension};
+use rusqlite::{Connection, params};
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 

@@ -17,11 +17,13 @@
 
 pub mod attestation;
 pub mod enclave;
+pub mod hardware;
 pub mod monitor;
 pub mod sealing;
 
 pub use attestation::*;
 pub use enclave::*;
+pub use hardware::*;
 pub use monitor::*;
 pub use sealing::*;
 
@@ -154,6 +156,15 @@ pub enum TeeError {
     
     #[error("Memory allocation failed: {0}")]
     MemoryAllocationFailed(String),
+    
+    #[error("IO error: {0}")]
+    IoError(String),
+}
+
+impl From<std::io::Error> for TeeError {
+    fn from(e: std::io::Error) -> Self {
+        TeeError::IoError(e.to_string())
+    }
 }
 
 impl From<TeeError> for SENTIENTError {
@@ -236,21 +247,79 @@ impl TeeSecurityLevel {
 
 /// Detect available TEE platform
 pub fn detect_platform() -> TeePlatform {
-    // In production, would check CPUID and kernel support
-    // For now, return simulation
-    #[cfg(target_arch = "x86_64")]
+    // Check for AMD SEV-SNP
+    #[cfg(target_os = "linux")]
     {
-        // Could check for SEV-SNP via /sys/module/kvm_amd/parameters/sev_snp
-        // Could check for TDX via /sys/module/kvm_intel/parameters/tdx
+        // Check SEV-SNP via kernel module
+        if std::path::Path::new("/sys/module/kvm_amd/parameters/sev_snp").exists() {
+            if let Ok(content) = std::fs::read_to_string("/sys/module/kvm_amd/parameters/sev_snp") {
+                if content.trim() == "Y" || content.trim() == "1" {
+                    log::info!("🔍 Detected AMD SEV-SNP support");
+                    return TeePlatform::AmdSevSnp;
+                }
+            }
+        }
+        
+        // Check TDX via kernel module
+        if std::path::Path::new("/sys/module/kvm_intel/parameters/tdx").exists() {
+            if let Ok(content) = std::fs::read_to_string("/sys/module/kvm_intel/parameters/tdx") {
+                if content.trim() == "Y" || content.trim() == "1" {
+                    log::info!("🔍 Detected Intel TDX support");
+                    return TeePlatform::IntelTdx;
+                }
+            }
+        }
+        
+        // Check CPUID for SEV support (fallback)
+        if let Ok(cpuinfo) = std::fs::read_to_string("/proc/cpuinfo") {
+            if cpuinfo.contains("sev") {
+                log::debug!("CPU supports SEV, checking for SNP...");
+            }
+        }
     }
     
+    #[cfg(target_os = "windows")]
+    {
+        // Windows VBS (Virtualization Based Security) check
+        // Could check registry or WMI for VBS status
+        log::debug!("Windows platform - VBS check not implemented");
+    }
+    
+    log::info!("🔍 No hardware TEE detected, using simulation mode");
     TeePlatform::Simulation
 }
 
 /// Check if TEE is available on this system
 pub fn is_tee_available() -> bool {
-    // In production, would perform actual detection
-    true // Simulation is always available
+    let platform = detect_platform();
+    !matches!(platform, TeePlatform::Simulation)
+}
+
+/// Get detailed TEE capability information
+pub fn get_tee_capabilities() -> TeeCapabilities {
+    let platform = detect_platform();
+    
+    TeeCapabilities {
+        platform,
+        hardware_available: !matches!(platform, TeePlatform::Simulation),
+        attestation_supported: true,
+        sealing_supported: true,
+        secure_channels: true,
+        memory_encryption: !matches!(platform, TeePlatform::Simulation),
+        migration_support: matches!(platform, TeePlatform::AmdSevSnp),
+    }
+}
+
+/// TEE capabilities
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TeeCapabilities {
+    pub platform: TeePlatform,
+    pub hardware_available: bool,
+    pub attestation_supported: bool,
+    pub sealing_supported: bool,
+    pub secure_channels: bool,
+    pub memory_encryption: bool,
+    pub migration_support: bool,
 }
 
 #[cfg(test)]

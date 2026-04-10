@@ -154,7 +154,7 @@ mod tests {
         let tool = SedTool::new();
         let result = tool.replace("test", "deneme", "Bu bir test cümlesi", true);
         assert!(result.is_ok());
-        assert!(result.unwrap().contains("deneme"));
+        assert!(result.expect("operation failed").contains("deneme"));
     }
     
     #[test]
@@ -163,7 +163,7 @@ mod tests {
         let content = "Satır 1\nSilinecek satır\nSatır 3";
         let result = tool.delete_lines("Silinecek", content);
         assert!(result.is_ok());
-        let deleted = result.unwrap();
+        let deleted = result.expect("operation failed");
         assert!(!deleted.contains("Silinecek"));
     }
     

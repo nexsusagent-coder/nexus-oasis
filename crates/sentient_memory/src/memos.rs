@@ -664,7 +664,7 @@ mod tests {
     
     #[tokio::test]
     async fn test_memos_creation() {
-        let memos = MemOS::new(unique_config()).await.unwrap();
+        let memos = MemOS::new(unique_config()).await.expect("operation failed");
         let stats = memos.stats().await;
         
         assert_eq!(stats.total_cubes, 0);
@@ -673,8 +673,8 @@ mod tests {
     
     #[tokio::test]
     async fn test_create_cube() {
-        let memos = MemOS::new(unique_config()).await.unwrap();
-        let cube_id = memos.create_cube("test_user", CubeType::User).await.unwrap();
+        let memos = MemOS::new(unique_config()).await.expect("operation failed");
+        let cube_id = memos.create_cube("test_user", CubeType::User).await.expect("operation failed");
         
         assert!(!cube_id.is_nil());
         
@@ -685,27 +685,27 @@ mod tests {
     
     #[tokio::test]
     async fn test_get_or_create_user_cube() {
-        let memos = MemOS::new(unique_config()).await.unwrap();
+        let memos = MemOS::new(unique_config()).await.expect("operation failed");
         
-        let cube1 = memos.get_or_create_user_cube("user1").await.unwrap();
-        let cube2 = memos.get_or_create_user_cube("user1").await.unwrap();
+        let cube1 = memos.get_or_create_user_cube("user1").await.expect("operation failed");
+        let cube2 = memos.get_or_create_user_cube("user1").await.expect("operation failed");
         
         assert_eq!(cube1, cube2);
         
-        let cube3 = memos.get_or_create_user_cube("user2").await.unwrap();
+        let cube3 = memos.get_or_create_user_cube("user2").await.expect("operation failed");
         assert_ne!(cube1, cube3);
     }
     
     #[tokio::test]
     async fn test_memorize() {
-        let memos = MemOS::new(unique_config()).await.unwrap();
-        let cube_id = memos.create_cube("test_user", CubeType::User).await.unwrap();
+        let memos = MemOS::new(unique_config()).await.expect("operation failed");
+        let cube_id = memos.create_cube("test_user", CubeType::User).await.expect("operation failed");
         
         let input = MemoryInput::new("Test bellek içeriği")
             .with_type(MemoryType::Semantic)
             .with_importance(Importance::high());
         
-        let memory_id = memos.memorize(cube_id, input).await.unwrap();
+        let memory_id = memos.memorize(cube_id, input).await.expect("operation failed");
         
         assert!(!memory_id.is_nil());
         

@@ -6,11 +6,13 @@ pub mod crypto;
 pub mod vault;
 pub mod secrets;
 pub mod audit;
+pub mod backends;
 
 pub use crypto::*;
 pub use vault::*;
 pub use secrets::*;
 pub use audit::*;
+pub use backends::*;
 
 use sentient_common::error::SENTIENTError;
 use serde::{Deserialize, Serialize};

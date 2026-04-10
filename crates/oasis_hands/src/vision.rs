@@ -329,7 +329,7 @@ impl VisionEngine {
             .min_by(|a, b| {
                 let dist_a = ((a.x - x).pow(2) + (a.y - y).pow(2)) as f64;
                 let dist_b = ((b.x - x).pow(2) + (b.y - y).pow(2)) as f64;
-                dist_a.partial_cmp(&dist_b).unwrap()
+                dist_a.partial_cmp(&dist_b).expect("operation failed")
             });
         
         Ok(nearest.cloned())
@@ -457,7 +457,7 @@ mod tests {
         let engine = VisionEngine::new(true);
         let capture = ScreenCapture::mock(800, 600);
         
-        let result = engine.analyze(&capture).await.unwrap();
+        let result = engine.analyze(&capture).await.expect("operation failed");
         assert!(result.elements.len() > 0);
     }
     
@@ -466,7 +466,7 @@ mod tests {
         let engine = VisionEngine::new(true);
         let capture = ScreenCapture::mock(800, 600);
         
-        let element = engine.find_element(&capture, "button").await.unwrap();
+        let element = engine.find_element(&capture, "button").await.expect("operation failed");
         assert!(element.is_some());
     }
 }

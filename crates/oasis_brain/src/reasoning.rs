@@ -5,7 +5,6 @@
 use crate::{BrainConfig, BrainError, KERNEL_MODEL};
 use sentient_local::LocalEngine;
 use serde::{Deserialize, Serialize};
-use log::info;
 
 /// Reasoning Engine
 pub struct ReasoningEngine {

@@ -470,7 +470,7 @@ mod tests {
         let result = engine.solve(captcha).await;
         assert!(result.is_ok());
         
-        let solution = result.unwrap();
+        let solution = result.expect("operation failed");
         assert!(solution.confidence > 0.0);
     }
     

@@ -271,7 +271,7 @@ mod tests {
         let info = executor.get_tool_info("git");
         assert!(info.is_some());
         
-        let info = info.unwrap();
+        let info = info.expect("operation failed");
         assert_eq!(info.name, "git");
         assert_eq!(info.category, ToolCategory::Process);
     }
@@ -281,6 +281,6 @@ mod tests {
         let executor = SENTIENTToolExecutor::new();
         let result = executor.execute("unknown_tool", HashMap::new()).await;
         assert!(!result.success);
-        assert!(result.error.unwrap().contains("bulunamadı"));
+        assert!(result.error.expect("operation failed").contains("bulunamadı"));
     }
 }

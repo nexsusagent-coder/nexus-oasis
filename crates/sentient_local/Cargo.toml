@@ -1,6 +1,6 @@
 [package]
 name = "sentient_local"
-version = "4.0.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Local LLM Integration - Gemma 4 Kernel, Ollama, GPT4All"
 authors = ["SENTIENT Core Team"]

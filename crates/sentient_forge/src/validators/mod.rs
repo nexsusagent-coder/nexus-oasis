@@ -211,7 +211,7 @@ mod tests {
     fn test_python_validator_ok() {
         let validator = PythonValidator::new();
         let code = "import requests\ndef main(): pass";
-        let result = validator.validate(code).unwrap();
+        let result = validator.validate(code).expect("operation failed");
         assert!(result.valid);
     }
     
@@ -219,7 +219,7 @@ mod tests {
     fn test_python_validator_forbidden() {
         let validator = PythonValidator::new();
         let code = "exec('hello')";
-        let result = validator.validate(code).unwrap();
+        let result = validator.validate(code).expect("operation failed");
         assert!(!result.valid);
     }
     
@@ -227,7 +227,7 @@ mod tests {
     fn test_json_validator_ok() {
         let validator = JsonValidator::new();
         let code = r#"{"name": "test", "nodes": []}"#;
-        let result = validator.validate(code).unwrap();
+        let result = validator.validate(code).expect("operation failed");
         assert!(result.valid);
     }
     
@@ -235,7 +235,7 @@ mod tests {
     fn test_json_validator_invalid() {
         let validator = JsonValidator::new();
         let code = "{invalid json}";
-        let result = validator.validate(code).unwrap();
+        let result = validator.validate(code).expect("operation failed");
         assert!(!result.valid);
     }
 }

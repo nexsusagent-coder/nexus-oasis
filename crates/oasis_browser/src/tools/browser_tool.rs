@@ -59,7 +59,7 @@ impl BrowserTool {
                 .timeout(std::time::Duration::from_secs(30))
                 .user_agent("SENTIENT/1.0 (Oasis Browser)")
                 .build()
-                .unwrap(),
+                .expect("operation failed"),
             cdp_endpoint,
         }
     }
@@ -191,36 +191,36 @@ fn html_to_markdown(html: &str) -> String {
     
     // Remove script and style
     md = regex::Regex::new(r"<script[^>]*>.*?</script>")
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "").to_string();
     md = regex::Regex::new(r"<style[^>]*>.*?</style>")
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "").to_string();
     
     // Headers
     md = regex::Regex::new(r"<h1[^>]*>(.*?)</h1>")
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "# $1\n").to_string();
     md = regex::Regex::new(r"<h2[^>]*>(.*?)</h2>")
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "## $1\n").to_string();
     md = regex::Regex::new(r"<h3[^>]*>(.*?)</h3>")
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "### $1\n").to_string();
     
     // Links
     md = regex::Regex::new(r#"<a[^>]*href="([^"]*)"[^>]*>(.*?)</a>"#)
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "[$2]($1)").to_string();
     
     // Remove remaining tags
     md = regex::Regex::new(r"<[^>]+>")
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "").to_string();
     
     // Clean whitespace
     md = regex::Regex::new(r"\n{3,}")
-        .unwrap()
+        .expect("operation failed")
         .replace_all(&md, "\n\n").to_string();
     
     md.trim().to_string()

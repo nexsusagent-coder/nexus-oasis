@@ -269,12 +269,12 @@ mod tests {
         let secret = "test_secret";
         
         // Doğru imza oluştur
-        let mut mac = HmacSha256::new_from_slice(secret.as_bytes()).unwrap();
+        let mut mac = HmacSha256::new_from_slice(secret.as_bytes()).expect("operation failed");
         mac.update(payload);
         let signature = format!("sha256={}", hex::encode(mac.finalize().into_bytes()));
         
         let result = SignatureVerifier::verify_hmac_sha256_hex(payload, secret, &signature);
-        assert!(result.unwrap());
+        assert!(result.expect("operation failed"));
     }
     
     #[test]
@@ -287,7 +287,7 @@ mod tests {
         let signature = hex::encode(hasher.finalize());
         
         let result = SignatureVerifier::verify_sha256(payload, &signature);
-        assert!(result.unwrap());
+        assert!(result.expect("operation failed"));
     }
     
     #[test]

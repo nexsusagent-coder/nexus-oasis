@@ -1,6 +1,6 @@
 [package]
 name = "sentient_agents"
-version = "3.0.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Multi-Agent Orchestration - CrewAI, AutoGen, Swarm, MetaGPT Integration"
 authors = ["SENTIENT Core Team"]

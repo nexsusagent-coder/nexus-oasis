@@ -218,7 +218,8 @@ mod tests {
     #[test]
     fn test_locale_detect() {
         let locale = Locale::detect();
-        assert!(matches!(locale.language, Language::_));
+        // Locale should have a valid language
+        assert!(!locale.language.to_string().is_empty());
     }
 
     #[test]

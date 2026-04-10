@@ -22,16 +22,25 @@ cpal = "0.15"
 hound = "3"
 rubato = "0.15"
 
+# MP3 decoding
+minimp3 = "0.5"
+
 # Whisper (via whisper-rs or API)
 whisper-rs = { version = "0.11", optional = true }
 
-# TTS APIs
-elevenlabs-rs = { version = "0.2", optional = true }
+# Vosk for offline STT
+vosk = { version = "0.3", optional = true }
+
+# Porcupine for wake word - REMOVED: not available on crates.io
+# For wake word detection, use Vosk or Whisper instead
+# pvporcupine = { version = "3", optional = true }
 
 # Other
 bytes = "1"
 base64 = "0.22"
 futures.workspace = true
+tokio-stream = "0.1"
+parking_lot = "0.12"
 
 sentient_common = { path = "../sentient_common" }
 
@@ -39,4 +48,7 @@ sentient_common = { path = "../sentient_common" }
 default = ["api"]
 api = []
 local-whisper = ["whisper-rs"]
-elevenlabs = ["elevenlabs-rs"]
+vosk-stt = ["vosk"]
+# porcupine-wake removed - pvporcupine not on crates.io
+# porcupine-wake = ["pvporcupine"]
+full-local = ["local-whisper", "vosk-stt"]

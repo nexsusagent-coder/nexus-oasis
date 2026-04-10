@@ -4,7 +4,7 @@
 //!
 //! V-GATE üzerinden LLM iletişimi.
 
-use crate::error::{ManusError, ManusResult};
+use crate::error::ManusResult;
 
 /// ─── MANUS V-GATE ───
 

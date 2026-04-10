@@ -10,8 +10,6 @@ use crate::{
     types::{DecodingConfig, GenerationOutput, TokenizationResult, Strategy, CognitiveResult},
     error::Result,
 };
-use std::sync::Arc;
-use parking_lot::RwLock;
 
 /// Ana Cevahir Bridge
 pub struct CevahirBridge {

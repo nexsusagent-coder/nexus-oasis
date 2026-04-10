@@ -21,11 +21,11 @@ impl ChromaClient {
         Ok(format!("Collection {} created", name))
     }
     
-    pub async fn add_documents(&self, collection: &str, docs: Vec<VectorDocument>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn add_documents(&self, _collection: &str, _docs: Vec<VectorDocument>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         Ok(())
     }
     
-    pub async fn search(&self, collection: &str, query: &[f32], limit: usize) -> Result<Vec<SearchResult>, Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn search(&self, _collection: &str, _query: &[f32], _limit: usize) -> Result<Vec<SearchResult>, Box<dyn std::error::Error + Send + Sync>> {
         Ok(vec![])
     }
 }

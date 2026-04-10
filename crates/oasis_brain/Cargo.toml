@@ -1,6 +1,6 @@
 [package]
 name = "oasis_brain"
-version = "4.0.0"
+version.workspace = true
 edition = "2021"
 description = "OASIS Brain - SENTIENT OS Autonomous Thinking Module with Gemma 4"
 authors = ["SENTIENT Core Team"]

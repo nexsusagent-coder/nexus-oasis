@@ -16,7 +16,6 @@ use crate::sovereign::SovereignPolicy;
 use async_trait::async_trait;
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::process::ExitStatus;
 use std::time::Duration;
 use tokio::process::Command;
 use tokio::time::timeout;
@@ -77,7 +76,7 @@ impl BashTool {
         let shell = if cfg!(target_os = "windows") { "cmd" } else { "bash" };
         let shell_arg = if cfg!(target_os = "windows") { "/C" } else { "-c" };
         
-        let mut child = Command::new(shell)
+        let child = Command::new(shell)
             .arg(shell_arg)
             .arg(&input.command)
             .current_dir(&cwd)

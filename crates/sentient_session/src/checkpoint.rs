@@ -179,16 +179,16 @@ mod tests {
     
     #[tokio::test]
     async fn test_checkpoint_save_load() {
-        let dir = tempdir().unwrap();
+        let dir = tempdir().expect("operation failed");
         let manager = CheckpointManager::new(dir.path());
         
         let mut session = Session::new(SessionConfig::default());
-        session.start().unwrap();
+        session.start().expect("operation failed");
         
-        let checkpoint = manager.save(&session).await.unwrap();
+        let checkpoint = manager.save(&session).await.expect("operation failed");
         assert_eq!(checkpoint.session_id, session.id);
         
-        let loaded = manager.load(session.id).await.unwrap();
+        let loaded = manager.load(session.id).await.expect("operation failed");
         assert_eq!(loaded.id, session.id);
     }
 }

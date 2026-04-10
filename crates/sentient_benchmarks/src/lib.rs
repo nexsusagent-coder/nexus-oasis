@@ -20,9 +20,8 @@ pub mod config;
 pub use config::BenchmarkConfig;
 pub use report::{BenchmarkReport, BenchmarkResult, ComparisonResult};
 
-use chrono::{DateTime, Utc};
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// Benchmark metrics
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -68,9 +67,18 @@ impl Metrics {
 
         let iterations = durations.len() as u64;
         let total: u64 = durations.iter().sum();
-        let mean = durations.iter().map(|&d| d as f64).mean();
-        let median = durations.iter().map(|&d| d as f64).median();
-        let std_dev = durations.iter().map(|&d| d as f64).std_dev();
+        let values: Vec<f64> = durations.iter().map(|&d| d as f64).collect();
+        let mean = values.iter().map(|&d| d).mean();
+        let median = {
+            let mut sorted = values.clone();
+            sorted.sort_by(|a, b| a.partial_cmp(b).expect("operation failed"));
+            if sorted.len() % 2 == 0 {
+                (sorted[sorted.len() / 2 - 1] + sorted[sorted.len() / 2]) / 2.0
+            } else {
+                sorted[sorted.len() / 2]
+            }
+        };
+        let std_dev = values.iter().map(|&d| d).std_dev();
         let min = durations.iter().min().copied().unwrap_or(0);
         let max = durations.iter().max().copied().unwrap_or(0);
 
@@ -203,10 +211,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_benchmark_runner() {
-        let config = BenchmarkConfig {
-            iterations: 100,
-            warmup_iterations: 10,
-        };
+        let config = BenchmarkConfig::quick();
         let mut runner = BenchmarkRunner::new(config);
 
         let metrics = runner.run("test_op", || async {

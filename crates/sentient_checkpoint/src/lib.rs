@@ -17,13 +17,11 @@ pub use ratchet::{Ratchet, RatchetConfig, RatchetState, RatchetStep};
 pub use chain::{Chain, ChainBlock, ChainVerifier};
 pub use recovery::{RecoveryManager, RecoveryPoint};
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use uuid::Uuid;
-use chrono::{DateTime, Utc};
-use sha2::{Sha256, Digest};
+use sha2::Digest;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // RATCHET ERROR
@@ -142,16 +140,16 @@ mod tests {
     #[tokio::test]
     async fn test_ratchet_creation() {
         let manager = RatchetManager::new();
-        let id = manager.create(RatchetConfig::default()).await.unwrap();
+        let id = manager.create(RatchetConfig::default()).await.expect("operation failed");
         
-        let state = manager.get_state(id).await.unwrap();
+        let state = manager.get_state(id).await.expect("operation failed");
         assert_eq!(state.step_count, 0);
     }
     
     #[tokio::test]
     async fn test_ratchet_advance() {
         let manager = RatchetManager::new();
-        let id = manager.create(RatchetConfig::default()).await.unwrap();
+        let id = manager.create(RatchetConfig::default()).await.expect("operation failed");
         
         let step = RatchetStep {
             name: "test".into(),
@@ -159,14 +157,14 @@ mod tests {
             metadata: HashMap::new(),
         };
         
-        let state = manager.advance(id, step).await.unwrap();
+        let state = manager.advance(id, step).await.expect("operation failed");
         assert_eq!(state.step_count, 1);
     }
     
     #[tokio::test]
     async fn test_chain_verification() {
         let manager = RatchetManager::new();
-        let id = manager.create(RatchetConfig::default()).await.unwrap();
+        let id = manager.create(RatchetConfig::default()).await.expect("operation failed");
         
         // İlerle
         for i in 0..5 {
@@ -175,11 +173,11 @@ mod tests {
                 data: serde_json::json!({"index": i}),
                 metadata: HashMap::new(),
             };
-            manager.advance(id, step).await.unwrap();
+            manager.advance(id, step).await.expect("operation failed");
         }
         
         // Doğrula
-        let valid = manager.verify_chain(id).await.unwrap();
+        let valid = manager.verify_chain(id).await.expect("operation failed");
         assert!(valid);
     }
 }

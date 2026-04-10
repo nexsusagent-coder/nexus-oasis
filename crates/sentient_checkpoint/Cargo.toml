@@ -1,6 +1,6 @@
 [package]
 name = "sentient_checkpoint"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "A4 Ratchet Pattern - Native Progress Checkpoint System for SENTIENT"
 authors = ["NEXUS OASIS"]

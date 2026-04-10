@@ -18,7 +18,7 @@ chrono.workspace = true
 uuid.workspace = true
 
 # Telegram Bot API
-teloxide = { version = "0.13", features = ["full"] }
+teloxide = { version = "0.13", default-features = false, features = ["rustls"] }
 
 # Discord (via serenity)
 serenity = { version = "0.12", default-features = false, features = [
@@ -38,6 +38,7 @@ regex.workspace = true
 
 # Crypto for signature verification
 hmac = "0.12"
+sha1 = "0.10"
 sha2 = "0.10"
 hex = "0.4"
 

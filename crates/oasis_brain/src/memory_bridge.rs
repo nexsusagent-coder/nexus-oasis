@@ -7,7 +7,6 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use chrono::{DateTime, Utc};
-use log::info;
 
 /// Zero-copy configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]

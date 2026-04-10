@@ -27,10 +27,10 @@ use std::sync::Arc;
 use tokio::sync::RwLock;
 
 pub use skill::{MarketplaceSkill, SkillManifest, SkillMetadata};
-pub use registry::{SkillRegistry, RegistryConfig};
+pub use registry::SkillRegistry;
 pub use install::{SkillInstaller, InstallResult};
 pub use search::{SkillSearch, SearchResult};
-pub use config::MarketplaceConfig;
+pub use config::{MarketplaceConfig, RegistryConfig};
 
 /// ─── Marketplace Client ───
 
@@ -214,6 +214,9 @@ pub enum MarketplaceError {
     
     #[error("TOML error: {0}")]
     Toml(#[from] toml::de::Error),
+    
+    #[error("TOML serialization error: {0}")]
+    TomlSer(#[from] toml::ser::Error),
     
     #[error("Internal error: {0}")]
     Internal(String),

@@ -192,7 +192,7 @@ impl ToolRegistry {
     
     /// Araç çalıştır
     pub fn execute(&self, name: &str, params: HashMap<String, String>) -> ManusResult<ToolResult> {
-        let tool = self.tools.get(name)
+        let _tool = self.tools.get(name)
             .ok_or_else(|| ManusError::General(format!("Araç bulunamadı: {}", name)))?;
         
         log::info!("🔧  MANUS-TOOLS: {} çalıştırılıyor", name);
@@ -320,7 +320,7 @@ mod tests {
         let mut params = HashMap::new();
         params.insert("expression".into(), "2 + 3".into());
         
-        let result = registry.execute("calculate", params).unwrap();
+        let result = registry.execute("calculate", params).expect("operation failed");
         assert!(result.success);
     }
 
@@ -331,7 +331,7 @@ mod tests {
         params.insert("text".into(), "hello".into());
         params.insert("operation".into(), "upper".into());
         
-        let result = registry.execute("text_transform", params).unwrap();
+        let result = registry.execute("text_transform", params).expect("operation failed");
         assert_eq!(result.output, "HELLO");
     }
 }

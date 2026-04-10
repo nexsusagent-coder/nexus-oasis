@@ -1,6 +1,7 @@
 //! Vault Implementation (Enterprise Grade 2026)
 
 use crate::{AccessLevel, SecureBytes, VaultError, VaultResult, SecureHash};
+use crate::crypto::{VaultCrypto, SecureKey, EncryptedData, EncryptionAlgorithm};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use chrono::{DateTime, Utc};
@@ -18,19 +19,6 @@ pub struct VaultConfig {
     pub encryption_algorithm: EncryptionAlgorithm,
     /// Key derivation function
     pub kdf: KeyDerivationFunction,
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
-pub enum EncryptionAlgorithm {
-    Aes256Gcm,
-    ChaCha20Poly1305,
-    XChaCha20Poly1305,
-}
-
-impl Default for EncryptionAlgorithm {
-    fn default() -> Self {
-        Self::XChaCha20Poly1305
-    }
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
@@ -96,8 +84,8 @@ impl SecretMeta {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StoredSecret {
     pub meta: SecretMeta,
-    pub encrypted_value: Vec<u8>,
-    pub nonce: Vec<u8>,
+    pub encrypted_value: EncryptedData,
+    pub salt: Vec<u8>,
     pub key_hash: String,
     pub checksum: String,
 }
@@ -108,6 +96,8 @@ pub struct OasisVault {
     secrets: HashMap<String, StoredSecret>,
     secret_versions: HashMap<String, Vec<StoredSecret>>,
     is_locked: bool,
+    master_key: Option<SecureKey>,
+    salt: Option<[u8; 16]>,
     key_hash: Option<String>,
     audit_log: Vec<AuditEntry>,
     last_activity: DateTime<Utc>,
@@ -141,6 +131,8 @@ impl OasisVault {
             secrets: HashMap::new(),
             secret_versions: HashMap::new(),
             is_locked: true,
+            master_key: None,
+            salt: None,
             key_hash: None,
             audit_log: Vec::new(),
             last_activity: Utc::now(),
@@ -149,18 +141,29 @@ impl OasisVault {
     
     /// Unlock vault with master password
     pub fn unlock(&mut self, master_password: &str) -> VaultResult<()> {
-        // Derive key from password using configured KDF
+        // Generate or use existing salt
+        let salt = if let Some(existing) = &self.salt {
+            *existing
+        } else {
+            let new_salt = VaultCrypto::generate_salt();
+            self.salt = Some(new_salt);
+            new_salt
+        };
+        
+        // Derive key from password using Argon2id
+        self.master_key = Some(SecureKey::from_password(master_password, &salt)?);
         self.key_hash = Some(SecureHash::hash(master_password.as_bytes()));
         self.is_locked = false;
         self.last_activity = Utc::now();
         
-        self.audit(VaultAction::Unlock, None, true, "Vault unlocked");
-        log::info!("🔐 Vault unlocked");
+        self.audit(VaultAction::Unlock, None, true, "Vault unlocked with Argon2id key derivation");
+        log::info!("🔐 Vault unlocked (AES-256-GCM encryption enabled)");
         Ok(())
     }
     
     /// Lock vault
     pub fn lock(&mut self) {
+        self.master_key = None;
         self.key_hash = None;
         self.is_locked = true;
         
@@ -205,18 +208,21 @@ impl OasisVault {
         
         let id = meta.id;
         
-        // Encrypt the value
-        let encrypted = self.encrypt(&value)?;
-        let nonce = self.generate_nonce();
+        // Encrypt the value using AES-256-GCM
+        let key = self.master_key.as_ref()
+            .ok_or(VaultError::VaultLocked)?;
+        let encrypted = VaultCrypto::encrypt(value.as_bytes(), key.as_bytes())?;
+        
+        let salt = self.salt.unwrap_or_default();
         let key_hash = self.key_hash.clone().unwrap_or_default();
         
         // Calculate checksum
-        let checksum = self.calculate_checksum(&encrypted);
+        let checksum = self.calculate_checksum(&encrypted.ciphertext);
         
         let stored = StoredSecret {
             meta,
             encrypted_value: encrypted,
-            nonce,
+            salt: salt.to_vec(),
             key_hash,
             checksum,
         };
@@ -236,7 +242,7 @@ impl OasisVault {
         
         self.secrets.insert(path.to_string(), stored);
         
-        self.audit(VaultAction::Store, Some(path), true, "Secret stored");
+        self.audit(VaultAction::Store, Some(path), true, "Secret stored with AES-256-GCM");
         Ok(id)
     }
     
@@ -253,13 +259,15 @@ impl OasisVault {
         }
         
         // Verify checksum
-        let expected_checksum = self.calculate_checksum(&stored.encrypted_value);
+        let expected_checksum = self.calculate_checksum(&stored.encrypted_value.ciphertext);
         if stored.checksum != expected_checksum {
             return Err(VaultError::DecryptionFailed("Checksum mismatch".into()));
         }
         
-        // Decrypt
-        let decrypted = self.decrypt(&stored.encrypted_value)?;
+        // Decrypt using AES-256-GCM
+        let key = self.master_key.as_ref()
+            .ok_or(VaultError::VaultLocked)?;
+        let decrypted = VaultCrypto::decrypt(&stored.encrypted_value, key.as_bytes())?;
         
         Ok(SecureBytes::new(decrypted))
     }
@@ -275,7 +283,10 @@ impl OasisVault {
             .find(|s| s.meta.version == version)
             .ok_or_else(|| VaultError::SecretNotFound(format!("{} version {}", path, version)))?;
         
-        let decrypted = self.decrypt(&stored.encrypted_value)?;
+        // Decrypt using AES-256-GCM
+        let key = self.master_key.as_ref()
+            .ok_or(VaultError::VaultLocked)?;
+        let decrypted = VaultCrypto::decrypt(&stored.encrypted_value, key.as_bytes())?;
         Ok(SecureBytes::new(decrypted))
     }
     
@@ -320,21 +331,43 @@ impl OasisVault {
         self.check_locked()?;
         self.touch();
         
+        // Get current key for re-encryption
+        let old_key = self.master_key.clone()
+            .ok_or(VaultError::VaultLocked)?;
+        
+        // Generate new salt and derive new key
+        let new_salt = VaultCrypto::generate_salt();
+        let new_key = SecureKey::from_password(new_master_password, &new_salt)?;
         let new_key_hash = SecureHash::hash(new_master_password.as_bytes());
         
         // Re-encrypt all secrets with new key
-        for (path, stored) in &self.secrets {
-            // Decrypt with old key
-            let decrypted = self.decrypt(&stored.encrypted_value)?;
-            
-            // TODO: Re-encrypt with new key
-            let _ = (path, decrypted);
+        let paths: Vec<String> = self.secrets.keys().cloned().collect();
+        for path in paths {
+            if let Some(stored) = self.secrets.get(&path) {
+                // Decrypt with old key
+                let decrypted = VaultCrypto::decrypt(&stored.encrypted_value, old_key.as_bytes())?;
+                
+                // Re-encrypt with new key
+                let re_encrypted = VaultCrypto::encrypt(&decrypted, new_key.as_bytes())?;
+                
+                // Update stored secret
+                if let Some(secret) = self.secrets.get_mut(&path) {
+                    secret.encrypted_value = re_encrypted;
+                    secret.salt = new_salt.to_vec();
+                    secret.key_hash = new_key_hash.clone();
+                    secret.meta.updated_at = Utc::now();
+                }
+            }
         }
         
+        // Update vault with new key
+        self.master_key = Some(new_key);
+        self.salt = Some(new_salt);
         self.key_hash = Some(new_key_hash);
-        self.audit(VaultAction::RotateKey, None, true, "Key rotated");
         
-        log::info!("🔄 Vault key rotated");
+        self.audit(VaultAction::RotateKey, None, true, "Key rotated with Argon2id re-derivation");
+        
+        log::info!("🔄 Vault key rotated successfully");
         Ok(())
     }
     
@@ -352,13 +385,17 @@ impl OasisVault {
                 "path": s.meta.path,
                 "version": s.meta.version,
                 "access_level": s.meta.access_level,
-                "encrypted": hex::encode(&s.encrypted_value),
+                "encrypted": hex::encode(&s.encrypted_value.ciphertext),
+                "nonce": hex::encode(&s.encrypted_value.nonce),
+                "algorithm": s.encrypted_value.algorithm,
             }))
             .collect::<Vec<_>>();
         
         Ok(serde_json::json!({
-            "version": "1.0",
+            "version": "2.0",
             "algorithm": self.config.encryption_algorithm,
+            "encryption": "AES-256-GCM",
+            "kdf": "Argon2id",
             "secrets": export_data,
         }))
     }
@@ -375,38 +412,6 @@ impl OasisVault {
     
     fn touch(&mut self) {
         self.last_activity = Utc::now();
-    }
-    
-    fn encrypt(&self, value: &SecureBytes) -> VaultResult<Vec<u8>> {
-        // Simplified encryption (use proper AEAD in production)
-        let key = self.key_hash.as_ref()
-            .ok_or(VaultError::VaultLocked)?;
-        
-        let mut encrypted = value.as_bytes().to_vec();
-        for (i, byte) in encrypted.iter_mut().enumerate() {
-            *byte ^= key.as_bytes()[i % key.len()];
-        }
-        
-        Ok(encrypted)
-    }
-    
-    fn decrypt(&self, encrypted: &[u8]) -> VaultResult<Vec<u8>> {
-        // Simplified decryption (use proper AEAD in production)
-        let key = self.key_hash.as_ref()
-            .ok_or(VaultError::VaultLocked)?;
-        
-        let mut decrypted = encrypted.to_vec();
-        for (i, byte) in decrypted.iter_mut().enumerate() {
-            *byte ^= key.as_bytes()[i % key.len()];
-        }
-        
-        Ok(decrypted)
-    }
-    
-    fn generate_nonce(&self) -> Vec<u8> {
-        // Generate random nonce (use proper RNG in production)
-        let timestamp = Utc::now().timestamp_nanos();
-        blake3::hash(&timestamp.to_le_bytes()).as_bytes()[..12].to_vec()
     }
     
     fn calculate_checksum(&self, data: &[u8]) -> String {
@@ -435,19 +440,19 @@ mod tests {
         let mut vault = OasisVault::new(VaultConfig::default());
         assert!(vault.is_locked());
         
-        vault.unlock("master_password").unwrap();
+        vault.unlock("master_password").expect("operation failed");
         assert!(!vault.is_locked());
     }
 
     #[test]
     fn test_vault_store_retrieve() {
         let mut vault = OasisVault::new(VaultConfig::default());
-        vault.unlock("master_password").unwrap();
+        vault.unlock("master_password").expect("operation failed");
         
         let secret = SecureBytes::new(b"my_secret_value".to_vec());
-        vault.store("/test/secret", secret, AccessLevel::Secret).unwrap();
+        vault.store("/test/secret", secret, AccessLevel::Secret).expect("operation failed");
         
-        let retrieved = vault.retrieve("/test/secret").unwrap();
+        let retrieved = vault.retrieve("/test/secret").expect("operation failed");
         assert_eq!(retrieved.as_bytes(), b"my_secret_value");
     }
     
@@ -456,25 +461,25 @@ mod tests {
         let mut config = VaultConfig::default();
         config.max_versions = 5;
         let mut vault = OasisVault::new(config);
-        vault.unlock("master_password").unwrap();
+        vault.unlock("master_password").expect("operation failed");
         
         // Store multiple versions
         for i in 0..3 {
             let secret = SecureBytes::new(format!("value_{}", i).into_bytes());
-            vault.store("/test/secret", secret, AccessLevel::Secret).unwrap();
+            vault.store("/test/secret", secret, AccessLevel::Secret).expect("operation failed");
         }
         
-        let meta = vault.get_meta("/test/secret").unwrap();
+        let meta = vault.get_meta("/test/secret").expect("operation failed");
         assert_eq!(meta.version, 3);
     }
     
     #[test]
     fn test_vault_audit() {
         let mut vault = OasisVault::new(VaultConfig::default());
-        vault.unlock("master_password").unwrap();
+        vault.unlock("master_password").expect("operation failed");
         
         let secret = SecureBytes::new(b"test".to_vec());
-        vault.store("/test", secret, AccessLevel::Secret).unwrap();
+        vault.store("/test", secret, AccessLevel::Secret).expect("operation failed");
         
         assert!(!vault.audit_log().is_empty());
     }

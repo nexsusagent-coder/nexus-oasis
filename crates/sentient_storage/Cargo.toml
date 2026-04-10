@@ -1,6 +1,6 @@
 [package]
 name = "sentient_storage"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Task Persistence Layer - SQLite veritabanı ile görev sürekliliği"
 authors = ["SENTIENT Team"]

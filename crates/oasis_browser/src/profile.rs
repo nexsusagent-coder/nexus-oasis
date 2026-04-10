@@ -14,16 +14,15 @@
 
 use aes_gcm::{
     aead::{Aead, KeyInit},
-    Aes256Gcm, Key, Nonce,
+    Aes256Gcm, Nonce,
 };
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 use chrono::{DateTime, Utc};
 use rand::RngCore;
 use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use std::fs::{self, File};
-use std::io::{Read, Write};
+use std::io::Write;
 use std::path::{Path, PathBuf};
 use thiserror::Error;
 use uuid::Uuid;
@@ -537,10 +536,10 @@ mod tests {
 
     #[test]
     fn test_create_profile() {
-        let dir = tempdir().unwrap();
-        let mut manager = ProfileManager::new_test(dir.path()).unwrap();
+        let dir = tempdir().expect("test operation failed");
+        let mut manager = ProfileManager::new_test(dir.path()).expect("test operation failed");
         
-        let profile = manager.create_profile("test-twitter", "twitter.com").unwrap();
+        let profile = manager.create_profile("test-twitter", "twitter.com").expect("test operation failed");
         
         assert_eq!(profile.name, "test-twitter");
         assert_eq!(profile.domain, "twitter.com");
@@ -549,14 +548,14 @@ mod tests {
 
     #[test]
     fn test_load_profile() {
-        let dir = tempdir().unwrap();
-        let mut manager = ProfileManager::new_test(dir.path()).unwrap();
+        let dir = tempdir().expect("test operation failed");
+        let mut manager = ProfileManager::new_test(dir.path()).expect("test operation failed");
         
         // Profil oluştur
-        let created = manager.create_profile("test-linkedin", "linkedin.com").unwrap();
+        let created = manager.create_profile("test-linkedin", "linkedin.com").expect("test operation failed");
         
         // Yükle
-        let loaded = manager.load_profile("test-linkedin").unwrap();
+        let loaded = manager.load_profile("test-linkedin").expect("test operation failed");
         
         assert_eq!(loaded.id, created.id);
         assert_eq!(loaded.name, "test-linkedin");
@@ -564,23 +563,23 @@ mod tests {
 
     #[test]
     fn test_encrypt_decrypt() {
-        let dir = tempdir().unwrap();
-        let manager = ProfileManager::new_test(dir.path()).unwrap();
+        let dir = tempdir().expect("test operation failed");
+        let manager = ProfileManager::new_test(dir.path()).expect("test operation failed");
         
         let data = r#"{"test": "value", "number": 42}"#;
         
-        let encrypted = manager.encrypt(data).unwrap();
-        let decrypted = manager.decrypt(&encrypted).unwrap();
+        let encrypted = manager.encrypt(data).expect("test operation failed");
+        let decrypted = manager.decrypt(&encrypted).expect("test operation failed");
         
         assert_eq!(data, decrypted);
     }
 
     #[test]
     fn test_update_cookies() {
-        let dir = tempdir().unwrap();
-        let mut manager = ProfileManager::new_test(dir.path()).unwrap();
+        let dir = tempdir().expect("test operation failed");
+        let mut manager = ProfileManager::new_test(dir.path()).expect("test operation failed");
         
-        manager.create_profile("test-cookies", "example.com").unwrap();
+        manager.create_profile("test-cookies", "example.com").expect("test operation failed");
         
         let cookies = vec![
             CookieData {
@@ -595,22 +594,22 @@ mod tests {
             },
         ];
         
-        manager.update_cookies("test-cookies", cookies).unwrap();
+        manager.update_cookies("test-cookies", cookies).expect("test operation failed");
         
-        let profile = manager.load_profile("test-cookies").unwrap();
+        let profile = manager.load_profile("test-cookies").expect("test operation failed");
         assert!(profile.is_authenticated || !profile.cookies.is_empty());
     }
 
     #[test]
     fn test_delete_profile() {
-        let dir = tempdir().unwrap();
-        let mut manager = ProfileManager::new_test(dir.path()).unwrap();
+        let dir = tempdir().expect("test operation failed");
+        let mut manager = ProfileManager::new_test(dir.path()).expect("test operation failed");
         
-        manager.create_profile("to-delete", "example.com").unwrap();
+        manager.create_profile("to-delete", "example.com").expect("test operation failed");
         
         assert!(manager.load_profile("to-delete").is_ok());
         
-        manager.delete_profile("to-delete").unwrap();
+        manager.delete_profile("to-delete").expect("test operation failed");
         
         assert!(manager.load_profile("to-delete").is_err());
     }

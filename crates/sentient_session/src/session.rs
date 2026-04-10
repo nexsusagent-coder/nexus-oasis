@@ -342,13 +342,13 @@ mod tests {
     fn test_session_lifecycle() {
         let mut session = Session::new(SessionConfig::default());
         
-        session.start().unwrap();
+        session.start().expect("operation failed");
         assert_eq!(session.state, SessionState::Active);
         
-        session.pause().unwrap();
+        session.pause().expect("operation failed");
         assert_eq!(session.state, SessionState::Paused);
         
-        session.end().unwrap();
+        session.end().expect("operation failed");
         assert_eq!(session.state, SessionState::Ended);
     }
     

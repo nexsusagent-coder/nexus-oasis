@@ -1,6 +1,5 @@
 //! Metrics Collector
 
-use serde::{Deserialize, Serialize};
 
 /// Metrics collector
 pub struct MetricsCollector {

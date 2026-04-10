@@ -92,19 +92,19 @@ pub fn cors_headers(allowed_origins: &[String]) -> reqwest::header::HeaderMap {
     let origin = allowed_origins.first().unwrap_or(&default_origin);
     headers.insert(
         "Access-Control-Allow-Origin",
-        origin.parse().unwrap(),
+        origin.parse().expect("Invalid CORS origin header"),
     );
     headers.insert(
         "Access-Control-Allow-Methods",
-        "GET, POST, OPTIONS".parse().unwrap(),
+        "GET, POST, OPTIONS".parse().expect("Invalid CORS methods header"),
     );
     headers.insert(
         "Access-Control-Allow-Headers",
-        "Content-Type, Authorization".parse().unwrap(),
+        "Content-Type, Authorization".parse().expect("Invalid CORS headers header"),
     );
     headers.insert(
         "Access-Control-Max-Age",
-        "86400".parse().unwrap(),
+        "86400".parse().expect("Invalid CORS max-age header"),
     );
     
     headers
@@ -130,8 +130,8 @@ mod tests {
 
     #[test]
     fn test_validate_temperature() {
-        assert_eq!(RequestValidator::validate_temperature(None).unwrap(), 0.7);
-        assert_eq!(RequestValidator::validate_temperature(Some(1.5)).unwrap(), 1.5);
+        assert_eq!(RequestValidator::validate_temperature(None).expect("operation failed"), 0.7);
+        assert_eq!(RequestValidator::validate_temperature(Some(1.5)).expect("operation failed"), 1.5);
         assert!(RequestValidator::validate_temperature(Some(-0.1)).is_err());
         assert!(RequestValidator::validate_temperature(Some(2.5)).is_err());
     }

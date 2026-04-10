@@ -17,15 +17,15 @@ impl QdrantClient {
         }
     }
     
-    pub async fn create_collection(&self, name: &str, vector_size: usize) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn create_collection(&self, _name: &str, _vector_size: usize) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         Ok(())
     }
     
-    pub async fn upsert(&self, collection: &str, docs: Vec<VectorDocument>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn upsert(&self, _collection: &str, _docs: Vec<VectorDocument>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         Ok(())
     }
     
-    pub async fn search(&self, collection: &str, vector: &[f32], limit: usize) -> Result<Vec<SearchResult>, Box<dyn std::error::Error + Send + Sync>> {
+    pub async fn search(&self, _collection: &str, _vector: &[f32], _limit: usize) -> Result<Vec<SearchResult>, Box<dyn std::error::Error + Send + Sync>> {
         Ok(vec![])
     }
 }

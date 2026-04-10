@@ -4,8 +4,7 @@
 
 use crate::error::{IngestorError, IngestorResult};
 use crate::parser::{SkillParser, ParsedSkill};
-use crate::categories::{SkillCategory, categorize_skill};
-use crate::unified_yaml::UnifiedSkill;
+use crate::categories::SkillCategory;
 use crate::db::SkillDatabase;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, atomic::{AtomicU64, Ordering}};
@@ -395,7 +394,7 @@ mod tests {
     
     #[test]
     fn test_mass_ingestor_creation() {
-        let dir = tempdir().unwrap();
+        let dir = tempdir().expect("operation failed");
         let db_path = dir.path().join("test.db");
         let output_dir = dir.path().join("skills");
         
@@ -405,15 +404,15 @@ mod tests {
     
     #[test]
     fn test_ingest_empty_dir() {
-        let dir = tempdir().unwrap();
+        let dir = tempdir().expect("operation failed");
         let db_path = dir.path().join("test.db");
         let output_dir = dir.path().join("skills");
         let categories_dir = dir.path().join("categories");
         
-        std::fs::create_dir_all(&categories_dir).unwrap();
+        std::fs::create_dir_all(&categories_dir).expect("operation failed");
         
-        let mut ingestor = MassIngestor::new(&db_path, &output_dir).unwrap();
-        let stats = ingestor.ingest_categories(&categories_dir).unwrap();
+        let mut ingestor = MassIngestor::new(&db_path, &output_dir).expect("operation failed");
+        let stats = ingestor.ingest_categories(&categories_dir).expect("operation failed");
         
         assert_eq!(stats.total_files, 0);
         assert_eq!(stats.total_skills, 0);

@@ -125,12 +125,27 @@ pub struct ExecutionEnvInfo {
 pub async fn execute(request: ExecutionRequest) -> ExecutionResult {
     info!("⚡ Executing {:?} code in {:?}", request.language, request.env);
     
-    // TODO: Implement actual execution
-    ExecutionResult {
-        stdout: "Execution completed".to_string(),
-        stderr: String::new(),
-        exit_code: 0,
-        duration_ms: 100,
-        success: true,
+    let config = sandbox::SandboxConfig {
+        image: match request.language {
+            Language::Python => "python:3.11-slim".to_string(),
+            Language::JavaScript => "node:20-slim".to_string(),
+            Language::Rust => "rust:1.75-slim".to_string(),
+            Language::Go => "golang:1.21-alpine".to_string(),
+            Language::Bash => "alpine:latest".to_string(),
+            Language::SQL => "postgres:15-alpine".to_string(),
+        },
+        timeout_secs: request.timeout_secs,
+        ..Default::default()
+    };
+    
+    match sandbox::run_in_sandbox(config, &request.code).await {
+        Ok(result) => result,
+        Err(e) => ExecutionResult {
+            stdout: String::new(),
+            stderr: format!("Execution error: {}", e),
+            exit_code: -1,
+            duration_ms: 0,
+            success: false,
+        },
     }
 }

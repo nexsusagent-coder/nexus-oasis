@@ -509,10 +509,10 @@ mod tests {
         queue.push(high_task);
         
         // Yüksek öncelikli önce çıkmalı
-        let first = queue.pop().unwrap();
+        let first = queue.pop().expect("operation failed");
         assert_eq!(first.priority, TaskPriority::High);
         
-        let second = queue.pop().unwrap();
+        let second = queue.pop().expect("operation failed");
         assert_eq!(second.priority, TaskPriority::Low);
         
         assert!(queue.is_empty());

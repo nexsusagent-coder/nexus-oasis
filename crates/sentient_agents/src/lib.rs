@@ -10,7 +10,6 @@
 //! - **Agent-S**: Desktop automation agents
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use tracing::info;
 
 pub mod error;

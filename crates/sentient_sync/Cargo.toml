@@ -1,6 +1,6 @@
 [package]
 name = "sentient_sync"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 authors = ["SENTIENT OS Team"]
 description = "Silent Auto-Update Engine for integrated repositories"
@@ -8,7 +8,7 @@ license = "MIT"
 
 [dependencies]
 tokio = { version = "1.35", features = ["full"] }
-git2 = "0.18"
+git2 = "0.19"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tracing = "0.1"

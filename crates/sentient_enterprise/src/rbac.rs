@@ -7,7 +7,6 @@
 
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
-use async_trait::async_trait;
 use thiserror::Error;
 
 /// Role in the system
@@ -51,7 +50,7 @@ impl std::str::FromStr for Role {
             "analyst" => Ok(Role::Analyst),
             "viewer" => Ok(Role::Viewer),
             s if s.starts_with("custom:") => {
-                let name = s.strip_prefix("custom:").unwrap();
+                let name = s.strip_prefix("custom:").expect("operation failed");
                 Ok(Role::Custom(name.to_string()))
             }
             _ => Err(RBACError::InvalidRole(s.to_string())),
@@ -412,17 +411,17 @@ mod tests {
     #[tokio::test]
     async fn test_rbac_manager() {
         let config = RBACConfig::default();
-        let manager = RBACManager::new(config).await.unwrap();
+        let manager = RBACManager::new(config).await.expect("operation failed");
 
         // Admin should have all permissions
-        let has_perm = manager.has_permission(&Role::Admin, "anything", "all").await.unwrap();
+        let has_perm = manager.has_permission(&Role::Admin, "anything", "all").await.expect("operation failed");
         assert!(has_perm);
 
         // Viewer should only have read access
-        let has_read = manager.has_permission(&Role::Viewer, "agents/test", "read").await.unwrap();
+        let has_read = manager.has_permission(&Role::Viewer, "agents/test", "read").await.expect("operation failed");
         assert!(has_read);
 
-        let has_delete = manager.has_permission(&Role::Viewer, "agents/test", "delete").await.unwrap();
+        let has_delete = manager.has_permission(&Role::Viewer, "agents/test", "delete").await.expect("operation failed");
         assert!(!has_delete);
     }
 }

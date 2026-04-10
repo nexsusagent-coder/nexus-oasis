@@ -12,21 +12,19 @@ use parking_lot::RwLock;
 use tokio::sync::mpsc;
 
 use super::{
-    SwarmAgentId, SwarmTask, SwarmTaskStatus, SwarmResult, SwarmStats,
+    SwarmAgentId, SwarmTask, SwarmResult, SwarmStats,
     AgentContribution,
 };
 use super::agent_type::{AgentType, AgentPersona, AgentCapability};
-use super::message::{SwarmMessage, MessageType, MessagePriority, MessageQueue};
+use super::message::{SwarmMessage, MessageType};
 use super::blackboard::Blackboard;
-use super::protocol::{SwarmProtocol, Negotiation};
-use super::task_router::{TaskRouter, RoutingStrategy, TaskAssignment};
+use super::protocol::SwarmProtocol;
+use super::task_router::{TaskRouter, TaskAssignment};
 use super::collective::CollectiveMemory;
 
 use crate::goal::Goal;
-use crate::planner::ExecutionPlan;
-use crate::execution::ExecutionResult;
 use crate::state::AgentState;
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
+use sentient_common::error::SENTIENTResult;
 
 /// ─── SWARM COORDINATOR ───
 /// 

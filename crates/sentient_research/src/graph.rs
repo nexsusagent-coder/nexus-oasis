@@ -192,7 +192,7 @@ mod tests {
         assert_eq!(graph.node_count(), 2);
         assert_eq!(graph.edge_count(), 1);
         
-        let root = graph.root().unwrap();
+        let root = graph.root().expect("operation failed");
         assert!(root.children.contains(&child_id));
     }
     
@@ -202,7 +202,7 @@ mod tests {
         let root_id = graph.root_id.clone();
         graph.set_response(&root_id, "Test response");
         
-        let root = graph.root().unwrap();
+        let root = graph.root().expect("operation failed");
         assert!(root.response.is_some());
     }
     
@@ -212,16 +212,16 @@ mod tests {
         let root_id = graph.root_id.clone();
         graph.add_reference(&root_id, "https://example.com", "Example");
         
-        let root = graph.root().unwrap();
+        let root = graph.root().expect("operation failed");
         assert!(root.references.contains_key("https://example.com"));
     }
     
     #[test]
     fn test_json_serialization() {
         let graph = SearchGraph::new("Test");
-        let json = graph.to_json().unwrap();
+        let json = graph.to_json().expect("operation failed");
         
-        let parsed = SearchGraph::from_json(&json).unwrap();
+        let parsed = SearchGraph::from_json(&json).expect("operation failed");
         assert_eq!(parsed.node_count(), graph.node_count());
     }
     

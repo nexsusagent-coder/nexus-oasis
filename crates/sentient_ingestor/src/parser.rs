@@ -171,13 +171,13 @@ mod tests {
     
     #[test]
     fn test_parse_markdown_line() {
-        let parser = SkillParser::new().unwrap();
+        let parser = SkillParser::new().expect("operation failed");
         let line = "- [github-pr-manager](https://clawskills.sh/skills/user-github-pr-manager) - Manage GitHub PRs automatically";
         
-        let result = parser.parse_markdown_line(line, &SkillCategory::GitGithub).unwrap();
+        let result = parser.parse_markdown_line(line, &SkillCategory::GitGithub).expect("operation failed");
         
         assert!(result.is_some());
-        let skill = result.unwrap();
+        let skill = result.expect("operation failed");
         assert_eq!(skill.name, "github-pr-manager");
     }
 }

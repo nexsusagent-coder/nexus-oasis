@@ -1,9 +1,8 @@
 //! ─── Wake Word Detector ───
 
-use crate::{WakeEngine, WakeWordConfig, SAMPLE_RATE};
+use crate::{WakeEngine, WakeWordConfig};
 use std::sync::Arc;
-use tokio::sync::{broadcast, mpsc};
-use tokio::task::JoinHandle;
+use tokio::sync::broadcast;
 
 /// Wake word event
 #[derive(Debug, Clone)]
@@ -31,7 +30,6 @@ pub struct WakeWordDetector {
     config: WakeWordConfig,
     event_tx: broadcast::Sender<WakeEvent>,
     running: Arc<std::sync::atomic::AtomicBool>,
-    task_handle: Option<JoinHandle<()>>,
 }
 
 impl WakeWordDetector {
@@ -43,7 +41,6 @@ impl WakeWordDetector {
             config,
             event_tx,
             running: Arc::new(std::sync::atomic::AtomicBool::new(false)),
-            task_handle: None,
         })
     }
     
@@ -53,7 +50,7 @@ impl WakeWordDetector {
     }
     
     /// Start listening for wake word
-    pub async fn start(&mut self) -> Result<(), WakeError> {
+    pub fn start(&mut self) -> Result<(), WakeError> {
         if self.running.load(std::sync::atomic::Ordering::SeqCst) {
             return Err(WakeError::AlreadyRunning);
         }
@@ -64,26 +61,19 @@ impl WakeWordDetector {
         let config = self.config.clone();
         let event_tx = self.event_tx.clone();
         
-        // Spawn audio capture and detection task
-        let handle = tokio::spawn(async move {
-            if let Err(e) = run_detection(running, config, event_tx).await {
+        // Spawn detection in a separate thread
+        std::thread::spawn(move || {
+            if let Err(e) = run_detection_sync(running, config, event_tx) {
                 log::error!("Detection error: {}", e);
             }
         });
-        
-        self.task_handle = Some(handle);
         
         Ok(())
     }
     
     /// Stop listening
-    pub async fn stop(&mut self) -> Result<(), WakeError> {
+    pub fn stop(&mut self) -> Result<(), WakeError> {
         self.running.store(false, std::sync::atomic::Ordering::SeqCst);
-        
-        if let Some(handle) = self.task_handle.take() {
-            handle.await.map_err(|e| WakeError::Internal(e.to_string()))?;
-        }
-        
         Ok(())
     }
     
@@ -98,35 +88,88 @@ impl WakeWordDetector {
     }
 }
 
-/// Run the detection loop
-async fn run_detection(
+/// Run the detection loop synchronously
+fn run_detection_sync(
     running: Arc<std::sync::atomic::AtomicBool>,
     config: WakeWordConfig,
     event_tx: broadcast::Sender<WakeEvent>,
 ) -> Result<(), WakeError> {
+    use cpal::traits::{HostTrait, DeviceTrait, StreamTrait};
+    
     // Initialize audio capture
     let host = cpal::default_host();
-    let device = host
-        .default_input_device()
-        .ok_or_else(|| WakeError::NoInputDevice)?;
     
-    let supported_config = device
+    let device = match host.default_input_device() {
+        Some(d) => d,
+        None => return Err(WakeError::NoInputDevice),
+    };
+    
+    let supported_config: cpal::SupportedStreamConfig = device
         .default_input_config()
         .map_err(|e| WakeError::AudioConfig(e.to_string()))?;
     
     log::info!("Using audio device: {}", device.name().unwrap_or_default());
     log::info!("Sample rate: {:?}", supported_config.sample_rate());
     
-    // Create audio stream
-    let (audio_tx, mut audio_rx) = mpsc::channel::<Vec<f32>>(100);
+    // Log engine status
+    log::info!("Wake engine: {:?}", config.engine);
+    log::info!("Vosk: {}", crate::vosk_::status());
+    log::info!("Whisper: {}", crate::whisper_::status());
+    log::info!("Porcupine: {}", crate::porcupine::status());
     
+    let running_clone = running.clone();
+    let event_tx_clone = event_tx.clone();
+    let config_clone = config.clone();
+    
+    // Audio buffer for accumulating samples
+    let audio_buffer: Arc<std::sync::Mutex<Vec<f32>>> = Arc::new(std::sync::Mutex::new(Vec::new()));
+    let buffer_clone = audio_buffer.clone();
+    
+    // Create audio stream
     let input_stream = device
         .build_input_stream(
             &supported_config.into(),
             move |data: &[f32], _: &cpal::InputCallbackInfo| {
-                // Resample if needed
-                let samples = data.to_vec();
-                let _ = audio_tx.blocking_send(samples);
+                // Calculate audio level
+                let level = calculate_audio_level(data);
+                let _ = event_tx_clone.send(WakeEvent::AudioLevel(level));
+                
+                // Accumulate samples for detection
+                let mut buf = buffer_clone.lock().expect("operation failed");
+                buf.extend_from_slice(data);
+                
+                // Process when we have enough samples (at least 1 second)
+                if buf.len() >= config_clone.sample_rate as usize {
+                    let samples: Vec<f32> = buf.drain(..config_clone.sample_rate as usize).collect();
+                    
+                    // Try detection with available engine
+                    let result = match config_clone.engine {
+                        WakeEngine::Vosk => crate::vosk_::detect(&samples, &config_clone),
+                        WakeEngine::Whisper => crate::whisper_::detect(&samples, &config_clone),
+                        WakeEngine::Porcupine => crate::porcupine::detect(&samples, &config_clone),
+                        WakeEngine::Simple => {
+                            // Simple energy-based detection
+                            if level > config_clone.confidence_threshold {
+                                Ok(Some((level, config_clone.wake_word.clone())))
+                            } else {
+                                Ok(None)
+                            }
+                        }
+                    };
+                    
+                    if let Ok(Some((confidence, word))) = result {
+                        let _ = event_tx_clone.send(WakeEvent::Detected {
+                            confidence,
+                            timestamp: std::time::Instant::now(),
+                        });
+                        log::info!("Wake word '{}' detected with confidence {:.2}", word, confidence);
+                    } else if let Ok(Some((_, text))) = crate::vosk_::detect(&samples, &config_clone) {
+                        // Speech detected but not wake word
+                        if !text.is_empty() {
+                            let _ = event_tx_clone.send(WakeEvent::SpeechDetected { text });
+                        }
+                    }
+                }
             },
             |err| {
                 log::error!("Audio stream error: {}", err);
@@ -139,72 +182,9 @@ async fn run_detection(
         .play()
         .map_err(|e| WakeError::AudioStream(e.to_string()))?;
     
-    // Detection loop
-    let mut last_detection = std::time::Instant::now()
-        - std::time::Duration::from_millis(config.cooldown_ms);
-    
+    // Keep stream alive while running
     while running.load(std::sync::atomic::Ordering::SeqCst) {
-        // Receive audio samples
-        let samples = match audio_rx.recv().await {
-            Some(s) => s,
-            None => break,
-        };
-        
-        // Calculate audio level
-        let level = calculate_audio_level(&samples);
-        let _ = event_tx.send(WakeEvent::AudioLevel(level));
-        
-        // Skip if in cooldown
-        if last_detection.elapsed().as_millis() < config.cooldown_ms as u128 {
-            continue;
-        }
-        
-        // Detect wake word based on engine
-        let detected = match config.engine {
-            WakeEngine::Porcupine => {
-                #[cfg(feature = "porcupine")]
-                {
-                    crate::porcupine::detect(&samples, &config)?
-                }
-                #[cfg(not(feature = "porcupine"))]
-                None
-            }
-            WakeEngine::Vosk => {
-                #[cfg(feature = "vosk")]
-                {
-                    crate::vosk_::detect(&samples, &config)?
-                }
-                #[cfg(not(feature = "vosk"))]
-                None
-            }
-            WakeEngine::Whisper => {
-                #[cfg(feature = "whisper")]
-                {
-                    crate::whisper_::detect(&samples, &config)?
-                }
-                #[cfg(not(feature = "whisper"))]
-                None
-            }
-            WakeEngine::Simple => {
-                // Simple energy-based detection for testing
-                if level > 0.5 {
-                    Some((1.0, config.wake_word.clone()))
-                } else {
-                    None
-                }
-            }
-        };
-        
-        if let Some((confidence, text)) = detected {
-            if confidence >= config.confidence_threshold {
-                log::info!("Wake word detected: {} (confidence: {})", text, confidence);
-                let _ = event_tx.send(WakeEvent::Detected {
-                    confidence,
-                    timestamp: std::time::Instant::now(),
-                });
-                last_detection = std::time::Instant::now();
-            }
-        }
+        std::thread::sleep(std::time::Duration::from_millis(100));
     }
     
     drop(input_stream);

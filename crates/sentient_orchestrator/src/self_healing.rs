@@ -6,10 +6,8 @@
 //! - Yeniden deneme stratejileri
 //! - Öğrenen hata veritabanı
 
-use crate::goal::{Goal, Task, TaskResult, TaskStatus};
-use crate::execution::{ExecutionResult, StepResult};
-use crate::state::AgentState;
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
+use crate::goal::{Task, TaskStatus};
+use sentient_common::error::SENTIENTResult;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use chrono::{DateTime, Utc};
@@ -487,7 +485,7 @@ impl SelfHealingEngine {
     }
     
     /// Retry stratejisi
-    async fn apply_retry(&self, task: &Task, error: &str) -> HealingResult {
+    async fn apply_retry(&self, task: &Task, _error: &str) -> HealingResult {
         if task.retry_count >= self.config.max_retries {
             return HealingResult {
                 success: false,
@@ -575,7 +573,7 @@ impl SelfHealingEngine {
         }
         
         // İlk alt görevi döndür
-        let first_sub = sub_tasks.into_iter().next().unwrap();
+        let first_sub = sub_tasks.into_iter().next().expect("operation failed");
         
         HealingResult {
             success: true,
@@ -737,7 +735,7 @@ impl SelfHealingEngine {
     /// Bağımlılık kontrol stratejisi
     async fn apply_check_dependencies(&self, task: &Task, _error: &str) -> HealingResult {
         // Bağımlılıkları kontrol et
-        let unmet = task.dependencies.iter().filter(|id| {
+        let unmet = task.dependencies.iter().filter(|_id| {
             // Basit simülasyon - gerçek implementasyonda task status kontrol edilir
             false
         }).count();
@@ -767,7 +765,7 @@ impl SelfHealingEngine {
     async fn analyze_and_fix_code(
         &self,
         code: &str,
-        error: &str,
+        _error: &str,
         pattern: Option<&ErrorPattern>
     ) -> Option<CodeFix> {
         // Basit syntax düzeltmeleri
@@ -963,7 +961,7 @@ mod tests {
         );
         
         let task = Task::new("Test", ToolType::Calculator);
-        let result = engine.heal(&task, "Network error").await.unwrap();
+        let result = engine.heal(&task, "Network error").await.expect("operation failed");
         
         assert!(result.success);
         assert_eq!(result.strategy, HealingStrategy::Retry);

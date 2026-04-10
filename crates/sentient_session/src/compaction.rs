@@ -2,7 +2,7 @@
 //!
 //! Bağlam sıkıştırma motoru
 
-use crate::{Session, SessionError, SessionResult};
+use crate::{Session, SessionResult};
 use serde::{Deserialize, Serialize};
 
 /// Sıkıştırma yapılandırması
@@ -260,13 +260,13 @@ mod tests {
     fn test_compaction_small_session() {
         let compactor = Compactor::default();
         let mut session = Session::new(SessionConfig::default());
-        session.start().unwrap();
+        session.start().expect("operation failed");
         
         // Az mesaj - sıkıştırma olmamalı
         session.add_message(Message::user("Merhaba", 10));
         session.add_message(Message::assistant("Merhaba!", 20));
         
-        let result = compactor.compact(&session).unwrap();
+        let result = compactor.compact(&session).expect("operation failed");
         assert_eq!(result.compacted_messages, 0);
     }
     
@@ -278,14 +278,14 @@ mod tests {
         };
         let compactor = Compactor::new(config);
         let mut session = Session::new(SessionConfig::default());
-        session.start().unwrap();
+        session.start().expect("operation failed");
         
         // 6 mesaj ekle
         for i in 0..6 {
             session.add_message(Message::user(&format!("Mesaj {}", i), 100));
         }
         
-        let result = compactor.compact(&session).unwrap();
+        let result = compactor.compact(&session).expect("operation failed");
         assert!(result.compression_ratio < 1.0);
     }
 }

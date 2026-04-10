@@ -191,6 +191,6 @@ mod tests {
         ]);
         let result = tool.execute(params).await;
         assert!(!result.success);
-        assert!(result.error.unwrap().contains("TEHLİKELİ"));
+        assert!(result.error.expect("operation failed").contains("TEHLİKELİ"));
     }
 }

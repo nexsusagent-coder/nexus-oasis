@@ -115,7 +115,7 @@ impl LspTool {
                     })
                 )
             }
-            LspAction::Completion { file, line, column } => {
+            LspAction::Completion { file: _, line: _, column: _ } => {
                 SentientToolResult::success_with_data(
                     "Tamamlamalar",
                     serde_json::json!({

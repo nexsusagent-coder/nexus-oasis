@@ -1,7 +1,7 @@
 //! Multi-Agent Orchestrator
 
-use crate::{AgentFramework, AgentTask, MultiAgentConfig, TaskStatus, AgentResult, AgentError};
-use crate::agents::{Agent, AgentState};
+use crate::{AgentFramework, AgentTask, MultiAgentConfig, AgentResult};
+use crate::agents::Agent;
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;

@@ -460,8 +460,8 @@ mod tests {
         let settings = HumanEmulationSettings::default();
         let manager = HumanEmulationManager::new(settings);
         
-        let json = manager.to_json().unwrap();
-        let imported = HumanEmulationManager::from_json(&json).unwrap();
+        let json = manager.to_json().expect("operation failed");
+        let imported = HumanEmulationManager::from_json(&json).expect("operation failed");
         
         assert_eq!(imported.settings().typing.wpm, 45);
     }

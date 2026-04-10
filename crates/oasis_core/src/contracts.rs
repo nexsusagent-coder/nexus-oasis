@@ -423,7 +423,7 @@ impl RuntimeStateContracts {
     /// ```ignore
     /// #[requires(state.is_initialized == true)]
     /// ```
-    pub fn contract_initialized(state: &RuntimeState) -> Condition {
+    pub fn contract_initialized(_state: &RuntimeState) -> Condition {
         Condition {
             name: "state_initialized".into(),
             description: "State must be initialized before operations".into(),
@@ -438,7 +438,7 @@ impl RuntimeStateContracts {
     /// ```ignore
     /// #[invariant(state.transaction_count >= 0)]
     /// ```
-    pub fn contract_transaction_count(state: &RuntimeState) -> Condition {
+    pub fn contract_transaction_count(_state: &RuntimeState) -> Condition {
         Condition {
             name: "transaction_count_non_negative".into(),
             description: "Transaction count must always be non-negative".into(),
@@ -453,7 +453,7 @@ impl RuntimeStateContracts {
     /// ```ignore
     /// #[invariant(state.memory_usage <= state.max_memory)]
     /// ```
-    pub fn contract_memory_limit(state: &RuntimeState) -> Condition {
+    pub fn contract_memory_limit(_state: &RuntimeState) -> Condition {
         Condition {
             name: "memory_within_limit".into(),
             description: "Memory usage must stay within configured limit".into(),
@@ -473,7 +473,7 @@ impl TransactionContracts {
     /// ```ignore
     /// #[requires(tx.id.is_valid())]
     /// ```
-    pub fn contract_valid_id(tx: &Transaction) -> Condition {
+    pub fn contract_valid_id(_tx: &Transaction) -> Condition {
         Condition {
             name: "transaction_valid_id".into(),
             description: "Transaction must have a valid UUID".into(),

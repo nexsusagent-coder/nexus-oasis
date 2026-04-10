@@ -1,6 +1,6 @@
 [package]
 name = "sentient_selfcoder"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Self-Coding Loop - Autonomous Self-Improvement Engine"
 authors = ["SENTIENT Core Team"]

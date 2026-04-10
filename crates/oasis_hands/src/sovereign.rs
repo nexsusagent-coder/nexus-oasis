@@ -426,7 +426,7 @@ mod tests {
     fn test_policy_activation() {
         let mut policy = SovereignPolicy::strict();
         assert!(!policy.is_active());
-        policy.activate().unwrap();
+        policy.activate().expect("operation failed");
         assert!(policy.is_active());
     }
     
@@ -512,7 +512,7 @@ mod tests {
     #[test]
     fn test_violation_recording() {
         let mut policy = SovereignPolicy::strict();
-        policy.activate().unwrap();
+        policy.activate().expect("operation failed");
         
         // Tehlikeli komut engellenmeli
         let result = policy.validate_command("rm -rf /");

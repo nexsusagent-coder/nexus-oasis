@@ -292,7 +292,7 @@ impl EmbeddingEngineSync {
     pub fn new(config: EmbeddingConfig) -> Self {
         Self {
             inner: Arc::new(EmbeddingEngine::new(config)),
-            runtime: tokio::runtime::Runtime::new().unwrap(),
+            runtime: tokio::runtime::Runtime::new().expect("operation failed"),
         }
     }
     
@@ -342,7 +342,7 @@ mod tests {
         let engine = EmbeddingEngine::new(config);
         
         let texts = vec!["Test metin".into(), "Başka metin".into()];
-        let embeddings = engine.embed_local_fallback(&texts).unwrap();
+        let embeddings = engine.embed_local_fallback(&texts).expect("operation failed");
         
         assert_eq!(embeddings.len(), 2);
         assert_eq!(embeddings[0].len(), 128);

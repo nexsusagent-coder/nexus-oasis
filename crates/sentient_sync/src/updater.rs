@@ -282,7 +282,7 @@ impl SilentUpdater {
                 let sig = repo.signature()?;
                 let msg = "SENTIENT-SYNC: Auto-merge (prefer upstream)";
                 let head = repo.head()?;
-                let head_commit = repo.find_commit(head.target().unwrap())?;
+                let head_commit = repo.find_commit(head.target().expect("operation failed"))?;
                 let tree = head_commit.tree()?;
                 repo.commit(Some("HEAD"), &sig, &sig, msg, &tree, &[])?;
                 

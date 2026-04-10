@@ -54,8 +54,8 @@ pub enum EnterpriseError {
     Internal(String),
 }
 
-impl From<sqlx::Error> for EnterpriseError {
-    fn from(err: sqlx::Error) -> Self {
+impl From<rusqlite::Error> for EnterpriseError {
+    fn from(err: rusqlite::Error) -> Self {
         EnterpriseError::Database(err.to_string())
     }
 }

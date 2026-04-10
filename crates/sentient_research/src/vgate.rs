@@ -201,7 +201,7 @@ mod tests {
             content: "Test content".into(),
         };
         
-        let json = serde_json::to_string(&message).unwrap();
+        let json = serde_json::to_string(&message).expect("operation failed");
         assert!(json.contains("user"));
         assert!(json.contains("Test content"));
     }

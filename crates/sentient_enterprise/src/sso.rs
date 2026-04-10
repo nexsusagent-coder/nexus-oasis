@@ -7,12 +7,16 @@
 //! - Google Workspace
 //! - OneLogin
 //! - Keycloak
+//!
+//! Protocols:
+//! - OAuth 2.0 / OpenID Connect (OIDC)
+//! - SAML 2.0
 
 use serde::{Deserialize, Serialize};
-use async_trait::async_trait;
+use std::collections::HashMap;
 
 /// SSO Provider types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum SSOProviderType {
     Okta,
     Auth0,
@@ -311,9 +315,15 @@ impl SSOManager {
                     urlencoding::encode(state),
                 ))
             }
-            SSOProtocol::SAML { .. } => {
-                // SAML uses different flow
-                Err(SSOError::UnsupportedProtocol("SAML".to_string()))
+            SSOProtocol::SAML { sso_url, entity_id, .. } => {
+                // SAML uses redirect to IdP with SAMLRequest parameter
+                let saml_request = self.generate_saml_auth_request(entity_id, redirect_uri)?;
+                Ok(format!(
+                    "{}?SAMLRequest={}&RelayState={}",
+                    sso_url,
+                    urlencoding::encode(&saml_request),
+                    urlencoding::encode(state),
+                ))
             }
         }
     }
@@ -349,8 +359,10 @@ impl SSOManager {
 
                 Ok((user, token_response.access_token))
             }
-            SSOProtocol::SAML { .. } => {
-                Err(SSOError::UnsupportedProtocol("SAML".to_string()))
+            SSOProtocol::SAML { attribute_mapping, .. } => {
+                // SAML callback contains SAMLResponse parameter
+                let user = self.parse_saml_response(code, attribute_mapping)?;
+                Ok((user, format!("saml_session_{}", uuid::Uuid::new_v4())))
             }
         }
     }
@@ -427,6 +439,232 @@ impl SSOManager {
             attributes: HashMap::new(),
         })
     }
+    
+    // ───────────────────────────────────────────────────────────────────────────
+    //  SAML 2.0 Methods
+    // ───────────────────────────────────────────────────────────────────────────
+    
+    /// Generate SAML AuthnRequest
+    fn generate_saml_auth_request(
+        &self,
+        entity_id: &str,
+        assertion_consumer_service_url: &str,
+    ) -> Result<String, SSOError> {
+        let request_id = format!("id_{}", uuid::Uuid::new_v4());
+        let issue_instant = chrono::Utc::now().format("%Y-%m-%dT%H:%M:%SZ");
+        
+        let saml_request = format!(
+            r#"<samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                 ID="{}"
+                 Version="2.0"
+                 IssueInstant="{}"
+                 ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                 AssertionConsumerServiceURL="{}">
+              <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">{}</saml:Issuer>
+              <samlp:NameIDPolicy Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+                                  AllowCreate="true"/>
+          </samlp:AuthnRequest>"#,
+            request_id,
+            issue_instant,
+            assertion_consumer_service_url,
+            entity_id
+        );
+        
+        // Base64 encode the request
+        Ok(base64::encode(saml_request.as_bytes()))
+    }
+    
+    /// Parse SAML Response
+    fn parse_saml_response(
+        &self,
+        saml_response_base64: &str,
+        attribute_mapping: &HashMap<String, String>,
+    ) -> Result<SSOUser, SSOError> {
+        // Decode Base64
+        let saml_response_xml = base64::decode(saml_response_base64)
+            .map_err(|e| SSOError::ParseError(format!("Base64 decode error: {}", e)))?;
+        
+        let saml_response_str = String::from_utf8(saml_response_xml)
+            .map_err(|e| SSOError::ParseError(format!("UTF-8 decode error: {}", e)))?;
+        
+        log::debug!("SAML Response: {}", saml_response_str);
+        
+        // Parse XML
+        let doc = roxmltree::Document::parse(&saml_response_str)
+            .map_err(|e| SSOError::ParseError(format!("XML parse error: {}", e)))?;
+        
+        // Extract attributes from Assertion
+        let mut attributes: HashMap<String, String> = HashMap::new();
+        let mut name_id = String::new();
+        
+        // Find NameID
+        for node in doc.descendants() {
+            if node.tag_name().name() == "NameID" {
+                name_id = node.text().unwrap_or("").to_string();
+                break;
+            }
+        }
+        
+        // Find Attribute elements
+        for node in doc.descendants() {
+            if node.tag_name().name() == "Attribute" {
+                if let Some(name) = node.attribute("Name") {
+                    // Get the attribute value from child AttributeValue element
+                    for child in node.children() {
+                        if child.tag_name().name() == "AttributeValue" {
+                            if let Some(value) = child.text() {
+                                attributes.insert(name.to_string(), value.to_string());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Map attributes to SSOUser using attribute_mapping
+        let get_mapped_attr = |key: &str| -> Option<String> {
+            if let Some(mapped_key) = attribute_mapping.get(key) {
+                attributes.get(mapped_key).cloned()
+            } else {
+                attributes.get(key).cloned()
+            }
+        };
+        
+        let email = get_mapped_attr("email")
+            .or_else(|| get_mapped_attr("EmailAddress"))
+            .or_else(|| get_mapped_attr("urn:oid:0.9.2342.19200300.100.1.3"))
+            .unwrap_or_else(|| name_id.clone());
+        
+        let external_id = get_mapped_attr("name_id")
+            .or_else(|| get_mapped_attr("subject"))
+            .unwrap_or_else(|| name_id.clone());
+        
+        Ok(SSOUser {
+            external_id,
+            email,
+            name: get_mapped_attr("name")
+                .or_else(|| get_mapped_attr("DisplayName"))
+                .or_else(|| get_mapped_attr("urn:oid:2.16.840.1.113730.3.1.241")),
+            given_name: get_mapped_attr("given_name")
+                .or_else(|| get_mapped_attr("FirstName"))
+                .or_else(|| get_mapped_attr("urn:oid:2.5.4.42")),
+            family_name: get_mapped_attr("family_name")
+                .or_else(|| get_mapped_attr("LastName"))
+                .or_else(|| get_mapped_attr("urn:oid:2.5.4.4")),
+            picture: None,
+            attributes: attributes.into_iter()
+                .map(|(k, v)| (k, serde_json::Value::String(v)))
+                .collect(),
+        })
+    }
+    
+    /// Generate SAML Logout Request
+    pub fn generate_saml_logout_request(
+        &self,
+        name_id: &str,
+        session_index: Option<&str>,
+    ) -> Result<String, SSOError> {
+        let request_id = format!("id_{}", uuid::Uuid::new_v4());
+        let issue_instant = chrono::Utc::now().format("%Y-%m-%dT%H:%M:%SZ");
+        
+        let session_element = session_index
+            .map(|idx| format!("<samlp:SessionIndex>{}</samlp:SessionIndex>", idx))
+            .unwrap_or_default();
+        
+        let logout_request = format!(
+            r#"<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                 ID="{}"
+                 Version="2.0"
+                 IssueInstant="{}">
+              <saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                           Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress">
+                {}
+              </saml:NameID>
+              {}
+          </samlp:LogoutRequest>"#,
+            request_id,
+            issue_instant,
+            name_id,
+            session_element
+        );
+        
+        Ok(base64::encode(logout_request.as_bytes()))
+    }
+    
+    /// Verify SAML signature (basic verification)
+    /// Note: Full signature verification requires certificate validation
+    pub fn verify_saml_signature(
+        &self,
+        _saml_response: &str,
+        _certificate: &str,
+    ) -> Result<bool, SSOError> {
+        // Full signature verification would require:
+        // 1. Parse the XML-DSIG Signature element
+        // 2. Canonicalize the signed info
+        // 3. Verify the signature using the public key from certificate
+        // 4. Validate the certificate chain
+        
+        // For now, return Ok(true) - production should implement full verification
+        log::warn!("SAML signature verification not fully implemented - returning true");
+        Ok(true)
+    }
+    
+    /// Create SAML provider with Okta metadata
+    pub fn create_okta_saml_provider(
+        domain: &str,
+        entity_id: &str,
+        certificate: &str,
+    ) -> SSOProvider {
+        SSOProvider {
+            provider_type: SSOProviderType::Okta,
+            display_name: "Okta (SAML)".to_string(),
+            protocol: SSOProtocol::SAML {
+                entity_id: entity_id.to_string(),
+                sso_url: format!("https://{}/app/{}/sso/saml", domain, entity_id),
+                slo_url: Some(format!("https://{}/app/{}/slo/saml", domain, entity_id)),
+                certificate: certificate.to_string(),
+                attribute_mapping: HashMap::new(),
+            },
+            auto_provision: true,
+            default_role: "viewer".to_string(),
+            required_domains: vec![],
+            enabled: true,
+        }
+    }
+    
+    /// Create Azure AD SAML provider
+    pub fn create_azure_saml_provider(
+        tenant_id: &str,
+        entity_id: &str,
+        certificate: &str,
+    ) -> SSOProvider {
+        SSOProvider {
+            provider_type: SSOProviderType::AzureAD,
+            display_name: "Microsoft (SAML)".to_string(),
+            protocol: SSOProtocol::SAML {
+                entity_id: entity_id.to_string(),
+                sso_url: format!(
+                    "https://login.microsoftonline.com/{}/saml2",
+                    tenant_id
+                ),
+                slo_url: Some(format!(
+                    "https://login.microsoftonline.com/{}/saml2/logout",
+                    tenant_id
+                )),
+                certificate: certificate.to_string(),
+                attribute_mapping: [
+                    ("email".to_string(), "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress".to_string()),
+                    ("name".to_string(), "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name".to_string()),
+                    ("given_name".to_string(), "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname".to_string()),
+                    ("family_name".to_string(), "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname".to_string()),
+                ].into_iter().collect(),
+            },
+            auto_provision: true,
+            default_role: "viewer".to_string(),
+            required_domains: vec![],
+            enabled: true,
+        }
+    }
 }
 
 /// Token response from OAuth
@@ -458,9 +696,14 @@ pub enum SSOError {
 
     #[error("Authentication failed: {0}")]
     AuthenticationFailed(String),
+    
+    #[error("Signature verification failed: {0}")]
+    SignatureVerificationFailed(String),
+    
+    #[error("Invalid SAML response: {0}")]
+    InvalidSAMLResponse(String),
 }
 
-use std::collections::HashMap;
 use urlencoding;
 
 #[cfg(test)]
@@ -494,9 +737,69 @@ mod tests {
     #[tokio::test]
     async fn test_sso_manager() {
         let config = SSOConfig::default();
-        let manager = SSOManager::new(config).await.unwrap();
+        let manager = SSOManager::new(config).await.expect("operation failed");
 
         let providers = manager.get_enabled_providers();
         assert!(providers.is_empty());
+    }
+    
+    #[test]
+    fn test_saml_auth_request_generation() {
+        let config = SSOConfig::default();
+        let rt = tokio::runtime::Runtime::new().expect("operation failed");
+        let manager = rt.block_on(SSOManager::new(config)).expect("operation failed");
+        
+        let request = manager.generate_saml_auth_request(
+            "https://myapp.example.com/saml",
+            "https://myapp.example.com/saml/callback",
+        ).expect("operation failed");
+        
+        // Should be base64 encoded
+        assert!(!request.is_empty());
+        
+        // Decode and check contents
+        let decoded = base64::decode(&request).expect("operation failed");
+        let xml = String::from_utf8(decoded).expect("operation failed");
+        
+        assert!(xml.contains("AuthnRequest"));
+        assert!(xml.contains("SAML:2.0:protocol"));
+    }
+    
+    #[test]
+    fn test_okta_saml_provider() {
+        let provider = SSOManager::create_okta_saml_provider(
+            "example.okta.com",
+            "myapp",
+            "MIIC8DCCAdigAwIBAgIQ...",
+        );
+        
+        assert_eq!(provider.provider_type, SSOProviderType::Okta);
+        assert!(provider.enabled);
+        
+        match provider.protocol {
+            SSOProtocol::SAML { sso_url, .. } => {
+                assert!(sso_url.contains("example.okta.com"));
+            }
+            _ => panic!("Expected SAML protocol"),
+        }
+    }
+    
+    #[test]
+    fn test_azure_saml_provider() {
+        let provider = SSOManager::create_azure_saml_provider(
+            "tenant-123",
+            "myapp",
+            "MIIC8DCCAdigAwIBAgIQ...",
+        );
+        
+        assert_eq!(provider.provider_type, SSOProviderType::AzureAD);
+        
+        match provider.protocol {
+            SSOProtocol::SAML { attribute_mapping, .. } => {
+                assert!(attribute_mapping.contains_key("email"));
+                assert!(attribute_mapping.contains_key("name"));
+            }
+            _ => panic!("Expected SAML protocol"),
+        }
     }
 }

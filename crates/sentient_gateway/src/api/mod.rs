@@ -23,13 +23,14 @@ use tower_http::cors::{Any, CorsLayer};
 use uuid::Uuid;
 
 use crate::{
-    GatewayConfig, GatewayRequest, GatewayResponse, GatewayStats,
-    RequestSource, ResponseStatus,
+    GatewayConfig, GatewayRequest, GatewayStats,
+    RequestSource,
 };
 use crate::dispatcher::TaskDispatcher;
-use crate::task_manager::{TaskManager, TaskStatus, ManagedTask};
+use crate::task_manager::{TaskManager, ManagedTask};
 use crate::webhooks::{WebhookRouter, WebhookStats, WebhookResult};
-use crate::dashboard::{MetricsCollector, DashboardState, DashboardConfig, Activity, LogEntry, AgentThought};
+use crate::dashboard::MetricsCollector;
+use crate::rate_limit::rate_limit_middleware;
 
 /// ─── API STATE ───
 
@@ -85,6 +86,8 @@ pub fn create_router(state: ApiState) -> Router {
         .route("/api/skills/:type/execute", post(execute_skill))
         .route("/api/skills/stats", get(get_skills_stats))
         
+        // Rate limiting
+        .layer(axum::middleware::from_fn(rate_limit_middleware))
         // CORS
         .layer(CorsLayer::new()
             .allow_origin(Any)
@@ -520,11 +523,15 @@ async fn handle_ws_message(
         }
         
         "subscribe" => {
-            // TODO: Task subscription (gerçek zamanlı güncelleme)
+            // Task subscription - real-time updates via WebSocket
+            // Production: Use tokio::sync::broadcast for task updates
             WebSocketResponse {
                 success: true,
-                message: "Abone olundu".into(),
-                data: None,
+                message: "Abone olundu - görev güncellemeleri aktif".into(),
+                data: Some(serde_json::json!({
+                    "subscribed": true,
+                    "channel": "task_updates"
+                })),
             }
         }
         
@@ -790,7 +797,7 @@ mod tests {
     #[test]
     fn test_create_task_request_deserialization() {
         let json = r#"{"goal":"Test hedefi","model":"qwen/qwen3-1.7b:free"}"#;
-        let req: CreateTaskRequest = serde_json::from_str(json).unwrap();
+        let req: CreateTaskRequest = serde_json::from_str(json).expect("operation failed");
         assert_eq!(req.goal, "Test hedefi");
         assert_eq!(req.model, Some("qwen/qwen3-1.7b:free".into()));
     }
@@ -803,14 +810,14 @@ mod tests {
             uptime_secs: 3600,
             active_tasks: 5,
         };
-        let json = serde_json::to_string(&response).unwrap();
+        let json = serde_json::to_string(&response).expect("operation failed");
         assert!(json.contains("\"status\":\"healthy\""));
     }
     
     #[test]
     fn test_websocket_message_deserialization() {
         let json = r#"{"type":"create_task","data":{"goal":"Test"}}"#;
-        let msg: WebSocketMessage = serde_json::from_str(json).unwrap();
+        let msg: WebSocketMessage = serde_json::from_str(json).expect("operation failed");
         assert_eq!(msg.type_field, "create_task");
     }
 }

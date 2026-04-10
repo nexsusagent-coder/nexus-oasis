@@ -4,8 +4,7 @@
 
 use axum::{
     extract::{
-        ws::{Message, WebSocket, WebSocketUpgrade},
-        Extension, Json, Path, Query, State,
+        ws::{Message, WebSocket, WebSocketUpgrade}, Json, Path, State,
     },
     response::{Html, IntoResponse, Response},
     routing::{get, post},
@@ -16,7 +15,6 @@ use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
     sync::Arc,
-    time::Duration,
 };
 use tokio::sync::RwLock;
 use uuid::Uuid;
@@ -24,7 +22,7 @@ use chrono::{DateTime, Utc};
 
 use super::assets::DashboardAssets;
 use crate::api::ApiState;
-use crate::dashboard::metrics::{SystemMetrics, MetricsCollector, HealthStatus};
+use crate::dashboard::metrics::MetricsCollector;
 
 // ═══════════════════════════════════════════════════════════════
 // TYPES
@@ -439,7 +437,7 @@ async fn stream_logs(State(state): State<ApiState>) -> impl IntoResponse {
         .header("Cache-Control", "no-cache")
         .header("Connection", "keep-alive")
         .body(body)
-        .unwrap()
+        .expect("operation failed")
         .into_response()
 }
 
@@ -580,7 +578,7 @@ async fn memory_ws_handler(
 }
 
 /// Memory WebSocket bağlantı işleyicisi
-async fn handle_memory_websocket(socket: WebSocket, state: ApiState) {
+async fn handle_memory_websocket(socket: WebSocket, _state: ApiState) {
     let (mut sender, mut receiver) = socket.split();
     
     // Initial memory stats

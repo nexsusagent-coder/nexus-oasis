@@ -2,7 +2,7 @@
 
 use crate::{
     types::TokenizationResult,
-    error::{CevahirError, Result},
+    error::Result,
 };
 use std::path::Path;
 
@@ -61,7 +61,7 @@ mod tests {
 
     #[test]
     fn test_tokenizer_encode() {
-        let tokenizer = TokenizerWrapper::new("vocab.json", "merges.txt").unwrap();
+        let tokenizer = TokenizerWrapper::new("vocab.json", "merges.txt").expect("operation failed");
         let result = tokenizer.encode("merhaba dünya");
         assert!(result.is_ok());
     }

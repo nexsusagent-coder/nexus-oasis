@@ -8,8 +8,8 @@ use chrono::{DateTime, Utc};
 use std::collections::{HashMap, BinaryHeap};
 use std::cmp::Ordering;
 
-use super::{SwarmAgentId, SwarmTask, SwarmTaskStatus};
-use super::agent_type::{AgentType, AgentCapability, AgentPersona};
+use super::{SwarmAgentId, SwarmTask};
+use super::agent_type::AgentPersona;
 
 /// ─── TASK ROUTER ───
 /// 
@@ -421,6 +421,7 @@ impl std::fmt::Display for RouterReport {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::AgentType;
     
     #[test]
     fn test_agent_registration() {

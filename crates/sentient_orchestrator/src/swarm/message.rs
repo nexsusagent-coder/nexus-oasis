@@ -7,8 +7,7 @@ use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
-use super::{SwarmAgentId, SwarmTask, SwarmTaskStatus};
-use super::agent_type::{AgentType, AgentCapability};
+use super::{SwarmAgentId, SwarmTask};
 
 /// ─── SWARM MESSAGE ───
 /// 
@@ -372,11 +371,11 @@ mod tests {
         let msg2 = SwarmMessage::new(SwarmAgentId::new(), MessageType::StatusUpdate, serde_json::Value::Null)
             .with_priority(MessagePriority::High);
         
-        queue.push(msg1).unwrap();
-        queue.push(msg2).unwrap();
+        queue.push(msg1).expect("operation failed");
+        queue.push(msg2).expect("operation failed");
         
         // Yüksek öncelikli önce çıkmalı
-        let popped = queue.pop().unwrap();
+        let popped = queue.pop().expect("operation failed");
         assert_eq!(popped.priority, MessagePriority::High);
     }
     
@@ -386,7 +385,7 @@ mod tests {
         
         for i in 0..5 {
             let msg = SwarmMessage::new(SwarmAgentId::new(), MessageType::StatusUpdate, serde_json::json!(i));
-            queue.push(msg).unwrap();
+            queue.push(msg).expect("operation failed");
         }
         
         assert_eq!(queue.len(), 3);

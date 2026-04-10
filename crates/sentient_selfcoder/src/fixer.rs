@@ -3,7 +3,6 @@
 //! ═══════════════════════════════════════════════════════════════════════════════
 
 use std::fs;
-use std::path::PathBuf;
 use crate::scanner::Gap;
 
 /// Fix sonucu

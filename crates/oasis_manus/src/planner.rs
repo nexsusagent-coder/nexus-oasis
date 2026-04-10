@@ -4,7 +4,7 @@
 //!
 //! Karmaşık görevleri adımlara bölme ve planlama.
 
-use crate::error::{ManusError, ManusResult};
+use crate::error::ManusResult;
 use crate::Language;
 use serde::{Deserialize, Serialize};
 
@@ -425,7 +425,7 @@ mod tests {
     #[test]
     fn test_plan_calculation() {
         let planner = TaskPlanner::new();
-        let plan = planner.plan("Fibonacci hesapla").unwrap();
+        let plan = planner.plan("Fibonacci hesapla").expect("operation failed");
         assert!(!plan.steps.is_empty());
         assert!(plan.steps[0].code.is_some());
     }
@@ -433,7 +433,7 @@ mod tests {
     #[test]
     fn test_plan_generic() {
         let planner = TaskPlanner::new();
-        let plan = planner.plan("Bir görev yap").unwrap();
+        let plan = planner.plan("Bir görev yap").expect("operation failed");
         assert!(!plan.steps.is_empty());
     }
 

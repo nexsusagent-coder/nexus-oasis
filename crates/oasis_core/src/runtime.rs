@@ -81,7 +81,7 @@ impl OasisRuntime {
     /// #[ensures(result.is_ok() ==> state.transaction_count == old(state.transaction_count) + 1)]
     /// ```
     pub async fn execute(&self, tx: Transaction) -> CoreResult<ExecutionResult> {
-        let start_time = Instant::now();
+        let _start_time = Instant::now();
         let tx_id = tx.id;
         
         // Pre-condition verification
@@ -248,20 +248,20 @@ mod tests {
     #[tokio::test]
     async fn test_runtime_execute() {
         let runtime = OasisRuntime::new(CoreConfig::default());
-        runtime.initialize().await.unwrap();
+        runtime.initialize().await.expect("operation failed");
         
         let tx = Transaction::new("ping", serde_json::json!({}));
         let result = runtime.execute(tx).await;
         
         assert!(result.is_ok());
-        let exec_result = result.unwrap();
+        let exec_result = result.expect("operation failed");
         assert!(exec_result.success);
     }
 
     #[tokio::test]
     async fn test_runtime_status() {
         let runtime = OasisRuntime::new(CoreConfig::default());
-        runtime.initialize().await.unwrap();
+        runtime.initialize().await.expect("operation failed");
         
         let status = runtime.status().await;
         assert!(status.is_initialized);

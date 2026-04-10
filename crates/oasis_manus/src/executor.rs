@@ -4,10 +4,9 @@
 //!
 //! Docker container içinde kod çalıştırma.
 
-use crate::error::{ManusError, ManusResult, translate_error};
+use crate::error::ManusResult;
 use crate::container::ContainerPool;
 use crate::Language;
-use bollard::exec::{CreateExecOptions, StartExecResults};
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
 
@@ -105,7 +104,7 @@ impl CodeExecutor {
         container_id: &str,
         code: &str,
         language: Language,
-        timeout_secs: u64,
+        _timeout_secs: u64,
     ) -> ManusResult<ExecutionResult> {
         let start = Instant::now();
         

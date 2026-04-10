@@ -281,7 +281,7 @@ version: 1.0.0
 This is the skill content.
 "#;
         
-        let skill = loader.parse_skill(content, None).unwrap();
+        let skill = loader.parse_skill(content, None).expect("operation failed");
         
         assert_eq!(skill.metadata.name, "test-skill");
         assert_eq!(skill.metadata.description, "A test skill");
@@ -293,7 +293,7 @@ This is the skill content.
         let loader = SkillLoader::new();
         let content = "# Simple Skill\n\nNo frontmatter here.";
         
-        let skill = loader.parse_skill(content, Some(Path::new("skills/simple-skill/SKILL.md"))).unwrap();
+        let skill = loader.parse_skill(content, Some(Path::new("skills/simple-skill/SKILL.md"))).expect("operation failed");
         
         assert_eq!(skill.metadata.name, "simple-skill");
     }

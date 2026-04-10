@@ -8,11 +8,9 @@
 //! - Zamanlanmış görevler
 //! - Tetikleyici bazlı görevler
 
-use crate::goal::{Goal, Task, TaskPriority, ToolType};
-use crate::execution::ExecutionResult;
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
+use crate::goal::{Goal, TaskPriority};
+use sentient_common::error::SENTIENTResult;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::sync::Arc;
 use parking_lot::RwLock;
 use tokio::sync::mpsc;
@@ -787,16 +785,16 @@ mod tests {
     #[tokio::test]
     async fn test_watcher_start() {
         let mut watcher = Watcher::new(WatcherConfig::default());
-        watcher.start().await.unwrap();
+        watcher.start().await.expect("operation failed");
         assert_eq!(watcher.status(), WatcherStatus::Running);
     }
     
     #[tokio::test]
     async fn test_watcher_tick() {
         let mut watcher = Watcher::new(WatcherConfig::default());
-        watcher.start().await.unwrap();
+        watcher.start().await.expect("operation failed");
         
-        let tasks = watcher.tick().await.unwrap();
+        let tasks = watcher.tick().await.expect("operation failed");
         // İlk tick'te görev üretilmeyebilir (zamanlama nedeniyle)
         assert!(tasks.is_empty() || !tasks.is_empty());
     }

@@ -117,7 +117,7 @@ impl CaptureConfig {
     }
     
     /// Pencere capture (mock)
-    pub fn window(window_id: u64) -> Self {
+    pub fn window(_window_id: u64) -> Self {
         Self {
             x: 0,
             y: 0,
@@ -214,7 +214,7 @@ impl ScreenCapture {
         self.base64 = Some(format!("data:{};base64,{}", 
             format.mime_type(), b64));
         
-        Ok(self.base64.clone().unwrap())
+        Ok(self.base64.clone().expect("operation failed"))
     }
     
     /// Dosyaya kaydet
@@ -428,13 +428,13 @@ mod tests {
     
     #[test]
     fn test_screen_capturer_creation() {
-        let capturer = ScreenCapturer::new().unwrap();
+        let capturer = ScreenCapturer::new().expect("operation failed");
         assert!(capturer.is_active());
     }
     
     #[test]
     fn test_screen_capturer_stop_start() {
-        let mut capturer = ScreenCapturer::new().unwrap();
+        let mut capturer = ScreenCapturer::new().expect("operation failed");
         capturer.stop();
         assert!(!capturer.is_active());
         capturer.start();
@@ -443,8 +443,8 @@ mod tests {
     
     #[test]
     fn test_screen_capturer_capture() {
-        let capturer = ScreenCapturer::new().unwrap();
-        let capture = capturer.capture_full().unwrap();
+        let capturer = ScreenCapturer::new().expect("operation failed");
+        let capture = capturer.capture_full().expect("operation failed");
         assert!(capture.data.len() > 0);
     }
 }

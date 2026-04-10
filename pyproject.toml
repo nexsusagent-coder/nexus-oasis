@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "sentient"
-version = "2.1.0"
+version = "4.0.0"
 description = "SENTIENT OS - The Operating System That Thinks"
 readme = "README.md"
 license = {text = "MIT"}

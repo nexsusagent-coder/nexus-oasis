@@ -46,6 +46,7 @@ pub mod webhooks;
 pub mod events;
 pub mod dashboard;
 pub mod claw3d;
+pub mod rate_limit;
 
 mod dispatcher;
 mod task_manager;
@@ -98,6 +99,13 @@ pub use sentient_storage::{
 
 // API exports
 pub use api::run_server;
+
+// Rate limiting exports
+pub use rate_limit::{
+    RateLimitConfig, RateLimitError,
+    rate_limit_middleware,
+    AUTH_BUCKET, API_BUCKET, WS_BUCKET,
+};
 
 use sentient_common::error::{SENTIENTError, SENTIENTResult};
 use serde::{Deserialize, Serialize};
@@ -348,7 +356,7 @@ impl Gateway {
         
         // Telegram bot'unu başlat (eğer token varsa)
         #[cfg(feature = "telegram")]
-        let telegram_handle = self.start_telegram_bot();
+        let _telegram_handle = self.start_telegram_bot();
         
         // Shutdown sinyalini bekle
         let shutdown = self.shutdown.clone();
@@ -486,7 +494,7 @@ mod tests {
             timestamp: chrono::Utc::now(),
         };
         
-        let json = serde_json::to_string(&response).unwrap();
+        let json = serde_json::to_string(&response).expect("operation failed");
         assert!(json.contains("\"status\":\"accepted\""));
         assert!(json.contains("\"message\":\"Görev kabul edildi\""));
     }

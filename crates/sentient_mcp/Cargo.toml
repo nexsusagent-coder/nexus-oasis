@@ -1,0 +1,68 @@
+[package]
+name = "sentient_mcp"
+version.workspace = true
+edition.workspace = true
+description = "Model Context Protocol (MCP) implementation for SENTIENT OS"
+authors = ["Pi <pi@sentient.os>"]
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["mcp", "model-context-protocol", "anthropic", "claude", "ai"]
+categories = ["api-bindings", "network-programming", "asynchronous"]
+
+[dependencies]
+# Internal dependencies
+sentient_common = { path = "../sentient_common" }
+
+# Async runtime
+tokio = { workspace = true }
+tokio-stream = "0.1"
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Async traits
+async-trait = "0.1"
+
+# UUID for request IDs
+uuid = { workspace = true }
+
+# Time
+chrono = { workspace = true }
+
+# Futures
+futures = "0.3"
+pin-project-lite = "0.2"
+
+# Base64 encoding
+base64 = "0.22"
+
+# MIME type guessing
+mime_guess = "2.0"
+
+# HTTP client for SSE transport (optional)
+reqwest = { version = "0.12", features = ["json", "stream"], optional = true }
+tower = { version = "0.4", optional = true }
+tower-service = { version = "0.3", optional = true }
+
+# WebSocket support (optional)
+tokio-tungstenite = { version = "0.21", optional = true }
+
+[features]
+default = ["stdio", "tcp"]
+stdio = []
+tcp = []
+websocket = ["tokio-tungstenite"]
+sse = ["reqwest", "tower", "tower-service"]
+full = ["stdio", "tcp", "websocket", "sse"]
+
+[dev-dependencies]
+tokio-test = "0.4"

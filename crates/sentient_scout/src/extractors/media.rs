@@ -17,7 +17,7 @@ impl Extractor for MediaExtractor {
         let mut items = Vec::new();
         
         // Resimler
-        let img_selector = Selector::parse("img").unwrap();
+        let img_selector = Selector::parse("img").expect("operation failed");
         for img in document.select(&img_selector) {
             if let Some(src) = img.value().attr("src") {
                 if let Some(alt) = img.value().attr("alt") {
@@ -34,7 +34,7 @@ impl Extractor for MediaExtractor {
         }
         
         // Videolar
-        let video_selector = Selector::parse("video source, video").unwrap();
+        let video_selector = Selector::parse("video source, video").expect("operation failed");
         for video in document.select(&video_selector) {
             if let Some(src) = video.value().attr("src").or_else(|| video.value().attr("poster")) {
                 items.push(ExtractedItem {

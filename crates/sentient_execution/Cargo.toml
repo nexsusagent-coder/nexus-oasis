@@ -1,6 +1,6 @@
 [package]
 name = "sentient_execution"
-version = "3.0.0"
+version.workspace = true
 edition = "2021"
 description = "SENTIENT Code Execution - Open Interpreter, E2B Sandbox"
 authors = ["SENTIENT Core Team"]

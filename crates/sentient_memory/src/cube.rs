@@ -617,8 +617,8 @@ mod tests {
         let db = test_db("create");
         cleanup(&db);
         {
-            let cube = MemoryCube::new(&db).unwrap();
-            assert_eq!(cube.count().unwrap(), 0);
+            let cube = MemoryCube::new(&db).expect("operation failed");
+            assert_eq!(cube.count().expect("operation failed"), 0);
         }
         cleanup(&db);
     }
@@ -628,15 +628,15 @@ mod tests {
         let db = test_db("recall");
         cleanup(&db);
         {
-            let mut cube = MemoryCube::new(&db).unwrap();
+            let mut cube = MemoryCube::new(&db).expect("operation failed");
             let id = cube.create(
                 "SENTIENT bir AI OS'tur".into(),
                 MemoryType::Semantic,
                 None,
                 None,
-            ).unwrap();
+            ).expect("operation failed");
             
-            let entry = cube.recall(id).unwrap().unwrap();
+            let entry = cube.recall(id).expect("operation failed").expect("operation failed");
             assert_eq!(entry.content, "SENTIENT bir AI OS'tur");
             assert_eq!(entry.memory_type, MemoryType::Semantic);
         }
@@ -648,11 +648,11 @@ mod tests {
         let db = test_db("search");
         cleanup(&db);
         {
-            let mut cube = MemoryCube::new(&db).unwrap();
-            cube.create("Rust güvenli bir dildir".into(), MemoryType::Semantic, None, None).unwrap();
-            cube.create("Python kolay bir dildir".into(), MemoryType::Semantic, None, None).unwrap();
+            let mut cube = MemoryCube::new(&db).expect("operation failed");
+            cube.create("Rust güvenli bir dildir".into(), MemoryType::Semantic, None, None).expect("operation failed");
+            cube.create("Python kolay bir dildir".into(), MemoryType::Semantic, None, None).expect("operation failed");
             
-            let results = cube.search("Rust", None).unwrap();
+            let results = cube.search("Rust", None).expect("operation failed");
             assert_eq!(results.len(), 1);
             assert!(results[0].content.contains("Rust"));
         }
@@ -664,13 +664,13 @@ mod tests {
         let db = test_db("link");
         cleanup(&db);
         {
-            let mut cube = MemoryCube::new(&db).unwrap();
-            let id1 = cube.create("Makine öğrenimi".into(), MemoryType::Semantic, None, None).unwrap();
-            let id2 = cube.create("Derin öğrenme".into(), MemoryType::Semantic, None, None).unwrap();
+            let mut cube = MemoryCube::new(&db).expect("operation failed");
+            let id1 = cube.create("Makine öğrenimi".into(), MemoryType::Semantic, None, None).expect("operation failed");
+            let id2 = cube.create("Derin öğrenme".into(), MemoryType::Semantic, None, None).expect("operation failed");
             
-            cube.link(id1, id2, RelationType::RelatedTo, None).unwrap();
+            cube.link(id1, id2, RelationType::RelatedTo, None).expect("operation failed");
             
-            let related = cube.get_related(id1).unwrap();
+            let related = cube.get_related(id1).expect("operation failed");
             assert_eq!(related.len(), 1);
             assert!(related[0].content.contains("Derin"));
         }
@@ -682,11 +682,11 @@ mod tests {
         let db = test_db("stats");
         cleanup(&db);
         {
-            let mut cube = MemoryCube::new(&db).unwrap();
-            cube.create("Test 1".into(), MemoryType::Semantic, None, None).unwrap();
-            cube.create("Test 2".into(), MemoryType::Episodic, None, None).unwrap();
+            let mut cube = MemoryCube::new(&db).expect("operation failed");
+            cube.create("Test 1".into(), MemoryType::Semantic, None, None).expect("operation failed");
+            cube.create("Test 2".into(), MemoryType::Episodic, None, None).expect("operation failed");
             
-            let stats = cube.stats().unwrap();
+            let stats = cube.stats().expect("operation failed");
             assert_eq!(stats.total_memories, 2);
             assert_eq!(stats.by_type.get(&MemoryType::Semantic), Some(&1));
         }

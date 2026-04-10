@@ -18,8 +18,6 @@ pub use monitor::*;
 
 use sentient_common::error::SENTIENTError;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
-use tokio::sync::RwLock;
 use chrono::{DateTime, Utc};
 
 // ═══════════════════════════════════════════════════════════════════════════════

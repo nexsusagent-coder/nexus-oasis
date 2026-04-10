@@ -3,14 +3,12 @@
 //! SENTIENT'nın otonom görev döngüsü - beyni, elleri ve gözleri
 //! tek bir merkezi orkestrasyon sisteminde birleştirir.
 
-use crate::goal::{Goal, Task, TaskResult, TaskStatus, ToolType};
+use crate::goal::{Goal, Task};
 use crate::planner::{ExecutionPlan, Planner};
 use crate::state::{AgentContext, AgentState, ToolCall, ToolResult};
 use crate::tools::Toolbox;
 use crate::execution::{ExecutionResult, StepResult};
 use sentient_common::error::{SENTIENTError, SENTIENTResult};
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 /// SENTIENT Sistem Promptu
 pub const SYSTEM_PROMPT: &str = r#"
@@ -145,7 +143,7 @@ impl Agent {
         let plan = self.create_plan();
         self.context.set_plan(plan);
         
-        log::info!("📋  Plan oluşturuldu: {} görev", self.context.current_plan.as_ref().unwrap().tasks.len());
+        log::info!("📋  Plan oluşturuldu: {} görev", self.context.current_plan.as_ref().expect("operation failed").tasks.len());
         
         // 3. Ana döngü
         self.state = AgentState::Acting;
@@ -168,7 +166,7 @@ impl Agent {
             
             // Sonraki görevi al
             let next_task_opt = {
-                let plan = self.context.current_plan.as_ref().unwrap();
+                let plan = self.context.current_plan.as_ref().expect("operation failed");
                 plan.next_task().cloned()
             };
             
@@ -302,7 +300,7 @@ impl Agent {
         
         let step_result = if result.success {
             self.context.last_tool_result = Some(ToolResult::success(
-                self.context.last_tool_call.as_ref().unwrap().id.clone(),
+                self.context.last_tool_call.as_ref().expect("operation failed").id.clone(),
                 result.output.clone(),
                 duration_ms
             ));
@@ -310,7 +308,7 @@ impl Agent {
             StepResult::from_task_with_result(task, result.output, duration_ms, true, None)
         } else {
             self.context.last_tool_result = Some(ToolResult::error(
-                self.context.last_tool_call.as_ref().unwrap().id.clone(),
+                self.context.last_tool_call.as_ref().expect("operation failed").id.clone(),
                 result.error.clone().unwrap_or_default(),
                 duration_ms
             ));

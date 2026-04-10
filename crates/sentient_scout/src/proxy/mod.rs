@@ -150,7 +150,7 @@ impl ProxyPool {
         self.proxies
             .iter()
             .filter(|p| p.status == ProxyStatus::Active)
-            .min_by(|a, b| a.avg_response_ms.partial_cmp(&b.avg_response_ms).unwrap())
+            .min_by(|a, b| a.avg_response_ms.partial_cmp(&b.avg_response_ms).expect("operation failed"))
     }
     
     /// Health check yap
@@ -256,7 +256,7 @@ mod tests {
     
     #[test]
     fn test_parse_proxy_line() {
-        let proxy = parse_proxy_line("http://127.0.0.1:8080").unwrap();
+        let proxy = parse_proxy_line("http://127.0.0.1:8080").expect("operation failed");
         assert_eq!(proxy.host, "127.0.0.1");
         assert_eq!(proxy.port, 8080);
     }

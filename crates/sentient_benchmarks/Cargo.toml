@@ -1,6 +1,6 @@
 [package]
 name = "sentient_benchmarks"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "Performance benchmarks for SENTIENT AI OS"
 license = "MIT OR Apache-2.0"
@@ -16,11 +16,12 @@ statrs = "0.16"
 sysinfo = "0.30"
 tracing = "0.1"
 tracing-subscriber = "0.3"
+rustc_version_runtime = "0.3"
 
 # Internal crates
 sentient_core = { path = "../sentient_core" }
 sentient_memory = { path = "../sentient_memory" }
-sentient_lancedb = { path = "../sentient_lancedb" }
+# sentient_lancedb = { path = "../sentient_lancedb", optional = true }
 
 [[bench]]
 name = "memory_benchmark"

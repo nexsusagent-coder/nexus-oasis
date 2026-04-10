@@ -1,6 +1,6 @@
 [package]
 name = "sentient_modes"
-version = "0.1.0"
+version.workspace = true
 edition = "2021"
 description = "A5 Six Operation Modes - Native Mode System for SENTIENT"
 authors = ["NEXUS OASIS"]

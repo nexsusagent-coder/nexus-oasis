@@ -1,0 +1,27 @@
+{
+  "model_id": "test-model",
+  "output_dir": "./test-output",
+  "hyperparameters": {
+    "learning_rate": 0.0001,
+    "batch_size": 2,
+    "epochs": 2,
+    "warmup_steps": 100,
+    "weight_decay": 0.01,
+    "gradient_accumulation_steps": 1,
+    "max_grad_norm": 1.0,
+    "lr_scheduler": "linear",
+    "optimizer": "adamw",
+    "seed": 42
+  },
+  "method": {
+    "type": "lora"
+  },
+  "max_seq_length": 2048,
+  "save_steps": 5,
+  "eval_steps": 5,
+  "log_steps": 2,
+  "fp16": true,
+  "bf16": false,
+  "gradient_checkpointing": true,
+  "dataloader_workers": 4
+}

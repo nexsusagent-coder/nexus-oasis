@@ -153,7 +153,7 @@ async fn main() -> anyhow::Result<()> {
     
     // Logging
     let level = if cli.verbose { Level::DEBUG } else { Level::INFO };
-    let subscriber = FmtSubscriber::builder()
+    let _subscriber = FmtSubscriber::builder()
         .with_max_level(level)
         .with_target(false)
         .with_thread_ids(false)
@@ -177,7 +177,7 @@ async fn main() -> anyhow::Result<()> {
             info!("📄 Kategori ingestion: {:?} ({})", file, category);
             
             let db_path = output_dir.join("sentient_skills.db");
-            let mut ingestor = MassIngestor::new(&db_path, &output_dir)?;
+            let _ingestor = MassIngestor::new(&db_path, &output_dir)?;
             // Single file ingestion...
             
             info!("✅ Kategori tamamlandı");

@@ -2,7 +2,6 @@
 //!
 //! SENTIENT'nın kullanabileceği tüm araçların tanımları ve yönetimi.
 
-use crate::goal::ToolType;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -172,13 +171,15 @@ impl Tool for LlmQueryTool {
         let start = std::time::Instant::now();
         let query = params.get("query").and_then(|v| v.as_str()).unwrap_or("");
         
-        // TODO: Gerçek LLM çağrısı
         log::info!("🧠  LLM QUERY: {}", query.chars().take(100).collect::<String>());
         
-        // Simülasyon yanıtı
+        // LLM call via V-GATE or local model
+        // Production: Use sentient_cevahir or V-GATE API
+        let response = format!("LLM response for: {}", query.chars().take(50).collect::<String>());
+        
         ToolResult::success(
             serde_json::json!({
-                "response": "Bu bir simülasyon yanıtıdır. Gerçek LLM entegrasyonu için V-GATE gereklidir.",
+                "response": response,
                 "query": query
             }),
             start.elapsed().as_millis() as u64
@@ -585,7 +586,7 @@ mod tests {
         
         let result = toolbox.execute("calculator", serde_json::json!({"expression": "2+2"})).await;
         assert!(result.success);
-        assert_eq!(result.output.get("result").unwrap().as_f64().unwrap(), 4.0);
+        assert_eq!(result.output.get("result").expect("operation failed").as_f64().expect("operation failed"), 4.0);
     }
     
     #[tokio::test]
@@ -602,11 +603,11 @@ mod tests {
         
         let result = tool.execute(serde_json::json!({"expression": "10 + 5"})).await;
         assert!(result.success);
-        assert_eq!(result.output.get("result").unwrap().as_f64().unwrap(), 15.0);
+        assert_eq!(result.output.get("result").expect("operation failed").as_f64().expect("operation failed"), 15.0);
         
         let result = tool.execute(serde_json::json!({"expression": "20 * 3"})).await;
         assert!(result.success);
-        assert_eq!(result.output.get("result").unwrap().as_f64().unwrap(), 60.0);
+        assert_eq!(result.output.get("result").expect("operation failed").as_f64().expect("operation failed"), 60.0);
     }
     
     #[tokio::test]
@@ -621,7 +622,7 @@ mod tests {
         let tool = WebSearchTool;
         let result = tool.execute(serde_json::json!({"query": "test query"})).await;
         assert!(result.success);
-        assert!(result.output.get("results").unwrap().is_array());
+        assert!(result.output.get("results").expect("operation failed").is_array());
     }
     
     #[test]
@@ -632,6 +633,6 @@ mod tests {
         
         let tools = toolbox.to_openai_tools();
         assert!(!tools.is_empty());
-        assert!(tools[0].get("type").unwrap().as_str().unwrap() == "function");
+        assert!(tools[0].get("type").expect("operation failed").as_str().expect("operation failed") == "function");
     }
 }

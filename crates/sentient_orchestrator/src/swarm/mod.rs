@@ -42,6 +42,15 @@ impl SwarmAgentId {
     pub fn as_str(&self) -> &str {
         &self.0
     }
+    
+    /// Parse from string
+    pub fn parse(s: &str) -> Result<Self, String> {
+        if s.starts_with("swarm_") || s.contains('_') {
+            Ok(Self(s.to_string()))
+        } else {
+            Err(format!("Invalid SwarmAgentId: {}", s))
+        }
+    }
 }
 
 impl Default for SwarmAgentId {

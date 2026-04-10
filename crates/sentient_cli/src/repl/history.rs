@@ -4,7 +4,7 @@
 
 use serde::{Deserialize, Serialize};
 use std::collections::VecDeque;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::fs::{File, OpenOptions};
 use std::io::{BufRead, BufReader, Write};
 use chrono::{DateTime, Utc};

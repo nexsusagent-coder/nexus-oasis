@@ -2,7 +2,6 @@
 
 use async_trait::async_trait;
 use reqwest::Client;
-use serde::{Deserialize, Serialize};
 use crate::VoiceError;
 
 /// Speech synthesis result
@@ -245,9 +244,39 @@ impl Default for SystemTts {
     }
 }
 
-/// MP3 to float conversion (simplified)
-fn mp3_to_float(_bytes: &[u8]) -> Result<Vec<f32>, VoiceError> {
-    // TODO: Implement proper MP3 decoding
-    // For now, return empty
-    Err(VoiceError::NotImplemented("MP3 decoding not implemented".into()))
+/// MP3 to float conversion using minimp3
+fn mp3_to_float(bytes: &[u8]) -> Result<Vec<f32>, VoiceError> {
+    use minimp3::Decoder;
+    
+    let cursor = std::io::Cursor::new(bytes);
+    let mut decoder = Decoder::new(cursor);
+    let mut samples: Vec<f32> = Vec::new();
+    
+    loop {
+        match decoder.next_frame() {
+            Ok(frame) => {
+                // minimp3 0.5+ API: frame.data contains interleaved samples
+                // frame.channels: 1=mono, 2=stereo
+                let _sample_rate = frame.sample_rate;
+                if frame.channels == 1 {
+                    // Mono
+                    samples.extend(frame.data.iter().map(|&s| s as f32 / 32768.0));
+                } else {
+                    // Stereo - mix to mono
+                    for chunk in frame.data.chunks(2) {
+                        let mono = if chunk.len() == 2 {
+                            (chunk[0] as i32 + chunk[1] as i32) / 2
+                        } else {
+                            chunk[0] as i32
+                        };
+                        samples.push(mono as f32 / 32768.0);
+                    }
+                }
+            }
+            Err(minimp3::Error::Eof) => break,
+            Err(e) => return Err(VoiceError::AudioError(e.to_string())),
+        }
+    }
+    
+    Ok(samples)
 }

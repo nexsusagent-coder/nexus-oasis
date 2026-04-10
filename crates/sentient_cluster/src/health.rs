@@ -1,7 +1,6 @@
 //! ─── Health Check Server ───
 
-use axum::{Router, routing::get, Json, http::StatusCode};
-use serde_json::json;
+use axum::{Router, routing::get, Json};
 use std::net::SocketAddr;
 
 /// Health check response
@@ -43,10 +42,8 @@ pub async fn start_server(port: u16) {
     
     log::info!("Health server listening on {}", addr);
     
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind(addr).await.expect("operation failed");
+    axum::serve(listener, app).await.expect("operation failed");
 }
 
 /// Health check endpoint
@@ -79,10 +76,9 @@ async fn health_handler() -> Json<HealthStatus> {
     })
 }
 
-/// Readiness endpoint
-async fn ready_handler() -> StatusCode {
-    // Check if operator is ready
-    StatusCode::OK
+/// Readiness endpoint  
+async fn ready_handler() -> &'static str {
+    "OK"
 }
 
 /// Metrics endpoint (Prometheus format)

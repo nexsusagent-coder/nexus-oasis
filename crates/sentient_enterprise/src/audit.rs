@@ -350,14 +350,14 @@ impl AuditLog {
     }
 
     /// Query audit logs
-    pub async fn query(&self, query: AuditQuery) -> Result<Vec<AuditEntry>, AuditError> {
+    pub async fn query(&self, _query: AuditQuery) -> Result<Vec<AuditEntry>, AuditError> {
         // In production, this would query the database
         // For now, return empty
         Ok(vec![])
     }
 
     /// Get audit entry by ID
-    pub async fn get(&self, id: Uuid) -> Result<Option<AuditEntry>, AuditError> {
+    pub async fn get(&self, _id: Uuid) -> Result<Option<AuditEntry>, AuditError> {
         // In production, this would query the database
         Ok(None)
     }
@@ -428,7 +428,7 @@ mod tests {
     #[tokio::test]
     async fn test_audit_log() {
         let config = AuditConfig::default();
-        let audit = AuditLog::new(config).await.unwrap();
+        let audit = AuditLog::new(config).await.expect("operation failed");
 
         let event = AuditEvent::AuthSuccess {
             user_id: "user123".to_string(),
@@ -437,7 +437,7 @@ mod tests {
             user_agent: Some("Mozilla/5.0".to_string()),
         };
 
-        let id = audit.log(event).await.unwrap();
+        let id = audit.log(event).await.expect("operation failed");
         assert!(!id.is_nil());
     }
 
