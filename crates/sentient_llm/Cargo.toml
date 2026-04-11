@@ -1,0 +1,45 @@
+[package]
+name = "sentient_llm"
+version = "0.1.0"
+edition = "2021"
+description = "SENTIENT OS LLM Hub - 50+ LLM providers with unified API"
+license = "AGPL-3.0"
+authors = ["SENTIENT OS Team"]
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["llm", "ai", "openai", "anthropic", "gemini", "mistral", "claude", "gpt"]
+categories = ["api-bindings", "science"]
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true, features = ["full"] }
+async-trait = "0.1"
+futures = "0.3"
+
+# HTTP client
+reqwest = { workspace = true, features = ["json", "stream", "rustls-tls"] }
+reqwest-eventsource = "0.6"
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Utilities
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Token counting
+tiktoken-rs = "0.5"
+
+# Configuration
+config = "0.14"
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockito = "1.0"
+
+[[example]]
+name = "llm-demo"
+path = "examples/llm-demo/main.rs"

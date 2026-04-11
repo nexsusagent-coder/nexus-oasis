@@ -1,0 +1,44 @@
+[package]
+name = "sentient_finetune"
+version = "0.1.0"
+edition = "2021"
+description = "Model Fine-tuning for SENTIENT OS - LoRA, QLoRA, Full Fine-tuning"
+authors = ["SENTIENT OS Team"]
+license = "AGPL-3.0"
+
+[dependencies]
+# Core
+sentient_common = { path = "../sentient_common" }
+async-trait = "0.1"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# HTTP
+reqwest = { version = "0.12", features = ["json", "multipart", "stream"] }
+
+# ML/AI
+ndarray = "0.16"
+half = { version = "2", features = ["num-traits"] }
+
+# Utilities
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1"
+futures = "0.3"
+bytes = "1"
+
+# Logging
+log = "0.4"
+
+# Optional: safetensors for model loading
+[dependencies.safetensors]
+version = "0.4"
+optional = true
+
+[features]
+default = []
+safetensors = ["dep:safetensors"]
+
+[dev-dependencies]
+tokio-test = "0.4"

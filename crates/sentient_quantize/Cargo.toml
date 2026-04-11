@@ -1,0 +1,32 @@
+[package]
+name = "sentient_quantize"
+version = "0.1.0"
+edition = "2021"
+description = "Model quantization for SENTIENT OS (GGUF, GPTQ, AWQ)"
+license = "AGPL-3.0"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+log = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+uuid = { workspace = true }
+num-traits = "0.2"
+half = "2.4"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = ["gguf", "gptq", "awq"]
+gguf = []
+gptq = []
+awq = []
+bnb = []

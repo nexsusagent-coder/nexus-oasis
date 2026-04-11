@@ -59,10 +59,10 @@
 | **TOPLAM** | **~8.7 GB** |
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  BÖLÜM 2: TÜM CRATE'LER (71 ADET)
+#  BÖLÜM 2: TÜM CRATE'LER (72 ADET)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-## 2.1 BÜYÜKLÜK SIRASINA GÖRE (İLK 30)
+## 2.1 BÜYÜKLÜK SIRASINA GÖRE (İLK 32)
 
 | Sıra | Crate | Satır | İşlev |
 |------|-------|-------|-------|
@@ -95,7 +95,8 @@
 | 27 | sentient_zk_mcp | 2,062 | Zero-Knowledge |
 | 28 | sentient_research | 2,011 | Research |
 | 29 | sentient_ingestor | 2,000 | Skill Ingestor |
-| 30 | sentient_marketplace | 1,680 | Marketplace |
+| 30 | sentient_llm | 6,868 | LLM Hub (50+ models, 13 providers) |
+| 31 | sentient_marketplace | 1,680 | Marketplace |
 
 ## 2.2 OASIS Serisi Detay (7 Crate)
 
@@ -294,6 +295,48 @@ Idle, Initializing, Perceiving, Deciding, Acting, Learning, Error, Stopped, Paus
 
 ---
 
+### sentient_llm (6,868 satır) - LLM HUB
+
+**50+ Models, 13 Providers - Unified API**
+
+#### Desteklenen Provider'lar:
+| # | Provider | Modeller | Özellik |
+|---|----------|----------|--------|
+| 1 | OpenAI | GPT-4o, o1, o3, GPT-3.5 | En popüler |
+| 2 | Anthropic | Claude 4, Claude 3.5 | Uzun context |
+| 3 | Google | Gemini 2.0, Gemini 1.5 | Multimodal |
+| 4 | Mistral | Mistral Large, Codestral | Avrupa |
+| 5 | DeepSeek | V3, R1 | **EN UCUZ!** |
+| 6 | xAI | Grok 2 | Elon Musk |
+| 7 | Cohere | Command R+ | Enterprise |
+| 8 | Perplexity | Sonar | Web search |
+| 9 | Groq | Llama, Mixtral | **EN HIZLI!** |
+| 10 | Together | 100+ model | Open source |
+| 11 | Fireworks | Llama, Qwen | Hızlı inference |
+| 12 | Replicate | Her model | Cloud run |
+| 13 | Ollama | Llama, Qwen, Mistral | **ÜCRETSİZ!** |
+
+#### Ana Modüller:
+- `lib.rs` - Ana modül ve re-exports
+- `error.rs` - Hata tipleri (LlmError)
+- `types.rs` - ChatRequest, ChatResponse, Message, Tool
+- `models.rs` - 50+ model tanımı, fiyatlar, özellikler
+- `provider.rs` - LlmProvider trait, ProviderInfo
+- `registry.rs` - LlmHub, LlmHubBuilder, RoutingStrategy
+- `providers/*.rs` - 13 provider implementasyonu
+
+#### Özellikler:
+- ✅ Unified chat() API
+- ✅ Streaming support (SSE)
+- ✅ Token counting (tiktoken)
+- ✅ Cost calculation & comparison
+- ✅ Automatic provider routing
+- ✅ Free tier detection
+- ✅ Vision/multimodal support
+- ✅ Tool calling
+
+---
+
 ## 2.4 Diğer Crate'ler (Kısa)
 
 | Crate | Satır | İşlev |
@@ -331,6 +374,7 @@ Idle, Initializing, Perceiving, Deciding, Acting, Learning, Error, Stopped, Paus
 | sentient_image | 1,263 | Image Generation |
 | sentient_storage | 1,237 | Persistence |
 | sentient_groq | 1,233 | Groq LPU |
+| sentient_llm | 6,868 | LLM Hub (50+ models, 13 providers) |
 | sentient_local | 1,157 | Local LLM |
 | sentient_anomaly | 1,160 | Anomaly Detection |
 | sentient_i18n | 1,049 | i18n (8 dil) |

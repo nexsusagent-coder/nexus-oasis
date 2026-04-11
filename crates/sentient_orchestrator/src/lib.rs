@@ -122,8 +122,8 @@ pub struct Orchestrator {
     config: OrchestratorConfig,
     /// Bellek sistemi
     memory: std::sync::Arc<tokio::sync::RwLock<sentient_memory::MemoryCube>>,
-    /// Sandbox yöneticisi
-    sandbox: std::sync::Arc<tokio::sync::RwLock<sentient_sandbox::SandboxManager>>,
+    /// Sandbox (optional)
+    sandbox: Option<std::sync::Arc<tokio::sync::RwLock<sentient_sandbox::Sandbox>>>,
     /// Aktif ajanlar
     agents: std::sync::Arc<tokio::sync::RwLock<Vec<Agent>>>,
     /// Global bağlam
@@ -178,10 +178,9 @@ impl Orchestrator {
             sentient_memory::MemoryCube::new("data/orchestrator_memory.db")?
         ));
         
-        // Sandbox yöneticisini başlat
-        let sandbox = std::sync::Arc::new(tokio::sync::RwLock::new(
-            sentient_sandbox::SandboxManager::new(sentient_sandbox::SandboxConfig::default()).await?
-        ));
+        // Sandbox (optional - requires E2B_API_KEY and running service)
+        // Sandbox will be None by default, created on-demand when needed
+        let sandbox = None;
         
         // Global bağlam
         let context = std::sync::Arc::new(tokio::sync::RwLock::new(

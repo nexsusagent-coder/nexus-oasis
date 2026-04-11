@@ -107,6 +107,16 @@ members = [
     "crates/sentient_desktop",
     # v30.0.0 Advanced RAG
     "crates/sentient_rag",
+    # v31.0.0 Knowledge Graph
+    "crates/sentient_knowledge",
+    # v32.0.0 Video Generation
+    "crates/sentient_video",
+    # v33.0.0 Fine-tuning
+    "crates/sentient_finetune",
+    # v34.0.0 Quantization
+    "crates/sentient_quantize",
+    # v35.0.0 Comprehensive LLM Hub (50+ models, 13 providers)
+    "crates/sentient_llm",
     # Skills System
     "skills",
     "scripts",
@@ -154,6 +164,9 @@ rand = "0.8"
 
 # Error handling
 anyhow = "1"
+
+# Token counting
+tiktoken-rs = "0.6"
 
 # Graph / Concurrency
 crossbeam = "0.8"

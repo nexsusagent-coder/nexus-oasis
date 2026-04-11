@@ -1,0 +1,42 @@
+[package]
+name = "sentient_knowledge"
+version = "0.1.0"
+edition.workspace = true
+authors = ["Pi <sentient@sentient-os.ai>"]
+description = "Knowledge Graph Engine with Neo4j and Graph RAG"
+license = "MIT"
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+thiserror.workspace = true
+log.workspace = true
+chrono.workspace = true
+
+# Async
+async-trait = "0.1"
+futures = "0.3"
+
+# Graph / Concurrency
+crossbeam = "0.8"
+parking_lot = "0.12"
+
+# Neo4j
+neo4rs = "0.8"
+
+# HTTP client for Neo4j
+reqwest.workspace = true
+
+# Vector embeddings for Graph RAG
+ndarray = "0.16"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[[example]]
+name = "knowledge-graph-demo"
+path = "examples/knowledge-graph-demo/main.rs"
