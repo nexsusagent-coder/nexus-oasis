@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Rust-1.75%2B-orange?logo=rust" alt="Rust">
-  <img src="https://img.shields.io/badge/License-Apache%202.0-blue" alt="License">
+  <img src="https://img.shields.io/badge/License-AGPL%20v3-blue" alt="License">
+  <a href="https://ko-fi.com/sentientos"><img src="https://img.shields.io/badge/Support-Ko--fi-ff5e5b" alt="Support"></a>
   <img src="https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20Windows-green" alt="Platforms">
   <img src="https://img.shields.io/badge/LLM%20Models-600%2B-purple" alt="LLM Models">
   <img src="https://img.shields.io/badge/Integrations-72%2B-yellow" alt="Integrations">
@@ -32,8 +33,10 @@
 15. [Plugin Sistemi](#plugin-sistemi)
 16. [Güvenlik](#güvenlik)
 17. [Performans](#performans)
-18. [Katıklıda Bulunma](#katıklıda-bulunma)
-19. [Lisans](#lisans)
+18. [💰 Sponsorluk & Destek](#-sponsorluk--destek)
+19. [🏢 Enterprise & Commercial](#-enterprise--commercial)
+20. [Katkılarda Bulunma](#katkılarda-bulunma)
+21. [Lisans](#lisans)
 
 ---
 
@@ -2174,23 +2177,124 @@ cargo test -p sentient_core -- --nocapture
 
 # Lisans
 
-**Apache License 2.0**
+## Open Source (AGPL v3)
+
+SENTIENT OS, **GNU Affero General Public License v3.0** ile lisanslanmıştır.
 
 ```
-Copyright 2024 SENTIENT AI
+Copyright 2025 SENTIENT AI Team
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
 ```
+
+**AGPL v3 Ne Anlama Gelir?**
+- ✅ Kullan, değiştir, dağıt (özgürce)
+- ✅ Değişikliklerini paylaşmak zorundasın
+- ✅ SaaS olarak sunarsan kaynak kodunu paylaşmak zorundasın
+- ❌ Kapalı kaynak ürünlerde kullanamazsın
+
+## Commercial License
+
+Kapalı kaynak ürünlerde kullanmak veya enterprise özellikler için:
+
+| İhtiyaç | Çözüm |
+|---------|-------|
+| Kapalı kaynak kullanım | Commercial License |
+| Enterprise Dashboard | Enterprise Plan |
+| SLA & Support | Enterprise Plan |
+| Custom Development | Enterprise Plus |
+
+**İletişim:** enterprise@sentient.ai
+
+---
+
+# 💰 Sponsorluk & Destek
+
+SENTIENT OS açık kaynak bir projedir. Geliştirmeyi sürdürmek için desteğinize ihtiyacımız var.
+
+## Bağış Yap
+
+| Platform | Link | Avantaj |
+|----------|------|----------|
+| **Ko-fi** | [ko-fi.com/sentientos](https://ko-fi.com/sentientos) | Tek seferlik |
+| **GitHub Sponsors** | [Sponsor](https://github.com/sponsors/nexsusagent-coder) | %0 komisyon |
+| **Patreon** | [patreon.com/sentientos](https://patreon.com/sentientos) | Aylık destek |
+
+## Sponsor Olarak Alacağınız
+
+- 🏆 README'de logo ve link
+- ⭐ Öncelikli feature request'ler
+- 📞 Aylık sync call (Enterprise sponsorlar)
+- 🎯 Custom feature development
+
+## Sponsor Tipleri
+
+| Tip | Tutar | Avantajlar |
+|-----|-------|------------|
+| **Bronze** | $50-99/ay | Logo + Link |
+| **Silver** | $100-499/ay | + Öncelikli support |
+| **Gold** | $500-999/ay | + Custom feature |
+| **Platinum** | $1000+/ay | + Dedicated support |
+
+---
+
+# 🏢 Enterprise & Commercial
+
+SENTIENT OS'u ticari kullanım için enterprise lisansları mevcuttur.
+
+## Open Core Model
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SENTIENT OS                                  │
+├────────────────────────────┬────────────────────────────────────┤
+│      OPEN SOURCE (AGPL)    │      ENTERPRISE (Commercial)       │
+├────────────────────────────┼────────────────────────────────────┤
+│ ✅ Core framework           │ ✅ Enterprise Dashboard            │
+│ ✅ 23 kanal entegrasyon    │ ✅ RBAC, SSO, LDAP, OIDC          │
+│ ✅ 600+ LLM model          │ ✅ Advanced Analytics              │
+| ✅ Basic memory            │ ✅ Multi-tenant Architecture       │
+│ ✅ Community support       │ ✅ Priority Support + SLA          │
+│ ✅ Local deployment        │ ✅ White-label Option              │
+│                            │ ✅ HIPAA & GDPR Compliance         │
+│                            │ ✅ On-premise & Cloud              │
+└────────────────────────────┴────────────────────────────────────┘
+```
+
+## Pricing
+
+| Plan | Fiyat | Kullanım | Özellikler |
+|------|-------|----------|------------|
+| **Community** | Ücretsiz | Self-hosted | AGPL, Community support |
+| **Pro** | $49/ay | 1 user | Cloud, 100K messages, Email support |
+| **Team** | $199/ay | 5 users | Cloud, 500K messages, Analytics, Priority support |
+| **Enterprise** | $999+/ay | Unlimited | On-prem/Cloud, SSO, SLA, Dedicated support |
+| **Enterprise Plus** | İletişime geçin | Unlimited | White-label, Custom dev, HIPAA/GDPR |
+
+## Enterprise Demo İstiyorum
+
+```bash
+# Email: enterprise@sentient.ai
+# Discord: discord.gg/sentient
+# Form: https://sentient.ai/enterprise
+```
+
+## SLA Garantileri
+
+| Metrik | Enterprise | Enterprise Plus |
+|--------|------------|-----------------|
+| **Uptime** | 99.9% | 99.99% |
+| **Response Time** | 4 saat | 1 saat |
+| **Resolution Time** | 24 saat | 4 saat |
+| **Support** | 24/5 | 24/7 |
 
 ---
 
@@ -2202,6 +2306,7 @@ limitations under the License.
 | **Twitter** | [@SentientAI_OS](https://twitter.com/SentientAI_OS) |
 | **GitHub** | [github.com/nexsusagent-coder/SENTIENT_CORE](https://github.com/nexsusagent-coder/SENTIENT_CORE) |
 | **Email** | hello@sentient.ai |
+| **Enterprise Sales** | enterprise@sentient.ai |
 | **Documentation** | [docs.sentient.ai](https://docs.sentient.ai) |
 
 ---

@@ -1,9 +1,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 #  SENTIENT OS - GÜNCEL DURUM VE YAPILACAKLAR
 # ═══════════════════════════════════════════════════════════════════════════════
-#  Tarih: 10 Nisan 2025
+#  Tarih: 11 Nisan 2025
 #  Versiyon: 4.0.0
-#  Son Commit: 3474444
+#  Son Commit: (yeni commit gelecek)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -142,7 +142,49 @@
 #  BÖLÜM 2: YAPILANLAR (KRONOLOJİK)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-## 2.1 SON OTURUMDA YAPILANLAR (10 Nisan 2025)
+## 2.1 SON OTURUMDA YAPILANLAR (11 Nisan 2025)
+
+### 💰 Monetization & Sponsorship Altyapısı
+
+#### 1. GitHub Sponsorship (FUNDING.yml)
+- `.github/FUNDING.yml` oluşturuldu
+- Ko-fi, Patreon, Open Collective linkleri eklendi
+- Sponsor butonu aktifleştirildi
+
+#### 2. Enterprise Datasheet (ENTERPRISE.md)
+- Kurumsal özellikler listesi
+- Pricing tablosu (Pro, Team, Enterprise, Enterprise Plus)
+- SLA garantileri
+- Rakip analizi
+- Kullanım senaryoları (Finans, Sağlık, E-Ticaret, Üretim)
+
+#### 3. Sponsorship Program (SPONSORS.md)
+- Bireysel sponsorluk tier'ları ($5-$100/ay)
+- Kurumsal sponsorluk tier'ları ($500-$50,000/yıl)
+- Avantajlar: Logo, öncelikli support, custom feature
+
+#### 4. README.md Güncellemeleri
+- Ko-fi sponsor badge eklendi
+- Lisans Apache 2.0'dan AGPL v3'e değiştirildi
+- İçindekiler'e Sponsorluk ve Enterprise bölümleri eklendi
+- Pricing tablosu eklendi
+- Open Core model açıklaması eklendi
+
+#### 5. LICENSE Değişikliği
+- MIT → **AGPL v3** (SaaS loophole kapalı)
+- Commercial licensing bilgisi eklendi
+- Dual licensing model aktifleştirildi
+
+### 📊 Sonuç
+```
+Önceki: MIT License (serbest kullanım)
+Şimdi:  AGPL v3 (SaaS için kaynak paylaşımı zorunlu)
+         + Commercial License (kapalı kullanım için ücret)
+```
+
+---
+
+## 2.2 ÖNCEKİ OTURUM (10 Nisan 2025)
 
 ### SOC 2 Compliance (sentient_compliance crate)
 - lib.rs - ComplianceManager, Soc2Certification
@@ -225,20 +267,34 @@
 - [ ] Roller: Admin, Moderator, Contributor, Enterprise, Member
 - [ ] Bot entegrasyonu (opsiyonel)
 
-### 2. GitHub Discussions Aktifleştirme
-- [ ] Settings > Features > Discussions
-- [ ] Kategoriler: Announcements, Ideas, Q&A, Show & Tell
+### 2. GitHub Discussions Aktifleştirme ✅
+- [x] Settings > Features > Discussions
+- [x] Kategoriler: Announcements, General, Ideas, Polls, Q&A, Show and Tell
+- [x] İlk duyuru postu: https://github.com/nexsusagent-coder/SENTIENT_CORE/discussions/16
 
-### 3. Demo Video
+### 3. Monetization Altyapısı ✅ (11 Nisan 2025)
+- [x] GitHub Sponsorship (FUNDING.yml)
+- [x] Enterprise Datasheet (ENTERPRISE.md)
+- [x] Sponsorship Program (SPONSORS.md)
+- [x] AGPL v3 License (dual licensing)
+- [x] README pricing & sponsor bölümleri
+
+### 4. Demo Video
 - [ ] 5 dakikalık "What is SENTIENT OS?" videosu
 - [ ] Quick start demonstration
 - [ ] Multi-agent showcase
 
-### 4. Canlı Test
+### 5. Canlı Test
 - [ ] Hello World örneği çalıştır
 - [ ] Chatbot örneği çalıştır
 - [ ] Multi-agent örneği çalıştır
 - [ ] CI/CI workflow'larını kontrol et
+
+### 6. Sponsor Hesapları Aç
+- [ ] Ko-fi hesabı aç (ko-fi.com/sentientos)
+- [ ] GitHub Sponsors başvurusu yap
+- [ ] Patreon hesabı aç (opsiyonel)
+- [ ] Open Collective hesabı aç (opsiyonel)
 
 ## 3.2 KISA VADE (1 Ay)
 
@@ -348,5 +404,5 @@
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  SON GÜNCELLEME: 10 Nisan 2025
+#  SON GÜNCELLEME: 11 Nisan 2025
 # ═══════════════════════════════════════════════════════════════════════════════
