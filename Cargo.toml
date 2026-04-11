@@ -97,6 +97,8 @@ members = [
     "crates/sentient_search",
     # v24.0.0 Structured Output & JSON Schema
     "crates/sentient_schema",
+    # v25.0.0 Groq LPU Integration (Ultra-fast inference)
+    "crates/sentient_groq",
     # Skills System
     "skills",
     "scripts",

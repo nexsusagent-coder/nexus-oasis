@@ -1,0 +1,24 @@
+[package]
+name = "sentient_groq"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Groq LPU integration for SENTIENT OS - Ultra-fast inference (500+ tokens/sec)"
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["ai", "groq", "lpu", "llm", "fast-inference"]
+categories = ["api-bindings", "science"]
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+
+[dev-dependencies]
+tokio-test = "0.4"
