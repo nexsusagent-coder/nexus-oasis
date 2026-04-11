@@ -510,7 +510,7 @@ pub struct PlanningPattern { ... }
 | 1 | Web Search (Tavily) | 2 gün | ⭐⭐⭐⭐⭐ | ✅ TAMAMLANDI |
 | 2 | Structured Output | 2 gün | ⭐⭐⭐⭐⭐ | ✅ TAMAMLANDI |
 | 3 | Groq LPU Support | 1 gün | ⭐⭐⭐⭐ | ✅ TAMAMLANDI |
-| 4 | Code Sandbox (E2B) | 3 gün | ⭐⭐⭐⭐⭐ | ⬜ Bekliyor |
+| 4 | Code Sandbox (E2B) | 3 gün | ⭐⭐⭐⭐⭐ | ✅ TAMAMLANDI |
 
 **Toplam: ~8 gün**
 
@@ -599,6 +599,48 @@ crates/sentient_groq/
 | Mixtral 8x7B | 32K | $0.24 | $0.24 |
 | Gemma 2 9B | 8K | $0.20 | $0.20 |
 | DeepSeek R1 70B | 128K | $0.75 | $0.99 |
+
+### ✅ Code Sandbox (sentient_sandbox) - TAMAMLANDI
+
+**Oluşturulan Dosyalar:**
+```
+crates/sentient_sandbox/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── sandbox.rs       (Sandbox, SandboxBuilder, SandboxMetadata)
+│   ├── templates.rs     (BuiltinTemplate, TemplateLanguage)
+│   ├── files.rs         (FileInfo, FileContent, WriteFileRequest)
+│   ├── terminal.rs      (RunCommandRequest, TerminalOutput)
+│   └── error.rs
+└── examples/code-sandbox/main.rs
+```
+
+**Özellikler:**
+- ✅ E2B API entegrasyonu
+- ✅ 8 builtin template (Python, Node, Rust, Go, vb.)
+- ✅ Güvenli kod çalıştırma (Firecracker microVM)
+- ✅ Dosya işlemleri (write, read, list, delete)
+- ✅ Terminal komutları
+- ✅ Package installation (pip, npm)
+- ✅ Multi-language support
+- ✅ 17 test geçti
+
+**Template'ler:**
+| Template | Language | Packages |
+|----------|----------|----------|
+| base | - | - |
+| python-3.11 | Python | pip, venv |
+| python-data-science | Python | numpy, pandas, matplotlib |
+| node-20 | JavaScript | npm, yarn |
+| typescript | TypeScript | typescript, tsx |
+| rust | Rust | cargo, rustfmt |
+| go | Go | go |
+| nextjs | Next.js | next, react |
+
+**Fiyatlandırma:**
+- Free tier: 1,000 sandbox saat/ay
+- Pro: $0.02/saat
 
 ---
 

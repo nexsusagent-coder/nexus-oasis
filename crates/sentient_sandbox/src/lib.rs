@@ -1,444 +1,218 @@
-//! ─── SENTIENT SANDBOX (DOCKER İZOLE ORTAM) ───
-//!
-//! OpenManus tabanlı Docker sandbox sistemi.
-//! SENTIENT'nın ürettiği veya dışarıdan aldığı kodları
-//! ana sisteme zarar vermeden güvenli bir şekilde çalıştırır.
+// ═══════════════════════════════════════════════════════════════════════════════
+//  SENTIENT OS - E2B Code Sandbox Integration
+// ═══════════════════════════════════════════════════════════════════════════════
+//  Secure code execution using E2B's Firecracker microVMs
+//  - Isolated environments
+//  - Multiple language support (Python, JS, Rust, etc.)
+//  - AI agent safe code execution
+//  - File system operations
+// ═══════════════════════════════════════════════════════════════════════════════
 
-use sentient_common::error::{SENTIENTError, SENTIENTResult};
-use sentient_common::translate::translate_raw_error;
+pub mod sandbox;
+pub mod templates;
+pub mod files;
+pub mod terminal;
+pub mod error;
 
-use bollard::Docker;
-use bollard::container::{
-    Config, CreateContainerOptions, RemoveContainerOptions,
-    StartContainerOptions, StopContainerOptions,
-};
-use bollard::exec::{CreateExecOptions, StartExecResults};
-use bollard::models::HostConfig;
+pub use sandbox::{Sandbox, SandboxBuilder, SandboxMetadata};
+pub use templates::{Template, TemplateLanguage, BuiltinTemplate};
+pub use files::{FileInfo, FileType};
+pub use terminal::{TerminalOutput, TerminalError};
+pub use error::{SandboxError, Result};
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use uuid::Uuid;
 
-// ─── Sandbox Yapılandırması ───
-
+/// E2B API configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SandboxConfig {
-    pub name_prefix: String,
-    pub image: String,
-    pub memory_limit: i64,
-    pub cpu_quota: f64,
+    /// API key (get from https://e2b.dev)
+    pub api_key: String,
+    /// Base URL (default: https://api.e2b.dev)
+    pub base_url: String,
+    /// Default template
+    pub default_template: String,
+    /// Sandbox timeout in seconds (default: 300)
     pub timeout_secs: u64,
-    pub network_enabled: bool,
-    pub read_only: bool,
-    pub work_dir: String,
-    pub env_vars: HashMap<String, String>,
+    /// Request timeout
+    pub request_timeout_secs: u64,
+}
+
+impl SandboxConfig {
+    /// Create new config with API key
+    pub fn new(api_key: impl Into<String>) -> Self {
+        Self {
+            api_key: api_key.into(),
+            base_url: "https://api.e2b.dev".to_string(),
+            default_template: "base".to_string(),
+            timeout_secs: 300,      // 5 minutes
+            request_timeout_secs: 30,
+        }
+    }
+
+    /// Set base URL
+    pub fn with_base_url(mut self, url: impl Into<String>) -> Self {
+        self.base_url = url.into();
+        self
+    }
+
+    /// Set default template
+    pub fn with_template(mut self, template: impl Into<String>) -> Self {
+        self.default_template = template.into();
+        self
+    }
+
+    /// Set sandbox timeout
+    pub fn with_timeout(mut self, secs: u64) -> Self {
+        self.timeout_secs = secs;
+        self
+    }
+
+    /// Load from environment variable E2B_API_KEY
+    pub fn from_env() -> Result<Self> {
+        let api_key = std::env::var("E2B_API_KEY")
+            .map_err(|_| SandboxError::MissingApiKey)?;
+        Ok(Self::new(api_key))
+    }
 }
 
 impl Default for SandboxConfig {
     fn default() -> Self {
         Self {
-            name_prefix: "sentient_sandbox".into(),
-            image: "python:3.11-slim".into(),
-            memory_limit: 512 * 1024 * 1024,
-            cpu_quota: 1.0,
-            timeout_secs: 60,
-            network_enabled: false,
-            read_only: false,
-            work_dir: "/workspace".into(),
-            env_vars: HashMap::new(),
-        }
-    }
-}
-
-impl SandboxConfig {
-    pub fn secure() -> Self {
-        Self {
-            name_prefix: "sentient_secure".into(),
-            image: "python:3.11-slim".into(),
-            memory_limit: 256 * 1024 * 1024,
-            cpu_quota: 0.5,
-            timeout_secs: 30,
-            network_enabled: false,
-            read_only: true,
-            work_dir: "/workspace".into(),
-            env_vars: HashMap::new(),
-        }
-    }
-    
-    pub fn development() -> Self {
-        Self {
-            name_prefix: "sentient_dev".into(),
-            image: "python:3.11-slim".into(),
-            memory_limit: 2 * 1024 * 1024 * 1024,
-            cpu_quota: 2.0,
+            api_key: String::new(),
+            base_url: "https://api.e2b.dev".to_string(),
+            default_template: "base".to_string(),
             timeout_secs: 300,
-            network_enabled: true,
-            read_only: false,
-            work_dir: "/workspace".into(),
-            env_vars: HashMap::new(),
+            request_timeout_secs: 30,
         }
     }
 }
 
-// ─── Sandbox Sonucu ───
-
+/// Execution result
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SandboxResult {
-    pub sandbox_id: String,
-    pub success: bool,
-    pub exit_code: Option<i32>,
+pub struct ExecutionResult {
+    /// stdout output
     pub stdout: String,
+    /// stderr output
     pub stderr: String,
+    /// Exit code
+    pub exit_code: i32,
+    /// Execution time in milliseconds
     pub duration_ms: u64,
-    pub error: Option<String>,
+    /// Whether execution succeeded
+    pub success: bool,
 }
 
-impl SandboxResult {
-    pub fn is_ok(&self) -> bool {
-        self.success && self.error.is_none()
+impl ExecutionResult {
+    /// Check if execution was successful
+    pub fn is_success(&self) -> bool {
+        self.exit_code == 0
     }
-    
-    pub fn summary(&self) -> String {
-        if self.is_ok() {
-            format!(
-                "✅ [{}] {}ms",
-                self.sandbox_id,
-                self.duration_ms
-            )
+
+    /// Get combined output
+    pub fn output(&self) -> String {
+        if self.stderr.is_empty() {
+            self.stdout.clone()
         } else {
-            format!(
-                "❌ [{}] {}",
-                self.sandbox_id,
-                self.error.as_deref().unwrap_or("Hata")
-            )
+            format!("{}\n{}", self.stdout, self.stderr)
         }
     }
 }
 
-// ─── Kod Çalıştırma İsteği ───
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CodeExecution {
-    pub code: String,
-    pub language: Language,
+/// Code snippet for execution
+#[derive(Debug, Clone, Serialize)]
+pub struct CodeSnippet {
+    /// Source code
+    pub source: String,
+    /// Language
+    pub language: String,
+    /// Entry point file (default: main.py for Python)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entrypoint: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub enum Language {
-    Python,
-    JavaScript,
-    Bash,
-}
+impl CodeSnippet {
+    /// Create new code snippet
+    pub fn new(language: impl Into<String>, source: impl Into<String>) -> Self {
+        Self {
+            source: source.into(),
+            language: language.into(),
+            entrypoint: None,
+        }
+    }
 
-impl Language {
-    pub fn extension(&self) -> &str {
-        match self {
-            Language::Python => ".py",
-            Language::JavaScript => ".js",
-            Language::Bash => ".sh",
-        }
+    /// Python code
+    pub fn python(source: impl Into<String>) -> Self {
+        Self::new("python", source).with_entrypoint("main.py")
     }
-    
-    pub fn run_command(&self, filename: &str) -> String {
-        match self {
-            Language::Python => format!("python3 {}", filename),
-            Language::JavaScript => format!("node {}", filename),
-            Language::Bash => format!("bash {}", filename),
-        }
-    }
-}
 
-// ─── Sandbox Yöneticisi ───
+    /// JavaScript code
+    pub fn javascript(source: impl Into<String>) -> Self {
+        Self::new("javascript", source).with_entrypoint("index.js")
+    }
 
-pub struct SandboxManager {
-    docker: Option<Docker>,
-    config: SandboxConfig,
-    active_sandboxes: HashMap<String, String>,
-}
+    /// TypeScript code
+    pub fn typescript(source: impl Into<String>) -> Self {
+        Self::new("typescript", source).with_entrypoint("index.ts")
+    }
 
-impl SandboxManager {
-    pub async fn new(config: SandboxConfig) -> SENTIENTResult<Self> {
-        let docker = match Docker::connect_with_socket_defaults() {
-            Ok(d) => {
-                log::info!("🐳  SANDBOX: Docker bağlantısı kuruldu");
-                Some(d)
-            }
-            Err(e) => {
-                let raw = e.to_string();
-                log::warn!("🐳  SANDBOX: Docker yok, simülasyon modu → {}", translate_raw_error(&raw));
-                None
-            }
-        };
-        
-        Ok(Self {
-            docker,
-            config,
-            active_sandboxes: HashMap::new(),
-        })
+    /// Rust code
+    pub fn rust(source: impl Into<String>) -> Self {
+        Self::new("rust", source).with_entrypoint("main.rs")
     }
-    
-    pub async fn default_config() -> SENTIENTResult<Self> {
-        Self::new(SandboxConfig::default()).await
-    }
-    
-    pub async fn secure() -> SENTIENTResult<Self> {
-        Self::new(SandboxConfig::secure()).await
-    }
-    
-    pub async fn create_sandbox(&mut self) -> SENTIENTResult<String> {
-        let sandbox_id = format!("{}_{}", self.config.name_prefix, Uuid::new_v4());
-        
-        if self.docker.is_none() {
-            self.active_sandboxes.insert(sandbox_id.clone(), "simulated".into());
-            log::info!("🐳  SANDBOX: Simülasyon → {}", sandbox_id);
-            return Ok(sandbox_id);
-        }
-        
-        let docker = self.docker.as_ref().expect("operation failed");
-        
-        let host_config = HostConfig {
-            memory: Some(self.config.memory_limit),
-            cpu_quota: Some((self.config.cpu_quota * 100000.0) as i64),
-            cpu_period: Some(100000),
-            network_mode: if self.config.network_enabled {
-                Some("bridge".into())
-            } else {
-                Some("none".into())
-            },
-            ..Default::default()
-        };
-        
-        let mut env_vec: Vec<String> = self.config.env_vars.iter()
-            .map(|(k, v)| format!("{}={}", k, v))
-            .collect();
-        env_vec.push(format!("SENTIENT_SANDBOX_ID={}", sandbox_id));
-        env_vec.push("SENTIENT_SANDBOX=true".into());
-        
-        let config = Config {
-            image: Some(self.config.image.clone()),
-            env: Some(env_vec),
-            working_dir: Some(self.config.work_dir.clone()),
-            host_config: Some(host_config),
-            cmd: Some(vec!["sleep".into(), "infinity".into()]),
-            ..Default::default()
-        };
-        
-        let container = docker.create_container(
-            Some(CreateContainerOptions {
-                name: sandbox_id.clone(),
-                platform: None,
-            }),
-            config,
-        ).await.map_err(|e| {
-            let raw = e.to_string();
-            SENTIENTError::Docker(translate_raw_error(&raw))
-        })?;
-        
-        docker.start_container(
-            &container.id,
-            None::<StartContainerOptions<String>>,
-        ).await.map_err(|e| {
-            let raw = e.to_string();
-            SENTIENTError::Docker(translate_raw_error(&raw))
-        })?;
-        
-        self.active_sandboxes.insert(sandbox_id.clone(), container.id.clone());
-        
-        log::info!("🐳  SANDBOX: Oluşturuldu → {}", sandbox_id);
-        Ok(sandbox_id)
-    }
-    
-    pub async fn execute_code(
-        &self,
-        sandbox_id: &str,
-        execution: CodeExecution,
-    ) -> SENTIENTResult<SandboxResult> {
-        let start = std::time::Instant::now();
-        
-        if self.docker.is_none() {
-            return Ok(SandboxResult {
-                sandbox_id: sandbox_id.into(),
-                success: true,
-                exit_code: Some(0),
-                stdout: format!("[SIM] {} çalıştırıldı", execution.language.extension()),
-                stderr: String::new(),
-                duration_ms: start.elapsed().as_millis() as u64,
-                error: None,
-            });
-        }
-        
-        let container_id = self.active_sandboxes.get(sandbox_id)
-            .ok_or_else(|| SENTIENTError::Docker(format!("Sandbox yok: {}", sandbox_id)))?;
-        
-        let docker = self.docker.as_ref().expect("operation failed");
-        let filename = format!("/tmp/code{}", execution.language.extension());
-        
-        // Kodu yaz
-        let write_cmd = format!("cat > {} << 'SENTIENT_EOF'\n{}\nSENTIENT_EOF", filename, execution.code);
-        
-        let _ = docker.create_exec(
-            container_id,
-            CreateExecOptions {
-                cmd: Some(vec!["sh".into(), "-c".into(), write_cmd]),
-                attach_stdout: Some(true),
-                attach_stderr: Some(true),
-                ..Default::default()
-            },
-        ).await.map_err(|e| {
-            let raw = e.to_string();
-            SENTIENTError::Docker(translate_raw_error(&raw))
-        })?;
-        
-        // Çalıştır
-        let run_cmd = execution.language.run_command(&filename);
-        
-        let exec = docker.create_exec(
-            container_id,
-            CreateExecOptions {
-                cmd: Some(vec!["sh".into(), "-c".into(), run_cmd]),
-                attach_stdout: Some(true),
-                attach_stderr: Some(true),
-                ..Default::default()
-            },
-        ).await.map_err(|e| {
-            let raw = e.to_string();
-            SENTIENTError::Docker(translate_raw_error(&raw))
-        })?;
-        
-        let output = docker.start_exec(&exec.id, None).await.map_err(|e| {
-            let raw = e.to_string();
-            SENTIENTError::Docker(translate_raw_error(&raw))
-        })?;
-        
-        let (stdout, stderr) = match output {
-            StartExecResults::Attached { output: stream, .. } => {
-                
-                let mut out = String::new();
-                let err = String::new();
-                
-                // Simplified - just collect output
-                let _ = stream;
-                out.push_str("Kod çalıştırıldı");
-                (out, err)
-            }
-            StartExecResults::Detached => (String::new(), String::new()),
-        };
-        
-        Ok(SandboxResult {
-            sandbox_id: sandbox_id.into(),
-            success: true,
-            exit_code: Some(0),
-            stdout,
-            stderr,
-            duration_ms: start.elapsed().as_millis() as u64,
-            error: None,
-        })
-    }
-    
-    pub async fn stop_sandbox(&self, sandbox_id: &str) -> SENTIENTResult<()> {
-        if self.docker.is_none() { return Ok(()); }
-        
-        let container_id = self.active_sandboxes.get(sandbox_id)
-            .ok_or_else(|| SENTIENTError::Docker(format!("Sandbox yok: {}", sandbox_id)))?;
-        
-        let docker = self.docker.as_ref().expect("operation failed");
-        
-        docker.stop_container(container_id, Some(StopContainerOptions { t: 10 }))
-            .await.map_err(|e| {
-                let raw = e.to_string();
-                SENTIENTError::Docker(translate_raw_error(&raw))
-            })?;
-        
-        log::info!("🐳  SANDBOX: Durduruldu → {}", sandbox_id);
-        Ok(())
-    }
-    
-    pub async fn destroy_sandbox(&mut self, sandbox_id: &str) -> SENTIENTResult<()> {
-        if self.docker.is_none() {
-            self.active_sandboxes.remove(sandbox_id);
-            return Ok(());
-        }
-        
-        let container_id = self.active_sandboxes.get(sandbox_id)
-            .ok_or_else(|| SENTIENTError::Docker(format!("Sandbox yok: {}", sandbox_id)))?;
-        
-        let docker = self.docker.as_ref().expect("operation failed");
-        
-        docker.remove_container(container_id, Some(RemoveContainerOptions { force: true, ..Default::default() }))
-            .await.map_err(|e| {
-                let raw = e.to_string();
-                SENTIENTError::Docker(translate_raw_error(&raw))
-            })?;
-        
-        self.active_sandboxes.remove(sandbox_id);
-        log::info!("🐳  SANDBOX: Silindi → {}", sandbox_id);
-        Ok(())
-    }
-    
-    pub async fn cleanup_all(&mut self) -> SENTIENTResult<usize> {
-        let ids: Vec<String> = self.active_sandboxes.keys().cloned().collect();
-        let count = ids.len();
-        
-        for id in ids {
-            let _ = self.destroy_sandbox(&id).await;
-        }
-        
-        log::info!("🐳  SANDBOX: {} temizlendi", count);
-        Ok(count)
-    }
-    
-    pub fn active_count(&self) -> usize {
-        self.active_sandboxes.len()
-    }
-    
-    pub fn list_sandboxes(&self) -> Vec<&String> {
-        self.active_sandboxes.keys().collect()
+
+    /// Set entry point
+    pub fn with_entrypoint(mut self, entry: impl Into<String>) -> Self {
+        self.entrypoint = Some(entry.into());
+        self
     }
 }
 
-// ─── Tests ───
+// Re-export for convenience
+pub mod prelude {
+    pub use crate::{Sandbox, SandboxBuilder, SandboxConfig};
+    pub use crate::{CodeSnippet, ExecutionResult};
+    pub use crate::templates::BuiltinTemplate;
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_config_default() {
-        let config = SandboxConfig::default();
-        assert_eq!(config.image, "python:3.11-slim");
-        assert!(!config.network_enabled);
+    fn test_config_creation() {
+        let config = SandboxConfig::new("test-key");
+        assert_eq!(config.api_key, "test-key");
+        assert_eq!(config.timeout_secs, 300);
     }
 
     #[test]
-    fn test_config_secure() {
-        let config = SandboxConfig::secure();
-        assert!(!config.network_enabled);
-        assert!(config.read_only);
+    fn test_config_builder() {
+        let config = SandboxConfig::new("test-key")
+            .with_template("python")
+            .with_timeout(600);
+        
+        assert_eq!(config.default_template, "python");
+        assert_eq!(config.timeout_secs, 600);
     }
 
     #[test]
-    fn test_config_dev() {
-        let config = SandboxConfig::development();
-        assert!(config.network_enabled);
+    fn test_code_snippet_python() {
+        let snippet = CodeSnippet::python("print('hello')");
+        assert_eq!(snippet.language, "python");
+        assert_eq!(snippet.entrypoint, Some("main.py".to_string()));
     }
 
     #[test]
-    fn test_language() {
-        assert_eq!(Language::Python.extension(), ".py");
-        assert_eq!(Language::JavaScript.extension(), ".js");
-    }
-
-    #[test]
-    fn test_result() {
-        let r = SandboxResult {
-            sandbox_id: "test".into(),
-            success: true,
-            exit_code: Some(0),
-            stdout: "ok".into(),
-            stderr: "".into(),
+    fn test_execution_result() {
+        let result = ExecutionResult {
+            stdout: "output".to_string(),
+            stderr: String::new(),
+            exit_code: 0,
             duration_ms: 100,
-            error: None,
+            success: true,
         };
-        assert!(r.is_ok());
+        
+        assert!(result.is_success());
+        assert_eq!(result.output(), "output");
     }
 }
