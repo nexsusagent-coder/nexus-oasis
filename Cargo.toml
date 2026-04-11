@@ -93,6 +93,8 @@ members = [
     "crates/sentient_compliance",
     # v22.0.0 SLA Monitoring
     "crates/sentient_sla",
+    # v23.0.0 Web Search Integration (Tavily, Brave, DuckDuckGo)
+    "crates/sentient_search",
     # Skills System
     "skills",
     "scripts",
