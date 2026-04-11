@@ -35,7 +35,7 @@ reqwest = { workspace = true }
 url = "2"
 
 # Random (stealth)
-rand = "0.8"
+rand = "0.10"
 
 # Logging
 log = { workspace = true }

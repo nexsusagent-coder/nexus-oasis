@@ -29,7 +29,7 @@ chrono = { workspace = true }
 thiserror = { workspace = true }
 regex = "1.10"
 url = "2.5"
-rand = "0.8"
+rand = "0.10"
 base64 = "0.22"
 bytes = "1"
 
