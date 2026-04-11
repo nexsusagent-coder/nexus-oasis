@@ -96,6 +96,16 @@ pub use chinese::ZhipuProvider;
 pub use chinese::MoonshotProvider;
 pub use chinese::YiProvider;
 
+// ═══════════════════════════════════════════════════════════════════════════════
+//  ADDITIONAL PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod stability;
+mod watsonx;
+
+pub use stability::StabilityProvider;
+pub use watsonx::WatsonXProvider;
+
 use crate::error::{LlmError, LlmResult};
 use reqwest::{Client, Response};
 use serde::Deserialize;

@@ -180,6 +180,16 @@ impl LlmHub {
             hub = hub.register(Arc::new(p));
         }
 
+        // ═══════════════════════════════════════════════════════════
+        //  ADDITIONAL PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::StabilityProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::WatsonXProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
         Ok(hub)
     }
 
@@ -582,6 +592,20 @@ impl LlmHubBuilder {
 
     pub fn huggingface(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::HuggingFaceProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  ADDITIONAL PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn stability(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::StabilityProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn watsonx(mut self, api_key: impl Into<String>, project_id: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::WatsonXProvider::new(api_key, project_id)?));
         Ok(self)
     }
 
