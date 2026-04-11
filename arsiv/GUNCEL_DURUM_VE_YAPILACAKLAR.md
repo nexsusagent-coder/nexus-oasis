@@ -301,6 +301,32 @@
 - [ ] Payoneer hesabı aç (para çekme için)
 - [ ] GitHub Sponsors başvurusu yap
 
+### 7. Canlı Test
+- [ ] Ollama kur
+- [ ] hello-world örneği çalıştır
+- [ ] chatbot örneği çalıştır
+- [ ] multi-agent örneği çalıştır
+
+### 8. Demo Video (Otomatik)
+- [ ] HeyGen ücretsiz hesap aç
+- [ ] Script'i kopyala (marketing/DEMO_VIDEO_SCRIPT.md)
+- [ ] Video oluştur
+- [ ] YouTube'a yükle
+
+### 9. Sosyal Medya Launch
+- [ ] Reddit post (r/rust)
+- [ ] Twitter/X thread
+- [ ] LinkedIn post
+- [ ] Dev.to article
+- [ ] Hacker News submit
+
+## 3.2 KISA VADE (1 Ay)
+
+### Pazarlama Dosyaları ✅
+- [x] marketing/DEMO_VIDEO_SCRIPT.md (HeyGen, Pictory için script)
+- [x] marketing/OTOMATIK_PAZARLAMA.md (Gelir sistemi, otomasyon)
+- Konum: ./SENTIENT_CORE/marketing/
+
 ## 3.2 KISA VADE (1 Ay)
 
 ### Topluluk Büyümesi
