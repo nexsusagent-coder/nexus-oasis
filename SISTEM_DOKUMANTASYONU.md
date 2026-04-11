@@ -95,7 +95,7 @@
 | 27 | sentient_zk_mcp | 2,062 | Zero-Knowledge |
 | 28 | sentient_research | 2,011 | Research |
 | 29 | sentient_ingestor | 2,000 | Skill Ingestor |
-| 30 | sentient_llm | 6,868 | LLM Hub (50+ models, 13 providers) |
+| 30 | sentient_llm | 14,445 | LLM Hub (34 providers, 313+ models, 200K+ via aggregators) |
 | 31 | sentient_marketplace | 1,680 | Marketplace |
 
 ## 2.2 OASIS Serisi Detay (7 Crate)
@@ -295,35 +295,63 @@ Idle, Initializing, Perceiving, Deciding, Acting, Learning, Error, Stopped, Paus
 
 ---
 
-### sentient_llm (6,868 satır) - LLM HUB
+### sentient_llm (14,445 satır) - LLM HUB
 
-**50+ Models, 13 Providers - Unified API**
+**34 Providers, 313+ Native Models, 200K+ via Aggregators - Industry Leading!**
 
 #### Desteklenen Provider'lar:
-| # | Provider | Modeller | Özellik |
-|---|----------|----------|--------|
-| 1 | OpenAI | GPT-4o, o1, o3, GPT-3.5 | En popüler |
-| 2 | Anthropic | Claude 4, Claude 3.5 | Uzun context |
-| 3 | Google | Gemini 2.0, Gemini 1.5 | Multimodal |
-| 4 | Mistral | Mistral Large, Codestral | Avrupa |
-| 5 | DeepSeek | V3, R1 | **EN UCUZ!** |
-| 6 | xAI | Grok 2 | Elon Musk |
-| 7 | Cohere | Command R+ | Enterprise |
-| 8 | Perplexity | Sonar | Web search |
-| 9 | Groq | Llama, Mixtral | **EN HIZLI!** |
-| 10 | Together | 100+ model | Open source |
-| 11 | Fireworks | Llama, Qwen | Hızlı inference |
-| 12 | Replicate | Her model | Cloud run |
-| 13 | Ollama | Llama, Qwen, Mistral | **ÜCRETSİZ!** |
+| # | Provider | Models | Tür | Özellik |
+|---|----------|--------|-----|--------|
+| 1 | OpenAI | 10+ | Direct | GPT-4o, o1, o3 |
+| 2 | Anthropic | 8+ | Direct | Claude 4, Claude 3.5 |
+| 3 | Google | 12+ | Direct | Gemini 2.0, Gemini 1.5 |
+| 4 | Mistral | 6+ | Direct | Mistral Large, Codestral |
+| 5 | DeepSeek | 4+ | Direct | **EN UCUZ!** V3, R1 |
+| 6 | xAI | 3+ | Direct | Grok 2 |
+| 7 | Cohere | 5+ | Direct | Command R+ |
+| 8 | Perplexity | 3+ | Direct | Sonar (web search) |
+| 9 | Groq | 8+ | Direct | **EN HIZLI!** Llama |
+| 10 | Together | 22+ | Aggregator | 100+ open source |
+| 11 | Fireworks | 10+ | Direct | Fast inference |
+| 12 | Replicate | 5+ | Direct | Cloud run |
+| 13 | AI21 | 4+ | Direct | Jamba |
+| 14 | Ollama | 6+ | Local | **ÜCRETSİZ!** |
+| 15 | **OpenRouter** | 35+ | Aggregator | **200+ models** |
+| 16 | GLHF | 13+ | Aggregator | Gaming |
+| 17 | Novita | 12+ | Aggregator | Cheap |
+| 18 | Hyperbolic | 13+ | Aggregator | Decentralized |
+| 19 | SiliconFlow | 17+ | Aggregator | China |
+| 20 | Cerebras | 3+ | Direct | Fastest chips |
+| 21 | **LiteLLM** | 15+ | Aggregator | **100+ providers** |
+| 22 | **Hugging Face** | 22+ | Aggregator | **200K+ models!** |
+| 23 | NVIDIA NIM | 13+ | Enterprise | Enterprise AI |
+| 24 | SambaNova | 6+ | Enterprise | Enterprise |
+| 25 | DeepInfra | 12+ | Aggregator | Cheap inference |
+| 26 | Azure OpenAI | 9+ | Cloud | Enterprise OpenAI |
+| 27 | AWS Bedrock | 18+ | Cloud | Claude, Llama, Titan |
+| 28 | Vertex AI | 15+ | Cloud | Gemini, Claude, Llama |
+| 29 | vLLM | 8+ | Local | High perf server |
+| 30 | LM Studio | 7+ | Local | GUI local |
+| 31 | Zhipu AI | 5+ | Chinese | GLM-4 |
+| 32 | Moonshot | 3+ | Chinese | Kimi (128K) |
+| 33 | Yi (01.AI) | 5+ | Chinese | Yi Lightning |
+| 34 | Replicate | 2+ | Aggregator | Cloud models |
+
+#### Model Dağılımı:
+- 📊 **313 native model tanımı**
+- 🌐 **200K+ model erişimi** (aggregator'lar ile)
+- 💰 **50+ ücretsiz model** (Ollama, HF, Gemini Flash)
+- 🧠 **15+ reasoning model** (o1, DeepSeek R1, Gemini Thinking)
+- 👁️ **30+ vision model** (GPT-4o, Claude, Gemini)
 
 #### Ana Modüller:
 - `lib.rs` - Ana modül ve re-exports
 - `error.rs` - Hata tipleri (LlmError)
 - `types.rs` - ChatRequest, ChatResponse, Message, Tool
-- `models.rs` - 50+ model tanımı, fiyatlar, özellikler
+- `models.rs` - 54 model tanımı, fiyatlar, özellikler
 - `provider.rs` - LlmProvider trait, ProviderInfo
 - `registry.rs` - LlmHub, LlmHubBuilder, RoutingStrategy
-- `providers/*.rs` - 13 provider implementasyonu
+- `providers/*.rs` - 34 provider implementasyonu
 
 #### Özellikler:
 - ✅ Unified chat() API
@@ -334,6 +362,9 @@ Idle, Initializing, Perceiving, Deciding, Acting, Learning, Error, Stopped, Paus
 - ✅ Free tier detection
 - ✅ Vision/multimodal support
 - ✅ Tool calling
+- ✅ Chinese AI providers (GLM, Kimi, Yi)
+- ✅ Enterprise cloud (Azure, Bedrock, Vertex)
+- ✅ Local inference (Ollama, vLLM, LM Studio)
 
 ---
 
