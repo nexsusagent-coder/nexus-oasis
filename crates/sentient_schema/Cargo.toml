@@ -1,0 +1,28 @@
+[package]
+name = "sentient_schema"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Structured output and JSON Schema for SENTIENT OS - Reliable LLM outputs"
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["ai", "schema", "json-schema", "structured-output", "llm"]
+categories = ["data-structures", "api-bindings"]
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+async-trait.workspace = true
+
+# JSON Schema generation
+schemars = "0.8"
+# Regex for extraction
+regex.workspace = true
+
+[dev-dependencies]
+tokio-test = "0.4"

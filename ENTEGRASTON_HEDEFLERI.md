@@ -508,7 +508,7 @@ pub struct PlanningPattern { ... }
 | Sıra | Entegrasyon | Süre | Değer | Durum |
 |------|-------------|------|-------|-------|
 | 1 | Web Search (Tavily) | 2 gün | ⭐⭐⭐⭐⭐ | ✅ TAMAMLANDI |
-| 2 | Structured Output | 2 gün | ⭐⭐⭐⭐⭐ | ⬜ Bekliyor |
+| 2 | Structured Output | 2 gün | ⭐⭐⭐⭐⭐ | ✅ TAMAMLANDI |
 | 3 | Groq LPU Support | 1 gün | ⭐⭐⭐⭐ | ⬜ Bekliyor |
 | 4 | Code Sandbox (E2B) | 3 gün | ⭐⭐⭐⭐⭐ | ⬜ Bekliyor |
 
@@ -537,6 +537,34 @@ crates/sentient_search/
 - ✅ LLM için context formatı
 - ✅ URL scraping
 - ✅ 6 test geçti
+
+### ✅ Structured Output (sentient_schema) - TAMAMLANDI
+
+**Oluşturulan Dosyalar:**
+```
+crates/sentient_schema/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── schema.rs         (Schema, SchemaBuilder)
+│   ├── extractor.rs      (StructuredExtractor, SchemaValidator)
+│   ├── function.rs       (FunctionDef, Parameter, FunctionCall)
+│   ├── error.rs
+│   └── providers/
+│       ├── mod.rs
+│       ├── openai.rs     (GPT-4, GPT-4o function calling)
+│       ├── anthropic.rs  (Claude tool use)
+│       └── ollama.rs     (Local, JSON mode)
+└── examples/structured-output/main.rs
+```
+
+**Özellikler:**
+- ✅ JSON Schema generation (derive + builder)
+- ✅ Function calling (OpenAI, Anthropic)
+- ✅ Structured extraction with retry
+- ✅ Schema validation
+- ✅ 3 provider desteği
+- ✅ 11 test geçti
 
 ---
 

@@ -95,6 +95,8 @@ members = [
     "crates/sentient_sla",
     # v23.0.0 Web Search Integration (Tavily, Brave, DuckDuckGo)
     "crates/sentient_search",
+    # v24.0.0 Structured Output & JSON Schema
+    "crates/sentient_schema",
     # Skills System
     "skills",
     "scripts",
