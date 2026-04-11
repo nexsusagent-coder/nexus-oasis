@@ -136,6 +136,10 @@
 | INSTALL.md | ✅ Var |
 | SETUP.md | ✅ Var |
 | USER_MANUAL.md | ✅ Var |
+| ENTERPRISE.md | ✅ Kurumsal tanıtım |
+| SPONSORS.md | ✅ Sponsorluk programı |
+| marketing/DEMO_VIDEO_SCRIPT.md | ✅ Video script |
+| marketing/OTOMATIK_PAZARLAMA.md | ✅ Pazarlama planı |
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
