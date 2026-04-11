@@ -7,7 +7,7 @@ description = "Internationalization (i18n) module for SENTIENT - 8 languages"
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 chrono = { version = "0.4", features = ["serde"] }
-strum = { version = "0.25", features = ["derive"] }
+strum = { version = "0.28", features = ["derive"] }
 once_cell = "1"
 
 [dev-dependencies]
