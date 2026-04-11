@@ -3,7 +3,7 @@
 //! Implementation for Replicate API
 
 use async_trait::async_trait;
-use futures::{Stream, StreamExt};
+use futures::Stream;
 use reqwest::Client;
 use serde_json::json;
 use std::pin::Pin;

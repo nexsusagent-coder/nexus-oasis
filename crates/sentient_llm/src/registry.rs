@@ -160,6 +160,26 @@ impl LlmHub {
             hub = hub.register(Arc::new(p));
         }
 
+        // ═══════════════════════════════════════════════════════════
+        //  CHINESE AI PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::ZhipuProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::MoonshotProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::YiProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  HUGGING FACE
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::HuggingFaceProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
         Ok(hub)
     }
 
@@ -534,6 +554,34 @@ impl LlmHubBuilder {
 
     pub fn vertex(mut self, access_token: impl Into<String>, project_id: impl Into<String>, location: impl Into<String>) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::VertexAIProvider::new(access_token, project_id, location)?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  CHINESE AI PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn zhipu(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::ZhipuProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn moonshot(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::MoonshotProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn yi(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::YiProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  HUGGING FACE
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn huggingface(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::HuggingFaceProvider::new(api_key)?));
         Ok(self)
     }
 

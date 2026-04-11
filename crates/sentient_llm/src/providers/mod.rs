@@ -47,6 +47,7 @@ mod hyperbolic;
 mod siliconflow;
 mod cerebras;
 mod litellm;
+mod huggingface;
 
 pub use openrouter::OpenRouterProvider;
 pub use glhf::GlhfProvider;
@@ -55,6 +56,7 @@ pub use hyperbolic::HyperbolicProvider;
 pub use siliconflow::SiliconFlowProvider;
 pub use cerebras::CerebrasProvider;
 pub use litellm::LiteLLMProvider;
+pub use huggingface::HuggingFaceProvider;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  ENTERPRISE PROVIDERS
@@ -83,6 +85,16 @@ mod lmstudio;
 
 pub use vllm::VLLMProvider;
 pub use lmstudio::LmStudioProvider;
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  CHINESE AI PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod chinese;
+
+pub use chinese::ZhipuProvider;
+pub use chinese::MoonshotProvider;
+pub use chinese::YiProvider;
 
 use crate::error::{LlmError, LlmResult};
 use reqwest::{Client, Response};
