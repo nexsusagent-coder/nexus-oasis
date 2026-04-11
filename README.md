@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/License-AGPL%20v3-blue" alt="License">
   <a href="https://ko-fi.com/sentientos"><img src="https://img.shields.io/badge/Support-Ko--fi-ff5e5b" alt="Support"></a>
   <img src="https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20Windows-green" alt="Platforms">
-  <img src="https://img.shields.io/badge/LLM%20Models-600%2B-purple" alt="LLM Models">
+  <img src="https://img.shields.io/badge/LLM%20Models-326%20native%20%7C%20200K%2B%20via%20aggregators-purple" alt="LLM Models">
   <img src="https://img.shields.io/badge/Integrations-72%2B-yellow" alt="Integrations">
   <img src="https://img.shields.io/badge/Skills-5%2C587%2B-red" alt="Skills">
 </p>
@@ -25,7 +25,7 @@
 7. [Mimari](#mimari)
 8. [59 Rust Crate](#59-rust-crate)
 9. [72 Entegrasyon](#72-entegrasyon)
-10. [600+ LLM Model Desteği](#600-llm-model-desteği)
+10. [326+ Native LLM Model (200K+ via Aggregators)](#326-native-llm-model-200k-via-aggregators)
 11. [5,587+ Skill](#5587-skill)
 12. [CLI Komutları](#cli-komutları)
 13. [Web Dashboard](#web-dashboard)
@@ -53,7 +53,7 @@
 │   🦀 Rust Core         → Memory-safe, zero-cost abstractions               │
 │   📦 63 Crate          → Modüler, değiştirilebilir mimari                  │
 │   🔌 72 Entegrasyon    → Agent framework'ler, browser'lar, memory sistemleri │
-│   🤖 600+ LLM Model    → OpenAI, Claude, Gemini, Ollama, 40+ provider      │
+│   🤖 326+ LLM Models  → OpenAI, Claude, Gemini, Ollama, 36 providers        │
 │   🎯 5,587+ Skill      → Hazır AI yetenekleri                               │
 │   🔐 V-GATE            → API anahtarları ASLA client'ta değil              │
 │   📊 Dashboard         → Enterprise war room, gerçek zamanlı               │
@@ -857,7 +857,7 @@ SENTIENT OS **72 açık kaynak proje** entegre eder:
 
 ---
 
-# 600+ LLM Model Desteği
+# 326+ Native LLM Model (200K+ via Aggregators)
 
 SENTIENT OS **40+ provider** ve **600+ model** destekler:
 
@@ -1638,21 +1638,32 @@ SENTIENT OS **40+ provider** ve **600+ model** destekler:
 | Replicate | 14 | Bulut (Pay-as-you-go)
 | Fireworks AI | 13 | Bulut (Ucuz)
 | AI21 Labs | 9 | Bulut (Ücretli)
-| Stability AI | 10 | Bulut + Açık
+| Stability AI | 5 | Bulut + Açık
 | Microsoft Phi | 11 | Açık Kaynak
-| IBM WatsonX | 10 | Bulut (Enterprise)
+| IBM WatsonX | 8 | Bulut (Enterprise)
 | AWS Bedrock | 23 | Bulut (Enterprise)
 | Azure OpenAI | 22 | Bulut (Enterprise)
 | Google Vertex | 19 | Bulut (Enterprise)
 | Ollama | 65+ | Yerel (Ücretsiz)
-| HuggingFace | 40+ | Bulut + Açık
+| HuggingFace | 22 | Bulut + Açık
+| OpenRouter | 35 | Aggregator (200+)
+| LiteLLM | 15 | Aggregator (100+)
+| Cerebras | 3 | Bulut (Hızlı)
+| SambaNova | 6 | Bulut (Enterprise)
+| DeepInfra | 12 | Bulut (Ucuz)
+| GLHF | 13 | Bulut (Gaming)
+| Hyperbolic | 13 | Bulut (Decentralized)
+| Novita | 12 | Bulut (Ucuz)
+| SiliconFlow | 17 | Bulut (Çin)
+| vLLM | 8 | Yerel (Server)
+| LM Studio | 7 | Yerel (GUI)
 | Moonshot | 3 | Bulut (Çin)
-| Zhipu AI | 7 | Bulut (Çin)
+| Zhipu AI | 5 | Bulut (Çin)
+| Yi (01.AI) | 5 | Bulut (Çin)
 | Baidu ERNIE | 5 | Bulut (Çin)
 | MiniMax | 4 | Bulut (Çin)
-| SiliconFlow | 5 | Bulut (Çin)
 | Diğerleri | 50+ | Çeşitli
-| **TOPLAM** | **600+** | -
+| **TOPLAM** | **326 native, 200K+ via aggregators** | -
 
 ---
 
