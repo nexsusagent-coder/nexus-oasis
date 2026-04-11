@@ -690,6 +690,43 @@ crates/sentient_image/
 | Stability AI | SDXL, SD 2.1 | $0.002-$0.04/img |
 | Flux | Pro, Schnell | $0.003-$0.05/img |
 
+### ✅ Agentic Patterns (sentient_patterns) - TAMAMLANDI
+
+**Oluşturulan Dosyalar:**
+```
+crates/sentient_patterns/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── error.rs
+│   ├── traits.rs
+│   └── patterns/
+│       ├── mod.rs
+│       ├── react.rs      (Reason + Act)
+│       ├── cot.rs        (Chain of Thought)
+│       ├── tot.rs        (Tree of Thoughts)
+│       ├── plan_execute.rs
+│       └── reflection.rs (Self-Reflection)
+└── examples/agentic-patterns/main.rs
+```
+
+**Özellikler:**
+- ✅ ReAct: Interleave reasoning and tool use
+- ✅ Chain of Thought: Step-by-step reasoning
+- ✅ Tree of Thoughts: Multiple reasoning paths
+- ✅ Plan-and-Execute: Decompose and execute
+- ✅ Self-Reflection: Generate, critique, improve
+- ✅ 18 test geçti
+
+**Pattern Kullanımları:**
+| Pattern | En İyi Kullanım |
+|---------|-----------------|
+| ReAct | Tool use tasks |
+| CoT | Math, logic problems |
+| ToT | Creative problems |
+| Plan-Execute | Complex multi-step tasks |
+| Reflection | Quality-critical tasks |
+
 ---
 
 ## SPRINT 3 (Hafta 5-8): Uzun Vadeli

@@ -101,6 +101,8 @@ members = [
     "crates/sentient_groq",
     # v27.0.0 Image Generation (DALL-E, SD, Flux)
     "crates/sentient_image",
+    # v28.0.0 Agentic Patterns (ReAct, CoT, ToT)
+    "crates/sentient_patterns",
     # Skills System
     "skills",
     "scripts",

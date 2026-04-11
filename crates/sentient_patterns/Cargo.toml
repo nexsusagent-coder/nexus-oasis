@@ -1,0 +1,23 @@
+[package]
+name = "sentient_patterns"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Agentic patterns for SENTIENT OS - ReAct, CoT, ToT, Plan-and-Execute"
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["ai", "agent", "reasoning", "patterns", "cot"]
+categories = ["science", "algorithms"]
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+futures.workspace = true
+
+[dev-dependencies]
+tokio-test = "0.4"
