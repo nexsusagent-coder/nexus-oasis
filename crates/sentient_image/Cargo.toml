@@ -1,0 +1,25 @@
+[package]
+name = "sentient_image"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Image generation integration for SENTIENT OS - DALL-E, Stable Diffusion, Flux"
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["ai", "image-generation", "dall-e", "stable-diffusion", "flux"]
+categories = ["api-bindings", "multimedia::images"]
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+base64 = "0.22"
+
+[dev-dependencies]
+tokio-test = "0.4"

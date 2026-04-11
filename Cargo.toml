@@ -99,6 +99,8 @@ members = [
     "crates/sentient_schema",
     # v25.0.0 Groq LPU Integration (Ultra-fast inference)
     "crates/sentient_groq",
+    # v27.0.0 Image Generation (DALL-E, SD, Flux)
+    "crates/sentient_image",
     # Skills System
     "skills",
     "scripts",

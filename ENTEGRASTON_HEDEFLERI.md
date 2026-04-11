@@ -646,14 +646,49 @@ crates/sentient_sandbox/
 
 ## SPRINT 2 (Hafta 3-4): Orta
 
-| Sıra | Entegrasyon | Süre | Değer |
-|------|-------------|------|-------|
-| 5 | Image Generation | 3 gün | ⭐⭐⭐⭐ |
-| 6 | Agentic Patterns | 4 gün | ⭐⭐⭐⭐⭐ |
-| 7 | Computer Use | 5 gün | ⭐⭐⭐⭐⭐ |
-| 8 | Advanced RAG | 5 gün | ⭐⭐⭐⭐ |
+| Sıra | Entegrasyon | Süre | Değer | Durum |
+|------|-------------|------|-------|-------|
+| 5 | Image Generation | 3 gün | ⭐⭐⭐⭐ | ✅ TAMAMLANDI |
+| 6 | Agentic Patterns | 4 gün | ⭐⭐⭐⭐⭐ | ⬜ Bekliyor |
+| 7 | Computer Use | 5 gün | ⭐⭐⭐⭐⭐ | ⬜ Bekliyor |
+| 8 | Advanced RAG | 5 gün | ⭐⭐⭐⭐ | ⬜ Bekliyor |
 
 **Toplam: ~17 gün**
+
+### ✅ Image Generation (sentient_image) - TAMAMLANDI
+
+**Oluşturulan Dosyalar:**
+```
+crates/sentient_image/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── types.rs          (ImageRequest, ImageSize, ImageQuality)
+│   ├── error.rs
+│   └── providers/
+│       ├── mod.rs
+│       ├── openai.rs     (DALL-E 2, DALL-E 3)
+│       ├── stability.rs  (Stable Diffusion XL, SD 2.1)
+│       └── flux.rs       (Flux Pro, Flux Schnell)
+└── examples/image-gen/main.rs
+```
+
+**Özellikler:**
+- ✅ Multi-provider support (OpenAI, Stability, Flux)
+- ✅ DALL-E 3 (HD, Vivid/Natural)
+- ✅ Stable Diffusion XL (img2img, upscale)
+- ✅ Flux Pro/Schnell (via Replicate)
+- ✅ Multiple sizes (256-1792px)
+- ✅ Negative prompts
+- ✅ Seed control
+- ✅ 9 test geçti
+
+**Provider'lar:**
+| Provider | Models | Pricing |
+|----------|--------|---------|
+| OpenAI | DALL-E 2, DALL-E 3 | $0.02-$0.12/img |
+| Stability AI | SDXL, SD 2.1 | $0.002-$0.04/img |
+| Flux | Pro, Schnell | $0.003-$0.05/img |
 
 ---
 
