@@ -105,6 +105,8 @@ members = [
     "crates/sentient_patterns",
     # v29.0.0 Computer Use / GUI Automation
     "crates/sentient_desktop",
+    # v30.0.0 Advanced RAG
+    "crates/sentient_rag",
     # Skills System
     "skills",
     "scripts",

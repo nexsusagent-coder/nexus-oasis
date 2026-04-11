@@ -1,133 +1,194 @@
-//! # Sentient RAG
-//!
-//! Native RAG (Retrieval-Augmented Generation) Engine for SENTIENT OS.
-//!
-//! ## Features
-//!
-//! - **Document Chunking**: Multiple strategies (fixed, sentence, paragraph, recursive, code)
-//! - **Embeddings**: Local (fastembed) and remote (OpenAI, etc.) embedding generation
-//! - **Vector Store**: In-memory and LanceDB for persistent storage
-//! - **Semantic Search**: Cosine, Euclidean, Dot Product distance metrics
-//! - **RAG Pipeline**: Complete end-to-end RAG workflow
-//!
-//! ## Example
-//!
-//! ```rust
-//! use sentient_rag::{RagPipeline, Document, ChunkingConfig, ChunkingStrategy};
-//!
-//! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
-//! // Create pipeline with defaults
-//! let pipeline = RagPipeline::default_pipeline()?;
-//!
-//! // Ingest documents
-//! let doc = Document::new("The quick brown fox jumps over the lazy dog.");
-//! pipeline.ingest(&doc).await?;
-//!
-//! // Query
-//! let response = pipeline.query("What does the fox do?").await?;
-//! println!("Response: {}", response.response);
-//!
-//! // Advanced configuration
-//! let pipeline = RagPipeline::builder()
-//!     .chunk_size(512)
-//!     .chunk_overlap(50)
-//!     .chunking_strategy(ChunkingStrategy::Recursive)
-//!     .embedding_dimension(384)
-//!     .distance_metric(sentient_rag::DistanceMetric::Cosine)
-//!     .build()
-//!     .await?;
-//!
-//! # Ok(())
-//! # }
-//! ```
+// ═══════════════════════════════════════════════════════════════════════════════
+//  SENTIENT OS - Advanced RAG (Retrieval Augmented Generation)
+// ═══════════════════════════════════════════════════════════════════════════════
+//  Advanced retrieval augmented generation
+//  - Multiple chunking strategies
+//  - Hybrid search (vector + keyword)
+//  - Re-ranking
+//  - Query expansion
+//  - Context compression
+// ═══════════════════════════════════════════════════════════════════════════════
 
-pub mod error;
-pub mod types;
-pub mod chunker;
-pub mod embedder;
-pub mod store;
-pub mod retriever;
+pub mod chunking;
+pub mod retrieval;
+pub mod reranking;
+pub mod embeddings;
 pub mod pipeline;
+pub mod error;
 
-pub use error::{RagError, Result};
-pub use types::*;
-pub use chunker::Chunker;
-pub use embedder::{Embedder, cosine_similarity, euclidean_distance, dot_product, normalize_embedding};
-pub use store::{VectorStore, MemoryStore, StoreBuilder, StoreStats};
-pub use retriever::{Retriever, RetrievalResult, RetrieverConfig};
-pub use pipeline::{RagPipeline, RagPipelineBuilder, IngestResult};
+pub use chunking::{Chunker, Chunk, ChunkingStrategy};
+pub use retrieval::{Retriever, RetrievalResult, SearchType};
+pub use reranking::{Reranker, RerankedResult};
+pub use embeddings::{EmbeddingModel, EmbeddingVector};
+pub use pipeline::{RAGPipeline, RAGConfig, RAGResult};
+pub use error::{RAGError, Result};
 
-/// RAG version
-pub const RAG_VERSION: &str = env!("CARGO_PKG_VERSION");
+use serde::{Deserialize, Serialize};
+
+/// Document for RAG
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Document {
+    /// Document ID
+    pub id: String,
+    /// Document content
+    pub content: String,
+    /// Metadata
+    pub metadata: std::collections::HashMap<String, String>,
+    /// Embedding (if computed)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embedding: Option<EmbeddingVector>,
+}
+
+impl Document {
+    pub fn new(id: impl Into<String>, content: impl Into<String>) -> Self {
+        Self {
+            id: id.into(),
+            content: content.into(),
+            metadata: std::collections::HashMap::new(),
+            embedding: None,
+        }
+    }
+
+    pub fn with_metadata(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
+        self.metadata.insert(key.into(), value.into());
+        self
+    }
+
+    pub fn with_embedding(mut self, embedding: EmbeddingVector) -> Self {
+        self.embedding = Some(embedding);
+        self
+    }
+
+    pub fn len(&self) -> usize {
+        self.content.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.content.is_empty()
+    }
+}
+
+/// Query for retrieval
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Query {
+    /// Query text
+    pub text: String,
+    /// Number of results to retrieve
+    pub top_k: usize,
+    /// Search type
+    pub search_type: SearchType,
+    /// Filters
+    pub filters: std::collections::HashMap<String, String>,
+}
+
+impl Query {
+    pub fn new(text: impl Into<String>) -> Self {
+        Self {
+            text: text.into(),
+            top_k: 5,
+            search_type: SearchType::Hybrid,
+            filters: std::collections::HashMap::new(),
+        }
+    }
+
+    pub fn with_top_k(mut self, k: usize) -> Self {
+        self.top_k = k;
+        self
+    }
+
+    pub fn with_search_type(mut self, search_type: SearchType) -> Self {
+        self.search_type = search_type;
+        self
+    }
+
+    pub fn with_filter(mut self, key: impl Into<String>, value: impl Into<String>) -> Self {
+        self.filters.insert(key.into(), value.into());
+        self
+    }
+}
+
+/// Context for generation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Context {
+    /// Retrieved documents
+    pub documents: Vec<RetrievalResult>,
+    /// Combined context text
+    pub combined_text: String,
+    /// Total tokens (approximate)
+    pub total_tokens: usize,
+}
+
+impl Context {
+    pub fn new(documents: Vec<RetrievalResult>) -> Self {
+        let combined_text = documents.iter()
+            .map(|d| d.chunk.content.as_str())
+            .collect::<Vec<_>>()
+            .join("\n\n");
+        
+        let total_tokens = combined_text.split_whitespace().count();
+
+        Self {
+            documents,
+            combined_text,
+            total_tokens,
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.documents.is_empty()
+    }
+
+    pub fn document_count(&self) -> usize {
+        self.documents.len()
+    }
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_version() {
-        assert!(!RAG_VERSION.is_empty());
+    fn test_document_creation() {
+        let doc = Document::new("doc1", "Hello world")
+            .with_metadata("author", "test");
+
+        assert_eq!(doc.id, "doc1");
+        assert_eq!(doc.content, "Hello world");
+        assert_eq!(doc.metadata.get("author"), Some(&"test".to_string()));
     }
 
-    #[tokio::test]
-    async fn test_full_workflow() {
-        // Create pipeline
-        let pipeline = RagPipeline::builder()
-            .chunk_size(100)
-            .embedding_dimension(32)
-            .build()
-            .await
-            .unwrap();
-
-        // Ingest documents
-        let doc1 = Document::new("Rust is a systems programming language.");
-
-        pipeline.ingest(&doc1).await.unwrap();
-
-        // Query
-        let response = pipeline.query("programming").await.unwrap();
-
-        assert!(!response.response.is_empty());
+    #[test]
+    fn test_document_length() {
+        let doc = Document::new("doc1", "Hello world");
+        assert_eq!(doc.len(), 11);
+        assert!(!doc.is_empty());
     }
 
-    #[tokio::test]
-    async fn test_chunking_strategies() {
-        let text = "First paragraph.\n\nSecond paragraph.";
+    #[test]
+    fn test_query_creation() {
+        let query = Query::new("test query")
+            .with_top_k(10)
+            .with_search_type(SearchType::Vector);
 
-        // Test different strategies
-        let strategies = [
-            ChunkingStrategy::FixedSize,
-            ChunkingStrategy::Paragraph,
-            ChunkingStrategy::Recursive,
+        assert_eq!(query.text, "test query");
+        assert_eq!(query.top_k, 10);
+    }
+
+    #[test]
+    fn test_context_creation() {
+        let results = vec![
+            RetrievalResult {
+                chunk: Chunk::new("doc1", "First document", 0, 13),
+                score: 0.9,
+            },
+            RetrievalResult {
+                chunk: Chunk::new("doc2", "Second document", 0, 14),
+                score: 0.8,
+            },
         ];
 
-        for strategy in strategies {
-            let config = ChunkingConfig {
-                strategy,
-                chunk_size: 50,
-                ..Default::default()
-            };
-            let chunker = Chunker::new(config);
-            let chunks = chunker.chunk_text(text).unwrap();
-            assert!(!chunks.is_empty(), "Failed for {:?}", strategy);
-        }
-    }
-
-    #[tokio::test]
-    async fn test_search_with_filters() {
-        let pipeline = RagPipeline::builder()
-            .embedding_dimension(32)
-            .build()
-            .await
-            .unwrap();
-
-        let doc = Document::new("Test content");
-        pipeline.ingest(&doc).await.unwrap();
-
-        let mut filters = std::collections::HashMap::new();
-        filters.insert("category".to_string(), "test".to_string());
-
-        let response = pipeline.query_filtered("test", filters).await.unwrap();
-        assert!(response.processing_time_ms >= 0);
+        let context = Context::new(results);
+        assert_eq!(context.document_count(), 2);
+        assert!(!context.combined_text.is_empty());
     }
 }

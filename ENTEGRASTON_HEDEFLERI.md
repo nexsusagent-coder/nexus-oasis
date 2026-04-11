@@ -760,7 +760,60 @@ crates/sentient_desktop/
 | Keyboard | type_text, hotkey, shortcuts |
 | Window | list, activate, close, minimize |
 
+### ✅ Advanced RAG (sentient_rag) - TAMAMLANDI
+
+**Oluşturulan Dosyalar:**
+```
+crates/sentient_rag/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── chunking.rs       (Chunk, Chunker, ChunkingStrategy)
+│   ├── retrieval.rs      (Retriever, SearchType)
+│   ├── reranking.rs      (Reranker, cross-encoder)
+│   ├── embeddings.rs     (EmbeddingModel, cosine similarity)
+│   ├── pipeline.rs       (RAGPipeline, RAGConfig)
+│   └── error.rs
+└── examples/rag-demo/main.rs
+```
+
+**Özellikler:**
+- ✅ Multiple chunking strategies (Fixed, Sentence, Paragraph, Recursive)
+- ✅ Hybrid search (Vector + Keyword)
+- ✅ Reranking with diversity penalty
+- ✅ Embedding support (Mock for testing)
+- ✅ RAG Pipeline (index, query)
+- ✅ Context building
+- ✅ 19 test geçti
+
+**Chunking Stratejileri:**
+| Strategy | Açıklama |
+|----------|----------|
+| FixedSize | Sabit karakter boyutu |
+| Sentence | Cümle bazlı |
+| Paragraph | Paragraf bazlı |
+| Recursive | Hiyerarşik |
+| Semantic | Embedding bazlı |
+
+**Search Types:**
+| Type | Açıklama |
+|------|----------|
+| Vector | Vector similarity search |
+| Keyword | BM25 keyword search |
+| Hybrid | Vector + Keyword kombinasyonu |
+
 ---
+
+## SPRINT 2 TAMAMLANDI!
+
+| # | Entegrasyon | Süre | Durum | Test |
+|---|-------------|------|-------|------|
+| 5 | Image Generation | 3 gün | ✅ TAMAMLANDI | 9/9 |
+| 6 | Agentic Patterns | 4 gün | ✅ TAMAMLANDI | 18/18 |
+| 7 | Computer Use | 5 gün | ✅ TAMAMLANDI | 20/20 |
+| 8 | Advanced RAG | 5 gün | ✅ TAMAMLANDI | 19/19 |
+
+**Toplam: 66 test, 4 entegrasyon!**
 
 ## SPRINT 3 (Hafta 5-8): Uzun Vadeli
 
