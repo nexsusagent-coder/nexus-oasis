@@ -2,6 +2,10 @@
 //!
 //! Provider implementations for various LLM APIs
 
+// ═══════════════════════════════════════════════════════════════════════════════
+//  DIRECT PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
 mod openai;
 mod anthropic;
 mod google;
@@ -31,6 +35,24 @@ pub use fireworks::FireworksProvider;
 pub use replicate::ReplicateProvider;
 pub use ai21::AI21Provider;
 pub use ollama::OllamaProvider;
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  AGGREGATOR PROVIDERS (200+ models each)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod openrouter;
+mod glhf;
+mod novita;
+mod hyperbolic;
+mod siliconflow;
+mod cerebras;
+
+pub use openrouter::OpenRouterProvider;
+pub use glhf::GlhfProvider;
+pub use novita::NovitaProvider;
+pub use hyperbolic::HyperbolicProvider;
+pub use siliconflow::SiliconFlowProvider;
+pub use cerebras::CerebrasProvider;
 
 use crate::error::{LlmError, LlmResult};
 use reqwest::{Client, Response};

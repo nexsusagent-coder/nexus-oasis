@@ -56,7 +56,9 @@ impl LlmHub {
     pub fn from_env() -> LlmResult<Self> {
         let mut hub = Self::new();
 
-        // Try to load each provider
+        // ═══════════════════════════════════════════════════════════
+        //  DIRECT PROVIDERS
+        // ═══════════════════════════════════════════════════════════
         if let Ok(p) = crate::providers::OpenAIProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
@@ -98,6 +100,28 @@ impl LlmHub {
         }
         // Ollama doesn't need API key
         if let Ok(p) = crate::providers::OllamaProvider::new() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  AGGREGATOR PROVIDERS (200+ models each)
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::OpenRouterProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::GlhfProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::NovitaProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::HyperbolicProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::SiliconFlowProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::CerebrasProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
 
@@ -379,6 +403,40 @@ impl LlmHubBuilder {
 
     pub fn ollama(mut self) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::OllamaProvider::new()?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  AGGREGATOR PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn openrouter(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::OpenRouterProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn glhf(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::GlhfProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn novita(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::NovitaProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn hyperbolic(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::HyperbolicProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn siliconflow(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::SiliconFlowProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn cerebras(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::CerebrasProvider::new(api_key)?));
         Ok(self)
     }
 
