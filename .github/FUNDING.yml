@@ -5,25 +5,16 @@
 #  Kullanıcılar projeye finansal destek sağlayabilir.
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# GitHub Sponsors (önerilen - %0 komisyon)
-# github: nexsusagent-coder
-
-# Ko-fi (basit ve popüler)
+# Ko-fi (aktif - bağış kabul ediliyor)
 ko_fi: sentientos
 
-# Patreon (recurring support)
-# patreon: sentientos
+# Patreon (recurring support - Türkiye'de works)
+patreon: sentientos
 
-# Open Collective (şeffaf finansal raporlama)
-# open_collective: sentient-os
-
-# Liberapay (açık kaynak projeler için)
-# liberapay: sentientos
-
-# Custom - Kendi web siteniz
-# custom: https://sentientos.dev/sponsor
+# Liberapay (açık kaynak projeler için - Türkiye'de works)
+liberapay: sentientos
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  NOT: Yukarıdan birini seçin ve yorum satırını (#) kaldırın.
-#  Ko-fi en kolayıdır - ücretsiz hesap açın, username'i yazın.
+#  NOT: GitHub Sponsors için başvuru yapıldıktan sonra yorumu kaldırın
+#       github: nexsusagent-coder
 # ═══════════════════════════════════════════════════════════════════════════════

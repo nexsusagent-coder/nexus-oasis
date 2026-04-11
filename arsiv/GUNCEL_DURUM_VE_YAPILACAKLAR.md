@@ -291,10 +291,11 @@
 - [ ] CI/CI workflow'larını kontrol et
 
 ### 6. Sponsor Hesapları Aç
-- [ ] Ko-fi hesabı aç (ko-fi.com/sentientos)
+- [x] Ko-fi hesabı aç (ko-fi.com/sentientos) ✅
+- [ ] Patreon hesabı aç
+- [ ] Liberapay hesabı aç
+- [ ] Payoneer hesabı aç (para çekme için)
 - [ ] GitHub Sponsors başvurusu yap
-- [ ] Patreon hesabı aç (opsiyonel)
-- [ ] Open Collective hesabı aç (opsiyonel)
 
 ## 3.2 KISA VADE (1 Ay)
 
