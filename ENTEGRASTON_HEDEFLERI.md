@@ -727,6 +727,39 @@ crates/sentient_patterns/
 | Plan-Execute | Complex multi-step tasks |
 | Reflection | Quality-critical tasks |
 
+### ✅ Computer Use (sentient_desktop) - TAMAMLANDI
+
+**Oluşturulan Dosyalar:**
+```
+crates/sentient_desktop/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── screen.rs        (Screen capture, Screenshot)
+│   ├── mouse.rs         (Mouse control, clicks, drag)
+│   ├── keyboard.rs      (Keyboard input, hotkeys)
+│   ├── window.rs        (Window management)
+│   └── error.rs
+└── examples/computer-use/main.rs
+```
+
+**Özellikler:**
+- ✅ Screen capture (full, region)
+- ✅ Mouse control (move, click, drag, scroll)
+- ✅ Keyboard input (type, hotkeys, shortcuts)
+- ✅ Window management (list, activate, close)
+- ✅ Template matching
+- ✅ Cross-platform support (Linux, Windows, macOS)
+- ✅ 20 test geçti
+
+**Fonksiyonlar:**
+| Kategori | İşlev |
+|----------|-------|
+| Screen | capture_all, capture_region, find_template |
+| Mouse | move_to, click, drag, scroll |
+| Keyboard | type_text, hotkey, shortcuts |
+| Window | list, activate, close, minimize |
+
 ---
 
 ## SPRINT 3 (Hafta 5-8): Uzun Vadeli

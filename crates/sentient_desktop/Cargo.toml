@@ -1,0 +1,36 @@
+[package]
+name = "sentient_desktop"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Computer use and GUI automation for SENTIENT OS - Screen, Mouse, Keyboard"
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["ai", "gui", "automation", "desktop", "rpa"]
+categories = ["api-bindings", "os"]
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+image = "0.25"
+base64 = "0.22"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+x11rb = "0.13"
+enigo = "0.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+winapi = "0.3"
+enigo = "0.2"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+core-graphics = "0.24"
+enigo = "0.2"
+
+[dev-dependencies]
+tokio-test = "0.4"
