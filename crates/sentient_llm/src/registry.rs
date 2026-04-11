@@ -124,6 +124,32 @@ impl LlmHub {
         if let Ok(p) = crate::providers::CerebrasProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
+        if let Ok(p) = crate::providers::LiteLLMProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  ENTERPRISE PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::NvidiaProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::SambaNovaProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::DeepInfraProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  LOCAL PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::VLLMProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::LmStudioProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
 
         Ok(hub)
     }
@@ -437,6 +463,49 @@ impl LlmHubBuilder {
 
     pub fn cerebras(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::CerebrasProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn litellm(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::LiteLLMProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  ENTERPRISE PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn nvidia(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::NvidiaProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn sambanova(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::SambaNovaProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn deepinfra(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::DeepInfraProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  LOCAL PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn vllm(mut self) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::VLLMProvider::from_env()?));
+        Ok(self)
+    }
+
+    pub fn vllm_with_url(mut self, base_url: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::VLLMProvider::new(base_url)?));
+        Ok(self)
+    }
+
+    pub fn lmstudio(mut self) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::LmStudioProvider::new()?));
         Ok(self)
     }
 

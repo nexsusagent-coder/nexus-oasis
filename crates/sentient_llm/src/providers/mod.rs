@@ -46,6 +46,7 @@ mod novita;
 mod hyperbolic;
 mod siliconflow;
 mod cerebras;
+mod litellm;
 
 pub use openrouter::OpenRouterProvider;
 pub use glhf::GlhfProvider;
@@ -53,6 +54,29 @@ pub use novita::NovitaProvider;
 pub use hyperbolic::HyperbolicProvider;
 pub use siliconflow::SiliconFlowProvider;
 pub use cerebras::CerebrasProvider;
+pub use litellm::LiteLLMProvider;
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  ENTERPRISE PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod nvidia;
+mod sambanova;
+mod deepinfra;
+
+pub use nvidia::NvidiaProvider;
+pub use sambanova::SambaNovaProvider;
+pub use deepinfra::DeepInfraProvider;
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  LOCAL PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+mod vllm;
+mod lmstudio;
+
+pub use vllm::VLLMProvider;
+pub use lmstudio::LmStudioProvider;
 
 use crate::error::{LlmError, LlmResult};
 use reqwest::{Client, Response};
