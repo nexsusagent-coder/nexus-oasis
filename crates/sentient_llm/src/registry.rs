@@ -140,6 +140,15 @@ impl LlmHub {
         if let Ok(p) = crate::providers::DeepInfraProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
+        if let Ok(p) = crate::providers::AzureOpenAIProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::BedrockProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::VertexAIProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
 
         // ═══════════════════════════════════════════════════════════
         //  LOCAL PROVIDERS
@@ -506,6 +515,25 @@ impl LlmHubBuilder {
 
     pub fn lmstudio(mut self) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::LmStudioProvider::new()?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  CLOUD ENTERPRISE PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn azure(mut self, api_key: impl Into<String>, endpoint: impl Into<String>, deployment: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::AzureOpenAIProvider::new(api_key, endpoint, deployment)?));
+        Ok(self)
+    }
+
+    pub fn bedrock(mut self, access_key: impl Into<String>, secret_key: impl Into<String>, region: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::BedrockProvider::new(access_key, secret_key, region)?));
+        Ok(self)
+    }
+
+    pub fn vertex(mut self, access_token: impl Into<String>, project_id: impl Into<String>, location: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::VertexAIProvider::new(access_token, project_id, location)?));
         Ok(self)
     }
 

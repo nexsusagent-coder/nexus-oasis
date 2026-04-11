@@ -63,10 +63,16 @@ pub use litellm::LiteLLMProvider;
 mod nvidia;
 mod sambanova;
 mod deepinfra;
+mod azure;
+mod bedrock;
+mod vertex;
 
 pub use nvidia::NvidiaProvider;
 pub use sambanova::SambaNovaProvider;
 pub use deepinfra::DeepInfraProvider;
+pub use azure::AzureOpenAIProvider;
+pub use bedrock::BedrockProvider;
+pub use vertex::VertexAIProvider;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  LOCAL PROVIDERS
