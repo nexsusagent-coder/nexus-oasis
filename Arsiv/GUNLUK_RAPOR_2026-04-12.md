@@ -167,8 +167,8 @@ Tüm Hedeflenen Provider'lar:
 
 ---
 
-*Son güncelleme: 12 Nisan 2026 - Tüm hedeflenen provider'lar tamamlandı!*
-*Kalan işlemler: Character.AI, Ollama Live Test, Demo Video (Düşük öncelik)*
+*Son güncelleme: 12 Nisan 2026 - Character.AI Provider tamamlandı!*
+*Kalan işlemler: Ollama Live Test, Demo Video (Düşük öncelik)*
 
 ---
 
@@ -190,6 +190,16 @@ All tests passing: 113 tests
 ```
 
 **Push:** ✅ GitHub'a push edildi
+
+---
+
+## 🔄 GİT İŞLEMLERİ
+
+| Commit | Açıklama |
+|--------|----------|
+| `691cc78` | 5 yeni provider (Baidu ERNIE, MiniMax, Lepton, RunPod, Modal) |
+| `d308db4` | README güncelleme (352 models, 41 providers) |
+| `fe09d5b` | Character.AI provider (3 models) |
 
 ---
 
