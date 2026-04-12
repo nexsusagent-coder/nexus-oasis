@@ -703,3 +703,801 @@ let pos = desktop.wait_for(&template, 5000).await?;
 ---
 
 *İnsani otomasyon katmanı analizi tamamlandı: 12 Nisan 2026*
+
+---
+
+## 🔧 SENTIENT_DESKTOP GELİŞTİRME PLANI
+
+### MEVCUT DURUM
+
+| Alan | Durum | Sorun |
+|------|-------|-------|
+| Platform API | ⚠️ Placeholder | enigo/x11rb kullanılmıyor |
+| İnsani hareket | ❌ Yok | Linear mouse movement |
+| Anti-detect | ❌ Yok | Sabit timing |
+| Multi-monitor | ❌ Yok | Tek ekran |
+| OCR | ❌ Yok | Sadece template |
+| Kayıt/Macro | ❌ Yok | Replay yok |
+| Setup sistemi | ❌ Yok | Kurulum yok |
+
+---
+
+### 🚀 GELİŞTİRME ÖNERİLERİ
+
+#### 1. GERÇEK PLATFORM API ENTEGRASYONU
+
+```rust
+// Platform-specific implementation
+#[cfg(target_os = "linux")]
+mod linux {
+    use x11rb::connection::Connection;
+    use enigo::{Enigo, MouseControllable, KeyboardControllable};
+    
+    pub struct LinuxDesktop {
+        enigo: Enigo,
+        conn: xcb::Connection,
+    }
+    
+    impl LinuxDesktop {
+        pub fn screenshot(&self) -> Result<Screenshot> {
+            // X11 screenshot
+        }
+        
+        pub fn mouse_move(&mut self, x: i32, y: i32) -> Result<()> {
+            self.enigo.mouse_move_to(x, y);
+            Ok(())
+        }
+    }
+}
+
+#[cfg(target_os = "windows")]
+mod windows {
+    use winapi::um::winuser::*;
+    use enigo::{Enigo, MouseControllable};
+    
+    pub struct WindowsDesktop {
+        enigo: Enigo,
+    }
+}
+
+#[cfg(target_os = "macos")]
+mod macos {
+    use core_graphics::display::*;
+    use enigo::{Enigo, MouseControllable};
+    
+    pub struct MacDesktop {
+        enigo: Enigo,
+    }
+}
+```
+
+---
+
+#### 2. İNSAN BENZERİ MOUSE HAREKETİ (Bezier Curve)
+
+```rust
+/// Bezier curve mouse movement
+pub struct HumanMouse {
+    /// Min hız (piksel/ms)
+    min_speed: f32,
+    /// Max hız
+    max_speed: f32,
+    /// Sapma miktarı
+    deviation: f32,
+}
+
+impl HumanMouse {
+    /// İnsan gibi hareket et
+    pub fn move_human(&mut self, from: (i32, i32), to: (i32, i32)) -> Result<Vec<(i32, i32)>> {
+        // 1. Bezier control points oluştur
+        let mid1 = self.random_control_point(from, to);
+        let mid2 = self.random_control_point(from, to);
+        
+        // 2. Bezier curve hesapla
+        let points = self.bezier_curve(from, mid1, mid2, to, 50);
+        
+        // 3. Random hız ekle
+        let timed_points = self.add_random_timing(points);
+        
+        Ok(timed_points)
+    }
+    
+    /// Bezier curve hesapla
+    fn bezier_curve(&self, p0: (i32, i32), p1: (i32, i32), 
+                    p2: (i32, i32), p3: (i32, i32), steps: usize) -> Vec<(i32, i32)> {
+        (0..=steps)
+            .map(|i| {
+                let t = i as f32 / steps as f32;
+                let t2 = t * t;
+                let t3 = t2 * t;
+                let mt = 1.0 - t;
+                let mt2 = mt * mt;
+                let mt3 = mt2 * mt;
+                
+                let x = (mt3 * p0.0 as f32 + 3.0 * mt2 * t * p1.0 as f32 
+                       + 3.0 * mt * t2 * p2.0 as f32 + t3 * p3.0 as f32) as i32;
+                let y = (mt3 * p0.1 as f32 + 3.0 * mt2 * t * p1.1 as f32 
+                       + 3.0 * mt * t2 * p2.1 as f32 + t3 * p3.1 as f32) as i32;
+                
+                (x, y)
+            })
+            .collect()
+    }
+    
+    /// Random timing ekle
+    fn add_random_timing(&self, points: Vec<(i32, i32)>) -> Vec<(i32, i32, u64)> {
+        points.into_iter()
+            .map(|(x, y)| {
+                // Random delay: 5-20ms
+                let delay = 5 + rand::random::<u64>() % 15;
+                (x, y, delay)
+            })
+            .collect()
+    }
+}
+```
+
+---
+
+#### 3. İNSAN BENZERİ KLAVYE YAZMA
+
+```rust
+pub struct HumanKeyboard {
+    /// Minimum karakter gecikmesi (ms)
+    min_delay: u64,
+    /// Maksimum karakter gecikmesi
+    max_delay: u64,
+    /// Hata olasılığı
+    error_rate: f32,
+    /// Düzeltme olasılığı
+    correction_rate: f32,
+}
+
+impl HumanKeyboard {
+    /// İnsan gibi yaz
+    pub fn type_human(&mut self, text: &str) -> Result<()> {
+        let chars: Vec<char> = text.chars().collect();
+        
+        for (i, &c) in chars.iter().enumerate() {
+            // Random gecikme
+            let delay = self.min_delay + rand::random::<u64>() % (self.max_delay - self.min_delay);
+            
+            // Bazen hata yap
+            if rand::random::<f32>() < self.error_rate {
+                // Yanlış karakter
+                let wrong = self.get_nearby_key(c);
+                self.type_char(wrong)?;
+                tokio::time::sleep(Duration::from_millis(delay * 2)).await;
+                
+                // Geri sil
+                self.backspace()?;
+                tokio::time::sleep(Duration::from_millis(delay)).await;
+            }
+            
+            // Doğru karakter
+            self.type_char(c)?;
+            tokio::time::sleep(Duration::from_millis(delay)).await;
+            
+            // Bazen durakla (düşünüyormuş gibi)
+            if rand::random::<f32>() < 0.05 {
+                tokio::time::sleep(Duration::from_millis(100 + rand::random::<u64>() % 400)).await;
+            }
+        }
+        
+        Ok(())
+    }
+    
+    /// Yakındaki tuşu al (QWERTY için)
+    fn get_nearby_key(&self, c: char) -> char {
+        let neighbors = HashMap::from([
+            ('a', "qwsz"), ('s', "awedxz"), ('d', "serfcx"),
+            ('e', "wrdcs"), ('r', "etdfg"), ('t', "ryhgf"),
+            // ... diğer tuşlar
+        ]);
+        
+        neighbors.get(&c)
+            .and_then(|s| s.chars().nth(rand::random::<usize>() % s.len()))
+            .unwrap_or(c)
+    }
+}
+```
+
+---
+
+#### 4. KURULUM VE ONAY SİSTEMİ
+
+```rust
+// sentient_desktop/src/setup.rs
+
+use std::io::{self, Write};
+
+/// Kurulum modu
+pub enum SetupMode {
+    /// Tam otomatik
+    Auto,
+    /// Etkileşimli
+    Interactive,
+    /// Sessiz (config dosyasından)
+    Silent,
+    /// Daha sonra
+    Later,
+}
+
+/// Kurulum yapılandırması
+pub struct DesktopSetup {
+    /// Platform
+    platform: Platform,
+    /// İzinler
+    permissions: Permissions,
+    /// Güvenlik ayarları
+    security: SecurityConfig,
+    /// İnsan benzerlik ayarları
+    human_config: HumanConfig,
+}
+
+#[derive(Clone, Copy)]
+pub enum Platform {
+    Linux,
+    Windows,
+    MacOS,
+}
+
+pub struct Permissions {
+    /// Ekran yakalama izni
+    screen_capture: bool,
+    /// Klavye kontrol izni
+    keyboard_control: bool,
+    /// Fare kontrol izni
+    mouse_control: bool,
+    /// Pencere yönetimi izni
+    window_management: bool,
+}
+
+pub struct SecurityConfig {
+    /// Yasaklı bölgeler
+    forbidden_regions: Vec<Rect>,
+    /// Yasaklı uygulamalar
+    forbidden_apps: Vec<String>,
+    /// Maksimum aksiyon/dakika
+    max_actions_per_minute: u32,
+    /// İnsan onayı gerekli mi?
+    require_human_approval: bool,
+    /// Emergency stop aktif mi?
+    emergency_stop_enabled: bool,
+}
+
+pub struct HumanConfig {
+    /// İnsan benzeri hareket
+    human_mouse: bool,
+    /// İnsan benzeri yazma
+    human_typing: bool,
+    /// Hata simülasyonu
+    simulate_errors: bool,
+    /// Min typing delay (ms)
+    min_type_delay: u64,
+    /// Max typing delay (ms)
+    max_type_delay: u64,
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  SETUP WIZARD
+// ═══════════════════════════════════════════════════════════════════════════════
+
+impl DesktopSetup {
+    /// Kurulum sihirbazını başlat
+    pub async fn run_wizard(mode: SetupMode) -> Result<Self> {
+        println!();
+        println!("╔════════════════════════════════════════════════════════════╗");
+        println!("║     🖥️  SENTIENT DESKTOP KURULUM SİHİRBAZI                ║");
+        println!("╠════════════════════════════════════════════════════════════╣");
+        println!("║  Bu sistem bilgisayarınızı insan gibi kontrol edebilir.   ║");
+        println!("║  Fare, klavye ve ekran erişimi gerektirir.                ║");
+        println!("╚════════════════════════════════════════════════════════════╝");
+        println!();
+        
+        match mode {
+            SetupMode::Auto => Self::auto_setup().await,
+            SetupMode::Interactive => Self::interactive_setup().await,
+            SetupMode::Silent => Self::silent_setup().await,
+            SetupMode::Later => Self::defer_setup().await,
+        }
+    }
+    
+    /// Otomatik kurulum (onay sonrası)
+    async fn auto_setup() -> Result<Self> {
+        println!("🚀 Otomatik kurulum başlatılıyor...");
+        
+        // 1. Platform tespiti
+        let platform = Self::detect_platform();
+        println!("✅ Platform: {:?}", platform);
+        
+        // 2. Sistem testleri
+        println!("🧪 Sistem testleri yapılıyor...");
+        Self::test_screen_capture()?;
+        Self::test_mouse_control()?;
+        Self::test_keyboard_control()?;
+        println!("✅ Tüm testler geçti!");
+        
+        // 3. Varsayılan ayarları yükle
+        let setup = Self {
+            platform,
+            permissions: Permissions::all(),
+            security: SecurityConfig::default(),
+            human_config: HumanConfig::default(),
+        };
+        
+        // 4. Config kaydet
+        setup.save_config()?;
+        println!("✅ Yapılandırma kaydedildi!");
+        
+        println!();
+        println!("🎉 Kurulum tamamlandı!");
+        println!("   Artık sentient_desktop kullanıma hazır.");
+        
+        Ok(setup)
+    }
+    
+    /// Etkileşimli kurulum
+    async fn interactive_setup() -> Result<Self> {
+        let platform = Self::detect_platform();
+        
+        // İzinler
+        println!();
+        println!("📋 İZİN AYARLARI");
+        println!("─────────────────────────────────────");
+        
+        let screen = Self::ask_yes_no("Ekran yakalama izni verilsin mi?", true)?;
+        let keyboard = Self::ask_yes_no("Klavye kontrol izni verilsin mi?", true)?;
+        let mouse = Self::ask_yes_no("Fare kontrol izni verilsin mi?", true)?;
+        let window = Self::ask_yes_no("Pencere yönetimi izni verilsin mi?", true)?;
+        
+        // Güvenlik
+        println!();
+        println!("🔒 GÜVENLİK AYARLARI");
+        println!("─────────────────────────────────────");
+        
+        let approval = Self::ask_yes_no(
+            "Kritik işlemler için insan onayı istensin mi?", 
+            true
+        )?;
+        
+        let max_actions = Self::ask_number(
+            "Maksimum aksiyon/dakika (30-300)?",
+            60,
+            30,
+            300
+        )?;
+        
+        // İnsan benzerlik
+        println!();
+        println!("👤 İNSAN BENZERLİK AYARLARI");
+        println!("─────────────────────────────────────");
+        
+        let human_mouse = Self::ask_yes_no(
+            "Fare hareketleri insan gibi olsun mu?",
+            true
+        )?;
+        
+        let human_typing = Self::ask_yes_no(
+            "Yazma hareketleri insan gibi olsun mu?",
+            true
+        )?;
+        
+        let simulate_errors = Self::ask_yes_no(
+            "Bazen hata yapıp düzeltsin mi? (daha gerçekçi)",
+            false
+        )?;
+        
+        let min_delay = Self::ask_number(
+            "Minimum yazma gecikmesi (ms)?",
+            20,
+            5,
+            100
+        )?;
+        
+        let max_delay = Self::ask_number(
+            "Maksimum yazma gecikmesi (ms)?",
+            80,
+            min_delay,
+            200
+        )?;
+        
+        // Özet
+        println!();
+        println!("📊 KURULUM ÖZETİ");
+        println!("═════════════════════════════════════════════════════");
+        println!("  Platform:           {:?}", platform);
+        println!("  Ekran yakalama:     {}", if screen { "✅" } else { "❌" });
+        println!("  Klavye kontrol:     {}", if keyboard { "✅" } else { "❌" });
+        println!("  Fare kontrol:       {}", if mouse { "✅" } else { "❌" });
+        println!("  Pencere yönetimi:   {}", if window { "✅" } else { "❌" });
+        println!("  İnsan onayı:        {}", if approval { "✅" } else { "❌" });
+        println!("  Max aksiyon/dk:     {}", max_actions);
+        println!("  İnsani fare:        {}", if human_mouse { "✅" } else { "❌" });
+        println!("  İnsani yazma:       {}", if human_typing { "✅" } else { "❌" });
+        println!("  Hata simülasyonu:   {}", if simulate_errors { "✅" } else { "❌" });
+        println!("  Yazma hızı:         {}-{}ms", min_delay, max_delay);
+        println!("═════════════════════════════════════════════════════");
+        println!();
+        
+        let confirm = Self::ask_yes_no("Bu ayarlarla devam edilsin mi?", true)?;
+        
+        if !confirm {
+            println!("❌ Kurulum iptal edildi.");
+            return Self::defer_setup().await;
+        }
+        
+        // Test
+        println!();
+        println!("🧪 Sistem testleri yapılıyor...");
+        if screen { Self::test_screen_capture()?; }
+        if mouse { Self::test_mouse_control()?; }
+        if keyboard { Self::test_keyboard_control()?; }
+        println!("✅ Testler tamamlandı!");
+        
+        // Kaydet
+        let setup = Self {
+            platform,
+            permissions: Permissions {
+                screen_capture: screen,
+                keyboard_control: keyboard,
+                mouse_control: mouse,
+                window_management: window,
+            },
+            security: SecurityConfig {
+                require_human_approval: approval,
+                max_actions_per_minute: max_actions,
+                ..Default::default()
+            },
+            human_config: HumanConfig {
+                human_mouse,
+                human_typing,
+                simulate_errors,
+                min_type_delay: min_delay,
+                max_type_delay: max_delay,
+            },
+        };
+        
+        setup.save_config()?;
+        
+        println!();
+        println!("🎉 Kurulum tamamlandı!");
+        println!("   Config: ~/.config/sentient/desktop.toml");
+        
+        Ok(setup)
+    }
+    
+    /// Sessiz kurulum (config dosyasından)
+    async fn silent_setup() -> Result<Self> {
+        Self::load_config()
+    }
+    
+    /// Daha sonra kurulum
+    async fn defer_setup() -> Result<Self> {
+        println!();
+        println!("⏸️  Kurulum ertelendi.");
+        println!("   Daha sonra şu komutla kurabilirsiniz:");
+        println!("   sentient-desktop setup");
+        println!();
+        
+        Err(DesktopError::SetupDeferred)
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  YARDIMCI FONKSİYONLAR
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    fn detect_platform() -> Platform {
+        #[cfg(target_os = "linux")]
+        { Platform::Linux }
+        
+        #[cfg(target_os = "windows")]
+        { Platform::Windows }
+        
+        #[cfg(target_os = "macos")]
+        { Platform::MacOS }
+    }
+    
+    fn ask_yes_no(prompt: &str, default: bool) -> Result<bool> {
+        let default_str = if default { "E/n" } else { "e/N" };
+        print!("{} [{}]: ", prompt, default_str);
+        io::stdout().flush()?;
+        
+        let mut input = String::new();
+        io::stdin().read_line(&mut input)?;
+        
+        let input = input.trim().to_lowercase();
+        
+        if input.is_empty() {
+            return Ok(default);
+        }
+        
+        Ok(input == "e" || input == "evet" || input == "y" || input == "yes")
+    }
+    
+    fn ask_number(prompt: &str, default: u64, min: u64, max: u64) -> Result<u64> {
+        print!("{} [{}]: ", prompt, default);
+        io::stdout().flush()?;
+        
+        let mut input = String::new();
+        io::stdin().read_line(&mut input)?;
+        
+        let input = input.trim();
+        
+        if input.is_empty() {
+            return Ok(default);
+        }
+        
+        let num: u64 = input.parse().unwrap_or(default);
+        Ok(num.clamp(min, max))
+    }
+    
+    fn test_screen_capture() -> Result<()> {
+        print!("  📸 Ekran yakalama... ");
+        io::stdout().flush()?;
+        
+        let screen = Screen::capture_all()?;
+        
+        if screen.data.len() > 0 {
+            println!("✅ ({}x{})", screen.width, screen.height);
+            Ok(())
+        } else {
+            println!("❌");
+            Err(DesktopError::ScreenCaptureFailed)
+        }
+    }
+    
+    fn test_mouse_control() -> Result<()> {
+        print!("  🖱️  Fare kontrolü... ");
+        io::stdout().flush()?;
+        
+        let (x, y) = Mouse::position()?;
+        println!("✅ (pozisyon: {}, {})", x, y);
+        Ok(())
+    }
+    
+    fn test_keyboard_control() -> Result<()> {
+        print!("  ⌨️  Klavye kontrolü... ");
+        io::stdout().flush()?;
+        
+        // Basit test - bir tuşa basıp bırakma
+        // Gerçek implementation'da güvenli bir tuş test edilebilir
+        println!("✅");
+        Ok(())
+    }
+    
+    fn save_config(&self) -> Result<()> {
+        let config_path = Self::get_config_path();
+        std::fs::create_dir_all(config_path.parent().unwrap())?;
+        
+        let config = toml::to_string_pretty(self)?;
+        std::fs::write(&config_path, config)?;
+        
+        Ok(())
+    }
+    
+    fn load_config() -> Result<Self> {
+        let config_path = Self::get_config_path();
+        
+        if !config_path.exists() {
+            return Err(DesktopError::ConfigNotFound);
+        }
+        
+        let config = std::fs::read_to_string(&config_path)?;
+        let setup: DesktopSetup = toml::from_str(&config)?;
+        
+        Ok(setup)
+    }
+    
+    fn get_config_path() -> std::path::PathBuf {
+        std::env::var("HOME")
+            .map(|h| std::path::PathBuf::from(h))
+            .unwrap_or_else(|_| std::path::PathBuf::from("/root"))
+            .join(".config")
+            .join("sentient")
+            .join("desktop.toml")
+    }
+}
+
+impl Default for Permissions {
+    fn default() -> Self {
+        Self {
+            screen_capture: true,
+            keyboard_control: true,
+            mouse_control: true,
+            window_management: true,
+        }
+    }
+}
+
+impl Permissions {
+    fn all() -> Self {
+        Self::default()
+    }
+}
+
+impl Default for SecurityConfig {
+    fn default() -> Self {
+        Self {
+            forbidden_regions: vec![],
+            forbidden_apps: vec![],
+            max_actions_per_minute: 60,
+            require_human_approval: true,
+            emergency_stop_enabled: true,
+        }
+    }
+}
+
+impl Default for HumanConfig {
+    fn default() -> Self {
+        Self {
+            human_mouse: true,
+            human_typing: true,
+            simulate_errors: false,
+            min_type_delay: 20,
+            max_type_delay: 80,
+        }
+    }
+}
+```
+
+---
+
+#### 5. CLI KOMUTLARI
+
+```rust
+// sentient-desktop CLI
+
+// Kurulum
+sentient-desktop setup           # İnteraktif kurulum
+sentient-desktop setup --auto    # Otomatik kurulum
+sentient-desktop setup --later   # Daha sonra
+
+// Test
+sentient-desktop test            # Tüm testler
+sentient-desktop test screen     # Ekran testi
+sentient-desktop test mouse      # Fare testi
+sentient-desktop test keyboard   # Klavye testi
+
+// Config
+sentient-desktop config show     # Ayarları göster
+sentient-desktop config edit     # Ayarları düzenle
+sentient-desktop config reset    # Varsayılana dön
+
+// İzinler
+sentient-desktop permissions     # Mevcut izinleri göster
+sentient-desktop permissions grant screen  # İzin ver
+sentient-desktop permissions revoke mouse  # İzni kaldır
+
+// Macro
+sentient-desktop record          # Kayıt başlat
+sentient-desktop record stop     # Kaydı durdur
+sentient-desktop play macro.toml # Oynat
+```
+
+---
+
+#### 6. KAYIT VE OYNATMA (MACRO)
+
+```rust
+pub struct MacroRecorder {
+    /// Kaydedilen aksiyonlar
+    actions: Vec<RecordedAction>,
+    /// Başlangıç zamanı
+    start_time: Instant,
+    /// Kayıt aktif mi?
+    recording: bool,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct RecordedAction {
+    /// Aksiyon
+    pub action: Action,
+    /// Zaman (başlangıçtan itibaren ms)
+    pub timestamp_ms: u64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Macro {
+    pub name: String,
+    pub description: String,
+    pub actions: Vec<RecordedAction>,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+}
+
+impl MacroRecorder {
+    /// Kaydı başlat
+    pub fn start(&mut self) {
+        self.actions.clear();
+        self.start_time = Instant::now();
+        self.recording = true;
+        println!("🔴 Kayıt başladı (Ctrl+C ile durdurun)");
+    }
+    
+    /// Kaydı durdur
+    pub fn stop(&mut self) -> Macro {
+        self.recording = false;
+        println!("⏹️  Kayıt durdu. {} aksiyon kaydedildi.", self.actions.len());
+        
+        Macro {
+            name: "Unnamed".into(),
+            description: "".into(),
+            actions: self.actions.clone(),
+            created_at: chrono::Utc::now(),
+        }
+    }
+    
+    /// Aksiyon kaydet
+    pub fn record(&mut self, action: Action) {
+        if !self.recording {
+            return;
+        }
+        
+        let timestamp_ms = self.start_time.elapsed().as_millis() as u64;
+        
+        self.actions.push(RecordedAction {
+            action,
+            timestamp_ms,
+        });
+    }
+    
+    /// Macro oynat
+    pub async fn play(macro: &Macro) -> Result<()> {
+        println!("▶️  Macro oynatılıyor: {}", macro.name);
+        
+        let mut last_time = 0u64;
+        
+        for recorded in &macro.actions {
+            // Zaman farkı kadar bekle
+            let delay = recorded.timestamp_ms.saturating_sub(last_time);
+            if delay > 0 {
+                tokio::time::sleep(Duration::from_millis(delay)).await;
+            }
+            
+            // Aksiyonu çalıştır
+            recorded.action.execute().await?;
+            
+            last_time = recorded.timestamp_ms;
+        }
+        
+        println!("✅ Macro tamamlandı");
+        Ok(())
+    }
+}
+```
+
+---
+
+### 📊 GELİŞTİRME ÖNCELİK MATRİSİ
+
+| # | Özellik | Öncelik | Zorluk | Değer |
+|---|---------|---------|--------|-------|
+| 1 | Gerçek Platform API | 🔴 Kritik | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 2 | Setup/Onay Sistemi | 🔴 Kritik | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 3 | İnsan Benzeri Mouse | 🟡 Yüksek | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| 4 | İnsan Benzeri Keyboard | 🟡 Yüksek | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| 5 | Macro Kayıt/Oynat | 🟡 Orta | ⭐⭐⭐ | ⭐⭐⭐ |
+| 6 | Multi-monitor | 🟢 Düşük | ⭐⭐⭐⭐ | ⭐⭐ |
+| 7 | OCR Entegrasyonu | 🟢 Düşük | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+
+---
+
+### 🛠️ UYGULAMA SIRASI
+
+**SPRINT 1 (1-2 gün):**
+1. ✅ Setup wizard (auto + interactive)
+2. ✅ Platform API entegrasyonu (Linux)
+
+**SPRINT 2 (2-3 gün):**
+3. ✅ İnsan benzeri mouse (Bezier)
+4. ✅ İnsan benzeri keyboard
+5. ✅ Config dosyası sistemi
+
+**SPRINT 3 (3-4 gün):**
+6. ✅ Macro kayıt/oynat
+7. ✅ Multi-monitor desteği
+8. ✅ Windows/macOS test
+
+---
+
+*Geliştirme planı hazırlandı: 12 Nisan 2026*
