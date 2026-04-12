@@ -242,3 +242,212 @@ All tests passing: 113 tests
 - Not: Resmi API değil, tersine mühendislik tabanlı
 
 **Test sonuçları:** 5 test geçti ✅
+
+---
+
+## 🔬 SİSTEM ANALİZİ: OTONOM VE GÜVENLİK KATMANLARI (12 Nisan 2026)
+
+### 1. OASIS AUTONOMOUS - İnsan Derecesinde Otonom Agent
+
+**Konum:** `crates/oasis_autonomous/`
+
+**Modüller (10 adet, ~250K satır):**
+
+| Modül | Dosya | Satır | Açıklama |
+|-------|-------|-------|----------|
+| agent_loop | agent_loop.rs | 30K | Desktop Agent Loop (Perception → Decision → Action) |
+| planner | planner.rs | 44K | Task Planner (Goal → Task → Step → Action) |
+| safety | safety.rs | 33K | Safety System (6 katman koruma) |
+| screen | screen.rs | 39K | Screen Understanding (OCR, UI detection) |
+| vision | vision.rs | 15K | Enhanced Vision (UI elements, templates) |
+| memory | memory.rs | 16K | Advanced Memory (Episode-based learning) |
+| tools | tools.rs | 20K | Tool Chaining (Kompozit aksiyonlar) |
+| orchestrator | orchestrator.rs | 17K | Multi-Agent Orchestrator |
+| healing | healing.rs | 21K | Self-Healing System |
+| error | error.rs | 9K | Hata yönetimi |
+
+**Agent Loop Mimarisi:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      ORCHESTRATOR                               │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                    AGENT LOOP                            │   │
+│  │  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌────────┐│   │
+│  │  │ PERCEIVE │ → │  DECIDE  │ → │   ACT    │ → │ LEARN  ││   │
+│  │  └────┬─────┘   └────┬─────┘   └────┬─────┘   └───┬────┘│   │
+│  │       │              │              │              │      │   │
+│  │  ┌────▼─────┐   ┌────▼─────┐   ┌────▼─────┐   ┌───▼────┐│   │
+│  │  │  SCREEN  │   │ PLANNER  │   │  TOOLS   │   │ MEMORY ││   │
+│  │  │  VISION  │   │  SAFETY  │   │ CHAINING │   │HEALING ││   │
+│  │  └──────────┘   └──────────┘   └──────────┘   └────────┘│   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Aksiyon Türleri:**
+| Kategori | Aksiyonlar |
+|----------|------------|
+| Mouse | Move, Click, Drag, Scroll |
+| Keyboard | KeyPress, Shortcut, TypeText |
+| Browser | Navigate, Click, Type |
+| Composite | Multi-step actions |
+| Custom | Special actions |
+
+---
+
+### 2. SAFETY SYSTEM - Güvenlik Katmanı
+
+**6 Güvenlik Katmanı:**
+
+| # | Katman | Açıklama |
+|---|--------|----------|
+| 1 | Forbidden Regions | Yasaklı ekran bölgeleri |
+| 2 | Action Validation | Aksiyon doğrulama |
+| 3 | Rate Limiting | Hız sınırlama (120/dk default) |
+| 4 | Human Approval | İnsan onayı (kritik aksiyonlar) |
+| 5 | Emergency Stop | Acil durum durdurması |
+| 6 | Audit Logging | Denetim kaydı |
+
+**Aksiyon Kritiklik Seviyeleri:**
+
+| Seviye | Örnekler | Onay Gerekli? |
+|--------|----------|---------------|
+| Normal | MouseMove, Scroll, Arrow keys | ❌ Hayır |
+| Moderate | Click, TypeText (<100 char) | ❌ Hayır |
+| Critical | Drag, TypeText (>100 char), Ctrl+shortcut | ✅ Evet |
+| VeryCritical | delete_files, send_email, execute_shell | ✅ Evet |
+
+**Safety Pipeline:**
+```
+Action → Validate → Rate Limit → Human Gate → Execute
+            │            │              │
+            ▼            ▼              ▼
+        [FORBIDDEN?]  [TOO FAST?]  [NEED APPROVAL?]
+            │            │              │
+            └────────────┴──────────────┘
+                         │
+                         ▼
+                     [BLOCK]
+```
+
+**Config Modları:**
+| Mod | Max Actions | Max Errors | Human Approval |
+|-----|-------------|------------|----------------|
+| Default | 120/dk | 10 | Kritik için |
+| Developer | 300/dk | 50 | ❌ Hayır |
+| Strict | 30/dk | 3 | ✅ Her zaman |
+| Production | 60/dk | 5 | ✅ Her zaman |
+
+---
+
+### 3. V-GATE (Vekil Sunucu Katmanı)
+
+**Konum:** `crates/sentient_vgate/`
+
+**Özellikler:**
+- API anahtarları ASLA istemcide tutulmaz
+- API anahtarları ASLA log'a yazılmaz
+- Tüm istekler Guardrails'ten geçer
+- Rate limiting uygulanır
+
+**Modüller:**
+| Modül | Açıklama |
+|-------|----------|
+| auth | API key yönetimi |
+| envguard | Environment koruması |
+| middleware | Rate limiting, logging |
+| providers | Provider yönlendirme |
+| routes | HTTP routing |
+
+**Varsayılan Port:** 1071
+
+---
+
+### 4. GUARDRAILS (Bağışıklık Sistemi)
+
+**Konum:** `crates/sentient_guardrails/`
+
+**Korunan Tehditler:**
+
+| Tehdit | Severity | Action |
+|--------|----------|--------|
+| Prompt Injection | 🔴 Critical | Block |
+| Data Exfiltration | 🔴 Critical | Block |
+| System Prompt Leak | 🟠 High | Block |
+| SQL Injection | 🔴 Critical | Block |
+| XSS Attack | 🟠 High | Block |
+| Profanity | 🟢 Low | Sanitize |
+
+**Tespit Pattern'leri:**
+```
+Prompt Injection:
+- "ignore previous instructions"
+- "system: override"
+- "ACT AS"
+- "you are no longer"
+
+Data Exfiltration:
+- api_key, secret_key
+- sk-* (OpenAI keys)
+- ghp_* (GitHub tokens)
+
+SQL Injection:
+- UNION SELECT
+- DROP TABLE
+- 1=1, OR 1=1
+```
+
+---
+
+### 5. SELF-HEALING SİSTEMİ
+
+**Konum:** `crates/oasis_autonomous/src/healing.rs`
+
+**Healing Süreci:**
+```
+Error → Detect → Diagnose → Strategy → Recover → Verify
+           │          │           │          │
+           ▼          ▼           ▼          ▼
+       [Anomaly] [Root Cause] [Strategy] [Action]
+```
+
+**Anomali Türleri:**
+
+| Tür | Açıklama |
+|-----|----------|
+| Timeout | Uzun süre yanıt yok |
+| ResourceExhaustion | Kaynak tükendi |
+| LoopDetected | Döngü tespit |
+| ElementNotFound | Element bulunamadı |
+| ActionFailed | Aksiyon başarısız |
+| NetworkIssue | Ağ sorunu |
+| ApplicationCrash | Uygulama çöktü |
+| PermissionDenied | İzin hatası |
+
+**Kurtarma Stratejileri:**
+
+| Strateji | Kullanım |
+|----------|----------|
+| Retry with delay | Geçici hatalar |
+| Alternative approach | Ana yöntem başarısız |
+| Rollback to checkpoint | Önceki duruma dön |
+| Ask for human help | Kurtarılamaz |
+| Graceful degradation | Kısmi çalışma |
+
+---
+
+## 📊 SİSTEM ÖZETİ
+
+| Bileşen | Modül Sayısı | K satır | Durum |
+|---------|-------------|---------|-------|
+| OASIS Autonomous | 10 | ~244K | ✅ Production |
+| Safety System | 6 katman | 33K | ✅ Production |
+| V-GATE | 5 modül | ~30K | ✅ Production |
+| Guardrails | 6 policy | ~10K | ✅ Production |
+| Self-Healing | 5 adım | 21K | ✅ Production |
+
+**Toplam:** 27+ modül, ~338K satır Rust kodu
+
+---
+
+*Analiz tamamlandı: 12 Nisan 2026*
