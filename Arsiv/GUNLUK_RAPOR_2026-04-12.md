@@ -451,3 +451,255 @@ Error → Detect → Diagnose → Strategy → Recover → Verify
 ---
 
 *Analiz tamamlandı: 12 Nisan 2026*
+
+---
+
+## 🖱️ İNSANİ OTOMASYON KATMANI: sentient_desktop
+
+**Konum:** `crates/sentient_desktop/`
+
+**5 Modül, ~25K satır:**
+
+| Modül | Satır | Açıklama |
+|-------|-------|----------|
+| lib.rs | 6.5K | Ana controller (Desktop) |
+| mouse.rs | 4K | Fare kontrolü |
+| keyboard.rs | 5.7K | Klavye kontrolü |
+| screen.rs | 5.3K | Ekran yakalama |
+| window.rs | 4.8K | Pencere yönetimi |
+
+---
+
+### 🖱️ FARE KONTROLÜ (Mouse)
+
+**Temel Fonksiyonlar:**
+
+| Fonksiyon | Açıklama |
+|-----------|----------|
+| `move_to(x, y)` | Mutlak pozisyona git |
+| `move_by(dx, dy)` | Relatif hareket |
+| `position()` | Mevcut pozisyonu al |
+| `click(button)` | Tıkla |
+| `double_click(button)` | Çift tıkla |
+| `down(button)` | Tuşu basılı tut |
+| `up(button)` | Tuşu bırak |
+| `scroll(amount)` | Dikey kaydır |
+| `scroll_horizontal(amount)` | Yatay kaydır |
+
+**Mouse Butonları:**
+
+| Buton | Kullanım |
+|-------|----------|
+| Left | Sol tık (varsayılan) |
+| Right | Sağ tık (context menu) |
+| Middle | Orta tık (scroll mode) |
+| Back | Geri tuşu |
+| Forward | İleri tuşu |
+
+**Mouse Action (Kayıt için):**
+
+```rust
+enum MouseAction {
+    MoveTo { x: u32, y: u32 },
+    MoveBy { dx: i32, dy: i32 },
+    Click { button: MouseButton },
+    DoubleClick { button: MouseButton },
+    Down { button: MouseButton },
+    Up { button: MouseButton },
+    Scroll { amount: i32 },
+}
+```
+
+---
+
+### ⌨️ KLAVYE KONTROLÜ (Keyboard)
+
+**Temel Fonksiyonlar:**
+
+| Fonksiyon | Açıklama |
+|-----------|----------|
+| `type_text(text)` | Metin yaz (karakter karakter) |
+| `press(key)` | Tuşa bas |
+| `release(key)` | Tuşu bırak |
+| `tap(key)` | Bas ve bırak |
+| `hotkey(keys)` | Kısayol (Ctrl+C gibi) |
+
+**Yaygın Kısayollar:**
+
+| Fonksiyon | Kısayol |
+|-----------|---------|
+| `copy()` | Ctrl+C |
+| `paste()` | Ctrl+V |
+| `cut()` | Ctrl+X |
+| `select_all()` | Ctrl+A |
+| `undo()` | Ctrl+Z |
+| `redo()` | Ctrl+Y |
+| `save()` | Ctrl+S |
+| `find()` | Ctrl+F |
+
+**Navigation Tuşları:**
+
+| Fonksiyon | Tuş |
+|-----------|-----|
+| `escape()` | Esc |
+| `enter()` | Enter |
+| `tab()` | Tab |
+| `backspace()` | Backspace |
+| `delete()` | Delete |
+| `arrow_up/down/left/right()` | Ok tuşları |
+
+**Key Codes (60+ tuş):**
+
+```rust
+enum Key {
+    // Harfler
+    A, B, C, D, E, F, G, H, I, J, K, L, M,
+    N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+    
+    // Sayılar
+    Num0, Num1, Num2, Num3, Num4,
+    Num5, Num6, Num7, Num8, Num9,
+    
+    // Fonksiyon tuşları
+    F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
+    
+    // Özel tuşlar
+    Enter, Escape, Backspace, Tab, Space, Delete, Insert,
+    Home, End, PageUp, PageDown,
+    
+    // Ok tuşları
+    Up, Down, Left, Right,
+    
+    // Modifier tuşları
+    Shift, Control, Alt, Meta,
+    
+    // Diğer
+    CapsLock, NumLock, ScrollLock,
+    Comma, Period, Slash, Semicolon, Quote,
+    LeftBracket, RightBracket, Backslash,
+    Minus, Equal, Grave,
+}
+```
+
+---
+
+### 📸 EKRAN YAKALAMA (Screen)
+
+**Temel Fonksiyonlar:**
+
+| Fonksiyon | Açıklama |
+|-----------|----------|
+| `capture_all()` | Tüm ekranı yakala |
+| `capture_region(x, y, w, h)` | Bölge yakala |
+| `capture_rect(rect)` | Rect ile yakala |
+| `dimensions()` | Ekran boyutları |
+
+**Screenshot İşlemleri:**
+
+| Fonksiyon | Açıklama |
+|-----------|----------|
+| `pixel(x, y)` | Piksel rengi al |
+| `to_base64()` | Base64'e çevir |
+| `save(path)` | Dosyaya kaydet |
+| `load(path)` | Dosyadan yükle |
+| `find_template(template)` | Template matching |
+| `resize(w, h)` | Boyutlandır |
+| `crop(x, y, w, h)` | Kırp |
+| `to_rgb()` | RGB'ye çevir |
+
+---
+
+### 🪟 PENCERE YÖNETİMİ (Window)
+
+**WindowManager Fonksiyonları:**
+
+| Fonksiyon | Açıklama |
+|-----------|----------|
+| `list_windows()` | Tüm pencereleri listele |
+| `get_active()` | Aktif pencereyi al |
+| `find_by_title(title)` | Başlığa göre bul |
+| `find_by_id(id)` | ID'ye göre bul |
+
+**Window İşlemleri:**
+
+| Fonksiyon | Açıklama |
+|-----------|----------|
+| `activate()` | Pencereyi önüne getir |
+| `close()` | Pencereyi kapat |
+| `minimize()` | Küçült |
+| `maximize()` | Büyüt |
+| `restore()` | Eski haline getir |
+| `move_to(x, y)` | Taşı |
+| `resize(w, h)` | Boyutlandır |
+| `screenshot()` | Pencere ekran görüntüsü |
+| `center()` | Merkez noktası |
+| `contains(x, y)` | Nokta içeride mi? |
+
+---
+
+### 🤖 Desktop Controller (Ana API)
+
+```rust
+let desktop = Desktop::new()?;
+
+// Screenshot
+let screen = desktop.screenshot()?;
+
+// Mouse
+desktop.move_mouse(100, 200)?;
+desktop.click(100, 200, MouseButton::Left)?;
+desktop.drag(0, 0, 500, 500)?;
+desktop.scroll(3)?;
+
+// Keyboard
+desktop.type_text("Merhaba Dünya!")?;
+desktop.press_key(Key::Enter)?;
+desktop.hotkey(&[Key::Control, Key::C])?;
+
+// Window
+let windows = desktop.windows()?;
+let active = desktop.active_window()?;
+
+// Template matching
+let template = Screenshot::load("button.png")?;
+if let Some((x, y)) = desktop.find_on_screen(&template)? {
+    desktop.click(x, y, MouseButton::Left)?;
+}
+
+// Wait for element
+let pos = desktop.wait_for(&template, 5000).await?;
+```
+
+---
+
+### 📊 İNSANİ DAVRANIŞ SİMÜLASYONU
+
+| Özellik | Değer | Açıklama |
+|---------|-------|----------|
+| Type delay | 10ms | Karakterler arası gecikme |
+| Click delay | 50ms | Basma-bırakma arası |
+| Double click delay | 100ms | Çift tık arası |
+| Hotkey delay | 50ms | Modifier basma-bırakma |
+
+**Anti-detect için:**
+- Random delays eklenebilir
+- Mouse movement curve (bezier)
+- Human-like typing speed variation
+
+---
+
+## 📊 sentient_desktop ÖZET
+
+| Bileşen | Modül Sayısı | Fonksiyon | Test |
+|---------|-------------|-----------|------|
+| Mouse | 8 fonksiyon | 5 button | 4 test |
+| Keyboard | 20+ fonksiyon | 60+ key | 5 test |
+| Screen | 10 fonksiyon | capture, template | 3 test |
+| Window | 10 fonksiyon | manage, activate | 4 test |
+| Desktop | 15 fonksiyon | unified API | 4 test |
+
+**Toplam:** 5 modül, 20 test, ~25K satır
+
+---
+
+*İnsani otomasyon katmanı analizi tamamlandı: 12 Nisan 2026*
