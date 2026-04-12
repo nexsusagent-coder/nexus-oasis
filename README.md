@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/License-AGPL%20v3-blue" alt="License">
   <a href="https://ko-fi.com/sentientos"><img src="https://img.shields.io/badge/Support-Ko--fi-ff5e5b" alt="Support"></a>
   <img src="https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20Windows-green" alt="Platforms">
-  <img src="https://img.shields.io/badge/LLM%20Models-326%20native%20%7C%20200K%2B%20via%20aggregators-purple" alt="LLM Models">
+  <img src="https://img.shields.io/badge/LLM%20Models-352%20native%20%7C%20200K%2B%20via%20aggregators-purple" alt="LLM Models">
   <img src="https://img.shields.io/badge/Integrations-72%2B-yellow" alt="Integrations">
   <img src="https://img.shields.io/badge/Skills-5%2C587%2B-red" alt="Skills">
 </p>
@@ -25,7 +25,7 @@
 7. [Mimari](#mimari)
 8. [59 Rust Crate](#59-rust-crate)
 9. [72 Entegrasyon](#72-entegrasyon)
-10. [326+ Native LLM Model (200K+ via Aggregators)](#326-native-llm-model-200k-via-aggregators)
+10. [352+ Native LLM Model (200K+ via Aggregators)](#352-native-llm-model-200k-via-aggregators)
 11. [5,587+ Skill](#5587-skill)
 12. [CLI Komutları](#cli-komutları)
 13. [Web Dashboard](#web-dashboard)
@@ -53,7 +53,7 @@
 │   🦀 Rust Core         → Memory-safe, zero-cost abstractions               │
 │   📦 63 Crate          → Modüler, değiştirilebilir mimari                  │
 │   🔌 72 Entegrasyon    → Agent framework'ler, browser'lar, memory sistemleri │
-│   🤖 326+ LLM Models  → OpenAI, Claude, Gemini, Ollama, 36 providers        │
+│   🤖 352+ LLM Models  → OpenAI, Claude, Gemini, Ollama, 41 providers        │
 │   🎯 5,587+ Skill      → Hazır AI yetenekleri                               │
 │   🔐 V-GATE            → API anahtarları ASLA client'ta değil              │
 │   📊 Dashboard         → Enterprise war room, gerçek zamanlı               │
@@ -71,7 +71,7 @@
 | **Memory Safety** | ✅ Garantili | ❌ Runtime hataları | ✅ Garantili |
 | **Modülerlik** | ✅ 59 crate | ❌ Monolitik | ⚡ 5-10 crate |
 | **Entegrasyon** | ✅ 72 hazır | ⚡ 10-20 | ❌ 1-5 |
-| **LLM Desteği** | ✅ 408+ model | ⚡ 50-100 | ❌ 5-20 |
+| **LLM Desteği** | ✅ 352+ native (200K+ via aggregators) | ⚡ 50-100 | ❌ 5-20 |
 | **Skill Sayısı** | ✅ 5,587+ | ⚡ 100-500 | ❌ 10-50 |
 | **Security** | ✅ V-GATE | ❌ API key暴露 | ⚡ Basic |
 | **Dashboard** | ✅ Enterprise | ❌ Yok | ❌ Yok |
@@ -1662,8 +1662,12 @@ SENTIENT OS **40+ provider** ve **600+ model** destekler:
 | Yi (01.AI) | 5 | Bulut (Çin)
 | Baidu ERNIE | 5 | Bulut (Çin)
 | MiniMax | 4 | Bulut (Çin)
-| Diğerleri | 50+ | Çeşitli
-| **TOPLAM** | **326 native, 200K+ via aggregators** | -
+| Lepton AI | 5 | Bulut (Ucuz)
+| RunPod Serverless | 4 | Bulut (Serverless)
+| Modal | 3 | Bulut (Serverless)
+| Stability AI | 5 | Bulut (Open Source)
+| IBM WatsonX | 8 | Bulut (Enterprise)
+| **TOPLAM** | **352 native, 200K+ via aggregators** | -
 
 ---
 

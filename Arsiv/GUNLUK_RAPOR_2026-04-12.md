@@ -167,3 +167,34 @@ Tüm Hedeflenen Provider'lar:
 
 *Son güncelleme: 12 Nisan 2026 - Tüm hedeflenen provider'lar tamamlandı!*
 *Kalan işlemler: Character.AI, Ollama Live Test, Demo Video (Düşük öncelik)*
+
+---
+
+## 🔄 GİT İŞLEMLERİ
+
+**Commit:** `691cc78`
+```
+feat: Add 5 new LLM providers (Baidu ERNIE, MiniMax, Lepton AI, RunPod, Modal)
+
+- Baidu ERNIE Provider (5 models)
+- MiniMax Provider (4 models)
+- Lepton AI Provider (5 models)
+- RunPod Serverless Provider (4 models)
+- Modal Provider (3 models)
+
+Provider count: 36 → 41 (+5)
+Native model count: 326 → 352 (+26)
+All tests passing: 113 tests
+```
+
+**Push:** ✅ GitHub'a push edildi
+
+---
+
+### 6. README.md Güncelleme ✅ (12 Nisan 2026 - Tamamlandı)
+
+**Değişiklikler:**
+- Badge: 326 → 352 native models
+- Provider sayısı: 36 → 41 providers
+- Yeni provider'lar tabloya eklendi: Lepton AI, RunPod, Modal, Stability AI, IBM WatsonX
+- Toplam model sayısı güncellendi: 326 → 352
