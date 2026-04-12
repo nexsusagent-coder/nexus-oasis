@@ -187,6 +187,9 @@ impl LlmHub {
         if let Ok(p) = crate::providers::ModalProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
+        if let Ok(p) = crate::providers::CharacterAIProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
 
         // ═══════════════════════════════════════════════════════════
         //  HUGGING FACE
@@ -623,6 +626,11 @@ impl LlmHubBuilder {
 
     pub fn modal(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::ModalProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn character_ai(mut self, token: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::CharacterAIProvider::new(token)?));
         Ok(self)
     }
 

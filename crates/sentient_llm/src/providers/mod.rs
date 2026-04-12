@@ -109,12 +109,14 @@ mod watsonx;
 mod lepton;
 mod runpod;
 mod modal;
+mod character_ai;
 
 pub use stability::StabilityProvider;
 pub use watsonx::WatsonXProvider;
 pub use lepton::LeptonProvider;
 pub use runpod::RunPodProvider;
 pub use modal::ModalProvider;
+pub use character_ai::CharacterAIProvider;
 
 use crate::error::{LlmError, LlmResult};
 use reqwest::{Client, Response};
