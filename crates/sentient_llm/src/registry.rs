@@ -172,6 +172,21 @@ impl LlmHub {
         if let Ok(p) = crate::providers::YiProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
+        if let Ok(p) = crate::providers::BaiduErnieProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::MiniMaxProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::LeptonProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::RunPodProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::ModalProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
 
         // ═══════════════════════════════════════════════════════════
         //  HUGGING FACE
@@ -583,6 +598,31 @@ impl LlmHubBuilder {
 
     pub fn yi(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::YiProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn baidu(mut self, api_key: impl Into<String>, secret_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::BaiduErnieProvider::new(api_key, secret_key)?));
+        Ok(self)
+    }
+
+    pub fn minimax(mut self, api_key: impl Into<String>, group_id: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::MiniMaxProvider::new(api_key, group_id)?));
+        Ok(self)
+    }
+
+    pub fn lepton(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::LeptonProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn runpod(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::RunPodProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn modal(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::ModalProvider::new(api_key)?));
         Ok(self)
     }
 

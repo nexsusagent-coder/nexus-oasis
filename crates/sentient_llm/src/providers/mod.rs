@@ -91,10 +91,14 @@ pub use lmstudio::LmStudioProvider;
 // ═══════════════════════════════════════════════════════════════════════════════
 
 mod chinese;
+mod baidu;
+mod minimax;
 
 pub use chinese::ZhipuProvider;
 pub use chinese::MoonshotProvider;
 pub use chinese::YiProvider;
+pub use baidu::BaiduErnieProvider;
+pub use minimax::MiniMaxProvider;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  ADDITIONAL PROVIDERS
@@ -102,9 +106,15 @@ pub use chinese::YiProvider;
 
 mod stability;
 mod watsonx;
+mod lepton;
+mod runpod;
+mod modal;
 
 pub use stability::StabilityProvider;
 pub use watsonx::WatsonXProvider;
+pub use lepton::LeptonProvider;
+pub use runpod::RunPodProvider;
+pub use modal::ModalProvider;
 
 use crate::error::{LlmError, LlmResult};
 use reqwest::{Client, Response};
