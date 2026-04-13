@@ -50,7 +50,7 @@ mime_guess = "2.0"
 
 # HTTP client for SSE transport (optional)
 reqwest = { version = "0.12", features = ["json", "stream"], optional = true }
-tower = { version = "0.4", optional = true }
+tower = { version = "0.5", optional = true }
 tower-service = { version = "0.3", optional = true }
 
 # WebSocket support (optional)
