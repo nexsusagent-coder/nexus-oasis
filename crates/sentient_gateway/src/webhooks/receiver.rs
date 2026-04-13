@@ -166,6 +166,7 @@ impl WebhookReceiver {
 struct WebhookState {
     router: Arc<WebhookRouter>,
     stats: Arc<RwLock<WebhookStats>>,
+    #[allow(dead_code)]
     event_tx: tokio::sync::mpsc::Sender<WebhookEvent>,
 }
 

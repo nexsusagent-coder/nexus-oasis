@@ -20,6 +20,7 @@ pub struct SpeakerDiarizer {
     min_segment_duration: f32,
     
     /// Maximum segment duration in seconds
+    #[allow(dead_code)]
     max_segment_duration: f32,
     
     /// Maximum number of speakers (0 = auto)
@@ -162,8 +163,8 @@ impl SpeakerDiarizer {
     fn segment_speakers(
         &self,
         speech_segments: &[SpeechSegment],
-        audio: &[f32],
-        sample_rate: u32,
+        _audio: &[f32],
+        _sample_rate: u32,
     ) -> Vec<SpeakerSegment> {
         let mut segments = Vec::new();
         
@@ -266,7 +267,7 @@ impl SpeakerDiarizer {
     fn identify_speaker(&self, embedding: &[f32]) -> Option<(String, f32)> {
         let mut best_match: Option<(String, f32)> = None;
         
-        for (speaker_id, profile) in &self.speaker_database {
+        for (_speaker_id, profile) in &self.speaker_database {
             let similarity = self.cosine_similarity(embedding, &profile.embedding);
             
             if similarity > self.config.identification_threshold {

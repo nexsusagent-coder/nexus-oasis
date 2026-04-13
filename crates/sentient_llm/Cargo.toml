@@ -33,8 +33,18 @@ chrono = { version = "0.4", features = ["serde"] }
 # Token counting
 tiktoken-rs = "0.5"
 
+# Random for load balancing
+rand = "0.8"
+
 # Configuration
 config = "0.14"
+
+# Internal crates
+sentient_embed = { path = "../sentient_embed" }
+sentient_rerank = { path = "../sentient_rerank" }
+
+# Parking lot for better locks
+parking_lot = "0.12"
 
 [dev-dependencies]
 tokio-test = "0.4"

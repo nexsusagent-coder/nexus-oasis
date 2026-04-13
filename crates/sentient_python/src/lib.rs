@@ -26,6 +26,32 @@ pub struct PythonToolDef {
     pub function_name: String,
     pub description: String,
     pub args: Vec<String>,
+    /// Araç versiyonu (semver)
+    pub version: String,
+    /// Argüman tip şemaları
+    pub arg_schemas: HashMap<String, ArgSchema>,
+    /// Son güncelleme zamanı
+    pub last_updated: String,
+}
+
+/// Argüman tip şeması (Type Validation)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ArgSchema {
+    pub param_type: ArgType,
+    pub required: bool,
+    pub default: Option<serde_json::Value>,
+    pub description: String,
+}
+
+/// Desteklenen argüman tipleri
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ArgType {
+    String,
+    Integer,
+    Float,
+    Boolean,
+    Array,
+    Object,
 }
 
 impl PythonToolDef {
@@ -36,12 +62,35 @@ impl PythonToolDef {
             function_name: function.into(),
             description: description.into(),
             args: vec![],
+            version: "1.0.0".into(),
+            arg_schemas: HashMap::new(),
+            last_updated: chrono::Utc::now().to_rfc3339(),
         }
     }
     
     pub fn with_args(mut self, args: Vec<&str>) -> Self {
         self.args = args.iter().map(|s| s.to_string()).collect();
         self
+    }
+
+    /// Versiyon ayarla
+    pub fn with_version(mut self, version: &str) -> Self {
+        self.version = version.to_string();
+        self.last_updated = chrono::Utc::now().to_rfc3339();
+        self
+    }
+
+    /// Argüman tip şeması ekle
+    pub fn with_arg_schema(mut self, name: &str, schema: ArgSchema) -> Self {
+        self.arg_schemas.insert(name.to_string(), schema);
+        self
+    }
+
+    /// Versiyon uyumluluğu kontrolü
+    pub fn is_compatible(&self, required: &str) -> bool {
+        let self_major: u32 = self.version.split('.').next().and_then(|s| s.parse().ok()).unwrap_or(0);
+        let req_major: u32 = required.split('.').next().and_then(|s| s.parse().ok()).unwrap_or(0);
+        self_major == req_major
     }
 }
 
@@ -128,9 +177,54 @@ impl SandboxResult {
 
 // ─── PyO3 Köprü Yöneticisi ───
 
+/// Python hata detayı
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PythonErrorDetail {
+    pub error_type: String,
+    pub message: String,
+    pub traceback: Option<String>,
+    pub module_path: Option<String>,
+    pub function_name: Option<String>,
+}
+
+impl PythonErrorDetail {
+    pub fn from_raw(raw: &str) -> Self {
+        // Python traceback'ini ayrıştır
+        let lines: Vec<&str> = raw.lines().collect();
+        let error_type = lines.iter()
+            .find(|l| l.contains(": "))
+            .and_then(|l| l.split(": ").next())
+            .unwrap_or("UnknownError")
+            .to_string();
+        let message = lines.iter()
+            .find(|l| l.contains(": "))
+            .and_then(|l| l.split(": ").nth(1))
+            .unwrap_or(raw)
+            .to_string();
+        let traceback = if raw.contains("Traceback") {
+            Some(raw.to_string())
+        } else {
+            None
+        };
+        Self {
+            error_type,
+            message,
+            traceback,
+            module_path: None,
+            function_name: None,
+        }
+    }
+    
+    pub fn summary(&self) -> String {
+        format!("{}: {}", self.error_type, self.message)
+    }
+}
+
 pub struct PythonBridge {
     tools: HashMap<String, PythonToolDef>,
     initialized: bool,
+    /// Hot reload: dosya değişiklik zamanları
+    tool_timestamps: HashMap<String, std::time::SystemTime>,
 }
 
 impl PythonBridge {
@@ -139,6 +233,7 @@ impl PythonBridge {
         Self {
             tools: HashMap::new(),
             initialized: false,
+            tool_timestamps: HashMap::new(),
         }
     }
 
@@ -484,6 +579,207 @@ impl PythonBridge {
     /// Başlatıldı mı?
     pub fn is_initialized(&self) -> bool {
         self.initialized
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  ASYNC DESTEK (PyO3 async wrapper)
+    // ═══════════════════════════════════════════════════════════════
+
+    /// Async Python fonksiyon çağrısı
+    /// PyO3 GIL'i serbest bırakarak Rust async runtime ile çalışır
+    pub async fn call_python_async(
+        &self,
+        tool_name: &str,
+        args: Option<serde_json::Value>,
+    ) -> SENTIENTResult<serde_json::Value> {
+        let tool_name = tool_name.to_string();
+        let tool = self.tools.get(&tool_name).ok_or_else(|| {
+            SENTIENTError::PythonBridge(format!("Tanımlanmamış araç: {}", tool_name))
+        })?.clone();
+
+        // GIL'i serbest bırak, senkron çağrıyı blocking thread'te yap
+        let result = tokio::task::spawn_blocking(move || {
+            Python::with_gil(|py| {
+                let module = py.import(&tool.module_path).map_err(|e| {
+                    let raw = e.value(py).to_string();
+                    let detail = PythonErrorDetail::from_raw(&raw);
+                    SENTIENTError::PythonBridge(format!("{} (modül: {})\nTraceback: {}",
+                        detail.summary(), tool.module_path, detail.traceback.unwrap_or_default()))
+                })?;
+
+                let sync_class = module.getattr("SENTIENTBrowserSync").map_err(|e| {
+                    let detail = PythonErrorDetail::from_raw(&e.value(py).to_string());
+                    SENTIENTError::PythonBridge(format!("SENTIENTBrowserSync bulunamadı: {}", detail.summary()))
+                })?;
+
+                let instance = sync_class.call0().map_err(|e| {
+                    let detail = PythonErrorDetail::from_raw(&e.value(py).to_string());
+                    SENTIENTError::PythonBridge(format!("Instance hatası: {}", detail.summary()))
+                })?;
+
+                let func = instance.getattr(&tool.function_name).map_err(|e| {
+                    let detail = PythonErrorDetail::from_raw(&e.value(py).to_string());
+                    SENTIENTError::PythonBridge(format!("Fonksiyon {}: {}", tool.function_name, detail.summary()))
+                })?;
+
+                let py_result = if let Some(ref json_args) = args {
+                    let kwargs = json_to_pydict(py, json_args).map_err(|e| {
+                        SENTIENTError::PythonBridge(format!("Argüman hatası: {}", e))
+                    })?;
+                    func.call((), Some(&kwargs))
+                } else {
+                    func.call0()
+                };
+
+                let py_value = py_result.map_err(|e| {
+                    let detail = PythonErrorDetail::from_raw(&e.value(py).to_string());
+                    SENTIENTError::PythonBridge(format!("{}", detail.summary()))
+                })?;
+
+                py_value_to_json(py, &py_value).map_err(|e| {
+                    SENTIENTError::PythonBridge(format!("JSON çevrimi: {}", e))
+                })
+            })
+        }).await.map_err(|e| SENTIENTError::PythonBridge(format!("Async görev hatası: {}", e)))??;
+
+        Ok(result)
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  TYPE VALIDATION
+    // ═══════════════════════════════════════════════════════════════
+
+    /// Argümanları tip şemasına göre doğrula
+    pub fn validate_args(&self, tool_name: &str, args: &serde_json::Value) -> Result<(), ValidationError> {
+        let tool = self.tools.get(tool_name).ok_or(ValidationError::ToolNotFound(tool_name.to_string()))?;
+
+        if let serde_json::Value::Object(map) = args {
+            for (key, schema) in &tool.arg_schemas {
+                if let Some(val) = map.get(key) {
+                    // Tip kontrolü
+                    match schema.param_type {
+                        ArgType::String if !val.is_string() => {
+                            return Err(ValidationError::TypeMismatch {
+                                arg: key.clone(),
+                                expected: "String".into(),
+                                got: val_type_name(val),
+                            });
+                        }
+                        ArgType::Integer if !val.is_number() => {
+                            return Err(ValidationError::TypeMismatch {
+                                arg: key.clone(),
+                                expected: "Integer".into(),
+                                got: val_type_name(val),
+                            });
+                        }
+                        ArgType::Float if !val.is_number() => {
+                            return Err(ValidationError::TypeMismatch {
+                                arg: key.clone(),
+                                expected: "Float".into(),
+                                got: val_type_name(val),
+                            });
+                        }
+                        ArgType::Boolean if !val.is_boolean() => {
+                            return Err(ValidationError::TypeMismatch {
+                                arg: key.clone(),
+                                expected: "Boolean".into(),
+                                got: val_type_name(val),
+                            });
+                        }
+                        ArgType::Array if !val.is_array() => {
+                            return Err(ValidationError::TypeMismatch {
+                                arg: key.clone(),
+                                expected: "Array".into(),
+                                got: val_type_name(val),
+                            });
+                        }
+                        ArgType::Object if !val.is_object() => {
+                            return Err(ValidationError::TypeMismatch {
+                                arg: key.clone(),
+                                expected: "Object".into(),
+                                got: val_type_name(val),
+                            });
+                        }
+                        _ => {} // Tip uyumlu
+                    }
+                } else if schema.required && schema.default.is_none() {
+                    return Err(ValidationError::MissingRequired(key.clone()));
+                }
+            }
+        }
+        Ok(())
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  HOT RELOAD
+    // ═══════════════════════════════════════════════════════════════
+
+    /// Araç tanımını runtime'da güncelle (hot reload)
+    pub fn reload_tool(&mut self, tool_name: &str, new_def: PythonToolDef) -> SENTIENTResult<()> {
+        if self.tools.contains_key(tool_name) {
+            let old_version = self.tools[tool_name].version.clone();
+            self.tools.insert(tool_name.to_string(), new_def.clone());
+            self.tool_timestamps.insert(tool_name.to_string(), std::time::SystemTime::now());
+            log::info!("🐍  KÖPRÜ: Hot reload → {} ({} → {})", tool_name, old_version, new_def.version);
+            Ok(())
+        } else {
+            Err(SENTIENTError::PythonBridge(format!("Hot reload: araç bulunamadı: {}", tool_name)))
+        }
+    }
+
+    /// Araç versiyonunu yükselt
+    pub fn upgrade_tool(&mut self, tool_name: &str, new_version: &str) -> SENTIENTResult<()> {
+        if let Some(tool) = self.tools.get_mut(tool_name) {
+            let old = tool.version.clone();
+            tool.version = new_version.to_string();
+            tool.last_updated = chrono::Utc::now().to_rfc3339();
+            self.tool_timestamps.insert(tool_name.to_string(), std::time::SystemTime::now());
+            log::info!("🐍  KÖPRÜ: Versiyon yükseltme → {} ({} → {})", tool_name, old, new_version);
+            Ok(())
+        } else {
+            Err(SENTIENTError::PythonBridge(format!("Versiyon yükseltme: araç bulunamadı: {}", tool_name)))
+        }
+    }
+
+    /// Araç değişiklik zamanlarını kontrol et
+    pub fn check_tool_updates(&self) -> Vec<String> {
+        self.tool_timestamps.keys().cloned().collect()
+    }
+
+    /// Araç versiyonlarını listele
+    pub fn list_tool_versions(&self) -> Vec<(String, String)> {
+        self.tools.iter().map(|(k, v)| (k.clone(), v.version.clone())).collect()
+    }
+}
+
+/// Tip doğrulama hatası
+#[derive(Debug)]
+pub enum ValidationError {
+    ToolNotFound(String),
+    TypeMismatch { arg: String, expected: String, got: String },
+    MissingRequired(String),
+}
+
+impl std::fmt::Display for ValidationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ValidationError::ToolNotFound(t) => write!(f, "Araç bulunamadı: {}", t),
+            ValidationError::TypeMismatch { arg, expected, got } => {
+                write!(f, "Tip uyuşmazlığı '{}': beklenen {}, bulunan {}", arg, expected, got)
+            }
+            ValidationError::MissingRequired(a) => write!(f, "Zorunlu alan eksik: {}", a),
+        }
+    }
+}
+
+fn val_type_name(val: &serde_json::Value) -> String {
+    match val {
+        serde_json::Value::Null => "Null".into(),
+        serde_json::Value::Bool(_) => "Boolean".into(),
+        serde_json::Value::Number(_) => "Number".into(),
+        serde_json::Value::String(_) => "String".into(),
+        serde_json::Value::Array(_) => "Array".into(),
+        serde_json::Value::Object(_) => "Object".into(),
     }
 }
 

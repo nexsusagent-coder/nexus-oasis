@@ -2,6 +2,11 @@
 //!
 //! Komut Satiri Arayuzu Kutuphanesi
 
+// Suppress warnings for unused code in development
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod repl;
 pub mod commands;
 pub mod ui;

@@ -8,6 +8,12 @@
 //! - Latency measurements
 //! - Throughput measurements
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(unused_mut)]
+
 pub mod memory;
 pub mod agent;
 pub mod channel;

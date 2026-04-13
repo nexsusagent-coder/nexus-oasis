@@ -3,6 +3,7 @@
 use crate::types::MultimodalEmbedding;
 use crate::{Result, VisionError};
 use async_trait::async_trait;
+#[allow(unused_imports)]
 use serde::Serialize;
 
 /// Embedding provider trait

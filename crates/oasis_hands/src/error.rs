@@ -54,6 +54,46 @@ pub enum HandsError {
     #[error("OASIS-HANDS AGENT: {0}")]
     AgentError(String),
     
+    /// Config bulunamadı
+    #[error("OASIS-HANDS CONFIG: Yapılandırma dosyası bulunamadı")]
+    ConfigNotFound,
+    
+    /// Config hatası
+    #[error("OASIS-HANDS CONFIG: {0}")]
+    ConfigError(String),
+    
+    /// Acil durum hatası
+    #[error("OASIS-HANDS EMERGENCY: {0}")]
+    EmergencyError(String),
+    
+    /// Rate limit aşıldı
+    #[error("OASIS-HANDS RATE LIMIT: {0}")]
+    RateLimitExceeded(String),
+    
+    /// Yasaklı bölge erişimi
+    #[error("OASIS-HANDS FORBIDDEN REGION: {0}")]
+    ForbiddenRegion(String),
+    
+    /// Zaman kuralı ihlali
+    #[error("OASIS-HANDS TIME RULE: {0}")]
+    TimeRuleViolation(String),
+    
+    /// Sandbox hatası
+    #[error("OASIS-HANDS SANDBOX: {0}")]
+    SandboxError(String),
+    
+    /// Alert hatası
+    #[error("OASIS-HANDS ALERT: {0}")]
+    AlertError(String),
+    
+    /// History hatası
+    #[error("OASIS-HANDS HISTORY: {0}")]
+    HistoryError(String),
+    
+    /// Recording hatası
+    #[error("OASIS-HANDS RECORDING: {0}")]
+    RecordingError(String),
+    
     /// Genel hata
     #[error("OASIS-HANDS: {0}")]
     Other(String),

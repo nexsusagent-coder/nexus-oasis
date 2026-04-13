@@ -44,6 +44,8 @@ pub mod models;
 pub mod provider;
 pub mod providers;
 pub mod registry;
+pub mod cache;
+pub mod distributed;
 
 pub use error::{LlmError, LlmResult};
 pub use types::{
@@ -54,6 +56,12 @@ pub use types::{
 };
 pub use provider::{LlmProvider, ProviderInfo};
 pub use registry::{LlmHub, LlmHubBuilder, RoutingStrategy};
+pub use cache::{ModelCache, CacheConfig, CacheStats, CacheEntry};
+pub use distributed::{
+    DistributedCluster, DistributedClient, DistributedConfig,
+    NodeConfig, NodeInfo, NodeStatus, NodeStats,
+    LoadBalanceStrategy, ShardingStrategy,
+};
 
 // Re-export providers
 pub use providers::{
@@ -62,6 +70,17 @@ pub use providers::{
     GroqProvider, TogetherProvider, FireworksProvider, ReplicateProvider,
     AI21Provider, OllamaProvider,
 };
+
+// Re-export embedding and reranking (cross-module)
+pub mod embedding {
+    //! Embedding types and utilities (see sentient_embed crate)
+    pub use sentient_embed::{Embedding, EmbeddingModel, EmbeddingHub, EmbeddingRequest};
+}
+
+pub mod reranking {
+    //! Reranking types and utilities (see sentient_rerank crate)
+    pub use sentient_rerank::{RerankDocument, RerankResult, RerankModel, RerankEngine};
+}
 
 /// Prelude for common imports
 pub mod prelude {

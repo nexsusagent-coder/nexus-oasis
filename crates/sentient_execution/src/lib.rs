@@ -8,6 +8,12 @@
 //! 
 //! Sources loaded from integrations/execution/ and integrations/sandbox/
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(private_interfaces)]
+
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use tracing::info;

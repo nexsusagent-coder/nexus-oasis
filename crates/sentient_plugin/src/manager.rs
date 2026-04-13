@@ -17,6 +17,7 @@ pub struct PluginManager {
     /// Plugin configs
     configs: Arc<RwLock<HashMap<String, PluginConfig>>>,
     /// Plugin hooks
+    #[allow(dead_code)]
     hooks: Arc<RwLock<HashMap<String, Vec<Box<dyn PluginHook>>>>>,
     /// Plugin middleware
     middleware: Arc<RwLock<Vec<Box<dyn PluginMiddleware>>>>,
@@ -149,8 +150,8 @@ impl PluginManager {
     }
 
     /// Get plugin by ID
-    pub async fn get(&self, id: &str) -> Option<Arc<dyn Plugin>> {
-        let plugins = self.plugins.read().await;
+    pub async fn get(&self, _id: &str) -> Option<Arc<dyn Plugin>> {
+        let _plugins = self.plugins.read().await;
         // Note: We return a reference since we can't clone Box<dyn Plugin>
         // In production, we'd use Arc<dyn Plugin> instead
         None
@@ -295,11 +296,11 @@ impl PluginManager {
     /// Set plugin config
     pub async fn set_config(&self, id: &str, config: PluginConfig) -> Result<()> {
         let plugins = self.plugins.read().await;
-        let plugin = plugins.get(id)
+        let _plugin = plugins.get(id)
             .ok_or_else(|| PluginError::not_found(id))?;
 
         // Get old config
-        let old_config = {
+        let _old_config = {
             let configs = self.configs.read().await;
             configs.get(id).cloned().unwrap_or_else(|| PluginConfig::new(id))
         };

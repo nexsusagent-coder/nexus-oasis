@@ -8,6 +8,11 @@
 //! ═──────────────────────────────────────────────────────────────────────────────
 //!  L1 SOVEREIGN ANAYASASI:
 //!  ───────────────────────
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //!  ✓ Python modülleri native Rust modülü olarak sarılır (PyO3)
 //!  ✓ Sıfır kopyalı veri akışı (zero-copy data flow)
 //!  ✓ V-GATE üzerinden şifreli LLM iletişimi

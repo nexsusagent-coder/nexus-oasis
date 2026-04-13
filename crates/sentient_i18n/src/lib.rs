@@ -8,6 +8,11 @@
 //! - Spanish (es)
 //! - Japanese (ja)
 //! - Chinese (zh)
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - Russian (ru)
 
 pub mod translations;

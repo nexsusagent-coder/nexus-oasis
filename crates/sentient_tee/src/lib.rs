@@ -8,6 +8,13 @@
 //! - AMD SEV-SNP (Secure Encrypted Virtualization - Secure Nested Paging)
 //! - Intel TDX (Trust Domain Extensions)
 //! - Simülasyon modu (geliştirme için)
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(deprecated)]
+#![allow(ambiguous_glob_reexports)]
 //!
 //! ## Güvenlik Özellikleri:
 //! - Memory encryption

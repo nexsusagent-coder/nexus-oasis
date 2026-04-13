@@ -91,6 +91,7 @@ impl OcrOptions {
 
 /// OCR engine using simple text extraction
 pub struct SimpleOcrEngine {
+    #[allow(dead_code)]
     supported_languages: Vec<String>,
 }
 

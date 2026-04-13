@@ -8,6 +8,12 @@
 //! # Example
 //! ```ignore
 //! use sentient_finetune::{FineTuner, TrainingConfig, Method};
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(unused_mut)]
 //!
 //! let trainer = FineTuner::openai("api-key");
 //! let config = TrainingConfig::new("model-id", "dataset-id")
@@ -22,6 +28,7 @@ pub mod types;
 pub mod method;
 pub mod providers;
 pub mod monitor;
+pub mod multimodal;
 
 pub use error::{FinetuneError, FinetuneResult};
 pub use types::{
@@ -32,6 +39,11 @@ pub use method::{FineTuneMethod, LoraConfig, QloraConfig, FullConfig};
 pub use dataset::{Dataset, DatasetFormat, DatasetSplitter};
 pub use providers::{FineTuneProvider, FineTuner};
 pub use monitor::{TrainingMonitor, LogEntry};
+pub use multimodal::{
+    MultiModalTrainer, MultiModalTrainingConfig, MultiModalDataset,
+    MultiModalSample, Modality, ImageData, AudioData, VideoData,
+    VisionEncoderConfig, AudioEncoderConfig, AlignmentMethod,
+};
 
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

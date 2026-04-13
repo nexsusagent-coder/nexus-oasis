@@ -91,6 +91,7 @@ impl OpenAIProvider {
             #[derive(Deserialize)]
             struct ErrorDetail {
                 message: Option<String>,
+                #[allow(dead_code)]
                 code: Option<String>,
             }
 

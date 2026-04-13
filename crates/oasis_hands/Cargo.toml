@@ -20,6 +20,7 @@ futures = { workspace = true }
 # Serialization
 serde = { workspace = true }
 serde_json = { workspace = true }
+toml = "0.8"
 
 # PyO3 Bridge (Agent-S wrapper)
 pyo3 = { workspace = true }

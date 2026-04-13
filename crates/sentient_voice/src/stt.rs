@@ -139,6 +139,7 @@ impl LocalWhisper {
 /// Simulation mode Local Whisper (when native library not available)
 #[cfg(not(feature = "local-whisper"))]
 pub struct LocalWhisper {
+    #[allow(dead_code)]
     model_path: String,
 }
 

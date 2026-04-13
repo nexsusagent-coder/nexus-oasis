@@ -279,6 +279,7 @@ impl Default for AuditConfig {
 /// Audit log manager
 pub struct AuditLog {
     config: AuditConfig,
+    #[allow(dead_code)]
     entries: Vec<AuditEntry>,
 }
 

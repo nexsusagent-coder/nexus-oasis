@@ -5,6 +5,11 @@
 //! Military-grade güvenlik için matematiksel doğrulama katmanı.
 //! Creusot pre/post-conditions ile formel ispat.
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod contracts;
 pub mod runtime;
 pub mod state;

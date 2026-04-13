@@ -395,7 +395,7 @@ async fn handle_websocket(
     state: ApiState,
 ) {
     use axum::extract::ws::Message;
-    use futures::{SinkExt, StreamExt};
+    use futures::StreamExt;
     
     let connection_id = Uuid::new_v4().to_string();
     log::info!("ws  Yeni WebSocket bağlantısı: {}", connection_id);

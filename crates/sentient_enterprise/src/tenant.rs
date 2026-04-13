@@ -267,6 +267,7 @@ impl Default for TenantConfig {
 
 /// Tenant Manager
 pub struct TenantManager {
+    #[allow(dead_code)]
     config: TenantConfig,
     tenants: HashMap<Uuid, Tenant>,
 }

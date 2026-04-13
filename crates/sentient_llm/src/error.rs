@@ -77,6 +77,14 @@ pub enum LlmError {
     /// Unknown error
     #[error("Unknown error: {0}")]
     Unknown(String),
+
+    /// No healthy nodes available
+    #[error("No healthy nodes available")]
+    NoHealthyNodes,
+
+    /// Request failed
+    #[error("Request failed: {0}")]
+    RequestFailed(String),
 }
 
 impl LlmError {

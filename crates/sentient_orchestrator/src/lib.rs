@@ -28,6 +28,7 @@ pub mod planner;
 pub mod tools;
 pub mod state;
 pub mod execution;
+pub mod task_queue;
 
 /// ─── MEMORY BRIDGE MODÜLÜ ───
 /// L7: Memory-Orchestrator entegrasyonu
@@ -58,9 +59,10 @@ pub mod watcher;
 pub mod dynamic_router;
 
 pub use agent::{Agent, AgentConfig};
-pub use goal::{Goal, Task, TaskStatus, TaskPriority};
+pub use goal::{Goal, Task};
+pub use state::{AgentContext};
 pub use planner::{Planner, ExecutionPlan};
-pub use state::{AgentState, AgentContext};
+pub use state::{AgentContext as OrchAgentContext};
 pub use execution::{ExecutionResult, StepResult};
 
 use sentient_common::error::SENTIENTResult;
@@ -110,6 +112,16 @@ pub use research_bridge::{
 pub use dynamic_router::{
     DynamicRouter, RouterConfig, RouterDecision,
     ComplexityAnalyzer, TaskAnalysis, TaskType,
+};
+
+/// Task Queue + Priority Queue + Agent Pool + Distributed Swarm + Marketplace
+pub use task_queue::{
+    QueuedTask, TaskPriority as OrchTaskPriority, TaskType as OrchTaskType, TaskStatus as QueueTaskStatus,
+    PersistentTaskQueue, QueueStats,
+    AgentPool, AgentPoolConfig, AgentState as PoolAgentState, PooledAgent, PoolStats,
+    DistributedSwarmCoordinator, DistributedSwarmConfig,
+    SwarmNodeConfig, SwarmNodeRole, SwarmNodeState, SwarmNode, ClusterStatus,
+    AgentMarketplace, AgentListing,
 };
 
 /// ─── ORCHESTRATOR ───
@@ -334,6 +346,7 @@ pub struct OrchestratorStatus {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::goal::TaskPriority;
     
     #[test]
     fn test_orchestrator_config_default() {

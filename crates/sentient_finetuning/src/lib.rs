@@ -8,6 +8,11 @@
 //! - **Training Engine**: Async training with progress monitoring
 //! - **Fine-tuning Methods**: LoRA, QLoRA, Full fine-tuning, Prefix/Prompt tuning
 //! - **Checkpointing**: Save/resume training from checkpoints
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - **Hyperparameters**: Comprehensive hyperparameter configuration
 //!
 //! ## Example

@@ -8,6 +8,11 @@
 //! - PDF çıktısı
 //! - HTML raporları
 //! - JSON çıktısı
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - Otomatik kaynakça
 
 pub mod report;

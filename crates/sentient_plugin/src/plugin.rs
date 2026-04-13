@@ -39,7 +39,7 @@ pub trait Plugin: Send + Sync {
     }
 
     /// Handle event (if capable)
-    async fn on_event(&self, event: &PluginEvent) -> Result<()> {
+    async fn on_event(&self, _event: &PluginEvent) -> Result<()> {
         Ok(())
     }
 

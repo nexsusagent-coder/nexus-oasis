@@ -3,6 +3,11 @@
 //! Bu motor sistem içinde entegre edilen GitHub repolarını takip eder,
 //! güncellemeleri sessizce çeker ve kullanıcıya hissettirmeden entegre eder.
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod config;
 pub mod tracker;
 pub mod updater;

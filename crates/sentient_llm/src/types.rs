@@ -10,7 +10,7 @@ use std::collections::HashMap;
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /// Chat message role
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     System,
@@ -264,7 +264,7 @@ pub struct FunctionDefinition {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /// Chat completion request
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ChatRequest {
     /// Model to use
     pub model: String,
@@ -408,7 +408,7 @@ pub struct ResponseFormat {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /// Chat completion response
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ChatResponse {
     /// Response ID
     pub id: String,

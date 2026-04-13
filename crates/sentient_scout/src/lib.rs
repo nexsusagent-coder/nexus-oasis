@@ -11,6 +11,7 @@ mod config;
 mod errors;
 mod session;
 mod rate_limiter;
+pub mod scout_ext;
 
 // Re-exports
 pub use config::*;

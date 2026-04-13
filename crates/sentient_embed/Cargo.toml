@@ -1,0 +1,50 @@
+[package]
+name = "sentient_embed"
+version = "0.1.0"
+edition = "2021"
+description = "SENTIENT OS Embedding Hub - Multi-provider text/image embeddings"
+license = "AGPL-3.0"
+authors = ["SENTIENT OS Team"]
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["embeddings", "vector", "ai", "openai", "huggingface"]
+categories = ["api-bindings", "science"]
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true, features = ["full"] }
+async-trait = "0.1"
+futures = "0.3"
+
+# HTTP client
+reqwest = { workspace = true, features = ["json", "rustls-tls"] }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Utilities
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+log = "0.4"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# Math
+ndarray = "0.15"
+numpy = { version = "0.4", optional = true }
+
+# Caching
+lru = "0.12"
+parking_lot = "0.12"
+
+# Configuration
+config = "0.14"
+
+[features]
+default = []
+python = ["numpy"]
+gpu = []
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockito = "1.0"

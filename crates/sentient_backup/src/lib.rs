@@ -8,6 +8,11 @@
 //! - Scheduled backups
 //! - Point-in-time recovery
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod backup;
 pub mod restore;
 pub mod scheduler;

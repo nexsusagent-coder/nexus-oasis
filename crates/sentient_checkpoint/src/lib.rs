@@ -9,6 +9,11 @@
 //! - Checkpoint oluşturma
 //! - Durum kurtarma
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod ratchet;
 pub mod chain;
 pub mod recovery;

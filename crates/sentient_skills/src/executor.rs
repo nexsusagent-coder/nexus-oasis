@@ -176,12 +176,14 @@ pub struct SkillExecutor {
     manager: Arc<SkillManager>,
     
     /// Guardrail middleware
+    #[allow(dead_code)]
     guardrail: GuardrailMiddleware,
     
     /// Subagent executor
     subagent_executor: SubagentExecutor,
     
     /// Auto-load skills
+    #[allow(dead_code)]
     auto_load: bool,
     
     /// LLM configuration

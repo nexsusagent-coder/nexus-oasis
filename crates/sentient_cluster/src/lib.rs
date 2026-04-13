@@ -2,6 +2,11 @@
 //!
 //! Deploy and manage distributed SENTIENT agents on Kubernetes.
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod metrics;
 pub mod health;
 

@@ -7,6 +7,11 @@
 //! - Multi-region support
 //! - Automated recovery
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod failover;
 pub mod health;
 pub mod recovery;

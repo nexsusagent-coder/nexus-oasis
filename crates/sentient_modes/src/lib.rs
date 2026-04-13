@@ -14,10 +14,16 @@
 pub mod modes;
 pub mod transition;
 pub mod config;
+pub mod mode_ext;
 
 pub use modes::{OperationMode, ModeBehavior, ModeRegistry};
 pub use transition::{ModeTransition, TransitionManager, TransitionRule};
 pub use config::{ModeConfig, ModeSettings};
+pub use mode_ext::{
+    CustomMode, CustomModeBehavior, CustomModeBuilder, ErrorBehavior,
+    ModeLearningEngine, ModeLearningEntry, ModeLearningStats,
+    ModePlugin, ModePluginType, ModePluginManager, HookPoint, PluginResult, PluginStats,
+};
 
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

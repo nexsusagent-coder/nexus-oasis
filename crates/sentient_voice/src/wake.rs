@@ -90,9 +90,11 @@ impl WakeWordModel {
 /// Wake word trainer
 pub struct WakeWordTrainer {
     /// Audio sample rate
+    #[allow(dead_code)]
     sample_rate: u32,
     
     /// MFCC configuration
+    #[allow(dead_code)]
     mfcc_config: MfccConfig,
 }
 
@@ -376,7 +378,7 @@ impl MultiWakeWordDetector {
     fn check_model(
         &self,
         model: &WakeWordModel,
-        audio: &[f32],
+        _audio: &[f32],
         energy: f32,
         avg_energy: f32,
     ) -> Option<WakeWord> {

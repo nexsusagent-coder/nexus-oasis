@@ -2,6 +2,11 @@
 //!  OASIS VAULT - Military-Grade Secrets Manager
 //! ═══════════════════════════════════════════════════════════════════════════════
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod crypto;
 pub mod vault;
 pub mod secrets;

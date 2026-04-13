@@ -302,6 +302,7 @@ struct KlingTask {
 }
 
 impl KlingTask {
+    #[allow(dead_code)]
     fn id(&self) -> &str {
         &self.id
     }

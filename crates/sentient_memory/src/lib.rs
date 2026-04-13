@@ -44,6 +44,9 @@ pub mod scheduler;
 pub mod fts;
 pub mod memos;
 pub mod tools;
+pub mod compression;
+pub mod migration;
+pub mod distributed;
 
 // Re-exports
 pub use types::*;
@@ -57,6 +60,9 @@ pub use decay::MemoryDecay;
 pub use scheduler::{MemScheduler, SchedulerConfig, TaskPriority, TaskStatus, ScheduledTask, MemTask};
 pub use fts::{FtsEngine, FtsOptions, FtsResult, HybridSearchEngine, HybridWeights, HybridResult};
 pub use memos::{MemOS, MemOSConfig, MemOSStats, CubeMeta, CubeType};
+pub use compression::{MemoryCompressor, CompressedEntry};
+pub use migration::{MigrationManager, MigrationResult, Migration};
+pub use distributed::{DistributedMemoryManager, ReplicationConfig, MemoryNode, NodeStatus, ConsistencyLevel, ClusterStats};
 
 // New Tools Re-exports
 pub use tools::{MemoryTool, MemoryToolInput, MemoryToolOutput, MemoryEntrySummary, ToolContext};

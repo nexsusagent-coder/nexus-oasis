@@ -7,6 +7,11 @@
 //! 
 //! Sources loaded from integrations/framework/
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 use serde::{Deserialize, Serialize};
 use tracing::info;
 

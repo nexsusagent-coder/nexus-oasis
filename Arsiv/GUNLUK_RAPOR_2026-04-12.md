@@ -7,6 +7,63 @@ README'de listelenen ama sistemde OLMAYAN provider'ları implemente etmek. Önce
 
 ---
 
+## 🧙 SETUP WIZARD NEDEN VAR?
+
+**Problem:** `oasis_hands` crate'i masaüstü kontrolü yapan bir sistem. Ekran yakalama, fare kontrolü, klavye kontrolü gibi **tehlikeli** işlemler yapıyor. Kullanıcı bunları bilmeden çalıştırırsa:
+
+1. ❌ Ekranı kaydedilebilir (gizli bilgiler)
+2. ❌ Fare kontrol edilebilir (istenmeyen tıklamalar)
+3. ❌ Klavye kontrol edilebilir (yanlışlıkla silme)
+4. ❌ Dosya sistemine erişebilir (gizli dosyalar)
+
+**Çözüm:** Setup Wizard ile kullanıcıdan **bilinçli onay** almak:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  SETUP WIZARD                                                   │
+│                                                                 │
+│  📸 Ekran Yakalama izni verilsin mi? [E/n]: e                  │
+│  🖱️  Fare Kontrolü izni verilsin mi? [E/n]: e                   │
+│  ⌨️  Klavye Kontrolü izni verilsin mi? [E/n]: e                 │
+│                                                                 │
+│  Güvenlik modu seçin:                                           │
+│    [1] Strict  - Her aksiyon onay gerekir                       │
+│    [2] Normal  - Kritik aksiyonlar onay gerekir                 │
+│    [3] Relaxed - Sadece yasaklılar engellenir                   │
+│                                                                 │
+│  Seçiminiz [2]: 2                                               │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Config Dosyası:** `~/.config/sentient/hands_setup.toml`
+
+```toml
+[permissions]
+screen_capture = true
+mouse_control = true
+keyboard_control = true
+window_management = true
+file_access = false
+process_spawn = false
+
+[security]
+mode = "Normal"
+require_approval = true
+max_actions = 60
+emergency_stop = true
+
+[human]
+mouse = true      # Bezier curve hareket
+typing = true     # İnsan gibi yazma
+wpm = 45          # Dakikada 45 kelime
+errors = false    # Hata simülasyonu
+tremor = true     # Doğal titreşim
+```
+
+**Özet:** Setup Wizard, kullanıcının BİLİNÇLİ ve KONTROLLÜ bir şekilde sistem izinlerini ayarlamasını sağlar.
+
+---
+
 ## ✅ YAPILAN İŞLEMLER
 
 ### 1. Baidu ERNIE Provider ✅ (12 Nisan 2026 - Tamamlandı)
@@ -1728,3 +1785,428 @@ let path = engine.generate_path(
 ---
 
 *Mevcut sistem analizi tamamlandı: 12 Nisan 2026*
+
+---
+
+## 🧙 SETUP WIZARD - İnteraktif Kurulum Sihirbazı ✅ (12 Nisan 2026 - Tamamlandı)
+
+**Konum:** `crates/oasis_hands/src/setup/`
+
+**Eklenen Dosyalar (7 adet):**
+
+| Dosya | Satır | Açıklama |
+|-------|-------|----------|
+| mod.rs | 40 | Modül exports ve yardımcı fonksiyonlar |
+| wizard.rs | 1000+ | Ana kurulum sihirbazı |
+| config.rs | 170 | Yapılandırma yönetimi |
+| permissions.rs | 70 | İzin yönetimi |
+| profiles.rs | 60 | Profil yönetimi |
+| tests.rs | 120 | Sistem testleri |
+| approval.rs | 100 | Onay sistemi |
+
+**Kurulum Modları:**
+
+| Mod | Açıklama |
+|-----|----------|
+| Auto | Otomatik, tüm varsayılanlarla |
+| Interactive | Adım adım soru-cevap |
+| Silent | Config dosyasından sessiz |
+| Later | Daha sonra kurulum |
+| TestOnly | Sadece sistem testleri |
+| Repair | Onarım modu |
+
+**İnteraktif Kurulum Adımları (8 adım):**
+
+1. Platform Tespiti (Linux/Windows/macOS)
+2. İzin Ayarları (Screen, Mouse, Keyboard, Window, File, Process)
+3. Güvenlik Ayarları (Strict/Normal/Relaxed)
+4. İnsan Benzerlik Ayarları (Mouse, Typing, WPM, Errors, Tremor)
+5. Yasaklı Alanlar (Bölgeler, Uygulamalar)
+6. Onay Sistemi (Remember, Timeout, Auto-safe)
+7. Sistem Testleri
+8. Profil Kaydetme
+
+**Config Dosyası:** `~/.config/sentient/hands_setup.toml`
+
+**Profiller:** `~/.config/sentient/profiles/`
+
+**Onay Kayıtları:** `~/.config/sentient/approvals/`
+
+**Test sonuçları:** 197 test geçti ✅
+
+---
+
+## 🧠 GELİŞMİŞ İNSAN BENZERLİK KATMANI (12 Nisan 2026 - Güncellendi)
+
+Setup Wizard'a **25+ yeni insan benzerliği ayarı** eklendi:
+
+### 🖱️ Fare Hareket Ayarları
+
+| Ayar | Değer Aralığı | Açıklama |
+|------|---------------|----------|
+| Mouse Pattern | linear/curved/wavy/natural/adaptive | Hareket paterni |
+| Bezier Quality | 20-100 nokta | Eğri kalitesi |
+| Tremor | aktif/pasif | Doğal titreşim |
+| Tremor Intensity | 1-20% | Titreşim yoğunluğu |
+
+### ⌨️ Klavye Yazma Ayarları
+
+| Ayar | Değer Aralığı | Açıklama |
+|------|---------------|----------|
+| Typing Profile | beginner/intermediate/expert/custom | Yazma profili |
+| WPM | 10-120 | Dakikada kelime |
+| Error Rate | 0-20% | Hata oranı |
+
+### 🧠 Davranış Modeli Ayarları
+
+| Ayar | Değer Aralığı | Açıklama |
+|------|---------------|----------|
+| RNN-LSTM | aktif/pasif | Akıllı seçim |
+| Best-of-N | 3-10 | En iyi seçim |
+| Exploration Rate | 0-30% | Keşif oranı |
+
+### 👁️ Dikkat ve Yorgunluk
+
+| Ayar | Değer Aralığı | Açıklama |
+|------|---------------|----------|
+| Attention Span | 30-300 sn | Odak süresi |
+| Distraction Rate | 0-30% | Dikkat dağılma |
+| Fatigue Rate | 0-50%/saat | Yorgunluk hızı |
+
+### 🤔 Karar Verme
+
+| Ayar | Değer Aralığı | Açıklama |
+|------|---------------|----------|
+| Decision Delay Min | 50-500 ms | Minimum gecikme |
+| Decision Delay Max | 100-2000 ms | Maksimum gecikme |
+| Hesitation Rate | 0-20% | Tereddüt oranı |
+
+### ✋ Fiziksel Özellikler
+
+| Ayar | Değer | Açıklama |
+|------|-------|----------|
+| Hand Preference | right/left/both | El tercihi |
+
+### 📊 Genel
+
+| Ayar | Değer Aralığı | Açıklama |
+|------|---------------|----------|
+| Humanlikeness | 50-100% | Genel benzerlik |
+
+### 📁 Örnek Config Dosyası (`~/.config/sentient/hands_setup.toml`)
+
+```toml
+version = "1.0"
+profile_name = "default"
+platform = "Linux"
+state = "Configured"
+created_at = 2026-04-12T10:00:00Z
+updated_at = 2026-04-12T10:00:00Z
+
+[permissions]
+screen_capture = true
+mouse_control = true
+keyboard_control = true
+window_management = true
+file_access = false
+process_spawn = false
+
+[security]
+mode = "Normal"
+require_approval = true
+max_actions = 60
+emergency_stop = true
+timeout_secs = 300
+
+[human]
+# Mouse
+mouse = true
+mouse_pattern = "natural"      # linear/curved/wavy/natural/adaptive
+bezier_quality = 50
+tremor = true
+tremor_intensity = 0.05
+# Keyboard
+typing = true
+typing_profile = "intermediate"  # beginner/intermediate/expert/custom
+wpm = 45
+errors = false
+error_rate = 0.03
+# Behavior
+use_rnn_model = true
+best_of_n = 5
+exploration_rate = 0.10
+# Attention
+simulate_attention = true
+attention_span_sec = 120
+distraction_rate = 0.05
+# Fatigue
+simulate_fatigue = true
+fatigue_rate = 0.10
+# Decision
+decision_delay_min_ms = 100
+decision_delay_max_ms = 500
+hesitation_rate = 0.05
+# Physical
+hand_preference = "right"
+# General
+level = 0.85
+
+[forbidden]
+regions = []
+apps = []
+
+[approval]
+remember = true
+timeout = 30
+auto_safe = true
+```
+
+---
+
+## 🎉 GÜN SONU ÖZET (GÜNCELLENDİ)
+
+| İşlem | Durum |
+|-------|-------|
+| Baidu ERNIE Provider | ✅ Eklendi (5 model) |
+| MiniMax Provider | ✅ Eklendi (4 model) |
+| Lepton AI Provider | ✅ Eklendi (5 model) |
+| RunPod Serverless Provider | ✅ Eklendi (4 model) |
+| Modal Provider | ✅ Eklendi (3 model) |
+| Character.AI Provider | ✅ Eklendi (3 model) |
+| **Setup Wizard** | ✅ **Eklendi (7 dosya, 8 adım)** |
+| **Gelişmiş İnsan Benzerliği** | ✅ **25+ ayar eklendi** |
+| README.md güncelleme | ✅ Yapıldı |
+| Build & Test | ✅ 197 test geçti |
+| Provider sayısı | 36 → 42 (+6) |
+| Native model sayısı | 326 → 355 (+29) |
+
+---
+
+## 🧠 GELİŞMİŞ İNSAN BENZERLİĞİ KATMANI - TEKNİK DETAYLAR
+
+### Değiştirilen Dosyalar
+
+| Dosya | Değişiklik Türü | Satır Değişimi |
+|-------|-----------------|---------------|
+| `setup/wizard.rs` | Genişletildi | +200 satır |
+| `setup/config.rs` | Genişletildi | +50 satır |
+| `GUNLUK_RAPOR_2026-04-12.md` | Güncellendi | +100 satır |
+
+### HumanConfig Yapısı (Önceki vs Yeni)
+
+**ÖNCE (6 alan):**
+```rust
+pub struct HumanConfig {
+    pub mouse: bool,
+    pub typing: bool,
+    pub wpm: u32,
+    pub errors: bool,
+    pub tremor: bool,
+    pub level: f64,
+}
+```
+
+**SONRA (25 alan):**
+```rust
+pub struct HumanConfig {
+    // --- Mouse Ayarları ---
+    pub mouse: bool,
+    pub mouse_pattern: String,           // linear, curved, wavy, natural, adaptive
+    pub bezier_quality: u32,             // 20-100 nokta
+    pub tremor: bool,
+    pub tremor_intensity: f64,          // 0.0-0.20
+    
+    // --- Klavye Ayarları ---
+    pub typing: bool,
+    pub typing_profile: String,         // beginner, intermediate, expert, custom, robot
+    pub wpm: u32,
+    pub errors: bool,
+    pub error_rate: f64,                // 0.0-0.20
+    
+    // --- Davranış Modeli ---
+    pub use_rnn_model: bool,
+    pub best_of_n: u32,                 // 1-10
+    pub exploration_rate: f64,          // 0.0-0.30
+    
+    // --- Dikkat ve Yorgunluk ---
+    pub simulate_attention: bool,
+    pub attention_span_sec: u32,        // 30-300 saniye
+    pub distraction_rate: f64,          // 0.0-0.30
+    pub simulate_fatigue: bool,
+    pub fatigue_rate: f64,              // 0.0-0.50 /saat
+    
+    // --- Karar Verme ---
+    pub decision_delay_min_ms: u32,     // 50-500 ms
+    pub decision_delay_max_ms: u32,     // 100-2000 ms
+    pub hesitation_rate: f64,           // 0.0-0.20
+    
+    // --- Fiziksel Özellikler ---
+    pub hand_preference: String,        // right, left, both
+    
+    // --- Genel ---
+    pub level: f64,                     // 0.0-1.0 (insan benzerliği)
+}
+```
+
+### Wizard ADIM 4 - İnsan Benzerlik Ayarları Akışı
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  ADIM 4: İNSAN BENZERLİK AYARLARI (GELİŞMİŞ)                   │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  🖱️ FARE HAREKET AYARLARI                                      │
+│  ├─ İnsani fare aktif mi? [E/n]                                │
+│  ├─ Hareket paterni: [1-5]                                     │
+│  │   1=Linear, 2=Curved, 3=Wavy, 4=Natural, 5=Adaptive        │
+│  ├─ Bezier kalitesi: [20-100]                                  │
+│  ├─ Titreşim aktif mi? [E/n]                                   │
+│  └─ Titreşim yoğunluğu: [1-20%]                                │
+│                                                                 │
+│  ⌨️ KLAVYE YAZMA AYARLARI                                      │
+│  ├─ İnsani yazma aktif mi? [E/n]                               │
+│  ├─ Yazma profili: [1-4]                                       │
+│  │   1=Beginner(20WPM), 2=Intermediate(40WPM)                  │
+│  │   3=Expert(70WPM), 4=Custom                                 │
+│  └─ Özel WPM ve hata oranı (custom için)                       │
+│                                                                 │
+│  🧠 DAVRANIŞ MODELİ                                            │
+│  ├─ RNN-LSTM aktif mi? [E/n]                                   │
+│  ├─ Best-of-N: [3-10]                                          │
+│  └─ Keşif oranı: [0-30%]                                       │
+│                                                                 │
+│  👁️ DİKKAT VE YORGUNLUK                                        │
+│  ├─ Dikkat simülasyonu aktif mi? [E/n]                         │
+│  ├─ Odak süresi: [30-300 sn]                                   │
+│  ├─ Dikkat dağılma: [0-30%]                                    │
+│  ├─ Yorgunluk simülasyonu aktif mi? [E/n]                      │
+│  └─ Yorgunluk hızı: [0-50%/saat]                               │
+│                                                                 │
+│  🤔 KARAR VERME                                                │
+│  ├─ Min karar gecikmesi: [50-500 ms]                           │
+│  ├─ Max karar gecikmesi: [100-2000 ms]                         │
+│  └─ Tereddüt oranı: [0-20%]                                    │
+│                                                                 │
+│  ✋ FİZİKSEL                                                   │
+│  └─ El tercihi: [1=Sağ, 2=Sol, 3=Her ikisi]                   │
+│                                                                 │
+│  📊 GENEL                                                      │
+│  └─ İnsan benzerliği seviyesi: [50-100%]                       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Mouse Pattern Açıklamaları
+
+| Pattern | Açıklama | Kullanım |
+|---------|----------|----------|
+| `linear` | Düz çizgi, robotik hareket | Test/debug |
+| `curved` | Bezier eğrisi, basit insani | Genel kullanım |
+| `wavy` | Dalgalı hareket, daha doğal | Anti-detect |
+| `natural` | RNN-LSTM tabanlı, en gerçekçi | Production |
+| `adaptive` | Duruma göre değişen pattern | Gelişmiş |
+
+### Typing Profile Açıklamaları
+
+| Profil | WPM | Hata Oranı | Açıklama |
+|--------|-----|------------|----------|
+| `beginner` | 20 | 8% | Yavaş, çok hata |
+| `intermediate` | 40 | 3% | Dengeli |
+| `expert` | 70 | 1% | Hızlı, nadir hata |
+| `custom` | 10-120 | 0-20% | Kullanıcı tanımlı |
+| `robot` | 120 | 0% | Makine hızı |
+
+### RNN-LSTM Best-of-N Açıklaması
+
+```
+Best-of-N = 5 örneği:
+
+1. Agent bir aksiyon için 5 farklı yol hesaplar
+2. Her birini değerlendirir ( skor )
+3. En yüksek skorlu seçilir
+
+Örnek: Mouse (0,0) → (500,300)
+┌──────────────────────────────────────┐
+│  Seçenek 1: skor=0.72  ╭───────╮    │
+│  Seçenek 2: skor=0.85  ╭─╮     ╰─╮  │ ← SEÇİLDİ
+│  Seçenek 3: skor=0.68  ╭──╮      ╰─╮│
+│  Seçenek 4: skor=0.71  ╭─╮       ╰╮ │
+│  Seçenek 5: skor=0.69  ╭───╮     ╰╮│
+└──────────────────────────────────────┘
+```
+
+### Dikkat ve Yorgunluk Simülasyonu
+
+```
+Zaman → Davranış Değişimi
+
+0 dk:   Hız=100%, Hata=3%, Odak=100%
+30 dk:  Hız=95%,  Hata=4%, Odak=90%
+60 dk:  Hız=85%,  Hata=6%, Odak=75%
+120 dk: Hız=70%,  Hata=10%, Odak=50%
+180 dk: Hız=55%,  Hata=15%, Odak=30%
+
+Yorgunluk etkileri:
+- Daha yavaş hareket
+- Daha fazla hata
+- Daha sık duraklama
+- Daha uzun karar verme
+```
+
+### Test Sonuçları
+
+```
+running 197 tests
+test result: ok. 197 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```
+
+---
+
+## 📊 KOD İSTATİSTİKLERİ
+
+| Metrik | Değer |
+|--------|-------|
+| Toplam satır (oasis_hands) | ~250K |
+| human_mimicry modülü | ~67K |
+| setup modülü | ~3K |
+| Wizard satır sayısı | ~1,200 |
+| Config struct alanları | 25 |
+| Test sayısı | 197 |
+
+---
+
+## 🔗 İLGİLİ DOSYALAR
+
+| Dosya | Açıklama |
+|-------|----------|
+| `setup/wizard.rs` | Ana wizard implementasyonu |
+| `setup/config.rs` | TOML config yapısı |
+| `setup/permissions.rs` | İzin yönetimi |
+| `setup/profiles.rs` | Profil yönetimi |
+| `setup/approval.rs` | Onay sistemi |
+| `setup/tests.rs` | Sistem testleri |
+| `human_mimicry/mod.rs` | İnsan taklidi motoru |
+| `human_mimicry/bezier.rs` | Bezier eğrileri |
+| `human_mimicry/typing_dynamics.rs` | Yazma dinamikleri |
+| `human_mimicry/bumblebee.rs` | RNN-LSTM modeli |
+| `human_mimicry/behavior_model.rs` | Davranış modeli |
+
+---
+
+*Gelişmiş İnsan Benzerliği Katmanı tamamlandı: 12 Nisan 2026 - 14:30*
+
+---
+
+## 📄 DEVAM
+
+**Bu raporun devamı:** `GUNLUK_RAPOR_2026-04-12_PART2.md`
+
+İçerik:
+- 🔒 Güvenlik Katmanları Analizi (L1-L6)
+- 🔴 Eksikler ve Geliştirme Önerileri (8 madde)
+- 📊 Geliştirme Öncelik Matrisi
+- 🎯 Sonraki Adımlar
+
+---
+
+*Son güncelleme: 12 Nisan 2026 - 15:00*

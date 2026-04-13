@@ -138,6 +138,7 @@ impl SandboxConfig {
 pub struct PluginSandbox {
     config: SandboxConfig,
     permissions: HashSet<PluginPermission>,
+    #[allow(dead_code)]
     plugin_id: String,
     plugin_data_dir: PathBuf,
 }

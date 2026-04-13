@@ -11,6 +11,9 @@
 //!  - Multi-language support
 //!  - Voice cloning (ElevenLabs)
 
+// Allow unexpected cfg conditions for optional features
+#![allow(unexpected_cfgs)]
+
 pub mod stt;
 pub mod tts;
 pub mod audio;
@@ -20,7 +23,9 @@ pub mod streaming;
 pub mod diarization;
 
 use std::sync::Arc;
-use tokio::sync::{RwLock, mpsc};
+use tokio::sync::RwLock;
+#[allow(unused_imports)]
+use tokio::sync::mpsc;
 pub use parking_lot::Mutex;
 
 pub use config::VoiceConfig;

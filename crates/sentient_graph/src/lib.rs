@@ -8,6 +8,11 @@
 //! - BrowserInitNode: Tarayıcıyı başlatır
 //! - BrowserSearchNode: Web'de arama yapar
 //! - BrowserResearchNode: Derinlemesine araştırma yapar
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - BrowserExtractNode: Sayfa içeriğini çıkarır
 
 use sentient_common::error::{SENTIENTError, SENTIENTResult};
@@ -105,7 +110,7 @@ pub struct EventGraph {
     stats: RwLock<GraphStats>,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct GraphStats {
     pub total_events: u64,
     pub events_processed: u64,
@@ -280,6 +285,220 @@ impl EventGraph {
             .values()
             .map(|n| n.def.clone())
             .collect()
+    }
+
+    /// Graph'ı JSON olarak serileştir (kalıcılık)
+    pub fn serialize(&self) -> SENTIENTResult<String> {
+        let snapshot = GraphSnapshot {
+            name: self.name.clone(),
+            nodes: self.nodes.read().values().map(|n| n.def.clone()).collect(),
+            edges: self.edges.read().values().cloned().collect(),
+            stats: self.stats.read().clone(),
+        };
+        serde_json::to_string_pretty(&snapshot)
+            .map_err(|e| SENTIENTError::General(format!("Graph serileştirme hatası: {}", e)))
+    }
+
+    /// Graph'ı dosyaya kaydet (kalıcılık)
+    pub fn save_to_file(&self, path: &str) -> SENTIENTResult<()> {
+        let json = self.serialize()?;
+        std::fs::write(path, json)
+            .map_err(|e| SENTIENTError::General(format!("Graph dosya yazma hatası: {}", e)))?;
+        log::info!("🔗  GRAPH: Kaydedildi → {}", path);
+        Ok(())
+    }
+
+    /// Dosyadan graph yükle (kalıcılık)
+    pub fn load_from_file(path: &str) -> SENTIENTResult<Self> {
+        let json = std::fs::read_to_string(path)
+            .map_err(|e| SENTIENTError::General(format!("Graph dosya okuma hatası: {}", e)))?;
+        let snapshot: GraphSnapshot = serde_json::from_str(&json)
+            .map_err(|e| SENTIENTError::General(format!("Graph ayrıştırma hatası: {}", e)))?;
+        
+        let graph = Self::new(&snapshot.name);
+        for node_def in snapshot.nodes {
+            graph.add_node(node_def)?;
+        }
+        // Kenarları yeniden oluştur
+        for edge in &snapshot.edges {
+            graph.add_edge(edge.source_id, edge.target_id, edge.event_filter.clone())?;
+        }
+        *graph.stats.write() = snapshot.stats;
+        log::info!("🔗  GRAPH: Yüklendi ← {} ({} düğüm, {} kenar)", path, graph.node_count(), graph.edge_count());
+        Ok(graph)
+    }
+
+    /// Paralel broadcast (tüm hedeflere eşzamanlı gönder)
+    /// Birden fazla hedef varsa, sonuçları topla
+    pub fn broadcast_parallel(&self, source_id: Uuid, event: SENTIENTEvent) -> SENTIENTResult<Vec<SENTIENTEvent>> {
+        let target_ids: Vec<Uuid> = {
+            let nodes = self.nodes.read();
+            if let Some(node) = nodes.get(&source_id) {
+                node.outgoing.read().clone()
+            } else {
+                return Err(SENTIENTError::General(format!("Kaynak düğüm bulunamadı: {}", source_id)));
+            }
+        };
+
+        let mut all_results = Vec::new();
+        let mut errors = 0u64;
+
+        for target_id in target_ids {
+            match self.send_to(target_id, event.clone()) {
+                Ok(results) => all_results.extend(results),
+                Err(e) => {
+                    log::warn!("🔗  GRAPH: Paralel broadcast hatası → {}", e.summary());
+                    errors += 1;
+                }
+            }
+        }
+
+        self.stats.write().total_events += 1;
+        self.stats.write().errors += errors;
+        Ok(all_results)
+    }
+}
+
+/// Graph anlık görüntüsü (serileştirme için)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct GraphSnapshot {
+    name: String,
+    nodes: Vec<NodeDef>,
+    edges: Vec<EdgeDef>,
+    stats: GraphStats,
+}
+
+// ═════════════════════════════════════════════════════════════════
+//  GRAPH VISUALIZATION
+// ═════════════════════════════════════════════════════════════════
+
+impl EventGraph {
+    /// Graph'ı DOT (Graphviz) formatına çevir
+    pub fn to_dot(&self) -> String {
+        let mut dot = String::from("digraph SENTIENT_GRAPH {\n");
+        dot.push_str("  rankdir=TB;\n");
+        dot.push_str("  node [shape=box, style=rounded, fontname=\"monospace\"];\n");
+        dot.push_str("  edge [color=\"#666666\"];\n\n");
+
+        let nodes = self.nodes.read();
+        let edges = self.edges.read();
+
+        // Düğümler
+        for node in nodes.values() {
+            let color = match node.def.node_type {
+                NodeType::Source => "#4CAF50",
+                NodeType::Processor => "#2196F3",
+                NodeType::Sink => "#FF5722",
+                NodeType::Router => "#FF9800",
+                NodeType::Browser => "#9C27B0",
+                NodeType::Research => "#00BCD4",
+            };
+            let enabled = if node.def.enabled { "" } else { ", style=dashed" };
+            dot.push_str(&format!(
+                "  \"{}\" [label=\"{}\", fillcolor=\"{}\"{}];\n",
+                node.def.id, node.def.name, color, enabled
+            ));
+        }
+
+        dot.push('\n');
+
+        // Kenarlar
+        for edge in edges.values() {
+            let label = edge.event_filter.as_ref()
+                .map(|f| f.iter().map(|e| format!("{:?}", e)).collect::<Vec<_>>().join(","))
+                .unwrap_or_default();
+            dot.push_str(&format!(
+                "  \"{}\" -> \"{}\" [label=\"{}\"];\n",
+                edge.source_id, edge.target_id, label
+            ));
+        }
+
+        dot.push_str("}\n");
+        dot
+    }
+
+    /// Graph'ı Mermaid formatına çevir
+    pub fn to_mermaid(&self) -> String {
+        let mut mermaid = String::from("graph TD\n");
+
+        let nodes = self.nodes.read();
+
+        // Düğümler
+        for node in nodes.values() {
+            let shape = match node.def.node_type {
+                NodeType::Source => "([%s])",
+                NodeType::Processor => "[%s]",
+                NodeType::Sink => "[%s]:::sink",
+                NodeType::Router => "{%s}",
+                NodeType::Browser => "[[%s]]",
+                NodeType::Research => "((%s))",
+            };
+            let label = shape.replace("%s", &node.def.name);
+            mermaid.push_str(&format!("  {}{}\n", node.def.id, label));
+        }
+
+        mermaid.push_str("\nclassDef sink fill:#FF5722,color:white\n");
+
+        mermaid
+    }
+
+    /// Döngü (cycle) tespiti - DFS ile
+    pub fn detect_cycles(&self) -> Vec<Vec<Uuid>> {
+        let nodes = self.nodes.read();
+        let mut visited = std::collections::HashSet::new();
+        let mut rec_stack = std::collections::HashSet::new();
+        let mut cycles = Vec::new();
+        let mut path = Vec::new();
+
+        for node_id in nodes.keys() {
+            if !visited.contains(node_id) {
+                Self::dfs_cycles(
+                    *node_id,
+                    &nodes,
+                    &mut visited,
+                    &mut rec_stack,
+                    &mut path,
+                    &mut cycles,
+                );
+            }
+        }
+
+        cycles
+    }
+
+    fn dfs_cycles(
+        node_id: Uuid,
+        nodes: &HashMap<Uuid, Arc<GraphNode>>,
+        visited: &mut std::collections::HashSet<Uuid>,
+        rec_stack: &mut std::collections::HashSet<Uuid>,
+        path: &mut Vec<Uuid>,
+        cycles: &mut Vec<Vec<Uuid>>,
+    ) {
+        visited.insert(node_id);
+        rec_stack.insert(node_id);
+        path.push(node_id);
+
+        if let Some(node) = nodes.get(&node_id) {
+            for neighbor in node.outgoing.read().iter() {
+                if !visited.contains(neighbor) {
+                    Self::dfs_cycles(*neighbor, nodes, visited, rec_stack, path, cycles);
+                } else if rec_stack.contains(neighbor) {
+                    // Döngü bulundu - yolu kaydet
+                    if let Some(start) = path.iter().position(|&id| id == *neighbor) {
+                        let cycle: Vec<Uuid> = path[start..].to_vec();
+                        cycles.push(cycle);
+                    }
+                }
+            }
+        }
+
+        path.pop();
+        rec_stack.remove(&node_id);
+    }
+
+    /// Döngü var mı?
+    pub fn has_cycles(&self) -> bool {
+        !self.detect_cycles().is_empty()
     }
 }
 

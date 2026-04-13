@@ -8,6 +8,11 @@
 //!
 //! # Example
 //! ```ignore
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! use sentient_quantize::{Quantizer, QuantConfig, QuantMethod};
 //!
 //! let quantizer = Quantizer::gguf();

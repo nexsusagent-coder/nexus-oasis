@@ -7,6 +7,11 @@
 //!  Multi-Key Vault: Sınırsız API key ve provider desteği
 //!  Dynamic Routing: Görev zorluğuna göre otomatik model seçimi
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod general;
 pub mod llm;
 pub mod security;

@@ -8,6 +8,11 @@
 //! ─────────
 //! 1. agent_loop       - Desktop Agent Loop (Perception → Decision → Action)
 //! 2. screen           - Screen Understanding (Ekran anlama)
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! 3. safety           - Safety System (Güvenlik katmanı)
 //! 4. planner          - Task Planner (Görev planlama)
 //! 5. vision           - Enhanced Vision (Gelişmiş görü)

@@ -2,8 +2,10 @@
 
 use std::sync::Arc;
 use tokio::sync::{RwLock, mpsc};
+#[allow(unused_imports)]
 use tokio_stream::Stream;
 use parking_lot::Mutex;
+#[allow(unused_imports)]
 use futures::StreamExt;
 
 use crate::{
@@ -76,6 +78,7 @@ pub struct VoiceStream {
     stt: Arc<RwLock<Box<dyn SpeechToText>>>,
     vad: Arc<Mutex<VoiceActivityDetector>>,
     config: StreamConfig,
+    #[allow(dead_code)]
     voice_config: VoiceConfig,
     
     /// Audio buffer for current utterance
@@ -86,6 +89,7 @@ pub struct VoiceStream {
     silence_frames: Arc<Mutex<usize>>,
     
     /// Channel for sending events
+    #[allow(dead_code)]
     event_tx: mpsc::Sender<StreamEvent>,
     event_rx: Option<mpsc::Receiver<StreamEvent>>,
     
@@ -254,7 +258,9 @@ impl VoiceStream {
 
 /// Audio recorder for capturing from microphone
 pub struct AudioRecorder {
+    #[allow(dead_code)]
     config: StreamConfig,
+    #[allow(dead_code)]
     event_tx: mpsc::Sender<Vec<f32>>,
 }
 

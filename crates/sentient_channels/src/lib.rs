@@ -2,6 +2,14 @@
 //!  SENTIENT Channels - Multi-Platform Messaging Integration
 //! ═══════════════════════════════════════════════════════════════════════════════
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(private_interfaces)]
+#![allow(unused_mut)]
+#![allow(non_camel_case_types)]
+
 pub mod message;
 pub mod config;
 pub mod telegram;

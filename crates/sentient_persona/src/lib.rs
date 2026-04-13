@@ -14,12 +14,19 @@ pub mod builder;
 pub mod traits;
 pub mod loader;
 pub mod templates;
+pub mod persona_ext;
 
 pub use persona::{Persona, PersonaConfig, PersonaIdentity, PersonalityTraits};
 pub use builder::PersonaBuilder;
 pub use traits::{Trait, TraitValue, BehaviorPattern};
 pub use loader::{PersonaLoader, PersonaFormat};
 pub use templates::{PersonaTemplate, TemplateLibrary};
+pub use persona_ext::{
+    PersonaMarketplace, MarketplaceCategory, MarketplaceListing, MarketplaceReview,
+    DynamicAdaptationEngine, AdaptationSignal, AdaptationParams, AdaptationRecord,
+    MultiLanguageSupport, LanguageCode, PersonaTranslation,
+    PersonaAnalytics, AnalyticsEvent, AnalyticsEventType, PersonaAnalyticsSummary,
+};
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

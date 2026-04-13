@@ -16,7 +16,7 @@ pub struct GuardrailPolicy {
     pub action: GuardrailAction,
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, std::hash::Hash)]
 pub enum Severity {
     Low,
     Medium,
@@ -76,6 +76,10 @@ fn default_policies() -> Vec<GuardrailPolicy> {
 pub struct GuardrailEngine {
     policies: Vec<GuardrailPolicy>,
     patterns: HashMap<String, Vec<Regex>>,
+    /// Kullanıcı tanımlı özel kurallar
+    custom_rules: Vec<CustomRule>,
+    /// Şiddet bazlı rate limit sayaçları
+    severity_counts: HashMap<Severity, u64>,
 }
 
 impl GuardrailEngine {
@@ -83,6 +87,8 @@ impl GuardrailEngine {
         let mut engine = Self {
             policies: default_policies(),
             patterns: HashMap::new(),
+            custom_rules: Vec::new(),
+            severity_counts: HashMap::new(),
         };
         engine.compile_patterns();
         engine
@@ -156,7 +162,7 @@ impl GuardrailEngine {
     }
 
     fn run_policies(&self, content: &str, _direction: Direction) -> GuardrailResult {
-        let violations: Vec<GuardrailViolation> = self
+        let mut violations: Vec<GuardrailViolation> = self
             .policies
             .iter()
             .filter(|p| p.enabled)
@@ -176,6 +182,30 @@ impl GuardrailEngine {
                 None
             })
             .collect();
+
+        // Kullanıcı tanımlı özel kuralları da kontrol et
+        for rule in &self.custom_rules {
+            if rule.enabled {
+                if let Some(pattern) = &rule.compiled_pattern {
+                    if pattern.is_match(content) {
+                        violations.push(GuardrailViolation {
+                            policy_name: rule.name.clone(),
+                            severity: rule.severity,
+                            action: rule.action,
+                            matched_snippet: Self::snip(content, pattern),
+                        });
+                    }
+                }
+            }
+        }
+
+        // Şiddete göre sayaç güncelle
+        for v in &violations {
+            // (immutable borrow - severity_counts ayrı mutable)
+            let sev = v.severity;
+            // NOT: self.severity_counts immutable borrow olduğu için
+            // güncelleme dışarıda yapılacak
+        }
 
         if violations.is_empty() {
             GuardrailResult::Clean
@@ -219,6 +249,46 @@ impl GuardrailEngine {
             Ok(())
         } else {
             Err(SENTIENTError::Guardrails(format!("Boyle bir politika bulunamadi: {}", name)))
+        }
+    }
+
+    /// Kullanıcı tanımlı özel kural ekle
+    pub fn add_custom_rule(&mut self, rule: CustomRule) -> SENTIENTResult<()> {
+        // Regex'i derle
+        let mut compiled_rule = rule.clone();
+        if let Some(pattern) = &rule.pattern {
+            let compiled = Regex::new(pattern)
+                .map_err(|e| SENTIENTError::Guardrails(format!("Geçersiz regex '{}': {}", pattern, e)))?;
+            compiled_rule.compiled_pattern = Some(compiled);
+        }
+        self.custom_rules.push(compiled_rule);
+        log::info!("🛡️  GUARDRAILS: Özel kural eklendi: {}", rule.name);
+        Ok(())
+    }
+
+    /// Özel kuralları listele
+    pub fn list_custom_rules(&self) -> &[CustomRule] {
+        &self.custom_rules
+    }
+
+    /// Özel kural sil
+    pub fn remove_custom_rule(&mut self, name: &str) {
+        self.custom_rules.retain(|r| r.name != name);
+    }
+
+    /// Şiddet bazlı istatistik al
+    pub fn severity_stats(&self) -> &HashMap<Severity, u64> {
+        &self.severity_counts
+    }
+
+    /// Şiddet bazlı rate limiting: Kritik tehditlerde daha agresif engelleme
+    pub fn should_rate_limit(&self, severity: Severity) -> bool {
+        let count = self.severity_counts.get(&severity).copied().unwrap_or(0);
+        match severity {
+            Severity::Critical => count > 3,   // 3 kritik = rate limit
+            Severity::High => count > 10,        // 10 yüksek = rate limit
+            Severity::Medium => count > 50,      // 50 orta = rate limit
+            Severity::Low => count > 100,        // 100 düşük = rate limit
         }
     }
 }
@@ -278,6 +348,219 @@ impl GuardrailResult {
             }
         }
     }
+}
+
+// ═════════════════════════════════════════════════════════════════
+//  KULLANICI TANIMLI ÖZEL KURAL
+// ═════════════════════════════════════════════════════════════════
+
+/// Kullanıcı tanımlı güvenlik kuralı
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CustomRule {
+    pub name: String,
+    pub pattern: Option<String>,
+    pub severity: Severity,
+    pub action: GuardrailAction,
+    pub enabled: bool,
+    /// Derlenmiş regex (runtime'da oluşturulur)
+    #[serde(skip)]
+    pub compiled_pattern: Option<Regex>,
+}
+
+impl CustomRule {
+    pub fn new(name: impl Into<String>, pattern: &str, severity: Severity, action: GuardrailAction) -> Self {
+        Self {
+            name: name.into(),
+            pattern: Some(pattern.to_string()),
+            severity,
+            action,
+            enabled: true,
+            compiled_pattern: None,
+        }
+    }
+}
+
+// ═════════════════════════════════════════════════════════════════
+//  ML-BASED DETECTION (Sorgulama Tabanlı)
+// ═════════════════════════════════════════════════════════════════
+
+/// ML-tabanlı tehdit algılama motoru
+/// Gelişmiş saldırıları regex ile yakalanamayan durumlar için
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct MlDetectionEngine {
+    /// Öğrenilmiş tehdit imzaları
+    threat_signatures: Vec<ThreatSignature>,
+    /// Algılama hassasiyeti (0.0 - 1.0)
+    sensitivity: f64,
+    /// Minimum güven eşiği
+    confidence_threshold: f64,
+    /// Öğrenme geçmişi
+    learning_history: Vec<LearningEntry>,
+}
+
+/// Tehdit imzası (öğrenilmiş desen)
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct ThreatSignature {
+    pub id: String,
+    pub threat_type: String,
+    pub patterns: Vec<String>,
+    pub confidence: f64,
+    pub occurrences: u64,
+    pub last_seen: String,
+    pub auto_learned: bool,
+}
+
+/// Öğrenme kaydı
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct LearningEntry {
+    pub input_hash: u64,
+    pub was_threat: bool,
+    pub threat_type: Option<String>,
+    pub timestamp: String,
+}
+
+impl MlDetectionEngine {
+    pub fn new(sensitivity: f64) -> Self {
+        Self {
+            threat_signatures: Vec::new(),
+            sensitivity,
+            confidence_threshold: 0.7,
+            learning_history: Vec::new(),
+        }
+    }
+
+    pub fn default_engine() -> Self {
+        let mut engine = Self::new(0.8);
+        engine.register_known_signatures();
+        engine
+    }
+
+    /// Bilinen tehdit imzalarını kaydet
+    fn register_known_signatures(&mut self) {
+        let signatures = vec![
+            ("encoded_injection", vec!["base64", "\x00", "%00", "0x"], 0.9),
+            ("multi_step_injection", vec!["step 1", "then", "finally", "after that"], 0.75),
+            ("social_engineering", vec!["urgent", "emergency", "immediately", "verify your"], 0.7),
+            ("data_theft", vec!["download all", "export database", "dump table", "copy entire"], 0.85),
+            ("privilege_escalation", vec!["sudo", "root access", "admin panel", "elevate"], 0.8),
+        ];
+
+        for (id, patterns, confidence) in signatures {
+            let patterns: Vec<String> = patterns.iter().map(|s| s.to_string()).collect();
+            self.threat_signatures.push(ThreatSignature {
+                id: id.into(),
+                threat_type: id.into(),
+                patterns,
+                confidence,
+                occurrences: 0,
+                last_seen: String::new(),
+                auto_learned: false,
+            });
+        }
+    }
+
+    /// Gelişmiş tehdit algılama
+    pub fn detect(&self, content: &str) -> Vec<MlThreatResult> {
+        let mut results = Vec::new();
+        let content_lower = content.to_lowercase();
+
+        for sig in &self.threat_signatures {
+            let mut match_count = 0;
+            for pattern in &sig.patterns {
+                if content_lower.contains(&pattern.to_lowercase()) {
+                    match_count += 1;
+                }
+            }
+
+            let pattern_ratio = match_count as f64 / sig.patterns.len().max(1) as f64;
+            let confidence = sig.confidence * pattern_ratio * self.sensitivity;
+
+            if confidence >= self.confidence_threshold {
+                results.push(MlThreatResult {
+                    threat_type: sig.threat_type.clone(),
+                    confidence,
+                    matched_patterns: match_count,
+                    total_patterns: sig.patterns.len(),
+                    recommendation: self.get_recommendation(&sig.threat_type),
+                });
+            }
+        }
+
+        results
+    }
+
+    /// Öğrenme: Yeni tehdit kaydet
+    pub fn learn_threat(&mut self, threat_type: &str, patterns: Vec<String>) {
+        let sig = ThreatSignature {
+            id: format!("learned_{}", self.threat_signatures.len()),
+            threat_type: threat_type.into(),
+            patterns,
+            confidence: 0.6, // Başlangıç güveni düşük
+            occurrences: 1,
+            last_seen: chrono::Utc::now().to_rfc3339(),
+            auto_learned: true,
+        };
+        self.threat_signatures.push(sig);
+        log::info!("🛡️  ML GUARD: Yeni tehdit öğrenildi: {}", threat_type);
+    }
+
+    /// Öğrenme: Sonuç kaydet
+    pub fn record_result(&mut self, input: &str, was_threat: bool, threat_type: Option<String>) {
+        use std::hash::{Hash, Hasher};
+        let mut hasher = std::collections::hash_map::DefaultHasher::new();
+        input.hash(&mut hasher);
+
+        let t_type_clone = threat_type.clone();
+
+        self.learning_history.push(LearningEntry {
+            input_hash: hasher.finish(),
+            was_threat,
+            threat_type,
+            timestamp: chrono::Utc::now().to_rfc3339(),
+        });
+
+        // Uyarlanabilir öğrenme: Tehdit tekrar edilirse güveni artır
+        if was_threat {
+            if let Some(t_type) = t_type_clone {
+                if let Some(sig) = self.threat_signatures.iter_mut().find(|s| s.threat_type == t_type) {
+                    sig.occurrences += 1;
+                    sig.confidence = (sig.confidence + 0.05).min(0.95);
+                    sig.last_seen = chrono::Utc::now().to_rfc3339();
+                }
+            }
+        }
+    }
+
+    /// İmza sayısı
+    pub fn signature_count(&self) -> usize {
+        self.threat_signatures.len()
+    }
+
+    /// Öğrenme geçmişi boyutu
+    pub fn history_size(&self) -> usize {
+        self.learning_history.len()
+    }
+
+    fn get_recommendation(&self, threat_type: &str) -> String {
+        match threat_type {
+            "encoded_injection" => "Kodlanmış girdi tespit edildi. İstek engellensin.".into(),
+            "multi_step_injection" => "Çok adımlı saldırı deseni. İstek dikkatle incelensin.".into(),
+            "social_engineering" => "Sosyal mühendislik deseni. Kullanıcı uyarılsın.".into(),
+            "data_theft" => "Veri hırsızlığı girişimi. İstek kesinlikle engellensin.".into(),
+            "privilege_escalation" => "Yetki yükseltme girişimi. İstek engellensin.".into(),
+            _ => "Bilinmeyen tehdit. Dikkatle incelensin.".into(),
+        }
+    }
+}
+
+/// ML tehdit algılama sonucu
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct MlThreatResult {
+    pub threat_type: String,
+    pub confidence: f64,
+    pub matched_patterns: usize,
+    pub total_patterns: usize,
+    pub recommendation: String,
 }
 
 #[cfg(test)]

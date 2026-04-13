@@ -12,6 +12,7 @@ use base64::{Engine as _, engine::general_purpose::STANDARD as BASE64};
 use super::WebhookProvider;
 
 type HmacSha256 = Hmac<Sha256>;
+#[allow(dead_code)]
 type HmacSha512 = Hmac<Sha512>;
 
 /// ─── SIGNATURE ALGORITHM ───

@@ -8,6 +8,11 @@
 //! - **WebSocket**: Real-time bidirectional communication
 //! - **Dashboard**: Built-in web dashboard
 //! - **Authentication**: JWT-based authentication
+
+// Suppress warnings for unused code
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - **Rate Limiting**: Request rate limiting
 //! - **CORS**: Cross-origin resource sharing support
 //!
@@ -34,6 +39,7 @@ pub mod server;
 pub mod routes;
 pub mod auth;
 pub mod middleware;
+pub mod web_ext;
 
 pub use error::{WebError, Result};
 pub use types::*;

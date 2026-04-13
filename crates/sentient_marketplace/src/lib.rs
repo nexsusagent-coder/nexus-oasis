@@ -8,6 +8,11 @@
 //!  - Publish skills
 //!  - Version management
 //!  - Ratings and reviews
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //!  - Categories and tags
 //!
 //!  Similar to:
@@ -41,6 +46,7 @@ pub use monetization::{
 /// ─── Marketplace Client ───
 
 pub struct Marketplace {
+    #[allow(dead_code)]
     config: MarketplaceConfig,
     registry: Arc<SkillRegistry>,
     installer: Arc<SkillInstaller>,

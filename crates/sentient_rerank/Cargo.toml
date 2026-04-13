@@ -1,0 +1,41 @@
+[package]
+name = "sentient_rerank"
+version = "0.1.0"
+edition = "2021"
+description = "SENTIENT OS Reranking Engine - Search result reranking with multiple providers"
+license = "AGPL-3.0"
+authors = ["SENTIENT OS Team"]
+repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
+keywords = ["reranking", "search", "ai", "cohere", "llm"]
+categories = ["api-bindings", "science"]
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true, features = ["full"] }
+async-trait = "0.1"
+futures = "0.3"
+
+# HTTP client
+reqwest = { workspace = true, features = ["json", "rustls-tls"] }
+
+# Serialization
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# Utilities
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+log = "0.4"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# Math
+ndarray = "0.15"
+
+# Caching
+lru = "0.12"
+parking_lot = "0.12"
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockito = "1.0"

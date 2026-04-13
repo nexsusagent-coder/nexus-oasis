@@ -9,6 +9,11 @@
 //  - Self-Reflection
 // ═══════════════════════════════════════════════════════════════════════════════
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod patterns;
 pub mod error;
 pub mod traits;

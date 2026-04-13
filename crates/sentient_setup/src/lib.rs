@@ -6,6 +6,11 @@
 //!  Universal LLM Gateway + 20+ Messaging Channels
 //!  Agent-S3 Hardware Permissions
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod wizard;
 pub mod config;
 pub mod integrations;

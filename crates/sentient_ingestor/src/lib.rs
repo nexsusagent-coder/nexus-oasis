@@ -8,6 +8,11 @@
 //!  Kategoriler:
 //!  - Git & GitHub (167)
 //!  - Coding Agents & IDEs (1184)
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //!  - Browser & Automation (322)
 //!  - Web & Frontend Dev (919)
 //!  - DevOps & Cloud (393)

@@ -17,6 +17,7 @@
 use crate::error::{HandsError, HandsResult};
 use crate::{ALLOWED_APPS, BLOCKED_COMMANDS, ALLOWED_PATHS, BLOCKED_PATHS};
 use std::collections::HashSet;
+use serde::{Deserialize, Serialize};
 
 // ───────────────────────────────────────────────────────────────────────────────
 //  POLİTİKA TİPLERİ
@@ -58,6 +59,98 @@ pub enum NetworkPolicy {
 }
 
 // ───────────────────────────────────────────────────────────────────────────────
+//  YASAKLI EKRAN BÖLGELERİ
+// ───────────────────────────────────────────────────────────────────────────────
+
+/// Yasaklı ekran bölgesi
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ForbiddenRegion {
+    /// Bölge ID
+    pub id: String,
+    /// X koordinatı
+    pub x: u32,
+    /// Y koordinatı
+    pub y: u32,
+    /// Genişlik
+    pub width: u32,
+    /// Yükseklik
+    pub height: u32,
+    /// Neden (açıklama)
+    pub reason: String,
+    /// Aktif mi?
+    pub enabled: bool,
+    /// Oluşturulma zamanı
+    pub created_at: chrono::DateTime<chrono::Utc>,
+}
+
+impl ForbiddenRegion {
+    /// Yeni yasaklı bölge oluştur
+    pub fn new(x: u32, y: u32, width: u32, height: u32, reason: &str) -> Self {
+        Self {
+            id: uuid::Uuid::new_v4().to_string(),
+            x,
+            y,
+            width,
+            height,
+            reason: reason.to_string(),
+            enabled: true,
+            created_at: chrono::Utc::now(),
+        }
+    }
+
+    /// Nokta bölge içinde mi?
+    pub fn contains(&self, px: i32, py: i32) -> bool {
+        if !self.enabled {
+            return false;
+        }
+        
+        px >= self.x as i32 
+            && px <= (self.x + self.width) as i32
+            && py >= self.y as i32 
+            && py <= (self.y + self.height) as i32
+    }
+
+    /// İki bölge çakışıyor mu?
+    pub fn overlaps(&self, other: &ForbiddenRegion) -> bool {
+        if !self.enabled || !other.enabled {
+            return false;
+        }
+        
+        self.x < other.x + other.width
+            && self.x + self.width > other.x
+            && self.y < other.y + other.height
+            && self.y + self.height > other.y
+    }
+
+    /// Bölge alanı
+    pub fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    /// Merkez nokta
+    pub fn center(&self) -> (u32, u32) {
+        (self.x + self.width / 2, self.y + self.height / 2)
+    }
+}
+
+/// Yasaklı bölge türü (ön tanımlı)
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ForbiddenRegionType {
+    /// Şifre alanı
+    PasswordField,
+    /// Admin paneli
+    AdminPanel,
+    /// Sistem ayarları
+    SystemSettings,
+    /// Ödeme formu
+    PaymentForm,
+    /// Kişisel bilgiler
+    PersonalInfo,
+    /// Özel kullanıcı tanımlı
+    Custom,
+}
+
+// ───────────────────────────────────────────────────────────────────────────────
 //  SOVEREIGN POLİTİKA
 // ─────────────────────────────────────────────────────────────────────────────--
 
@@ -85,6 +178,8 @@ pub struct SovereignPolicy {
     pub gui_control_allowed: bool,
     /// Onay gerekli mi?
     pub require_confirmation: bool,
+    /// Yasaklı ekran bölgeleri
+    pub forbidden_regions: Vec<ForbiddenRegion>,
     /// Aktif mi?
     active: bool,
     /// İhlaller
@@ -110,6 +205,7 @@ pub enum ViolationType {
     NetworkAccess,
     Timeout,
     MouseLimitExceeded,
+    ForbiddenRegionAccess,
 }
 
 impl SovereignPolicy {
@@ -147,6 +243,7 @@ impl SovereignPolicy {
             max_mouse_distance: 10000,
             gui_control_allowed: true,
             require_confirmation: true,
+            forbidden_regions: Vec::new(),
             active: false,
             violations: Vec::new(),
         }
@@ -316,6 +413,11 @@ impl SovereignPolicy {
                     "OASIS-HANDS SOVEREIGN: X koordinatı ekran dışında: {}", x
                 )));
             }
+            
+            // Yasaklı bölge kontrolü
+            if let Some(y) = action.y() {
+                self.validate_screen_position(x, y)?;
+            }
         }
         
         if let Some(y) = action.y() {
@@ -396,6 +498,102 @@ impl SovereignPolicy {
     pub fn add_blocked_command(&mut self, command: &str) {
         self.blocked_commands.insert(command.to_string());
         log::info!("🔒  SOVEREIGN: '{}' komutu blacklist'e eklendi", command);
+    }
+    
+    // ─── YASAKLI EKRAN BÖLGESİ METOTLARI ───
+    
+    /// Ekran pozisyonunu doğrula (yasaklı bölge kontrolü)
+    pub fn validate_screen_position(&self, x: i32, y: i32) -> HandsResult<()> {
+        for region in &self.forbidden_regions {
+            if region.contains(x, y) {
+                log::warn!(
+                    "🔒  SOVEREIGN: Yasaklı bölgeye erişim engellendi → ({}, {}) '{}'",
+                    x, y, region.reason
+                );
+                return Err(HandsError::ForbiddenRegion(format!(
+                    "OASIS-HANDS SOVEREIGN: ({}, {}) koordinatı yasaklı bölgede: {}",
+                    x, y, region.reason
+                )));
+            }
+        }
+        Ok(())
+    }
+    
+    /// Yasaklı bölge ekle
+    pub fn add_forbidden_region(&mut self, region: ForbiddenRegion) {
+        log::info!(
+            "🔒  SOVEREIGN: Yasaklı bölge eklendi → ({},{}) {}x{} '{}'",
+            region.x, region.y, region.width, region.height, region.reason
+        );
+        self.forbidden_regions.push(region);
+    }
+    
+    /// Yasaklı bölge oluştur ve ekle
+    pub fn create_forbidden_region(&mut self, x: u32, y: u32, width: u32, height: u32, reason: &str) -> String {
+        let region = ForbiddenRegion::new(x, y, width, height, reason);
+        let id = region.id.clone();
+        self.add_forbidden_region(region);
+        id
+    }
+    
+    /// Yasaklı bölge kaldır
+    pub fn remove_forbidden_region(&mut self, id: &str) -> bool {
+        if let Some(pos) = self.forbidden_regions.iter().position(|r| r.id == id) {
+            let removed = self.forbidden_regions.remove(pos);
+            log::info!("🔒  SOVEREIGN: Yasaklı bölge kaldırıldı → '{}' {}", id, removed.reason);
+            return true;
+        }
+        false
+    }
+    
+    /// Yasaklı bölgeyi aktif/pasif yap
+    pub fn toggle_forbidden_region(&mut self, id: &str, enabled: bool) -> bool {
+        if let Some(region) = self.forbidden_regions.iter_mut().find(|r| r.id == id) {
+            region.enabled = enabled;
+            log::info!(
+                "🔒  SOVEREIGN: Yasaklı bölge {} → '{}' {}",
+                if enabled { "aktifleştirildi" } else { "devre dışı bırakıldı" },
+                id, region.reason
+            );
+            return true;
+        }
+        false
+    }
+    
+    /// Yasaklı bölgeleri getir
+    pub fn get_forbidden_regions(&self) -> &[ForbiddenRegion] {
+        &self.forbidden_regions
+    }
+    
+    /// Aktif yasaklı bölgeleri getir
+    pub fn get_active_forbidden_regions(&self) -> Vec<&ForbiddenRegion> {
+        self.forbidden_regions.iter().filter(|r| r.enabled).collect()
+    }
+    
+    /// Yasaklı bölge sayısı
+    pub fn forbidden_region_count(&self) -> usize {
+        self.forbidden_regions.len()
+    }
+    
+    /// Tüm yasaklı bölgeleri temizle
+    pub fn clear_forbidden_regions(&mut self) {
+        let count = self.forbidden_regions.len();
+        self.forbidden_regions.clear();
+        log::info!("🔒  SOVEREIGN: {} yasaklı bölge temizlendi", count);
+    }
+    
+    /// Ön tanımlı yasaklı bölgeleri ekle (şifre alanları vb.)
+    pub fn add_default_forbidden_regions(&mut self, screen_width: u32, screen_height: u32) {
+        // Ekranın üst kısmı (genellikle menü/bar)
+        self.create_forbidden_region(
+            0, 0, screen_width, 30,
+            "Sistem barı - tıklama korumalı"
+        );
+        
+        log::info!(
+            "🔒  SOVEREIGN: Ön tanımlı yasaklı bölgeler eklendi (ekran: {}x{})",
+            screen_width, screen_height
+        );
     }
 }
 
@@ -520,5 +718,112 @@ mod tests {
         
         // Politika aktif olmalı
         assert!(policy.is_active());
+    }
+    
+    // ─── YASAKLI BÖLGE TESTLERİ ───
+    
+    #[test]
+    fn test_forbidden_region_creation() {
+        let region = ForbiddenRegion::new(100, 100, 200, 150, "Test bölge");
+        assert!(region.enabled);
+        assert_eq!(region.x, 100);
+        assert_eq!(region.width, 200);
+        assert!(!region.id.is_empty());
+    }
+    
+    #[test]
+    fn test_forbidden_region_contains() {
+        let region = ForbiddenRegion::new(100, 100, 200, 150, "Test");
+        
+        // İçeride
+        assert!(region.contains(150, 150));
+        assert!(region.contains(100, 100));
+        assert!(region.contains(300, 250));
+        
+        // Dışarıda
+        assert!(!region.contains(50, 50));
+        assert!(!region.contains(350, 300));
+    }
+    
+    #[test]
+    fn test_forbidden_region_disabled() {
+        let mut region = ForbiddenRegion::new(100, 100, 200, 150, "Test");
+        region.enabled = false;
+        
+        // Devre dışı iken hiçbir noktayı içermez
+        assert!(!region.contains(150, 150));
+    }
+    
+    #[test]
+    fn test_add_forbidden_region() {
+        let mut policy = SovereignPolicy::strict();
+        assert_eq!(policy.forbidden_region_count(), 0);
+        
+        policy.create_forbidden_region(0, 0, 100, 50, "Menü");
+        assert_eq!(policy.forbidden_region_count(), 1);
+    }
+    
+    #[test]
+    fn test_validate_screen_position() {
+        let mut policy = SovereignPolicy::strict();
+        policy.create_forbidden_region(0, 0, 100, 50, "Menü");
+        
+        // Yasaklı bölge içinde - engellenmeli
+        assert!(policy.validate_screen_position(50, 25).is_err());
+        
+        // Yasaklı bölge dışında - geçmeli
+        assert!(policy.validate_screen_position(200, 200).is_ok());
+    }
+    
+    #[test]
+    fn test_remove_forbidden_region() {
+        let mut policy = SovereignPolicy::strict();
+        let id = policy.create_forbidden_region(0, 0, 100, 50, "Test");
+        
+        assert_eq!(policy.forbidden_region_count(), 1);
+        
+        let removed = policy.remove_forbidden_region(&id);
+        assert!(removed);
+        assert_eq!(policy.forbidden_region_count(), 0);
+    }
+    
+    #[test]
+    fn test_toggle_forbidden_region() {
+        let mut policy = SovereignPolicy::strict();
+        let id = policy.create_forbidden_region(0, 0, 100, 50, "Test");
+        
+        // Devre dışı bırak
+        policy.toggle_forbidden_region(&id, false);
+        assert!(policy.validate_screen_position(50, 25).is_ok());
+        
+        // Tekrar aktifleştir
+        policy.toggle_forbidden_region(&id, true);
+        assert!(policy.validate_screen_position(50, 25).is_err());
+    }
+    
+    #[test]
+    fn test_forbidden_region_area() {
+        let region = ForbiddenRegion::new(0, 0, 100, 50, "Test");
+        assert_eq!(region.area(), 5000);
+    }
+    
+    #[test]
+    fn test_forbidden_region_center() {
+        let region = ForbiddenRegion::new(100, 100, 200, 100, "Test");
+        let (cx, cy) = region.center();
+        assert_eq!(cx, 200);
+        assert_eq!(cy, 150);
+    }
+    
+    #[test]
+    fn test_clear_forbidden_regions() {
+        let mut policy = SovereignPolicy::strict();
+        policy.create_forbidden_region(0, 0, 100, 50, "Test1");
+        policy.create_forbidden_region(200, 200, 100, 50, "Test2");
+        
+        assert_eq!(policy.forbidden_region_count(), 2);
+        
+        policy.clear_forbidden_regions();
+        assert_eq!(policy.forbidden_region_count(), 0);
     }
 }

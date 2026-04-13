@@ -8,6 +8,11 @@
 //! ## Güvenlik Özellikleri:
 //!
 //! - Dış araçlara veri sızıntısı önleme
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - İşlem doğrulama without revealing data
 //! - Audit trail without compromising privacy
 

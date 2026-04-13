@@ -164,6 +164,7 @@ impl AudioBuffer {
 /// Voice Activity Detection
 pub struct VoiceActivityDetector {
     threshold: f32,
+    #[allow(dead_code)]
     frame_size: usize,
     energy_history: Vec<f32>,
 }

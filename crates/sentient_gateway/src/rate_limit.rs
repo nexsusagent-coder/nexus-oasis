@@ -26,7 +26,7 @@ use once_cell::sync::Lazy;
 
 /// Token bucket for rate limiting
 #[derive(Debug, Clone)]
-struct TokenBucket {
+pub struct TokenBucket {
     tokens: f64,
     max_tokens: f64,
     refill_rate: f64, // tokens per second

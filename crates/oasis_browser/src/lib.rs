@@ -8,6 +8,11 @@
 //!  L1 SOVEREIGN ANAYASASI:
 //!  ───────────────────────
 //!  ✓ Tarayıcı DIŞ WEB'de otonom gezinir
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //!  ✓ YEREL DOSYA SİSTEMİNE ERİŞİM YASAKTIR (Sovereign Sandbox)
 //!  ✓ DOM → Observation (LLM-optimized) dönüşümü
 //!  ✓ V-GATE üzerinden şifreli LLM iletişimi
@@ -65,6 +70,7 @@ pub mod profile;
 // Human-Mimicry & Stealth Modülleri
 pub mod recap;
 pub mod proxy;
+pub mod browser_ext;
 #[cfg(feature = "lightpanda-ffi")]
 pub mod lightpanda_ffi;
 

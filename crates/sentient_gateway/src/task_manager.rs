@@ -168,7 +168,9 @@ pub struct TaskManager {
     timeout_secs: u64,
     
     /// Görev kanalı
+    #[allow(dead_code)]
     task_tx: mpsc::Sender<TaskCommand>,
+    #[allow(dead_code)]
     task_rx: Option<mpsc::Receiver<TaskCommand>>,
     
     /// İstatistikler
@@ -181,6 +183,7 @@ pub struct TaskManager {
     running: Arc<RwLock<bool>>,
 }
 
+#[allow(dead_code)]
 enum TaskCommand {
     Execute(Box<ManagedTask>),
     Cancel(Uuid),

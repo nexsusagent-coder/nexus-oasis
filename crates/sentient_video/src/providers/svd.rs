@@ -42,7 +42,7 @@ impl SVDProvider {
 
     /// Generate video from image
     async fn generate_from_image(&self, request: VideoRequest) -> VideoResult<VideoResponse> {
-        let image_url = request.image_url.as_ref()
+        let _image_url = request.image_url.as_ref()
             .ok_or_else(|| VideoError::InvalidRequest("Image URL required for SVD".into()))?;
 
         let svd_request = SVDRequest::from(request.clone());
@@ -179,6 +179,7 @@ struct SVDRequest {
     seed: Option<i64>,
 }
 
+#[allow(dead_code)]
 fn default_motion_bucket() -> u8 { 127 }
 
 impl From<VideoRequest> for SVDRequest {

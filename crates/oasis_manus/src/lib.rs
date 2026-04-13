@@ -8,6 +8,11 @@
 //! ═──────────────────────────────────────────────────────────────────────────────
 //!  L1 SOVEREIGN ANAYASASI:
 //!  ───────────────────────
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //!  ✓ Kod SADECE Docker container içinde çalışır
 //!  ✓ Ana sisteme DOSYA ERİŞİMİ YASAKTIR
 //!  ✓ Ağ erişimi KISITLANABİLİR (default: kapalı)

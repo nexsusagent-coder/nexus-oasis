@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use parking_lot::RwLock;
 use tokio::sync::mpsc;
-use tracing::{info, warn, debug};
+use tracing::{info, warn};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
 
@@ -226,6 +226,7 @@ pub struct SubagentExecutor {
     
     /// Cancel channel
     cancel_tx: mpsc::Sender<TaskId>,
+    #[allow(dead_code)]
     cancel_rx: Option<mpsc::Receiver<TaskId>>,
 }
 

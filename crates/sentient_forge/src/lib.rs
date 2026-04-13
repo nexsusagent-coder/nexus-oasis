@@ -7,6 +7,7 @@ pub mod templates;
 pub mod generators;
 pub mod validators;
 pub mod formats;
+pub mod forge_ext;
 
 // Re-exports
 pub use templates::*;

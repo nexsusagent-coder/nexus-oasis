@@ -7,6 +7,7 @@ use colored::Colorize;
 
 /// Gemma 4 Kernel Status
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct KernelStatus {
     pub model: String,
     pub version: String,
@@ -34,6 +35,7 @@ impl Default for KernelStatus {
 /// Sistem durumu paneli
 pub struct SystemDashboard {
     /// Kernel status (Gemma 4)
+    #[allow(dead_code)]
     kernel: KernelStatus,
     /// Modul durumları
     modules: Vec<ModuleInfo>,
@@ -65,6 +67,7 @@ pub enum EngineType {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
+#[allow(dead_code)]
 pub enum EngineStatus {
     Active,
     Idle,
@@ -76,6 +79,7 @@ pub enum EngineStatus {
 pub struct ModuleInfo {
     pub name: String,
     pub status: ModuleStatus,
+    #[allow(dead_code)]
     pub uptime_secs: u64,
 }
 

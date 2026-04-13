@@ -8,6 +8,11 @@
 //  - Multi-model support (OpenAI, Claude, Gemini, Ollama)
 // ═══════════════════════════════════════════════════════════════════════════════
 
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 pub mod schema;
 pub mod extractor;
 pub mod function;

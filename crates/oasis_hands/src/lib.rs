@@ -8,6 +8,12 @@
 //! ═──────────────────────────────────────────────────────────────────────────────
 //!  L1 SOVEREIGN ANAYASASI:
 //!  ───────────────────────
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(private_interfaces)]
 //!  ✓ GUI kontrolü ANCAK izin verilen uygulamalarla
 //!  ✓ Dosya sistemi ERİŞİMİ KISITLANMIŞ (whitelist dizinler)
 //!  ✓ Process başlatma WHITELIST ile kontrol edilir
@@ -61,13 +67,23 @@ pub mod sentient_tool;
 pub mod sentient_tools;
 pub mod executor;
 pub mod skill_loader;
+pub mod emergency;
+pub mod rate_limiter;
+pub mod time_rules;
+pub mod sandbox;
+pub mod alert;
+pub mod history;
+pub mod recorder;
 
 // Human Mimicry Modülü (Bumblebee + typerr asimilasyonu)
 pub mod human_mimicry;
 
+// Setup Wizard Modülü
+pub mod setup;
+
 // Re-exports
 pub use error::{HandsError, HandsResult};
-pub use sovereign::{SovereignPolicy, FileAccessPolicy, ProcessPolicy, NetworkPolicy};
+pub use sovereign::{SovereignPolicy, FileAccessPolicy, ProcessPolicy, NetworkPolicy, ForbiddenRegion, ForbiddenRegionType};
 pub use screen::{ScreenCapture, ScreenInfo, CaptureConfig};
 pub use input::{InputController, MouseAction, KeyboardAction, MouseButton};
 pub use vision::{VisionEngine, VisionResult, UIElement};
@@ -76,6 +92,13 @@ pub use vgate::HandsVGate;
 pub use session::{HandsSession, SessionConfig, SessionStats};
 pub use tools::{ToolRegistry, ToolResult};
 pub use skill_loader::{SkillLoader, LoadedSkill, SkillMetadata, SkillExecutionContext};
+pub use emergency::{EmergencyStop, EmergencyManager, Hotkey, EmergencyLevel};
+pub use rate_limiter::{RateLimiter, RateLimitConfig, RateLimitReport, MouseRateLimits, KeyboardRateLimits, GeneralRateLimits};
+pub use time_rules::{TimeRules, TimeRulesManager, TimeRulesReport, WorkMode, BlockedPeriod};
+pub use sandbox::{SandboxManager, SandboxConfig, SandboxModeType, SandboxReport, SimulatedResult, RecordedAction};
+pub use alert::{AlertSystem, AlertConfig, AlertLevel, AlertStats, AlertRecord, AlertChannel, ViolationType};
+pub use history::{ActionHistory, HistoryConfig, HistoryStats, HistoryReport, HistoricalAction, StateSnapshot, UndoableActionType, UndoRedoResult, UndoRedoOperation, HistoryBranch};
+pub use recorder::{MacroRecorder, RecorderConfig, RecorderStats, RecorderReport, Macro, MacroSummary, TimedAction, PlaybackSettings, PlaybackResult, RecordingState, StopReason};
 
 // Sentient Tools Re-exports
 pub use sentient_tool::{SentientTool, SentientToolResult, ToolCategory, RiskLevel, ToolParameter};

@@ -117,6 +117,10 @@ members = [
     "crates/sentient_quantize",
     # v35.0.0 Comprehensive LLM Hub (50+ models, 13 providers)
     "crates/sentient_llm",
+    # v36.0.0 Embedding Hub (multi-provider embeddings)
+    "crates/sentient_embed",
+    # v37.0.0 Reranking Engine (search result optimization)
+    "crates/sentient_rerank",
     # Skills System
     "skills",
     "scripts",

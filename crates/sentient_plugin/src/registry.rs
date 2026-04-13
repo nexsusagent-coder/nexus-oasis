@@ -1,6 +1,5 @@
 //! Plugin registry for marketplace and dependency management
 
-use crate::types::PluginManifest;
 use crate::{PluginError, Result};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -262,7 +261,7 @@ impl PluginRegistry {
 
         // Filter versions
         if !search.include_prerelease {
-            for entry in &mut results {
+            for _entry in &mut results {
                 // Note: Can't mutate through iterator, would need to clone
             }
         }

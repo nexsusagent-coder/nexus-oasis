@@ -7,6 +7,9 @@
 //! - /cancel - Görevi iptal et
 //! - /help - Yardım mesajı
 
+// Allow deprecated ParseMode::Markdown until migration to MarkdownV2
+#![allow(deprecated)]
+
 use teloxide::{
     dispatching::UpdateFilterExt,
     dptree,
@@ -341,6 +344,7 @@ async fn handle_text_message(
 
 /// ─── YARDIMCI TRAIT ───
 
+#[allow(dead_code)]
 trait SENTIENTMessage {
     fn to_sentient_message(&self) -> String;
 }

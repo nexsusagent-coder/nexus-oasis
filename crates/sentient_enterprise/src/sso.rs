@@ -12,6 +12,9 @@
 //! - OAuth 2.0 / OpenID Connect (OIDC)
 //! - SAML 2.0
 
+// Allow deprecated base64 functions until migration to Engine API
+#![allow(deprecated)]
+
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -669,6 +672,7 @@ impl SSOManager {
 
 /// Token response from OAuth
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct TokenResponse {
     access_token: String,
     token_type: String,

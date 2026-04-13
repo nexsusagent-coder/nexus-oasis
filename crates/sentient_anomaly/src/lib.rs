@@ -8,6 +8,11 @@
 //! - Sonsuz döngü (infinite loop)
 //! - Davranış sapması (behavioral deviation)
 //! - Kaynak anomalileri (CPU, memory, latency)
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - Çıktı anomalileri (repeated outputs)
 
 pub mod detector;

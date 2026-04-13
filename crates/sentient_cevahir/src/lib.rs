@@ -8,6 +8,11 @@
 //! - **Neural Network (V-7)**: RoPE, RMSNorm, SwiGLU, KV Cache, MoE, GQA
 //! - **Cognitive Strategies**: Direct, Think, Debate, Tree of Thoughts
 //! - **Turkish BPE Tokenizer**: Native Türkçe tokenizer
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //! - **Memory & RAG**: Vector store, semantic cache
 //! - **Tool Execution**: Dynamic tool registration
 

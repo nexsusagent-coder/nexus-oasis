@@ -13,6 +13,7 @@ pub mod templates;
 pub mod files;
 pub mod terminal;
 pub mod error;
+pub mod local_sandbox;
 
 pub use sandbox::{Sandbox, SandboxBuilder, SandboxMetadata};
 pub use templates::{Template, TemplateLanguage, BuiltinTemplate};

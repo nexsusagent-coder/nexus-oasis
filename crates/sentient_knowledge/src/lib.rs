@@ -8,6 +8,13 @@
 //! - Graph traversal and pathfinding
 //! - Graph RAG for contextual retrieval
 //! - Neo4j backend support
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(unused_mut)]
+#![allow(unused_assignments)]
 //! - In-memory backend for testing
 
 use chrono::{DateTime, Utc};

@@ -42,6 +42,7 @@ pub struct SlaManager {
     support: SupportManager,
     
     /// Metrics collector
+    #[allow(dead_code)]
     metrics: MetricsCollector,
     
     /// SLA credit manager

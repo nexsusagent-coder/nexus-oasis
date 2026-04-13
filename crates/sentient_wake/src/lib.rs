@@ -8,6 +8,11 @@
 //! Usage:
 //! ```rust,ignore
 //! use sentient_wake::{WakeWordDetector, WakeWordConfig, WakeEvent};
+
+// Suppress warnings
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {

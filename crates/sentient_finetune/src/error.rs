@@ -75,6 +75,9 @@ pub enum FinetuneError {
 
     #[error("Internal error: {0}")]
     InternalError(String),
+
+    #[error("Dataset error: {0}")]
+    DatasetError(String),
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -159,6 +162,7 @@ impl FinetuneError {
             FinetuneError::SerializationError(_) => "SERIALIZE_ERROR",
             FinetuneError::NetworkError(_) => "NETWORK_ERROR",
             FinetuneError::InternalError(_) => "INTERNAL_ERROR",
+            FinetuneError::DatasetError(_) => "DATASET_ERROR",
         }
     }
 }

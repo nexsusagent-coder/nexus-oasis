@@ -409,6 +409,7 @@ async fn handle_client_message(
     }
 }
 
+#[allow(dead_code)]
 trait SENTIENTMessage {
     fn to_sentient_message(&self) -> String;
 }

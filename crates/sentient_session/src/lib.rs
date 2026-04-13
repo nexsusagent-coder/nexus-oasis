@@ -14,12 +14,19 @@ pub mod tree;
 pub mod compaction;
 pub mod checkpoint;
 pub mod history;
+pub mod session_ext;
 
 pub use session::{Session, SessionConfig, SessionState, SessionType};
 pub use tree::{SessionTree, SessionNode, NodeId};
 pub use compaction::{Compactor, CompactionConfig, CompactionResult};
 pub use checkpoint::{Checkpoint, CheckpointManager};
 pub use history::{SessionHistory, HistoryEntry};
+pub use session_ext::{
+    SessionExporter, ExportConfig, ExportFormat, ExportedSession,
+    SessionReplay, ReplayConfig, ReplayEvent, ReplayState,
+    MultiUserSession, SessionUser, SessionUserRole, SessionPermission, JoinRequest,
+    CloudSyncManager, CloudSyncConfig, ConflictResolution, SyncState, SyncResult,
+};
 
 use std::sync::Arc;
 use tokio::sync::RwLock;

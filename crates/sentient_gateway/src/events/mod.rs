@@ -20,7 +20,7 @@
 //! └─────────────────────────────────────────────────────────────┘
 
 use sentient_common::error::SENTIENTResult;
-use sentient_orchestrator::TaskPriority;
+use sentient_orchestrator::OrchTaskPriority as TaskPriority;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::{mpsc, RwLock};
