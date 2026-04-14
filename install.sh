@@ -1,298 +1,625 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════════════════════════════════════
-#  SENTIENT - Quick Install Script
-#  https://get.sentient.ai
+#  SENTIENT OS - OTOMATİK KURULUM SCRIPTİ
 # ═══════════════════════════════════════════════════════════════════════════════
-#
-#  Usage:
-#    curl -sSL https://get.sentient.ai | bash
-#    curl -sSL https://get.sentient.ai | bash -s -- --version 4.0.0
-#
-#  Options:
-#    --version VERSION    Specify version (default: latest)
-#    --prefix PATH        Install directory (default: ~/.sentient)
-#    --no-confirm         Skip confirmation prompts
-#    --uninstall          Remove SENTIENT
-#
-#  Supported:
-#    - Linux (x86_64, arm64)
-#    - macOS (x86_64, arm64)
-#    - Windows (via PowerShell script)
+#  Tek komutla: curl -fsSL https://.../install.sh | bash
+#  Veya manuel: ./install.sh
 # ═══════════════════════════════════════════════════════════════════════════════
 
 set -e
 
-# Colors
+# Renkler
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
+YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
+NC='\033[0m' # No Color
 BOLD='\033[1m'
-NC='\033[0m'
 
-# Defaults
-VERSION="latest"
-PREFIX="$HOME/.sentient"
-NO_CONFIRM=false
-UNINSTALL=false
-REPO="nexsusagent-coder/SENTIENT_CORE"
+# Logo
+show_logo() {
+    echo -e "${CYAN}"
+    echo "╔════════════════════════════════════════════════════════════╗"
+    echo "║                                                            ║"
+    echo "║     █████╗ ███╗   ██╗███████╗██╗      ██████╗ ██╗   ██╗   ║"
+    echo "║    ██╔══██╗████╗  ██║██╔════╝██║     ██╔═══██╗██║   ██║   ║"
+    echo "║    ███████║██╔██╗ ██║█████╗  ██║     ██║   ██║██║   ██║   ║"
+    echo "║    ██╔══██║██║╚██╗██║██╔══╝  ██║     ██║   ██║██║   ██║   ║"
+    echo "║    ██║  ██║██║ ╚████║███████╗███████╗╚██████╔╝╚██████╔╝   ║"
+    echo "║    ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝    ║"
+    echo "║                                                            ║"
+    echo "║            NEXUS OASIS — Yapay Zeka İşletim Sistemi        ║"
+    echo "╚════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+}
 
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --version)
-            VERSION="$2"
-            shift 2
+# Progress göstergesi
+progress() {
+    local step=$1
+    local total=$2
+    local desc=$3
+    echo -e "${BLUE}[${step}/${total}]${NC} ${BOLD}${desc}${NC}"
+}
+
+# Başarı mesajı
+success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
+
+# Hata mesajı
+error() {
+    echo -e "${RED}❌ $1${NC}"
+    exit 1
+}
+
+# Uyarı mesajı
+warn() {
+    echo -e "${YELLOW}⚠️  $1${NC}"
+}
+
+# Soru sor
+ask() {
+    echo -e -n "${CYAN}$1${NC}"
+    read -r answer
+    echo "$answer"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  LLM SEÇİMİ
+# ═══════════════════════════════════════════════════════════════════════════════
+
+select_llm() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  🧠 LLM (Yapay Zeka Modeli) Seçimi${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    echo -e "Lütfen kullanmak istediğiniz LLM türünü seçin:"
+    echo ""
+    echo -e "  ${GREEN}[1]${NC} ${BOLD}LOKAL (Ücretsiz)${NC} - Ollama ile bilgisayarınızda çalışır"
+    echo "      • İnternet gerektirmez"
+    echo "      • Tamamen gizli (veri dışarı çıkmaz)"
+    echo "      • GPU destekli (NVIDIA, AMD, Apple Silicon)"
+    echo "      • Modeller: Llama3.2, Gemma3, DeepSeek, Qwen..."
+    echo ""
+    echo -e "  ${GREEN}[2]${NC} ${BOLD}API KEY (Ücretli)${NC} - OpenRouter, OpenAI, Anthropic"
+    echo "      • En iyi kalite (GPT-4, Claude, Gemini)"
+    echo "      • 200+ model erişimi (OpenRouter)"
+    echo "      • Kurulum çok hızlı"
+    echo "      • Pay-as-you-go定价"
+    echo ""
+    echo -e "  ${GREEN}[3]${NC} ${BOLD}HİBRİT${NC} - Hem lokal hem API"
+    echo "      • Normalde lokal kullanır"
+    echo "      • Zor sorularda API'ye başvurur"
+    echo "      • En iyi denge"
+    echo ""
+    
+    answer=$(ask "Seçiminiz [1/2/3]: ")
+    
+    case $answer in
+        1)
+            LLM_TYPE="local"
+            setup_local_llm
             ;;
-        --prefix)
-            PREFIX="$2"
-            shift 2
+        2)
+            LLM_TYPE="api"
+            setup_api_llm
             ;;
-        --no-confirm)
-            NO_CONFIRM=true
-            shift
-            ;;
-        --uninstall)
-            UNINSTALL=true
-            shift
-            ;;
-        -h|--help)
-            echo "SENTIENT Quick Installer"
-            echo ""
-            echo "Usage: curl -sSL https://get.sentient.ai | bash"
-            echo ""
-            echo "Options:"
-            echo "  --version VERSION    Specify version (default: latest)"
-            echo "  --prefix PATH        Install directory (default: ~/.sentient)"
-            echo "  --no-confirm         Skip confirmation prompts"
-            echo "  --uninstall          Remove SENTIENT"
-            exit 0
+        3)
+            LLM_TYPE="hybrid"
+            setup_hybrid_llm
             ;;
         *)
-            echo -e "${RED}Unknown option: $1${NC}"
-            exit 1
+            error "Geçersiz seçim. Lütfen 1, 2 veya 3 girin."
             ;;
     esac
-done
+}
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  UNINSTALL
+#  LOKAL LLM KURULUMU (OLLAMA)
 # ═══════════════════════════════════════════════════════════════════════════════
-if [ "$UNINSTALL" = true ]; then
-    echo -e "${YELLOW}Uninstalling SENTIENT...${NC}"
+
+setup_local_llm() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  🦙 Ollama (Lokal LLM) Kurulumu${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
     
-    # Remove binary
-    rm -f "$PREFIX/bin/sentient"
-    rm -f "$PREFIX/bin/sentient-gateway"
-    rm -f "$PREFIX/bin/sentient-agent"
+    # Model seçimi
+    echo -e "Hangi modeli kurmak istersiniz?"
+    echo ""
+    echo -e "  ${GREEN}[1]${NC} Llama 3.2 (3B)    ~2GB   - Hızlı, genel amaçlı"
+    echo -e "  ${GREEN}[2]${NC} Gemma 3 (4B)     ~3GB   - Google, dengeli"
+    echo -e "  ${GREEN}[3]${NC} Qwen 2.5 (7B)    ~4GB   - Çok dilli, Türkçe iyi"
+    echo -e "  ${GREEN}[4]${NC} DeepSeek R1 (7B) ~4GB   - Reasoning, düşünme"
+    echo -e "  ${GREEN}[5]${NC} Llama 3.2 (11B)  ~7GB   - Daha akıllı"
+    echo -e "  ${GREEN}[6]${NC} Gemma 3 (27B)    ~16GB  - En iyi kalite (önerilen)"
+    echo -e "  ${GREEN}[7]${NC} DeepSeek R1 (67B)~40GB  - En akıllı (40GB+ RAM)"
+    echo ""
     
-    # Remove from PATH (shell configs)
-    for rc in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
-        if [ -f "$rc" ]; then
-            sed -i '/# SENTIENT/d' "$rc" 2>/dev/null || true
-            sed -i '/\.sentient\/bin/d' "$rc" 2>/dev/null || true
-        fi
-    done
+    model_choice=$(ask "Model seçimi [1-7, default=6]: ")
+    model_choice=${model_choice:-6}
     
-    # Remove directory
-    rm -rf "$PREFIX"
+    case $model_choice in
+        1) OLLAMA_MODEL="llama3.2" ;;
+        2) OLLAMA_MODEL="gemma3:4b" ;;
+        3) OLLAMA_MODEL="qwen2.5:7b" ;;
+        4) OLLAMA_MODEL="deepseek-r1:7b" ;;
+        5) OLLAMA_MODEL="llama3.2:11b" ;;
+        6) OLLAMA_MODEL="gemma3:27b" ;;
+        7) OLLAMA_MODEL="deepseek-r1:67b" ;;
+        *) OLLAMA_MODEL="gemma3:27b" ;;
+    esac
     
-    echo -e "${GREEN}✓ SENTIENT uninstalled${NC}"
-    exit 0
-fi
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  DETECT PLATFORM
-# ═══════════════════════════════════════════════════════════════════════════════
-OS="$(uname -s)"
-ARCH="$(uname -m)"
-
-case "$OS" in
-    Linux)
-        OS_NAME="linux"
-        ;;
-    Darwin)
-        OS_NAME="macos"
-        ;;
-    *)
-        echo -e "${RED}Unsupported OS: $OS${NC}"
-        echo "Please use the Windows PowerShell installer:"
-        echo "  irm https://get.sentient.ai/ps | iex"
-        exit 1
-        ;;
-esac
-
-case "$ARCH" in
-    x86_64|amd64)
-        ARCH_NAME="x86_64"
-        ;;
-    aarch64|arm64)
-        ARCH_NAME="arm64"
-        ;;
-    *)
-        echo -e "${RED}Unsupported architecture: $ARCH${NC}"
-        exit 1
-        ;;
-esac
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  BANNER
-# ═══════════════════════════════════════════════════════════════════════════════
-clear
-echo -e "${CYAN}"
-cat << 'EOF'
-  ╔════════════════════════════════════════════════════════════╗
-  ║     █████╗ ███╗   ██╗███████╗██╗      ██████╗ ██╗   ██╗    ║
-  ║    ██╔══██╗████╗  ██║██╔════╝██║     ██╔═══██╗██║   ██║    ║
-  ║    ███████║██╔██╗ ██║█████╗  ██║     ██║   ██║██║   ██║    ║
-  ║    ██╔══██║██║╚██╗██║██╔══╝  ██║     ██║   ██║██║   ██║    ║
-  ║    ██║  ██║██║ ╚████║███████╗███████╗╚██████╔╝╚██████╔╝    ║
-  ║    ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝     ║
-  ║                                                            ║
-  ║          NEXUS OASIS — AI Operating System                 ║
-  ╚════════════════════════════════════════════════════════════╝
-EOF
-echo -e "${NC}"
-echo ""
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  GET LATEST VERSION
-# ═══════════════════════════════════════════════════════════════════════════════
-if [ "$VERSION" = "latest" ]; then
-    echo -e "${CYAN}🔍  Fetching latest version...${NC}"
-    VERSION=$(curl -sSL "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
+    echo ""
+    progress "1" "4" "Ollama kuruluyor..."
     
-    if [ -z "$VERSION" ]; then
-        echo -e "${YELLOW}⚠ Could not fetch latest version, using default${NC}"
-        VERSION="4.0.0"
+    # Ollama kur
+    if command -v ollama &> /dev/null; then
+        success "Ollama zaten kurulu"
+    else
+        curl -fsSL https://ollama.com/install.sh | sh
+        success "Ollama kuruldu"
     fi
-fi
-
-echo -e "${GREEN}📦  Version: $VERSION${NC}"
-echo -e "${BLUE}🖥️  Platform: $OS_NAME-$ARCH_NAME${NC}"
-echo -e "${MAGENTA}📁  Install location: $PREFIX${NC}"
-echo ""
+    
+    progress "2" "4" "Model indiriliyor: $OLLAMA_MODEL (bu biraz sürebilir)..."
+    ollama pull "$OLLAMA_MODEL"
+    success "$OLLAMA_MODEL indirildi"
+    
+    progress "3" "4" "Ollama servisi başlatılıyor..."
+    ollama serve &
+    sleep 3
+    success "Ollama çalışıyor"
+    
+    progress "4" "4" "Test..."
+    ollama run "$OLLAMA_MODEL" "Merhaba, tek kelimeyle cevap ver"
+    success "LLM çalışıyor!"
+    
+    # .env güncelle
+    echo "OLLAMA_HOST=http://localhost:11434" >> .env
+    echo "OLLAMA_MODEL=$OLLAMA_MODEL" >> .env
+    echo "LLM_PROVIDER=ollama" >> .env
+    
+    LLM_ENDPOINT="http://localhost:11434"
+}
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  CONFIRM
+#  API LLM KURULUMU
 # ═══════════════════════════════════════════════════════════════════════════════
-if [ "$NO_CONFIRM" = false ]; then
-    echo -e "${YELLOW}Continue with installation? [Y/n]${NC}"
-    read -r CONFIRM
-    if [[ "$CONFIRM" =~ ^[Nn]$ ]]; then
-        echo "Installation cancelled."
+
+setup_api_llm() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  🔑 API Key ile LLM Kurulumu${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    
+    echo -e "Hangi sağlayıcıyı kullanmak istersiniz?"
+    echo ""
+    echo -e "  ${GREEN}[1]${NC} ${BOLD}OpenRouter${NC} (önerilen) - 200+ model, $5 başlangıç bonusu"
+    echo "      • GPT-4, Claude, Gemini, Llama, Mistral..."
+    echo "      • Site: https://openrouter.ai/keys"
+    echo ""
+    echo -e "  ${GREEN}[2]${NC} ${BOLD}OpenAI${NC} - GPT-4, GPT-4o, GPT-4o-mini"
+    echo "      • Site: https://platform.openai.com/api-keys"
+    echo ""
+    echo -e "  ${GREEN}[3]${NC} ${BOLD}Anthropic${NC} - Claude 3.5 Sonnet, Claude 3 Opus"
+    echo "      • Site: https://console.anthropic.com/"
+    echo ""
+    echo -e "  ${GREEN}[4]${NC} ${BOLD}Google AI${NC} - Gemini 1.5 Pro, Gemini 2.0"
+    echo "      • Site: https://aistudio.google.com/apikey"
+    echo ""
+    
+    provider_choice=$(ask "Sağlayıcı seçimi [1-4]: ")
+    
+    case $provider_choice in
+        1)
+            API_PROVIDER="openrouter"
+            echo ""
+            echo -e "${CYAN}OpenRouter API Key almak için:${NC}"
+            echo "  1. https://openrouter.ai/keys adresine git"
+            echo "  2. 'Create Key' tıkla"
+            echo "  3. Key'i kopyala"
+            echo ""
+            API_KEY=$(ask "API Key'inizi girin: ")
+            
+            echo ""
+            echo -e "Varsayılan model:"
+            echo -e "  ${GREEN}[1]${NC} GPT-4o-mini (hızlı, ucuz)"
+            echo -e "  ${GREEN}[2]${NC} GPT-4o (dengeli)"
+            echo -e "  ${GREEN}[3]${NC} Claude 3.5 Sonnet (en iyi)"
+            echo -e "  ${GREEN}[4]${NC} Gemini 2.0 Flash (hızlı)"
+            echo -e "  ${GREEN}[5]${NC} Llama 3.3 70B (açık kaynak, güçlü)"
+            echo ""
+            model_choice=$(ask "Model [1-5, default=1]: ")
+            model_choice=${model_choice:-1}
+            
+            case $model_choice in
+                1) API_MODEL="openai/gpt-4o-mini" ;;
+                2) API_MODEL="openai/gpt-4o" ;;
+                3) API_MODEL="anthropic/claude-3.5-sonnet" ;;
+                4) API_MODEL="google/gemini-2.0-flash-exp" ;;
+                5) API_MODEL="meta-llama/llama-3.3-70b-instruct" ;;
+                *) API_MODEL="openai/gpt-4o-mini" ;;
+            esac
+            ;;
+        2)
+            API_PROVIDER="openai"
+            echo ""
+            echo -e "${CYAN}OpenAI API Key almak için:${NC}"
+            echo "  1. https://platform.openai.com/api-keys"
+            echo "  2. 'Create new secret key'"
+            echo ""
+            API_KEY=$(ask "API Key'inizi girin: ")
+            API_MODEL="gpt-4o-mini"
+            ;;
+        3)
+            API_PROVIDER="anthropic"
+            echo ""
+            echo -e "${CYAN}Anthropic API Key almak için:${NC}"
+            echo "  1. https://console.anthropic.com/"
+            echo "  2. 'Get API Keys'"
+            echo ""
+            API_KEY=$(ask "API Key'inizi girin: ")
+            API_MODEL="claude-3-5-sonnet-20241022"
+            ;;
+        4)
+            API_PROVIDER="google"
+            echo ""
+            echo -e "${CYAN}Google AI API Key almak için:${NC}"
+            echo "  1. https://aistudio.google.com/apikey"
+            echo ""
+            API_KEY=$(ask "API Key'inizi girin: ")
+            API_MODEL="gemini-2.0-flash"
+            ;;
+        *)
+            error "Geçersiz seçim"
+            ;;
+    esac
+    
+    # Test
+    echo ""
+    progress "1" "2" "API bağlantısı test ediliyor..."
+    
+    if [ "$API_PROVIDER" = "openrouter" ]; then
+        response=$(curl -s -w "%{http_code}" "https://openrouter.ai/api/v1/chat/completions" \
+            -H "Authorization: Bearer $API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\":\"$API_MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"Hi\"}]}" \
+            --max-time 30)
+        http_code="${response: -3}"
+        if [ "$http_code" = "200" ]; then
+            success "API bağlantısı başarılı!"
+        else
+            warn "API test başarısız (HTTP $http_code). Key'i kontrol edin."
+        fi
+    fi
+    
+    progress "2" "2" "Yapılandırma kaydediliyor..."
+    
+    # .env güncelle (API KEY'İ DOSYAYA YAZMIYORUZ - sadece ortam değişkeni)
+    echo "LLM_PROVIDER=$API_PROVIDER" >> .env
+    echo "LLM_MODEL=$API_MODEL" >> .env
+    
+    # API key'i export et (geçici)
+    if [ "$API_PROVIDER" = "openrouter" ]; then
+        export OPENROUTER_API_KEY="$API_KEY"
+        LLM_ENV="OPENROUTER_API_KEY"
+    elif [ "$API_PROVIDER" = "openai" ]; then
+        export OPENAI_API_KEY="$API_KEY"
+        LLM_ENV="OPENAI_API_KEY"
+    elif [ "$API_PROVIDER" = "anthropic" ]; then
+        export ANTHROPIC_API_KEY="$API_KEY"
+        LLM_ENV="ANTHROPIC_API_KEY"
+    elif [ "$API_PROVIDER" = "google" ]; then
+        export GOOGLE_API_KEY="$API_KEY"
+        LLM_ENV="GOOGLE_API_KEY"
+    fi
+    
+    success "API yapılandırması tamamlandı"
+    
+    echo ""
+    warn "API Key .env dosyasına YAZILMADI (güvenlik)"
+    echo -e "Çalıştırırken şöyle kullanın:"
+    echo -e "  ${CYAN}$LLM_ENV=$API_KEY ./target/release/sentient gateway${NC}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  HİBRİT LLM KURULUMU
+# ═══════════════════════════════════════════════════════════════════════════════
+
+setup_hybrid_llm() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  🔄 Hibrit LLM Kurulumu${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    
+    # Önce lokal
+    echo -e "${CYAN}>>> Önce Lokal LLM kurulumu:${NC}"
+    setup_local_llm
+    
+    echo ""
+    # Sonra API
+    echo -e "${CYAN}>>> Şimdi API LLM kurulumu (fallback için):${NC}"
+    setup_api_llm
+    
+    # Hibrit config
+    echo "LLM_MODE=hybrid" >> .env
+    echo "LLM_LOCAL_MODEL=$OLLAMA_MODEL" >> .env
+    echo "LLM_API_MODEL=$API_MODEL" >> .env
+    
+    success "Hibrit yapılandırma tamamlandı!"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  VOICE KURULUMU
+# ═══════════════════════════════════════════════════════════════════════════════
+
+setup_voice() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  🎙️  Voice (Ses) Kurulumu${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    
+    echo -e "Ses özelliklerini kurmak ister misiniz?"
+    echo ""
+    echo -e "  ${GREEN}[1]${NC} Evet - Lokal (Whisper.cpp + Piper TTS, ücretsiz)"
+    echo -e "  ${GREEN}[2]${NC} Evet - API (OpenAI Whisper + ElevenLabs, ücretli)"
+    echo -e "  ${GREEN}[3]${NC} Hayır - Sadece metin"
+    echo ""
+    
+    voice_choice=$(ask "Seçiminiz [1-3, default=1]: ")
+    voice_choice=${voice_choice:-1}
+    
+    case $voice_choice in
+        1) setup_local_voice ;;
+        2) setup_api_voice ;;
+        3) 
+            echo "VOICE_ENABLED=false" >> .env
+            warn "Voice atlanıyor"
+            ;;
+    esac
+}
+
+setup_local_voice() {
+    echo ""
+    progress "1" "4" "Whisper.cpp kuruluyor (STT - Konuşmadan metne)..."
+    
+    # Whisper.cpp
+    if [ ! -d "whisper.cpp" ]; then
+        git clone https://github.com/ggerganov/whisper.cpp
+    fi
+    cd whisper.cpp
+    make
+    bash ./models/download-ggml-model.sh medium
+    cd ..
+    
+    success "Whisper.cpp kuruldu"
+    
+    progress "2" "4" "Piper TTS kuruluyor (Metinden konuşmaya)..."
+    
+    # Piper
+    mkdir -p ~/.local/share/piper/models
+    wget -q https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_1.2.0_amd64.tar.gz
+    tar -xzf piper_1.2.0_amd64.tar.gz
+    sudo mv piper/piper /usr/local/bin/ 2>/dev/null || true
+    
+    # Türkçe model
+    cd ~/.local/share/piper/models
+    wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx
+    wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx.json
+    cd -
+    
+    success "Piper TTS kuruldu"
+    
+    progress "3" "4" "Ses sistemi bağımlılıkları..."
+    sudo apt install -y portaudio19-dev libasound2-dev ffmpeg 2>/dev/null
+    success "Bağımlılıklar kuruldu"
+    
+    progress "4" "4" "Yapılandırma..."
+    echo "VOICE_ENABLED=true" >> .env
+    echo "VOICE_STT=whisper_cpp" >> .env
+    echo "VOICE_TTS=piper" >> .env
+    echo "WHISPER_MODEL=medium" >> .env
+    
+    success "Voice kuruldu (tamamen lokal, ücretsiz)"
+}
+
+setup_api_voice() {
+    echo ""
+    echo -e "${CYAN}OpenAI Whisper API Key (STT):${NC}"
+    echo "  https://platform.openai.com/api-keys"
+    WHISPER_KEY=$(ask "API Key: ")
+    
+    echo ""
+    echo -e "${CYAN}ElevenLabs API Key (TTS):${NC}"
+    echo "  https://elevenlabs.io/app/settings/api-keys"
+    ELEVENLABS_KEY=$(ask "API Key: ")
+    
+    echo "VOICE_ENABLED=true" >> .env
+    echo "VOICE_STT=openai_whisper" >> .env
+    echo "VOICE_TTS=elevenlabs" >> .env
+    
+    export OPENAI_API_KEY="$WHISPER_KEY"
+    export ELEVENLABS_API_KEY="$ELEVENLABS_KEY"
+    
+    success "Voice API'leri yapılandırıldı"
+    warn "API Key'ler .env'e yazılmadı (güvenlik)"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SİSTEM KURULUMU
+# ═══════════════════════════════════════════════════════════════════════════════
+
+install_dependencies() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  📦 Sistem Bağımlılıkları${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    
+    progress "1" "4" "Paket listesi güncelleniyor..."
+    sudo apt update
+    success "Paket listesi güncellendi"
+    
+    progress "2" "4" "Temel bağımlılıklar kuruluyor..."
+    sudo apt install -y \
+        build-essential \
+        pkg-config \
+        libssl-dev \
+        curl \
+        git \
+        ca-certificates
+    success "Temel bağımlılıklar kuruldu"
+    
+    progress "3" "4" "Docker kontrol ediliyor..."
+    if command -v docker &> /dev/null; then
+        success "Docker zaten kurulu"
+    else
+        echo -e "${YELLOW}Docker kurulu değil. Kurmak ister misiniz? [y/N]:${NC}"
+        read -r install_docker
+        if [[ "$install_docker" =~ ^[Yy]$ ]]; then
+            curl -fsSL https://get.docker.com | sh
+            sudo usermod -aG docker $USER
+            success "Docker kuruldu"
+        else
+            warn "Docker atlanıyor. Manuel kurmanız gerekecek."
+        fi
+    fi
+    
+    progress "4" "4" "Rust kontrol ediliyor..."
+    if command -v rustc &> /dev/null; then
+        success "Rust zaten kurulu ($(rustc --version))"
+    else
+        echo -e "${YELLOW}Rust kurulu değil. Kuruluyor...${NC}"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source $HOME/.cargo/env
+        success "Rust kuruldu"
+    fi
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  DOCKER SERVİSLERİ
+# ═══════════════════════════════════════════════════════════════════════════════
+
+start_docker() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  🐳 Docker Servisleri${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    
+    if ! command -v docker &> /dev/null; then
+        warn "Docker kurulu değil, atlanıyor"
+        return
+    fi
+    
+    progress "1" "2" "Docker servisleri başlatılıyor..."
+    docker-compose up -d
+    success "Servisler başlatıldı"
+    
+    progress "2" "2" "Sağlık kontrolü..."
+    sleep 5
+    docker-compose ps
+    success "Docker servisleri hazır"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  RUST DERLEME
+# ═══════════════════════════════════════════════════════════════════════════════
+
+build_sentient() {
+    echo ""
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}  🦀 Rust Derleme${NC}"
+    echo -e "${BOLD}══════════════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    
+    progress "1" "2" "SENTIENT derleniyor (release mode)..."
+    echo -e "${YELLOW}Bu işlem 5-15 dakika sürebilir...${NC}"
+    cargo build --release --bin sentient
+    success "Derleme tamamlandı"
+    
+    progress "2" "2" "Binary kontrolü..."
+    ls -lh target/release/sentient
+    success "Binary hazır"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  FINAL
+# ═══════════════════════════════════════════════════════════════════════════════
+
+show_final() {
+    echo ""
+    echo -e "${GREEN}╔══════════════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${GREEN}║                    ✅ KURULUM TAMAMLANDI!                            ║${NC}"
+    echo -e "${GREEN}╚══════════════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    echo -e "${BOLD}Çalıştırmak için:${NC}"
+    echo ""
+    
+    if [ "$LLM_TYPE" = "local" ]; then
+        echo -e "  ${CYAN}./target/release/sentient gateway${NC}"
+    elif [ "$LLM_TYPE" = "api" ]; then
+        echo -e "  ${CYAN}$LLM_ENV=\$YOUR_KEY ./target/release/sentient gateway${NC}"
+    else
+        echo -e "  ${CYAN}$LLM_ENV=\$YOUR_KEY ./target/release/sentient gateway${NC}"
+    fi
+    
+    echo ""
+    echo -e "${BOLD}Dashboard:${NC} ${CYAN}http://localhost:8080/dashboard${NC}"
+    echo -e "${BOLD}API Docs:${NC}  ${CYAN}http://localhost:8080/health${NC}"
+    echo ""
+    echo -e "${BOLD}Durdurmak için:${NC} Ctrl+C"
+    echo ""
+    
+    echo -e "${YELLOW}Kurulum detayları:${NC}"
+    echo "  • Config: .env"
+    echo "  • Logs: ./logs/"
+    echo "  • Docs: Arsiv/SISTEMI_AYAGA_KALDIRMA_REHBERI_TAM.md"
+    echo ""
+    
+    echo -e "${GREEN}İyi kullanımlar! 🚀${NC}"
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  MAIN
+# ═══════════════════════════════════════════════════════════════════════════════
+
+main() {
+    show_logo
+    
+    echo -e "${BOLD}Bu script SENTIENT OS'u bilgisayarınıza kuracak.${NC}"
+    echo ""
+    echo -e "Kurulum adımları:"
+    echo "  1. Sistem bağımlılıkları"
+    echo "  2. LLM seçimi (Lokal veya API)"
+    echo "  3. Voice seçimi (isteğe bağlı)"
+    echo "  4. Docker servisleri"
+    echo "  5. Rust derleme"
+    echo ""
+    
+    confirm=$(ask "Devam etmek istiyor musunuz? [Y/n]: ")
+    if [[ "$confirm" =~ ^[Nn]$ ]]; then
+        echo "İptal edildi."
         exit 0
     fi
-fi
+    
+    # .env oluştur
+    cp .env.template .env 2>/dev/null || touch .env
+    
+    # Adımlar
+    install_dependencies
+    select_llm
+    setup_voice
+    start_docker
+    build_sentient
+    show_final
+}
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  CREATE DIRECTORIES
-# ═══════════════════════════════════════════════════════════════════════════════
-echo ""
-echo -e "${CYAN}📁  Creating directories...${NC}"
-mkdir -p "$PREFIX/bin"
-mkdir -p "$PREFIX/data"
-mkdir -p "$PREFIX/config"
-mkdir -p "$PREFIX/logs"
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  DOWNLOAD BINARY
-# ═══════════════════════════════════════════════════════════════════════════════
-DOWNLOAD_URL="https://github.com/$REPO/releases/download/v$VERSION/sentient-$OS_NAME-$ARCH_NAME.tar.gz"
-TEMP_FILE="/tmp/sentient-$VERSION.tar.gz"
-
-echo -e "${CYAN}📥  Downloading SENTIENT v$VERSION...${NC}"
-echo -e "    ${DOWNLOAD_URL}"
-
-if ! curl -fSL --progress-bar -o "$TEMP_FILE" "$DOWNLOAD_URL"; then
-    echo -e "${RED}❌  Download failed!${NC}"
-    echo ""
-    echo "Possible reasons:"
-    echo "  1. Version $VERSION doesn't exist"
-    echo "  2. Binary for $OS_NAME-$ARCH_NAME not available"
-    echo ""
-    echo "Available versions: https://github.com/$REPO/releases"
-    exit 1
-fi
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  EXTRACT
-# ═══════════════════════════════════════════════════════════════════════════════
-echo -e "${CYAN}📦  Extracting...${NC}"
-tar -xzf "$TEMP_FILE" -C "$PREFIX/bin"
-rm -f "$TEMP_FILE"
-
-# Make executable
-chmod +x "$PREFIX/bin/sentient" 2>/dev/null || true
-chmod +x "$PREFIX/bin/sentient-gateway" 2>/dev/null || true
-chmod +x "$PREFIX/bin/sentient-agent" 2>/dev/null || true
-chmod +x "$PREFIX/bin/sentient-setup" 2>/dev/null || true
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  ADD TO PATH
-# ═══════════════════════════════════════════════════════════════════════════════
-echo -e "${CYAN}🔧  Adding to PATH...${NC}"
-
-# Add to shell config
-SHELL_CONFIG=""
-if [ -n "$ZSH_VERSION" ]; then
-    SHELL_CONFIG="$HOME/.zshrc"
-elif [ -n "$BASH_VERSION" ]; then
-    SHELL_CONFIG="$HOME/.bashrc"
-else
-    SHELL_CONFIG="$HOME/.profile"
-fi
-
-# Check if already in PATH
-if ! grep -q "SENTIENT" "$SHELL_CONFIG" 2>/dev/null; then
-    echo "" >> "$SHELL_CONFIG"
-    echo "# SENTIENT AI Operating System" >> "$SHELL_CONFIG"
-    echo "export PATH=\"\$PATH:$PREFIX/bin\"" >> "$SHELL_CONFIG"
-    echo -e "${GREEN}✓  Added to $SHELL_CONFIG${NC}"
-else
-    echo -e "${YELLOW}⚠  Already in PATH${NC}"
-fi
-
-# Export for current session
-export PATH="$PATH:$PREFIX/bin"
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  VERIFY INSTALLATION
-# ═══════════════════════════════════════════════════════════════════════════════
-echo ""
-echo -e "${CYAN}🔍  Verifying installation...${NC}"
-
-if [ -f "$PREFIX/bin/sentient" ]; then
-    INSTALLED_VERSION=$("$PREFIX/bin/sentient" --version 2>/dev/null || echo "v$VERSION")
-    echo -e "${GREEN}✓  SENTIENT $INSTALLED_VERSION installed successfully!${NC}"
-else
-    echo -e "${RED}❌  Installation failed - binary not found${NC}"
-    exit 1
-fi
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  NEXT STEPS
-# ═══════════════════════════════════════════════════════════════════════════════
-echo ""
-echo -e "${BOLD}${GREEN}══════════════════════════════════════════════════════════════${NC}"
-echo -e "${BOLD}${GREEN}  🎉  INSTALLATION COMPLETE!${NC}"
-echo -e "${BOLD}${GREEN}══════════════════════════════════════════════════════════════${NC}"
-echo ""
-echo -e "${YELLOW}Next steps:${NC}"
-echo ""
-echo -e "  1. ${CYAN}Reload your shell:${NC}"
-echo "     source ~/.bashrc  # or ~/.zshrc"
-echo ""
-echo -e "  2. ${CYAN}Run setup wizard:${NC}"
-echo "     sentient setup"
-echo ""
-echo -e "  3. ${CYAN}Start interactive REPL:${NC}"
-echo "     sentient repl"
-echo ""
-echo -e "  4. ${CYAN}Run autonomous agent:${NC}"
-echo "     sentient agent --goal \"Your task description\""
-echo ""
-echo -e "${BLUE}Documentation: https://github.com/$REPO${NC}"
-echo ""
+# Run
+main "$@"
