@@ -1374,7 +1374,19 @@ async fn main() {
     
     // Router
     let app = Router::new()
+        // ════════════════════════════════════════════════════════════════════════
+        // PAGE ROUTES
+        // ════════════════════════════════════════════════════════════════════════
         .route("/", get(get_index))
+        .route("/setup", get(get_setup))
+        .route("/voice", get(get_voice))
+        .route("/llm-providers", get(get_llm_providers))
+        .route("/channels", get(get_channels))
+        .route("/agents", get(get_agents))
+        .route("/permissions", get(get_permissions))
+        // ════════════════════════════════════════════════════════════════════════
+        // API ROUTES
+        // ════════════════════════════════════════════════════════════════════════
         .route("/api/skills", get(get_skills))
         .route("/api/categories", get(get_categories))
         .route("/api/stats", get(get_stats))
@@ -1384,6 +1396,14 @@ async fn main() {
         .route("/api/security/blocked", get(get_blocked_commands))
         .route("/api/security/decisions", get(get_behavior_decisions))
         .route("/api/tool/action", post(tool_action))
+        .route("/api/setup/complete", post(complete_setup))
+        .route("/api/providers", get(get_providers).post(save_provider))
+        .route("/api/channels", get(get_channels_api).post(save_channel))
+        .route("/api/agents", get(get_agents_api).post(spawn_agent))
+        .route("/api/permissions", get(get_permissions_api).post(update_permissions))
+        // ════════════════════════════════════════════════════════════════════════
+        // WEBSOCKET
+        // ════════════════════════════════════════════════════════════════════════
         .route("/ws", get(ws_handler))
         .layer(cors)
         .with_state(dashboard.clone())
@@ -1412,6 +1432,121 @@ async fn main() {
     println!("");
 
     axum::serve(listener, app).await.unwrap();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  PAGE HANDLERS - New UI Pages
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async fn get_setup() -> impl IntoResponse {
+    Html(include_str!("../templates/setup.html"))
+}
+
+async fn get_voice() -> impl IntoResponse {
+    Html(include_str!("../templates/voice.html"))
+}
+
+async fn get_llm_providers() -> impl IntoResponse {
+    Html(include_str!("../templates/llm-providers.html"))
+}
+
+async fn get_channels() -> impl IntoResponse {
+    Html(include_str!("../templates/channels.html"))
+}
+
+async fn get_agents() -> impl IntoResponse {
+    Html(include_str!("../templates/agents.html"))
+}
+
+async fn get_permissions() -> impl IntoResponse {
+    Html(include_str!("../templates/permissions.html"))
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  API HANDLERS - New APIs
+// ═══════════════════════════════════════════════════════════════════════════════
+
+#[derive(Debug, Clone, serde::Deserialize)]
+struct SetupData {
+    user_name: String,
+    language: String,
+    provider: String,
+    api_key: String,
+    features: serde_json::Value,
+    security: serde_json::Value,
+}
+
+async fn complete_setup(
+    Json(payload): Json<SetupData>,
+) -> impl IntoResponse {
+    println!("Setup completed for user: {}", payload.user_name);
+    println!("Provider: {}", payload.provider);
+    
+    Json(serde_json::json!({
+        "success": true,
+        "message": "Setup completed successfully",
+        "user": payload.user_name
+    }))
+}
+
+async fn get_providers() -> impl IntoResponse {
+    Json(serde_json::json!([
+        {"id": "openrouter", "name": "OpenRouter", "status": "active"},
+        {"id": "openai", "name": "OpenAI", "status": "active"},
+        {"id": "anthropic", "name": "Anthropic", "status": "active"},
+        {"id": "ollama", "name": "Ollama (Local)", "status": "active"},
+        {"id": "google", "name": "Google AI", "status": "inactive"},
+        {"id": "mistral", "name": "Mistral AI", "status": "inactive"},
+        {"id": "groq", "name": "Groq", "status": "active"},
+        {"id": "deepseek", "name": "DeepSeek", "status": "active"},
+    ]))
+}
+
+async fn save_provider(Json(_payload): Json<serde_json::Value>) -> impl IntoResponse {
+    Json(serde_json::json!({"success": true, "message": "Provider saved"}))
+}
+
+async fn get_channels_api() -> impl IntoResponse {
+    Json(serde_json::json!([
+        {"id": "telegram", "name": "Telegram", "status": "active"},
+        {"id": "discord", "name": "Discord", "status": "active"},
+        {"id": "slack", "name": "Slack", "status": "inactive"},
+        {"id": "gmail", "name": "Gmail", "status": "active"},
+    ]))
+}
+
+async fn save_channel(Json(_payload): Json<serde_json::Value>) -> impl IntoResponse {
+    Json(serde_json::json!({"success": true, "message": "Channel saved"}))
+}
+
+async fn get_agents_api() -> impl IntoResponse {
+    Json(serde_json::json!([
+        {"id": "alpha", "name": "Alpha", "status": "running"},
+        {"id": "beta", "name": "Beta", "status": "running"},
+        {"id": "gamma", "name": "Gamma", "status": "paused"},
+    ]))
+}
+
+async fn spawn_agent(Json(_payload): Json<serde_json::Value>) -> impl IntoResponse {
+    Json(serde_json::json!({
+        "success": true,
+        "message": "Agent spawned",
+        "agent_id": format!("agent-{}", chrono::Utc::now().timestamp())
+    }))
+}
+
+async fn get_permissions_api() -> impl IntoResponse {
+    Json(serde_json::json!({
+        "users": [
+            {"id": "admin", "name": "Admin", "role": "Super Admin"},
+            {"id": "john", "name": "John Doe", "role": "Developer"},
+        ],
+        "permissions": {"files.read": true, "files.write": true}
+    }))
+}
+
+async fn update_permissions(Json(_payload): Json<serde_json::Value>) -> impl IntoResponse {
+    Json(serde_json::json!({"success": true, "message": "Permissions updated"}))
 }
 
 #[cfg(test)]

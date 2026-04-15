@@ -15,6 +15,7 @@ use tracing::info;
 pub mod error;
 pub mod orchestrator;
 pub mod agents;
+pub mod farm;
 
 // Re-exports
 pub use error::{AgentError, AgentResult};

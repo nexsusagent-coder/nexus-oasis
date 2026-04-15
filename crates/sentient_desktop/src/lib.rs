@@ -1,24 +1,32 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  SENTIENT OS - Computer Use / GUI Automation
+//  SENTIENT OS - Computer Use / GUI Automation (Real Implementation)
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Control desktop like a human
-//  - Screen capture
-//  - Mouse control
-//  - Keyboard input
-//  - Window management
-//  - OCR support
+//  Cross-platform desktop automation
+//  - Screen capture (X11/Win32/CoreGraphics)
+//  - Mouse control (enigo/CoreGraphics)
+//  - Keyboard input (enigo/CoreGraphics)
+//  - Window management (X11/Win32)
+//  - OCR support (tesseract)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// Suppress warnings for stub implementations
+// Suppress warnings for platform-specific code
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(dead_code)]
+
+// Platform-specific imports
+#[cfg(target_os = "linux")]
+use x11rb::protocol::xproto::*;
 
 pub mod screen;
 pub mod mouse;
 pub mod keyboard;
 pub mod window;
 pub mod error;
+pub mod tray;
+pub mod hotkey;
+pub mod voice_widget;
+pub mod ocr;
 
 pub use screen::{Screen, ScreenCapture, Screenshot};
 pub use mouse::{Mouse, MouseButton, MouseAction};
@@ -45,10 +53,9 @@ impl Desktop {
         Ok(Self { width, height, scale })
     }
 
-    /// Get screen information
+    /// Get screen information (uses real implementation)
     fn get_screen_info() -> Result<(u32, u32, f32)> {
-        // Default values, actual implementation would query system
-        Ok((1920, 1080, 1.0))
+        Screen::dimensions().map(|(w, h)| (w, h, Screen::scale().unwrap_or(1.0)))
     }
 
     /// Take screenshot

@@ -35,6 +35,9 @@ crossbeam.workspace = true
 sha2 = "0.10"
 blake3 = "1.5"
 
+# Regex for parsing
+regex = "1.10"
+
 # Metrics
 prometheus = "0.13"
 

@@ -1,0 +1,24 @@
+[package]
+name = "sentient_email"
+version = "0.1.0"
+edition = "2021"
+description = "Email Integration - Gmail API + IMAP/SMTP for JARVIS-like email management"
+authors = ["SENTIENT OS Team"]
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+reqwest = { workspace = true }
+base64 = "0.22"
+lettre = { version = "0.11", features = ["tokio1-native-tls"] }
+imap = { version = "3.0.0-alpha.15" }
+mail-parser = "0.9"
+
+[dev-dependencies]
+tokio-test = "0.4"

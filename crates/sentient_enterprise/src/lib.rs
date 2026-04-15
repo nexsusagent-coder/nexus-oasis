@@ -5,18 +5,29 @@
 //! - Audit Logging
 //! - SSO (Single Sign-On) Integration
 //! - Multi-tenancy Support
+//! - MFA (Multi-Factor Authentication)
+//! - Password Policy Enforcement
 
 pub mod rbac;
 pub mod audit;
 pub mod sso;
 pub mod tenant;
+pub mod mfa;
+pub mod password_policy;
 pub mod config;
 pub mod error;
+pub mod scim;
+pub mod consent;
 
 pub use rbac::{Role, Permission, RBACManager};
 pub use audit::{AuditLog, AuditEvent, AuditQuery};
 pub use sso::{SSOProvider, SSOConfig, SSOManager};
 pub use tenant::{Tenant, TenantManager};
+pub use mfa::{MfaManager, MfaConfig, MfaMethod, UserMfaSettings, TotpSetup};
+pub use password_policy::{
+    PasswordPolicy, PasswordValidator, PasswordStrength, PasswordAnalysis,
+    PasswordHistory, FailedAttemptsTracker, LockoutStatus, PasswordError, UserInfo
+};
 pub use config::EnterpriseConfig;
 pub use error::EnterpriseError;
 
@@ -38,6 +49,11 @@ pub struct EnterpriseManager {
     audit: AuditLog,
     sso: Option<SSOManager>,
     tenants: TenantManager,
+    mfa: MfaManager,
+    password_policy: PasswordPolicy,
+    password_validator: PasswordValidator,
+    password_history: PasswordHistory,
+    failed_attempts: FailedAttemptsTracker,
 }
 
 impl EnterpriseManager {
@@ -57,6 +73,11 @@ impl EnterpriseManager {
             audit,
             sso,
             tenants,
+            mfa: MfaManager::new(config.mfa.clone()),
+            password_policy: config.password_policy.clone(),
+            password_validator: PasswordValidator::new(config.password_policy.clone()),
+            password_history: PasswordHistory::new(config.password_policy.clone()),
+            failed_attempts: FailedAttemptsTracker::new(config.password_policy.clone()),
         })
     }
 
@@ -78,6 +99,26 @@ impl EnterpriseManager {
     /// Get tenant manager
     pub fn tenants(&self) -> &TenantManager {
         &self.tenants
+    }
+    
+    /// Get MFA manager
+    pub fn mfa(&self) -> &MfaManager {
+        &self.mfa
+    }
+    
+    /// Get password validator
+    pub fn password_validator(&self) -> &PasswordValidator {
+        &self.password_validator
+    }
+    
+    /// Get password history
+    pub fn password_history(&self) -> &PasswordHistory {
+        &self.password_history
+    }
+    
+    /// Get failed attempts tracker
+    pub fn failed_attempts(&self) -> &FailedAttemptsTracker {
+        &self.failed_attempts
     }
 
     /// Check if user has permission for action

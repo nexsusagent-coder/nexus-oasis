@@ -1,0 +1,50 @@
+[package]
+name = "sentient_daemon"
+version = "4.0.0"
+edition = "2021"
+description = "SENTIENT OS Background Daemon - Always-on voice assistant"
+authors = ["Pi <pi@sentient.os>"]
+license = "MIT"
+
+[dependencies]
+# Internal crates
+sentient_voice = { path = "../sentient_voice" }
+sentient_persona = { path = "../sentient_persona" }
+sentient_i18n = { path = "../sentient_i18n" }
+oasis_browser = { path = "../oasis_browser" }
+sentient_common = { path = "../sentient_common" }
+sentient_home = { path = "../sentient_home" }
+sentient_connectors = { path = "../sentient_connectors" }
+
+# Async runtime
+tokio = { version = "1.36", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Configuration
+config = "0.14"
+
+# System
+signal-hook = "0.3"
+signal-hook-tokio = { version = "0.3", features = ["futures-v0_3"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID
+uuid = { version = "1.7", features = ["v4", "serde"] }
+
+# Async traits
+async-trait = "0.1"
+
+# URL encoding
+urlencoding = "2.1"
+
+[dev-dependencies]
+tokio-test = "0.4"

@@ -1,0 +1,22 @@
+[package]
+name = "sentient_context"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Context Engineering - AGENTS.md, PRP workflow"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+log.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tracing.workspace = true
+
+[lib]
+name = "sentient_context"
+path = "src/lib.rs"

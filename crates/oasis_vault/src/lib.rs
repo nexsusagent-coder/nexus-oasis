@@ -12,12 +12,17 @@ pub mod vault;
 pub mod secrets;
 pub mod audit;
 pub mod backends;
+pub mod storage_backend;
 
 pub use crypto::*;
 pub use vault::*;
 pub use secrets::*;
 pub use audit::*;
 pub use backends::*;
+pub use storage_backend::{
+    InMemoryBackend, FileBackend, BackendManager, StorageBackend,
+    StoredSecret, SecretMetadata, WriteMode,
+};
 
 use sentient_common::error::SENTIENTError;
 use serde::{Deserialize, Serialize};

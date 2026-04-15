@@ -42,11 +42,18 @@ pub mod api;
 pub mod auth;
 pub mod telegram;
 pub mod websocket;
+pub mod webhook;
 pub mod webhooks;
 pub mod events;
 pub mod dashboard;
 pub mod claw3d;
 pub mod rate_limit;
+pub mod advanced_rate_limit;
+pub mod voice;
+pub mod grpc;
+pub mod graphql;
+pub mod oauth2;
+pub mod openapi;
 
 mod dispatcher;
 mod task_manager;

@@ -1,11 +1,13 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# SENTIENT CORE - Grafana Datasources Configuration
+#  SENTIENT OS - Grafana Datasource Provisioning
 # ═══════════════════════════════════════════════════════════════════════════════
 
 apiVersion: 1
 
 datasources:
-  # Prometheus - Metrics
+  # ─────────────────────────────────────────────────────────────────────────────
+  #  Prometheus - Primary metrics source
+  # ─────────────────────────────────────────────────────────────────────────────
   - name: Prometheus
     type: prometheus
     access: proxy
@@ -15,39 +17,3 @@ datasources:
     jsonData:
       timeInterval: "15s"
       httpMethod: POST
-
-  # PostgreSQL - Agent State & Memory
-  - name: PostgreSQL
-    type: postgres
-    access: proxy
-    url: postgres:5432
-    database: sentient
-    user: ${POSTGRES_USER}
-    secureJsonData:
-      password: ${POSTGRES_PASSWORD}
-    jsonData:
-      sslmode: disable
-      maxOpenConns: 10
-      maxIdleConns: 5
-      connMaxLifetime: 14400
-      postgresVersion: 1500
-      timescaledb: false
-
-  # Loki - Logs (optional)
-  - name: Loki
-    type: loki
-    access: proxy
-    url: http://loki:3100
-    editable: false
-    jsonData:
-      maxLines: 1000
-
-  # Redis - Cache Metrics (optional)
-  - name: Redis
-    type: redis-datasource
-    access: proxy
-    url: redis://redis:6379
-    editable: false
-    jsonData:
-      client: standalone
-      poolSize: 5

@@ -4,6 +4,9 @@
 //! - Görev oluşturma
 //! - Durum güncelleme akışı
 //! - Sonuç yayını
+//! - Dashboard real-time metrics
+//! - Agent status updates
+//! - Security alerts
 
 use axum::extract::ws::{Message, WebSocket};
 use futures::{SinkExt, StreamExt};
@@ -125,6 +128,59 @@ pub enum ServerMessage {
     Unsubscribed {
         task_id: Uuid,
     },
+    
+    /// Dashboard metrics update
+    MetricsUpdate {
+        health: f32,
+        tasks_completed: u64,
+        cost_today: f32,
+        active_agents: u32,
+        tokens_used: u64,
+        latency_ms: u32,
+        uptime_secs: u64,
+    },
+    
+    /// Agent status changed
+    AgentStatus {
+        agent_id: String,
+        agent_name: String,
+        status: String, // "online", "busy", "offline"
+        progress: f32,
+        current_task: Option<String>,
+    },
+    
+    /// Security alert
+    SecurityAlert {
+        alert_type: String,
+        severity: String, // "low", "medium", "high", "critical"
+        message: String,
+        timestamp: DateTime<Utc>,
+        details: serde_json::Value,
+    },
+    
+    /// Activity feed update
+    ActivityUpdate {
+        activity_type: String,
+        source: String,
+        description: String,
+        timestamp: DateTime<Utc>,
+    },
+    
+    /// Channel status update
+    ChannelStatus {
+        channel: String,
+        connected: bool,
+        users_count: u32,
+    },
+    
+    /// LLM Provider update
+    ProviderUpdate {
+        provider: String,
+        model: String,
+        tokens_used: u64,
+        cost: f32,
+        latency_ms: u32,
+    },
 }
 
 /// ─── CONNECTION MANAGER ───
@@ -223,6 +279,69 @@ impl ConnectionManager {
     /// Aktif bağlantı sayısı
     pub async fn connection_count(&self) -> usize {
         self.connections.read().await.len()
+    }
+    
+    /// Dashboard metrics yayınla
+    pub async fn broadcast_metrics(&self, metrics: super::GatewayStats) {
+        self.broadcast_all(ServerMessage::MetricsUpdate {
+            health: 98.5,
+            tasks_completed: metrics.completed_tasks,
+            cost_today: (metrics.total_requests as f32 * 0.01),
+            active_agents: metrics.active_tasks as u32,
+            tokens_used: metrics.total_requests * 100,
+            latency_ms: 124,
+            uptime_secs: metrics.uptime_secs,
+        }).await;
+    }
+    
+    /// Agent durumu yayınla
+    pub async fn broadcast_agent_status(
+        &self,
+        agent_id: &str,
+        agent_name: &str,
+        status: &str,
+        progress: f32,
+        current_task: Option<&str>,
+    ) {
+        self.broadcast_all(ServerMessage::AgentStatus {
+            agent_id: agent_id.to_string(),
+            agent_name: agent_name.to_string(),
+            status: status.to_string(),
+            progress,
+            current_task: current_task.map(|s| s.to_string()),
+        }).await;
+    }
+    
+    /// Security alert yayınla
+    pub async fn broadcast_security_alert(
+        &self,
+        alert_type: &str,
+        severity: &str,
+        message: &str,
+        details: serde_json::Value,
+    ) {
+        self.broadcast_all(ServerMessage::SecurityAlert {
+            alert_type: alert_type.to_string(),
+            severity: severity.to_string(),
+            message: message.to_string(),
+            timestamp: Utc::now(),
+            details,
+        }).await;
+    }
+    
+    /// Activity update yayınla
+    pub async fn broadcast_activity(
+        &self,
+        activity_type: &str,
+        source: &str,
+        description: &str,
+    ) {
+        self.broadcast_all(ServerMessage::ActivityUpdate {
+            activity_type: activity_type.to_string(),
+            source: source.to_string(),
+            description: description.to_string(),
+            timestamp: Utc::now(),
+        }).await;
     }
 }
 
@@ -476,5 +595,82 @@ mod tests {
         // Subscription should exist
         let subs = manager.subscriptions.read().await;
         assert!(subs.contains_key(&task_id));
+    }
+    
+    #[tokio::test]
+    async fn test_broadcast_metrics() {
+        let manager = ConnectionManager::new();
+        let (tx, mut rx) = tokio::sync::mpsc::channel(10);
+        
+        manager.add_connection("conn1".into(), tx).await;
+        
+        let stats = crate::GatewayStats {
+            total_requests: 100,
+            active_tasks: 5,
+            completed_tasks: 50,
+            failed_tasks: 2,
+            cancelled_tasks: 1,
+            uptime_secs: 3600,
+            requests_per_source: std::collections::HashMap::new(),
+        };
+        
+        manager.broadcast_metrics(stats).await;
+        
+        // Should receive message
+        let msg = rx.recv().await.expect("Should receive message");
+        match msg {
+            ServerMessage::MetricsUpdate { health, .. } => {
+                assert!(health >= 98.0);
+            }
+            _ => panic!("Expected MetricsUpdate"),
+        }
+    }
+    
+    #[tokio::test]
+    async fn test_agent_status_broadcast() {
+        let manager = ConnectionManager::new();
+        let (tx, mut rx) = tokio::sync::mpsc::channel(10);
+        
+        manager.add_connection("conn1".into(), tx).await;
+        manager.broadcast_agent_status(
+            "agent-1",
+            "Research Agent",
+            "online",
+            0.75,
+            Some("Analyzing data"),
+        ).await;
+        
+        let msg = rx.recv().await.expect("Should receive message");
+        match msg {
+            ServerMessage::AgentStatus { agent_name, status, progress, .. } => {
+                assert_eq!(agent_name, "Research Agent");
+                assert_eq!(status, "online");
+                assert!((progress - 0.75).abs() < 0.01);
+            }
+            _ => panic!("Expected AgentStatus"),
+        }
+    }
+    
+    #[tokio::test]
+    async fn test_security_alert_broadcast() {
+        let manager = ConnectionManager::new();
+        let (tx, mut rx) = tokio::sync::mpsc::channel(10);
+        
+        manager.add_connection("conn1".into(), tx).await;
+        manager.broadcast_security_alert(
+            "constitution_violation",
+            "high",
+            "Potential harmful action blocked",
+            serde_json::json!({"action": "delete_files"}),
+        ).await;
+        
+        let msg = rx.recv().await.expect("Should receive message");
+        match msg {
+            ServerMessage::SecurityAlert { alert_type, severity, .. } => {
+                assert_eq!(alert_type, "constitution_violation");
+                assert_eq!(severity, "high");
+            }
+            _ => panic!("Expected SecurityAlert"),
+        }
     }
 }

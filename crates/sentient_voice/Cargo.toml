@@ -2,53 +2,48 @@
 name = "sentient_voice"
 version.workspace = true
 edition.workspace = true
-authors.workspace = true
-license.workspace = true
-description = "SENTIENT Voice Module - STT (Whisper) and TTS integration"
+description = "SENTIENT Voice - TTS, STT, Wake Word Detection"
+authors = ["SENTIENT Core Team"]
 
 [dependencies]
-tokio.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-reqwest.workspace = true
-async-trait.workspace = true
-thiserror.workspace = true
-log.workspace = true
-chrono.workspace = true
-uuid.workspace = true
-
-# Audio processing
-cpal = "0.15"
-hound = "3"
-rubato = "0.15"
-
-# MP3 decoding
-minimp3 = "0.5"
-
-# Whisper (via whisper-rs or API)
-whisper-rs = { version = "0.11", optional = true }
-
-# Vosk for offline STT
-vosk = { version = "0.3", optional = true }
-
-# Porcupine for wake word - REMOVED: not available on crates.io
-# For wake word detection, use Vosk or Whisper instead
-# pvporcupine = { version = "3", optional = true }
-
-# Other
-bytes = "1"
-base64 = "0.22"
-futures.workspace = true
-tokio-stream = "0.1"
-parking_lot = "0.12"
-
 sentient_common = { path = "../sentient_common" }
 
+# Async
+tokio.workspace = true
+async-trait = "0.1"
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Logging
+log.workspace = true
+
+# Error handling
+thiserror.workspace = true
+anyhow.workspace = true
+
+# HTTP client (for API-based TTS/STT)
+reqwest = { version = "0.12", features = ["json", "stream", "multipart"] }
+
+# Audio
+cpal = "0.15"
+rubato = "0.14"  # Audio resampling
+
+# VAD (Voice Activity Detection)
+# webrtc-vad = "0.4"  # Disabled - uses old rustc
+
+# UUID
+uuid.workspace = true
+
+# Bytes
+bytes = "1.5"
+
 [features]
-default = ["api"]
-api = []
-local-whisper = ["whisper-rs"]
-vosk-stt = ["vosk"]
-# porcupine-wake removed - pvporcupine not on crates.io
-# porcupine-wake = ["pvporcupine"]
-full-local = ["local-whisper", "vosk-stt"]
+default = []
+whisper = []  # Local Whisper STT
+porcupine = []  # Picovoice wake word
+piper = []  # Piper TTS

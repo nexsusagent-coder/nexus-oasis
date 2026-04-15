@@ -46,6 +46,9 @@ pub mod providers;
 pub mod registry;
 pub mod cache;
 pub mod distributed;
+pub mod router;
+pub mod streaming;
+pub mod cost_tracker;
 
 pub use error::{LlmError, LlmResult};
 pub use types::{
@@ -62,6 +65,7 @@ pub use distributed::{
     NodeConfig, NodeInfo, NodeStatus, NodeStats,
     LoadBalanceStrategy, ShardingStrategy,
 };
+pub use router::{SmartRouter, ComplexityTier, RoutingDecision, ModelTier, RouterConfig, RouterStats};
 
 // Re-export providers
 pub use providers::{

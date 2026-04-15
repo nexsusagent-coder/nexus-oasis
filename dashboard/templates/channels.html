@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTIENT OS | Channels</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        :root {
+            --bg-canvas: #0F0F0F;
+            --bg-primary: #1A1D21;
+            --bg-secondary: #1E2227;
+            --bg-tertiary: #252A30;
+            --bg-hover: #2A2F36;
+            --text-primary: #E8E9EB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --border-subtle: #2A2F36;
+            --border-default: #374151;
+            --accent-green: #4B7C59;
+            --accent-green-muted: rgba(75, 124, 89, 0.15);
+            --accent-orange: #B86D28;
+            --accent-blue: #4A6B8A;
+            --accent-red: #8B4B4B;
+            --accent-purple: #6B5B95;
+            --accent-cyan: #4A8B8B;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-canvas);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .page-container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .page-title { font-size: 28px; font-weight: 700; }
+        .page-subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+        
+        .header-actions { display: flex; gap: 12px; }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary { background: var(--accent-green); color: white; }
+        .btn-primary:hover { background: #3D6A4A; }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Channel Categories */
+        .channel-section { margin-bottom: 32px; }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-count {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        
+        /* Channel Cards */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        
+        .channel-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .channel-card:hover { border-color: var(--border-default); }
+        .channel-card.active { border-color: var(--accent-green); }
+        
+        .channel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .channel-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .channel-info { flex: 1; }
+        
+        .channel-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .channel-type {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .channel-toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .channel-toggle input { opacity: 0; width: 0; height: 0; }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-tertiary);
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        
+        .channel-toggle input:checked + .toggle-slider { background: var(--accent-green); }
+        .channel-toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+            background: white;
+        }
+        
+        .channel-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .channel-stat {
+            text-align: center;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+        }
+        
+        .channel-stat-value {
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+        
+        .channel-stat-label {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        
+        .channel-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-tag {
+            padding: 3px 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            font-size: 9px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .feature-tag.supported { background: var(--accent-green-muted); color: var(--accent-green); }
+        
+        .channel-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .channel-btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+        
+        .channel-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.visible { display: flex; }
+        
+        .modal {
+            width: 90%;
+            max-width: 560px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .modal-title { font-size: 18px; font-weight: 600; }
+        .modal-close {
+            width: 32px; height: 32px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 20px;
+        }
+        
+        .modal-body { padding: 24px; max-height: 60vh; overflow-y: auto; }
+        
+        .form-group { margin-bottom: 16px; }
+        
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .form-input:focus { outline: none; border-color: var(--accent-green); }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+        }
+        
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+        
+        .toast {
+            padding: 14px 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .toast.success { border-left: 3px solid var(--accent-green); }
+        .toast.error { border-left: 3px solid var(--accent-red); }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Channels</h1>
+                <p class="page-subtitle">Manage communication channels and integrations</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="testAllChannels()">
+                    <span>⚡</span> Test All
+                </button>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <span>+</span> Add Channel
+                </button>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Active Channels</div>
+                <div class="stat-value" id="activeChannels">6</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Messages</div>
+                <div class="stat-value">24.5K</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Voice Messages</div>
+                <div class="stat-value">1.2K</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Commands Run</div>
+                <div class="stat-value">892</div>
+            </div>
+        </div>
+        
+        <!-- Messaging Channels -->
+        <div class="channel-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>💬</span> Messaging
+                    <span class="section-count">8 platforms</span>
+                </h2>
+            </div>
+            <div class="channels-grid" id="messagingGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+        
+        <!-- Voice Channels -->
+        <div class="channel-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>🎙️</span> Voice
+                    <span class="section-count">4 platforms</span>
+                </h2>
+            </div>
+            <div class="channels-grid" id="voiceGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+        
+        <!-- Social Media -->
+        <div class="channel-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>📱</span> Social Media
+                    <span class="section-count">5 platforms</span>
+                </h2>
+            </div>
+            <div class="channels-grid" id="socialGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+        
+        <!-- Email & Calendar -->
+        <div class="channel-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>📧</span> Email & Calendar
+                    <span class="section-count">3 platforms</span>
+                </h2>
+            </div>
+            <div class="channels-grid" id="emailGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Channel Modal -->
+    <div class="modal-overlay" id="channelModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Configure Channel</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Channel Type</label>
+                    <select class="form-input" id="channelType">
+                        <option value="telegram">Telegram</option>
+                        <option value="discord">Discord</option>
+                        <option value="slack">Slack</option>
+                        <option value="whatsapp">WhatsApp Business</option>
+                        <option value="matrix">Matrix</option>
+                        <option value="signal">Signal</option>
+                        <option value="irc">IRC</option>
+                        <option value="gmail">Gmail</option>
+                        <option value="outlook">Outlook</option>
+                        <option value="twitter">Twitter/X DM</option>
+                        <option value="instagram">Instagram DM</option>
+                        <option value="messenger">Facebook Messenger</option>
+                        <option value="teams">Microsoft Teams</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Bot Token / API Key</label>
+                    <input type="password" class="form-input" id="channelToken" placeholder="Enter token...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Channel ID / Webhook URL</label>
+                    <input type="text" class="form-input" id="channelId" placeholder="@channel or webhook URL">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Allowed Users (comma separated)</label>
+                    <input type="text" class="form-input" id="allowedUsers" placeholder="user1, user2, @admin">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveChannel()">Save Channel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Channel Data
+        const channels = {
+            messaging: [
+                { id: 'telegram', name: 'Telegram', icon: '📱', status: true, messages: '8.2K', voice: true, commands: 234, features: ['text', 'voice', 'files', 'commands'] },
+                { id: 'discord', name: 'Discord', icon: '🎮', status: true, messages: '5.1K', voice: true, commands: 189, features: ['text', 'voice', 'files', 'commands', 'slash'] },
+                { id: 'slack', name: 'Slack', icon: '💼', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'files', 'commands', 'slash'] },
+                { id: 'whatsapp', name: 'WhatsApp', icon: '💬', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'voice', 'files'] },
+                { id: 'matrix', name: 'Matrix', icon: '🔷', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'files', 'commands'] },
+                { id: 'signal', name: 'Signal', icon: '🔐', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'voice', 'files'] },
+                { id: 'irc', name: 'IRC', icon: '📡', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'commands'] },
+                { id: 'teams', name: 'MS Teams', icon: '👥', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'voice', 'files', 'commands'] },
+            ],
+            voice: [
+                { id: 'dashboard', name: 'Dashboard Voice', icon: '🎤', status: true, messages: '1.2K', voice: true, commands: 156, features: ['stt', 'tts', 'realtime'] },
+                { id: 'desktop', name: 'Desktop Voice', icon: '🖥️', status: true, messages: '345', voice: true, commands: 89, features: ['stt', 'tts', 'control'] },
+                { id: 'mobile', name: 'Mobile Voice', icon: '📱', status: false, messages: '0', voice: false, commands: 0, features: ['stt', 'tts'] },
+                { id: 'telephone', name: 'Telephone (Twilio)', icon: '📞', status: false, messages: '0', voice: false, commands: 0, features: ['stt', 'tts', 'ivr'] },
+            ],
+            social: [
+                { id: 'twitter', name: 'Twitter/X DM', icon: '🐦', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'media'] },
+                { id: 'instagram', name: 'Instagram DM', icon: '📸', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'media'] },
+                { id: 'messenger', name: 'Messenger', icon: '💬', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'media'] },
+                { id: 'reddit', name: 'Reddit', icon: '🔴', status: false, messages: '0', voice: false, commands: 0, features: ['text', 'commands'] },
+                { id: 'linkedin', name: 'LinkedIn', icon: '💼', status: false, messages: '0', voice: false, commands: 0, features: ['text'] },
+            ],
+            email: [
+                { id: 'gmail', name: 'Gmail', icon: '📧', status: true, messages: '2.4K', voice: false, commands: 42, features: ['read', 'send', 'search', 'calendar'] },
+                { id: 'outlook', name: 'Outlook', icon: '📅', status: false, messages: '0', voice: false, commands: 0, features: ['read', 'send', 'calendar'] },
+                { id: 'imap', name: 'IMAP/SMTP', icon: '📬', status: false, messages: '0', voice: false, commands: 0, features: ['read', 'send'] },
+            ]
+        };
+        
+        function renderChannelSection(containerId, channelList) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = channelList.map(c => `
+                <div class="channel-card ${c.status ? 'active' : ''}">
+                    <div class="channel-header">
+                        <div class="channel-icon">${c.icon}</div>
+                        <div class="channel-info">
+                            <div class="channel-name">${c.name}</div>
+                            <div class="channel-type">${c.status ? 'Active' : 'Inactive'}</div>
+                        </div>
+                        <label class="channel-toggle">
+                            <input type="checkbox" ${c.status ? 'checked' : ''} onchange="toggleChannel('${c.id}')">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="channel-stats">
+                        <div class="channel-stat">
+                            <div class="channel-stat-value">${c.messages}</div>
+                            <div class="channel-stat-label">Messages</div>
+                        </div>
+                        <div class="channel-stat">
+                            <div class="channel-stat-value">${c.commands}</div>
+                            <div class="channel-stat-label">Commands</div>
+                        </div>
+                        <div class="channel-stat">
+                            <div class="channel-stat-value">${c.voice ? '✓' : '—'}</div>
+                            <div class="channel-stat-label">Voice</div>
+                        </div>
+                    </div>
+                    <div class="channel-features">
+                        ${c.features.map(f => `<span class="feature-tag ${f}">${f}</span>`).join('')}
+                    </div>
+                    <div class="channel-actions">
+                        <button class="channel-btn" onclick="configureChannel('${c.id}')">Configure</button>
+                        <button class="channel-btn" onclick="testChannel('${c.id}')">Test</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderAllChannels() {
+            renderChannelSection('messagingGrid', channels.messaging);
+            renderChannelSection('voiceGrid', channels.voice);
+            renderChannelSection('socialGrid', channels.social);
+            renderChannelSection('emailGrid', channels.email);
+            
+            // Update stats
+            const allChannels = [...channels.messaging, ...channels.voice, ...channels.social, ...channels.email];
+            const active = allChannels.filter(c => c.status).length;
+            document.getElementById('activeChannels').textContent = active;
+        }
+        
+        function toggleChannel(id) {
+            for (const category of Object.values(channels)) {
+                const channel = category.find(c => c.id === id);
+                if (channel) {
+                    channel.status = !channel.status;
+                    showToast(`${channel.name} ${channel.status ? 'enabled' : 'disabled'}`, 'success');
+                    break;
+                }
+            }
+            renderAllChannels();
+        }
+        
+        function configureChannel(id) {
+            document.getElementById('channelModal').classList.add('visible');
+            // Pre-select the channel type
+            document.getElementById('channelType').value = id;
+        }
+        
+        function testChannel(id) {
+            showToast(`Testing ${id}...`, 'success');
+        }
+        
+        function testAllChannels() {
+            showToast('Testing all active channels...', 'success');
+        }
+        
+        function openAddModal() {
+            document.getElementById('channelModal').classList.add('visible');
+        }
+        
+        function closeModal() {
+            document.getElementById('channelModal').classList.remove('visible');
+        }
+        
+        function saveChannel() {
+            showToast('Channel saved successfully!', 'success');
+            closeModal();
+        }
+        
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllChannels();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

@@ -17,6 +17,8 @@ use tracing::info;
 
 pub mod aider;
 pub mod continue_dev;
+pub mod lsp;
+pub mod code_review;
 
 /// Developer Tool Type
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

@@ -1,207 +1,195 @@
-//! ─── Audio Processing ───
+//! Audio capture and playback
 
-use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
-/// Audio format specification
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub struct AudioFormat {
-    pub sample_rate: u32,
-    pub channels: u16,
-    pub bits_per_sample: u16,
+use crate::{AudioSettings, VoiceError, VoiceResult};
+
+/// Audio capture
+pub struct AudioCapture {
+    config: AudioSettings,
+    is_capturing: Arc<Mutex<bool>>,
 }
 
-impl Default for AudioFormat {
-    fn default() -> Self {
+impl AudioCapture {
+    pub fn new(config: AudioSettings) -> Self {
         Self {
-            sample_rate: 16000,
-            channels: 1,
-            bits_per_sample: 16,
+            config,
+            is_capturing: Arc::new(Mutex::new(false)),
         }
+    }
+
+    /// Start capturing audio
+    pub async fn start(&self) -> VoiceResult<()> {
+        let mut capturing = self.is_capturing.lock().await;
+        *capturing = true;
+        log::info!("Audio capture started ({}Hz, {} channels)", 
+            self.config.input_sample_rate, self.config.channels);
+        Ok(())
+    }
+
+    /// Stop capturing
+    pub async fn stop(&self) -> VoiceResult<()> {
+        let mut capturing = self.is_capturing.lock().await;
+        *capturing = false;
+        log::info!("Audio capture stopped");
+        Ok(())
+    }
+
+    /// Check if capturing
+    pub async fn is_capturing(&self) -> bool {
+        *self.is_capturing.lock().await
+    }
+
+    /// Capture audio for duration (seconds)
+    pub async fn capture(&self, duration_secs: f32) -> VoiceResult<Vec<i16>> {
+        log::info!("Capturing audio for {:.1} seconds", duration_secs);
+        
+        // Simulate audio capture
+        // In real implementation, this would use cpal to capture from microphone
+        let sample_count = (self.config.input_sample_rate as f32 * duration_secs) as usize;
+        let samples = vec![0i16; sample_count];
+        
+        Ok(samples)
+    }
+
+    /// Get available input devices
+    pub fn list_devices() -> VoiceResult<Vec<AudioDevice>> {
+        // In real implementation, this would enumerate cpal devices
+        Ok(vec![
+            AudioDevice {
+                name: "Default Microphone".to_string(),
+                is_default: true,
+                is_input: true,
+                is_output: false,
+                sample_rates: vec![16000, 44100, 48000],
+                channels: 1,
+            },
+        ])
+    }
+
+    /// Get configuration
+    pub fn config(&self) -> &AudioSettings {
+        &self.config
     }
 }
 
-/// Audio buffer
+impl Default for AudioCapture {
+    fn default() -> Self {
+        Self::new(AudioSettings::default())
+    }
+}
+
+/// Audio playback
+pub struct AudioPlayback {
+    config: AudioSettings,
+    is_playing: Arc<Mutex<bool>>,
+}
+
+impl AudioPlayback {
+    pub fn new(config: AudioSettings) -> Self {
+        Self {
+            config,
+            is_playing: Arc::new(Mutex::new(false)),
+        }
+    }
+
+    /// Play audio data
+    pub async fn play(&self, audio: &[u8]) -> VoiceResult<()> {
+        let mut playing = self.is_playing.lock().await;
+        *playing = true;
+        drop(playing);
+
+        log::info!("Playing {} bytes of audio", audio.len());
+
+        // In real implementation, this would use cpal to play audio
+        // Simulate playback duration
+        let duration_ms = (audio.len() as f64 / self.config.output_sample_rate as f64 * 1000.0) as u64;
+        tokio::time::sleep(std::time::Duration::from_millis(duration_ms.min(1000))).await;
+
+        let mut playing = self.is_playing.lock().await;
+        *playing = false;
+        Ok(())
+    }
+
+    /// Play audio from file
+    pub async fn play_file(&self, path: &str) -> VoiceResult<()> {
+        let audio = tokio::fs::read(path).await?;
+        self.play(&audio).await
+    }
+
+    /// Stop playback
+    pub async fn stop(&self) -> VoiceResult<()> {
+        let mut playing = self.is_playing.lock().await;
+        *playing = false;
+        log::info!("Audio playback stopped");
+        Ok(())
+    }
+
+    /// Check if playing
+    pub async fn is_playing(&self) -> bool {
+        *self.is_playing.lock().await
+    }
+
+    /// Get available output devices
+    pub fn list_devices() -> VoiceResult<Vec<AudioDevice>> {
+        Ok(vec![
+            AudioDevice {
+                name: "Default Speaker".to_string(),
+                is_default: true,
+                is_input: false,
+                is_output: true,
+                sample_rates: vec![44100, 48000],
+                channels: 2,
+            },
+        ])
+    }
+}
+
+impl Default for AudioPlayback {
+    fn default() -> Self {
+        Self::new(AudioSettings::default())
+    }
+}
+
+/// Audio device info
 #[derive(Debug, Clone)]
-pub struct AudioBuffer {
-    pub samples: Vec<f32>,
-    pub format: AudioFormat,
-    pub duration_secs: f32,
+pub struct AudioDevice {
+    pub name: String,
+    pub is_default: bool,
+    pub is_input: bool,
+    pub is_output: bool,
+    pub sample_rates: Vec<u32>,
+    pub channels: u16,
 }
 
-impl AudioBuffer {
-    /// Create new audio buffer
-    pub fn new(samples: Vec<f32>, format: AudioFormat) -> Self {
-        let duration_secs = samples.len() as f32 / format.sample_rate as f32;
-        Self {
-            samples,
-            format,
-            duration_secs,
-        }
-    }
-    
-    /// Create silence
-    pub fn silence(format: AudioFormat, duration_secs: f32) -> Self {
-        let num_samples = (format.sample_rate as f32 * duration_secs) as usize;
-        Self::new(vec![0.0; num_samples], format)
-    }
-    
-    /// Resample to target sample rate
-    pub fn resample(&self, target_rate: u32) -> Self {
-        if self.format.sample_rate == target_rate {
-            return self.clone();
-        }
-        
-        let ratio = target_rate as f64 / self.format.sample_rate as f64;
-        let target_len = (self.samples.len() as f64 * ratio) as usize;
-        
-        let mut resampled = Vec::with_capacity(target_len);
-        for i in 0..target_len {
-            let src_idx = i as f64 / ratio;
-            let idx = src_idx as usize;
-            let frac = src_idx - idx as f64;
-            
-            let sample = if idx + 1 < self.samples.len() {
-                self.samples[idx] * (1.0 - frac as f32) + self.samples[idx + 1] * frac as f32
-            } else if idx < self.samples.len() {
-                self.samples[idx]
-            } else {
-                0.0
-            };
-            resampled.push(sample);
-        }
-        
-        Self::new(resampled, AudioFormat {
-            sample_rate: target_rate,
-            ..self.format
-        })
-    }
-    
-    /// Normalize audio
-    pub fn normalize(&mut self) {
-        let max = self.samples.iter().fold(0.0f32, |a, &b| a.max(b.abs()));
-        if max > 0.0 {
-            for sample in &mut self.samples {
-                *sample /= max;
-            }
-        }
-    }
-    
-    /// Apply gain
-    pub fn apply_gain(&mut self, gain: f32) {
-        for sample in &mut self.samples {
-            *sample = (*sample * gain).clamp(-1.0, 1.0);
-        }
-    }
-    
-    /// Fade in/out
-    pub fn fade(&mut self, fade_samples: usize) {
-        // Fade in
-        for i in 0..fade_samples.min(self.samples.len()) {
-            let factor = i as f32 / fade_samples as f32;
-            self.samples[i] *= factor;
-        }
-        
-        // Fade out
-        let len = self.samples.len();
-        for i in 0..fade_samples.min(len) {
-            let factor = i as f32 / fade_samples as f32;
-            self.samples[len - 1 - i] *= factor;
-        }
-    }
-    
-    /// Concatenate buffers
-    pub fn concat(&mut self, other: &AudioBuffer) {
-        self.samples.extend(&other.samples);
-        self.duration_secs = self.samples.len() as f32 / self.format.sample_rate as f32;
-    }
-    
-    /// Split at position
-    pub fn split_at(&self, position_secs: f32) -> (AudioBuffer, AudioBuffer) {
-        let split_idx = (position_secs * self.format.sample_rate as f32) as usize;
-        let split_idx = split_idx.min(self.samples.len());
-        
-        let first = AudioBuffer::new(
-            self.samples[..split_idx].to_vec(),
-            self.format,
-        );
-        let second = AudioBuffer::new(
-            self.samples[split_idx..].to_vec(),
-            self.format,
-        );
-        
-        (first, second)
-    }
-    
-    /// Get RMS energy
-    pub fn rms_energy(&self) -> f32 {
-        let sum: f32 = self.samples.iter().map(|s| s * s).sum();
-        (sum / self.samples.len() as f32).sqrt()
-    }
-    
-    /// Detect silence
-    pub fn is_silence(&self, threshold: f32) -> bool {
-        self.rms_energy() < threshold
-    }
-    
-    /// Trim silence from start/end
-    pub fn trim_silence(&mut self, threshold: f32) {
-        // Find first non-silent sample
-        let start = self.samples.iter()
-            .position(|&s| s.abs() > threshold)
-            .unwrap_or(0);
-        
-        // Find last non-silent sample
-        let end = self.samples.iter()
-            .rposition(|&s| s.abs() > threshold)
-            .map(|i| i + 1)
-            .unwrap_or(self.samples.len());
-        
-        self.samples = self.samples[start..end].to_vec();
-        self.duration_secs = self.samples.len() as f32 / self.format.sample_rate as f32;
-    }
-}
-
-/// Voice Activity Detection
-pub struct VoiceActivityDetector {
-    threshold: f32,
-    #[allow(dead_code)]
-    frame_size: usize,
-    energy_history: Vec<f32>,
-}
-
-impl VoiceActivityDetector {
-    pub fn new(threshold: f32, frame_size: usize) -> Self {
-        Self {
-            threshold,
-            frame_size,
-            energy_history: Vec::new(),
-        }
-    }
-    
-    /// Process frame and return true if voice detected
-    pub fn process(&mut self, frame: &[f32]) -> bool {
-        let energy: f32 = frame.iter().map(|s| s * s).sum::<f32>().sqrt() / frame.len() as f32;
-        self.energy_history.push(energy);
-        
-        // Keep last 10 frames
-        if self.energy_history.len() > 10 {
-            self.energy_history.remove(0);
-        }
-        
-        // Smoothed energy
-        let avg_energy: f32 = self.energy_history.iter().sum::<f32>() / self.energy_history.len() as f32;
-        
-        avg_energy > self.threshold
-    }
-    
-    /// Reset detector
-    pub fn reset(&mut self) {
-        self.energy_history.clear();
-    }
-}
-
-impl Default for VoiceActivityDetector {
+impl Default for AudioDevice {
     fn default() -> Self {
-        Self::new(0.01, 512)
+        Self {
+            name: "Default".to_string(),
+            is_default: true,
+            is_input: false,
+            is_output: true,
+            sample_rates: vec![48000],
+            channels: 2,
+        }
+    }
+}
+
+/// Audio configuration
+#[derive(Debug, Clone)]
+pub struct AudioConfig {
+    pub settings: AudioSettings,
+}
+
+impl AudioConfig {
+    pub fn new(settings: AudioSettings) -> Self {
+        Self { settings }
+    }
+}
+
+impl Default for AudioConfig {
+    fn default() -> Self {
+        Self::new(AudioSettings::default())
     }
 }

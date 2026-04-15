@@ -27,6 +27,7 @@ pub mod publish;
 pub mod search;
 pub mod config;
 pub mod monetization;
+pub mod payment_integration;
 
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

@@ -11,10 +11,12 @@
 pub mod providers;
 pub mod types;
 pub mod error;
+pub mod edit;
 
 pub use providers::{ImageProvider, ImageGenerator};
 pub use types::{ImageRequest, ImageResponse, ImageSize, ImageStyle, ImageQuality};
 pub use error::{ImageError, Result};
+pub use edit::{ImageEditor, EditRequest, EditResponse, EditOperation, ImageSource, RgbaColor};
 
 use serde::{Deserialize, Serialize};
 

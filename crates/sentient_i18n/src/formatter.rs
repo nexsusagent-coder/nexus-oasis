@@ -40,6 +40,9 @@ pub fn format_currency(amount: f64, currency: &str, language: Language) -> Strin
         Language::Japanese => format!("{}{}", formatted, currency),
         Language::Chinese => format!("{}{}", currency, formatted),
         Language::Russian => format!("{} {}", formatted, currency),
+        Language::Arabic => format!("{} {}", formatted, currency),
+        Language::Korean => format!("{} {}", formatted, currency),
+        Language::Portuguese => format!("{} {}", formatted, currency),
     }
 }
 
@@ -167,6 +170,45 @@ pub fn format_relative_time(date: &DateTime<Utc>, language: Language) -> String 
                 format!("{} часов назад", hours)
             } else if days < 7 {
                 format!("{} дней назад", days)
+            } else {
+                format_date(date, language)
+            }
+        }
+        Language::Arabic => {
+            if seconds < 60 {
+                "الآن".to_string()
+            } else if minutes < 60 {
+                format!("منذ {} دقيقة", minutes)
+            } else if hours < 24 {
+                format!("منذ {} ساعة", hours)
+            } else if days < 7 {
+                format!("منذ {} يوم", days)
+            } else {
+                format_date(date, language)
+            }
+        }
+        Language::Korean => {
+            if seconds < 60 {
+                "방금".to_string()
+            } else if minutes < 60 {
+                format!("{}분 전", minutes)
+            } else if hours < 24 {
+                format!("{}시간 전", hours)
+            } else if days < 7 {
+                format!("{}일 전", days)
+            } else {
+                format_date(date, language)
+            }
+        }
+        Language::Portuguese => {
+            if seconds < 60 {
+                "agora mesmo".to_string()
+            } else if minutes < 60 {
+                format!("há {} minutos", minutes)
+            } else if hours < 24 {
+                format!("há {} horas", hours)
+            } else if days < 7 {
+                format!("há {} dias", days)
             } else {
                 format_date(date, language)
             }

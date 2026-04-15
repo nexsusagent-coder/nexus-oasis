@@ -1,6 +1,6 @@
 //! Internationalization (i18n) module for SENTIENT
 //!
-//! Supports 8 languages:
+//! Supports 11 languages:
 //! - English (en)
 //! - Turkish (tr)
 //! - German (de)
@@ -8,12 +8,15 @@
 //! - Spanish (es)
 //! - Japanese (ja)
 //! - Chinese (zh)
+//! - Russian (ru)
+//! - Arabic (ar)
+//! - Korean (ko)
+//! - Portuguese (pt)
 
 // Suppress warnings
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(dead_code)]
-//! - Russian (ru)
 
 pub mod translations;
 pub mod locale;
@@ -46,6 +49,12 @@ pub enum Language {
     Chinese,
     #[strum(serialize = "ru")]
     Russian,
+    #[strum(serialize = "ar")]
+    Arabic,
+    #[strum(serialize = "ko")]
+    Korean,
+    #[strum(serialize = "pt")]
+    Portuguese,
 }
 
 impl Default for Language {
@@ -66,6 +75,9 @@ impl Language {
             Language::Japanese => "日本語",
             Language::Chinese => "中文",
             Language::Russian => "Русский",
+            Language::Arabic => "العربية",
+            Language::Korean => "한국어",
+            Language::Portuguese => "Português",
         }
     }
 
@@ -80,12 +92,15 @@ impl Language {
             Language::Japanese => "🇯🇵",
             Language::Chinese => "🇨🇳",
             Language::Russian => "🇷🇺",
+            Language::Arabic => "🇸🇦",
+            Language::Korean => "🇰🇷",
+            Language::Portuguese => "🇧🇷",
         }
     }
 
     /// Check if the language uses RTL (right-to-left) script
     pub fn is_rtl(&self) -> bool {
-        false // None of our supported languages are RTL
+        matches!(self, Language::Arabic)
     }
 
     /// Get all supported languages
@@ -99,6 +114,9 @@ impl Language {
             Language::Japanese,
             Language::Chinese,
             Language::Russian,
+            Language::Arabic,
+            Language::Korean,
+            Language::Portuguese,
         ]
     }
 }
@@ -189,6 +207,9 @@ fn load_translations(language: Language) -> HashMap<String, String> {
         Language::Japanese => translations::japanese(),
         Language::Chinese => translations::chinese(),
         Language::Russian => translations::russian(),
+        Language::Arabic => translations::arabic(),
+        Language::Korean => translations::korean(),
+        Language::Portuguese => translations::portuguese(),
     }
 }
 
@@ -232,7 +253,7 @@ mod tests {
     #[test]
     fn test_language_all() {
         let all = Language::all();
-        assert_eq!(all.len(), 8);
+        assert_eq!(all.len(), 11);
     }
 
     #[test]

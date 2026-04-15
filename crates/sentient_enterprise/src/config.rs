@@ -5,6 +5,8 @@ use crate::rbac::RBACConfig;
 use crate::audit::AuditConfig;
 use crate::sso::SSOConfig;
 use crate::tenant::TenantConfig;
+use crate::mfa::MfaConfig;
+use crate::password_policy::PasswordPolicy;
 
 /// Main enterprise configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -20,6 +22,12 @@ pub struct EnterpriseConfig {
 
     /// Multi-tenancy configuration
     pub tenants: TenantConfig,
+    
+    /// MFA configuration
+    pub mfa: MfaConfig,
+    
+    /// Password policy configuration
+    pub password_policy: PasswordPolicy,
 
     /// Database connection string
     pub database_url: String,
@@ -38,6 +46,8 @@ impl Default for EnterpriseConfig {
             audit: AuditConfig::default(),
             sso: SSOConfig::default(),
             tenants: TenantConfig::default(),
+            mfa: MfaConfig::default(),
+            password_policy: PasswordPolicy::default(),
             database_url: "postgresql://localhost/sentient".to_string(),
             redis_url: None,
             encryption_key: "change-me-in-production".to_string(),

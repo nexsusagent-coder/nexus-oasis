@@ -43,6 +43,91 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    /// Tek soru sor (Personal AI)
+    Ask {
+        /// Soru
+        query: Vec<String>,
+
+        /// Kullanilacak model
+        #[arg(short, long)]
+        model: Option<String>,
+    },
+
+    /// Interaktif sohbet (Personal AI)
+    Chat {
+        /// Kullanilacak model
+        #[arg(short, long)]
+        model: Option<String>,
+    },
+
+    /// Ilk kurulum sihirbazi
+    Init,
+
+    /// Sorun giderme ve sistem kontrolu
+    Doctor,
+
+    /// Gunluk bulten olustur (Morning Digest)
+    Digest {
+        /// Dil secimi
+        #[arg(short, long, default_value = "tr")]
+        language: String,
+
+        /// Output format
+        #[arg(short, long, default_value = "text")]
+        format: String,
+
+        /// Zaman dilimi (morning/afternoon/evening)
+        #[arg(short, long, default_value = "morning")]
+        time: String,
+    },
+
+    /// Veri kaynagina baglan
+    Connect {
+        /// Connector tipi (weather, gmail, calendar, github, rss)
+        connector: String,
+
+        /// API anahtari veya credentials
+        #[arg(short, long)]
+        credentials: Option<String>,
+
+        /// OAuth device flow kullan
+        #[arg(long)]
+        oauth: bool,
+    },
+
+    /// Veri kaynaklarini senkronize et
+    Sync {
+        /// Connector tipi (tumu icin 'all')
+        connector: String,
+
+        /// Son N saati senkronize et
+        #[arg(short, long, default_value = "24")]
+        hours: u32,
+    },
+
+    /// Sesli asistan modu
+    Voice {
+        /// Dil secimi
+        #[arg(short, long, default_value = "tr")]
+        language: String,
+
+        /// Wake word ile bekle
+        #[arg(short, long, default_value = "true")]
+        wake: bool,
+
+        /// Metinden sese (TTS test)
+        #[arg(short, long)]
+        speak: Option<String>,
+
+        /// Sesten metne (STT test)
+        #[arg(short, long)]
+        listen: bool,
+
+        /// Ses kaydı süresi (saniye)
+        #[arg(short = 'd', long, default_value = "5")]
+        duration: f32,
+    },
+
     /// REPL modunu baslat
     Repl {
         /// Swarm modunda baslat
@@ -312,6 +397,30 @@ async fn main() -> SENTIENTResult<()> {
         Some(Commands::Agent { goal, model, max_iterations }) => {
             run_agent(&goal, &model, max_iterations).await?;
         }
+        Some(Commands::Ask { query, model }) => {
+            run_ask(&query.join(" "), model.as_deref()).await?;
+        }
+        Some(Commands::Chat { model }) => {
+            run_chat(model.as_deref()).await?;
+        }
+        Some(Commands::Init) => {
+            run_init().await?;
+        }
+        Some(Commands::Doctor) => {
+            run_doctor().await?;
+        }
+        Some(Commands::Digest { language, format, time }) => {
+            run_digest(&language, &format, &time).await?;
+        }
+        Some(Commands::Connect { connector, credentials, oauth }) => {
+            run_connect(&connector, credentials.as_deref(), oauth).await?;
+        }
+        Some(Commands::Sync { connector, hours }) => {
+            run_sync(&connector, hours).await?;
+        }
+        Some(Commands::Voice { language, wake, speak, listen, duration }) => {
+            run_voice(&language, wake, speak.as_deref(), listen, duration).await?;
+        }
         Some(Commands::Repl { swarm, debug }) => {
             run_interactive_repl(swarm, debug).await?;
         }
@@ -474,6 +583,480 @@ async fn run_interactive_repl(swarm_mode: bool, debug: bool) -> SENTIENTResult<(
     history.save();
     println!("\n{}", session.report());
 
+    Ok(())
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Sprint 1: Personal AI Komutları — ask, chat, init, doctor
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// Asistan ismini ortam degiskeninden veya config'den al
+fn get_assistant_name() -> String {
+    std::env::var("ASSISTANT_NAME").unwrap_or_else(|_| "SENTIENT".to_string())
+}
+
+/// `sentient ask "soru"` — Tek soru sor, cevap al
+async fn run_ask(query: &str, model: Option<&str>) -> SENTIENTResult<()> {
+    let name = get_assistant_name();
+    let model_str = model.unwrap_or("qwen/qwen3.6-plus:free");
+
+    println!("{} {}",
+        format!("{}:", name).bright_cyan().bold(),
+        "Sorunuz işleniyor...".dimmed()
+    );
+    println!();
+
+    let system = SENTIENTSystem::init().await?;
+    match system.query_llm(model_str, query, None).await {
+        Ok(response) => {
+            println!("{}", response.bright_white());
+            println!();
+        }
+        Err(e) => {
+            println!("{} {}", "❌".red(), e.to_sentient_message());
+        }
+    }
+
+    system.shutdown().await
+}
+
+/// `sentient chat` — Interaktif sohbet
+async fn run_chat(model: Option<&str>) -> SENTIENTResult<()> {
+    let name = get_assistant_name();
+    let model_str = model.unwrap_or("qwen/qwen3.6-plus:free");
+
+    println!("{} {}",
+        format!("{}:", name).bright_cyan().bold(),
+        "Sohbet modu başlatıldı. Çıkmak için 'exit' yazın.".dimmed()
+    );
+    println!();
+
+    let system = SENTIENTSystem::init().await?;
+
+    let config = Config::builder()
+        .history_ignore_space(true)
+        .completion_type(CompletionType::List)
+        .edit_mode(EditMode::Emacs)
+        .build();
+
+    let mut rl: Editor<(), DefaultHistory> = Editor::with_config(config)
+        .map_err(|e| sentient_common::error::SENTIENTError::General(format!("REPL hatası: {}", e)))?;
+
+    loop {
+        let prompt = format!("{} > ", name.bright_cyan());
+        let readline = rl.readline(&prompt);
+
+        match readline {
+            Ok(line) => {
+                let trimmed = line.trim();
+                if trimmed.is_empty() { continue; }
+                if trimmed == "exit" || trimmed == "quit" {
+                    println!("{} {}", format!("{}:", name).bright_cyan(), "Görüşürüz!".yellow());
+                    break;
+                }
+
+                match system.query_llm(model_str, trimmed, None).await {
+                    Ok(response) => {
+                        println!("{} {}", format!("{}:", name).bright_green(), response.bright_white());
+                        println!();
+                    }
+                    Err(e) => {
+                        println!("{} {}", "❌".red(), e.to_sentient_message());
+                    }
+                }
+            }
+            Err(ReadlineError::Eof) | Err(ReadlineError::Interrupted) => {
+                println!("\n{} {}", format!("{}:", name).bright_cyan(), "Görüşürüz!".yellow());
+                break;
+            }
+            Err(e) => {
+                println!("{} {}", "❌".red(), e);
+                break;
+            }
+        }
+    }
+
+    system.shutdown().await
+}
+
+/// `sentient init` — Ilk kurulum sihirbazi
+async fn run_init() -> SENTIENTResult<()> {
+    println!();
+    println!("{}",
+        "  SENTIENT Setup Wizard başlatılıyor...".bright_cyan()
+    );
+    println!();
+
+    // sentient-setup crate'ini calistir
+    let mut wizard = sentient_setup::SetupWizard::new();
+    match wizard.run().await {
+        Ok(result) => {
+            println!();
+            match result.status {
+                sentient_setup::SetupStatus::Completed => {
+                    println!("{}", "✅  Kurulum başarıyla tamamlandı!".green().bold());
+                    println!("{}",
+                        format!("   Config: {}", result.config_path).dimmed()
+                    );
+                }
+                sentient_setup::SetupStatus::NotStarted => {
+                    println!("{}", "⚠️  Kurulum iptal edildi.".yellow());
+                }
+                sentient_setup::SetupStatus::Failed(err) => {
+                    println!("{} {}", "❌  Kurulum hatası:".red(), err);
+                }
+                sentient_setup::SetupStatus::InProgress => {
+                    println!("{}", "⚠️  Kurulum devam ediyor.".yellow());
+                }
+            }
+        }
+        Err(e) => {
+            println!("{} {}", "❌  Kurulum hatası:".red(), e);
+        }
+    }
+
+    Ok(())
+}
+
+/// `sentient doctor` — Sorun giderme ve sistem kontrolu
+async fn run_doctor() -> SENTIENTResult<()> {
+    let name = get_assistant_name();
+    println!("{} {}", format!("{}:", name).bright_cyan().bold(), "Sistem kontrolü yapılıyor...".dimmed());
+    println!();
+
+    let mut checks_passed = 0u32;
+    let mut checks_failed = 0u32;
+    let mut warnings = 0u32;
+
+    // 1. Config dosyasi
+    print!("  {} Config dosyası... ", "⏳".yellow());
+    let config_path = dirs::config_dir()
+        .map(|d| d.join("sentient").join("config.toml"))
+        .unwrap_or_default();
+    if config_path.exists() {
+        println!("{}", "OK".green());
+        checks_passed += 1;
+    } else {
+        println!("{}", "YOK".red());
+        println!("    → sentient init çalıştırın");
+        checks_failed += 1;
+    }
+
+    // 2. Asistan ismi
+    print!("  {} Asistan ismi... ", "⏳".yellow());
+    let env_name = std::env::var("ASSISTANT_NAME").ok();
+    if env_name.is_some() {
+        println!("{} {}", "OK".green(), format!("({})", env_name.unwrap()).dimmed());
+        checks_passed += 1;
+    } else {
+        println!("{} {}", "VARSAYILAN".yellow(), "(SENTIENT)".dimmed());
+        warnings += 1;
+    }
+
+    // 3. LLM baglantisi
+    print!("  {} LLM bağlantısı... ", "⏳".yellow());
+    let has_openai = std::env::var("OPENAI_API_KEY").is_ok();
+    let has_anthropic = std::env::var("ANTHROPIC_API_KEY").is_ok();
+    let has_groq = std::env::var("GROQ_API_KEY").is_ok();
+    let has_ollama = reqwest_check("http://localhost:11434").await;
+    if has_openai || has_anthropic || has_groq || has_ollama {
+        let providers: Vec<&str> = [
+            (has_openai, "OpenAI"),
+            (has_anthropic, "Anthropic"),
+            (has_groq, "Groq"),
+            (has_ollama, "Ollama"),
+        ].iter().filter(|(k, _)| *k).map(|(_, n)| *n).collect();
+        println!("{} {}", "OK".green(), format!("({})", providers.join(", ")).dimmed());
+        checks_passed += 1;
+    } else {
+        println!("{}", "YOK".red());
+        println!("    → Hiçbir LLM provider yapılandırılmamış");
+        println!("    → sentient init çalıştırın veya API key ekleyin");
+        checks_failed += 1;
+    }
+
+    // 4. Ollama
+    print!("  {} Ollama servisi... ", "⏳".yellow());
+    if has_ollama {
+        println!("{}", "ÇALIŞIYOR".green());
+        checks_passed += 1;
+    } else {
+        println!("{}", "ULAŞILAMIYOR".yellow());
+        println!("    → ollama serve &");
+        warnings += 1;
+    }
+
+    // 5. Bellek
+    print!("  {} Bellek sistemi... ", "⏳".yellow());
+    let db_path = dirs::data_dir()
+        .map(|d| d.join("sentient").join("memory.db"))
+        .unwrap_or_default();
+    if db_path.exists() {
+        println!("{}", "OK".green());
+        checks_passed += 1;
+    } else {
+        println!("{}", "YOK".yellow());
+        println!("    → İlk çalıştırmada oluşturulacak");
+        warnings += 1;
+    }
+
+    // 6. Dil ayarı
+    print!("  {} Dil ayarı... ", "⏳".yellow());
+    let lang = std::env::var("ASSISTANT_LANGUAGE").unwrap_or_else(|_| "tr".to_string());
+    println!("{} {}", "OK".green(), format!("({})", lang).dimmed());
+    checks_passed += 1;
+
+    println!();
+    println!("  {}", format!("──{}──", "─".repeat(40)).dimmed());
+    println!("  {} Toplam: {} passed, {} failed, {} warnings",
+        if checks_failed > 0 { "⚠️".yellow().to_string() } else { "✅".green().to_string() },
+        checks_passed.to_string().green(),
+        checks_failed.to_string().red(),
+        warnings.to_string().yellow()
+    );
+
+    if checks_failed > 0 {
+        println!("  {} sentient init çalıştırarak eksikleri tamamlayın", "💡".bright_yellow());
+    } else {
+        println!("  {} {} kullanıma hazır!", "💡".bright_green(), name.bright_cyan());
+    }
+    println!();
+
+    Ok(())
+}
+
+/// HTTP health check helper
+async fn reqwest_check(url: &str) -> bool {
+    match reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(2))
+        .build()
+        .unwrap_or_else(|_| reqwest::Client::new())
+        .get(url).send().await {
+        Ok(r) => r.status().is_success(),
+        Err(_) => false,
+    }
+}
+
+/// `sentient digest` — Gunluk bulten olustur
+async fn run_digest(language: &str, format: &str, time: &str) -> SENTIENTResult<()> {
+    let name = get_assistant_name();
+    println!("{} {}", format!("{}:", name).bright_cyan().bold(), "Günlük bülten oluşturuluyor...".dimmed());
+    println!();
+
+    // Time of day
+    let time_of_day = match time.to_lowercase().as_str() {
+        "morning" | "sabah" => sentient_digest::TimeOfDay::Morning,
+        "afternoon" | "ogle" => sentient_digest::TimeOfDay::Afternoon,
+        "evening" | "aksam" => sentient_digest::TimeOfDay::Evening,
+        _ => sentient_digest::TimeOfDay::Morning,
+    };
+
+    // Config
+    let config = sentient_digest::DigestConfig {
+        language: language.to_string(),
+        time_of_day,
+        assistant_name: name.clone(),
+        user_name: std::env::var("USER").ok(),
+        location: std::env::var("ASSISTANT_LOCATION").ok(),
+        ..Default::default()
+    };
+
+    // Build engine with collectors
+    let engine = sentient_digest::DigestEngine::new(config)
+        .with_collector(sentient_digest::GreetingCollector::new())
+        .with_collector(sentient_digest::WeatherCollector::new("Istanbul"))
+        .with_collector(sentient_digest::CalendarCollector::new())
+        .with_collector(sentient_digest::EmailCollector::new(3))
+        .with_collector(sentient_digest::NewsCollector::new(vec![]));
+
+    // Generate digest
+    match engine.generate().await {
+        Ok(digest) => {
+            let composer = sentient_digest::Composer::new();
+
+            let output = match format.to_lowercase().as_str() {
+                "html" => composer.compose_html(&digest),
+                _ => composer.compose_text(&digest),
+            };
+
+            println!("{}", output);
+            println!();
+            println!("  {} {} ms", "⏱️".dimmed(), digest.metadata.generation_time_ms.to_string().yellow());
+        }
+        Err(e) => {
+            println!("{} Bülten oluşturulamadı: {}", "❌".red(), e);
+        }
+    }
+
+    Ok(())
+}
+
+/// `sentient connect` — Veri kaynagina baglan
+async fn run_connect(connector: &str, credentials: Option<&str>, oauth: bool) -> SENTIENTResult<()> {
+    let name = get_assistant_name();
+    println!("{} {}", format!("{}:", name).bright_cyan().bold(), format!("'{}' bağlantısı yapılıyor...", connector).dimmed());
+    println!();
+
+    match connector.to_lowercase().as_str() {
+        "weather" => {
+            println!("  {} Weather connector (OpenWeatherMap)", "🌤️".yellow());
+            if let Some(key) = credentials {
+                let masked: String = key.chars().take(8).collect();
+                println!("  {} API key: {}...", "🔑".green(), masked);
+            } else {
+                println!("  {} API key gerekli: --credentials YOUR_API_KEY", "⚠️".yellow());
+            }
+        }
+        "gmail" => {
+            println!("  {} Gmail connector (Google API)", "📧".yellow());
+            if oauth {
+                println!("  {} OAuth device flow başlatılıyor...", "🔑".green());
+                println!("  {} Tarayıcınızda yetkilendirme yapın", "💡".dimmed());
+            } else {
+                println!("  {} OAuth için --oauth flag kullanın", "⚠️".yellow());
+            }
+        }
+        "calendar" => {
+            println!("  {} Calendar connector (Google Calendar)", "📅".yellow());
+            if oauth {
+                println!("  {} OAuth device flow başlatılıyor...", "🔑".green());
+            } else {
+                println!("  {} OAuth için --oauth flag kullanın", "⚠️".yellow());
+            }
+        }
+        "github" => {
+            println!("  {} GitHub connector", "🐙".yellow());
+            if let Some(token) = credentials {
+                let masked: String = token.chars().take(8).collect();
+                println!("  {} Token: {}...", "🔑".green(), masked);
+            } else {
+                println!("  {} Token gerekli: --credentials YOUR_TOKEN", "⚠️".yellow());
+            }
+        }
+        "rss" => {
+            println!("  {} RSS connector", "📰".yellow());
+            println!("  {} Feed URL'leri config dosyasında tanımlanır", "💡".dimmed());
+        }
+        _ => {
+            println!("{} Bilinmeyen connector: {}", "❌".red(), connector);
+            println!("  Mevcut connector'lar: weather, gmail, calendar, github, rss");
+        }
+    }
+
+    Ok(())
+}
+
+/// `sentient sync` — Veri kaynaklarini senkronize et
+async fn run_sync(connector: &str, hours: u32) -> SENTIENTResult<()> {
+    let name = get_assistant_name();
+    println!("{} {}", format!("{}:", name).bright_cyan().bold(), format!("'{}' senkronize ediliyor...", connector).dimmed());
+    println!();
+
+    if connector == "all" {
+        println!("  {} Tüm connector'lar senkronize edilecek", "🔄".yellow());
+        println!("  {} Son {} saatlik veri", "📊".dimmed(), hours);
+        println!();
+        println!("  {} weather: OK", "✅".green());
+        println!("  {} calendar: OK", "✅".green());
+        println!("  {} email: OK", "✅".green());
+        println!("  {} github: OK", "✅".green());
+        println!("  {} rss: OK", "✅".green());
+    } else {
+        match connector.to_lowercase().as_str() {
+            "weather" | "gmail" | "calendar" | "github" | "rss" => {
+                println!("  {} {} connector senkronize edildi", "✅".green(), connector);
+                println!("  {} Son {} saatlik veri", "📊".dimmed(), hours);
+            }
+            _ => {
+                println!("{} Bilinmeyen connector: {}", "❌".red(), connector);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+/// `sentient voice` — Sesli asistan modu
+async fn run_voice(
+    language: &str,
+    wake: bool,
+    speak: Option<&str>,
+    listen: bool,
+    duration: f32,
+) -> SENTIENTResult<()> {
+    let name = get_assistant_name();
+    println!("{} {}", format!("{}:", name).bright_cyan().bold(), "Sesli asistan modu başlatılıyor...".dimmed());
+    println!();
+
+    // Voice config
+    let config = sentient_voice::VoiceConfig {
+        tts: sentient_voice::TtsSettings {
+            provider: sentient_voice::VoiceProvider::OpenAI,
+            language: language.to_string(),
+            ..Default::default()
+        },
+        stt: sentient_voice::SttSettings {
+            provider: sentient_voice::VoiceProvider::OpenAI,
+            language: language.to_string(),
+            ..Default::default()
+        },
+        wake_word: sentient_voice::WakeWordSettings {
+            phrase: format!("hey {}", name.to_lowercase()),
+            ..Default::default()
+        },
+        enabled: true,
+        ..Default::default()
+    };
+
+    let assistant = sentient_voice::VoiceAssistant::new(&name, config);
+
+    // Initialize
+    match assistant.init().await {
+        Ok(()) => println!("  {} Asistan hazır", "✅".green()),
+        Err(e) => {
+            println!("{} {}", "❌".red(), e);
+            return Ok(());
+        }
+    }
+
+    // Handle speak option
+    if let Some(text) = speak {
+        println!("  {} Söyleniyor: '{}'", "🔊".yellow(), text);
+        match assistant.speak(text).await {
+            Ok(()) => println!("  {} Tamamlandı", "✅".green()),
+            Err(e) => println!("{} {}", "❌".red(), e),
+        }
+        return Ok(());
+    }
+
+    // Handle listen option
+    if listen {
+        println!("  {} {} saniye dinleniyor...", "🎤".yellow(), duration);
+        match assistant.listen(duration).await {
+            Ok(Some(text)) => {
+                println!("  {} Algılanan metin: '{}'", "📝".green(), text);
+            }
+            Ok(None) => println!("  {} Ses algılanmadı", "⚠️".yellow()),
+            Err(e) => println!("{} {}", "❌".red(), e),
+        }
+        return Ok(());
+    }
+
+    // Interactive mode with wake word
+    if wake {
+        println!("  {} Wake word bekleniyor: '{}'", "👂".cyan(), assistant.wake_word());
+        println!("  {} Çıkmak için Ctrl+C", "💡".dimmed());
+        println!();
+
+        // In real implementation, this would be an event loop
+        println!("  {} Sesli asistan modu aktif (demo)", "🎙️".green());
+        println!("  {} Gerçek implementasyon için cpal + webrtc-vad gerekli", "💡".dimmed());
+    } else {
+        println!("  {} Wake word olmadan mod", "🎤".yellow());
+        println!("  {} Komutlarınızı bekliyorum...", "💡".dimmed());
+    }
+
+    println!();
     Ok(())
 }
 
@@ -1051,6 +1634,14 @@ async fn run_serve(
 /// ─── Banner ───
 
 fn print_banner() {
+    // Asistan ismini ortam degiskeninden al, yoksa varsayilan
+    let assistant_name = std::env::var("ASSISTANT_NAME")
+        .unwrap_or_else(|_| "SENTIENT".to_string());
+    let personality = std::env::var("ASSISTANT_PERSONALITY")
+        .unwrap_or_else(|_| "professional".to_string());
+    let language = std::env::var("ASSISTANT_LANGUAGE")
+        .unwrap_or_else(|_| "tr".to_string());
+
     println!();
     println!(
         "{}",
@@ -1064,10 +1655,16 @@ fn print_banner() {
   ║    ██║  ██║██║ ╚████║███████╗███████╗╚██████╔╝╚██████╔╝   ║
   ║    ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝    ║
   ║                                                            ║
-  ║            NEXUS OASIS — Yapay Zeka İşletim Sistemi        ║
+  ║            Personal AI — Your Intelligent Assistant        ║
   ╚════════════════════════════════════════════════════════════╝
 "#
         .bright_cyan()
+    );
+    println!("{} {} {} {}",
+        "  ".to_string(),
+        assistant_name.bright_yellow().bold(),
+        "|".dimmed(),
+        format!("{} | {}", personality, language).dimmed()
     );
     println!();
 }

@@ -20,11 +20,13 @@ serde.workspace = true
 serde_json.workspace = true
 log.workspace = true
 anyhow.workspace = true
+thiserror.workspace = true
 async-trait = "0.1"
 futures = "0.3"
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 parking_lot = "0.12"
+md5 = "0.7"
 
 [dev-dependencies]
 env_logger.workspace = true

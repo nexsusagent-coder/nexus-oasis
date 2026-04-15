@@ -1,24 +1,21 @@
 [package]
 name = "sentient_search"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-license.workspace = true
-description = "Web search integration for SENTIENT OS - Tavily, SerpAPI, Brave, DuckDuckGo"
-repository = "https://github.com/nexsusagent-coder/SENTIENT_CORE"
-keywords = ["ai", "search", "web", "tavily", "rag"]
-categories = ["web-programming", "api-bindings"]
+version = "0.1.0"
+edition = "2021"
+description = "SearXNG Local Search - Privacy-first web search"
+authors = ["SENTIENT OS Team"]
 
 [dependencies]
-tokio.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-reqwest.workspace = true
-thiserror.workspace = true
-anyhow.workspace = true
-tracing.workspace = true
-async-trait.workspace = true
-regex = "1"
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+reqwest = { version = "0.12", features = ["json"] }
+url = "2.5"
 
 [dev-dependencies]
 tokio-test = "0.4"

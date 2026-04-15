@@ -1,0 +1,22 @@
+[package]
+name = "sentient_learning"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Continuous Learning - User behavior, preferences, adaptive personality"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+log.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tracing.workspace = true
+
+[lib]
+name = "sentient_learning"
+path = "src/lib.rs"

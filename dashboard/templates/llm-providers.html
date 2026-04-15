@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTIENT OS | LLM Providers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        :root {
+            --bg-canvas: #0F0F0F;
+            --bg-primary: #1A1D21;
+            --bg-secondary: #1E2227;
+            --bg-tertiary: #252A30;
+            --bg-hover: #2A2F36;
+            --text-primary: #E8E9EB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --border-subtle: #2A2F36;
+            --border-default: #374151;
+            --accent-green: #4B7C59;
+            --accent-green-muted: rgba(75, 124, 89, 0.15);
+            --accent-orange: #B86D28;
+            --accent-blue: #4A6B8A;
+            --accent-red: #8B4B4B;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-canvas);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .btn-primary:hover { background: #3D6A4A; }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+        
+        .btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+        
+        .stat-change {
+            font-size: 12px;
+            color: var(--accent-green);
+            margin-top: 4px;
+        }
+        
+        /* Filters */
+        .filters-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+        
+        .search-input:focus { outline: none; border-color: var(--accent-green); }
+        
+        .filter-btn {
+            padding: 10px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .filter-btn:hover { background: var(--bg-hover); }
+        .filter-btn.active { background: var(--accent-green-muted); border-color: var(--accent-green); color: var(--accent-green); }
+        
+        /* Providers Grid */
+        .providers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        
+        .provider-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .provider-card:hover { border-color: var(--border-default); }
+        .provider-card.active { border-color: var(--accent-green); }
+        
+        .provider-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .provider-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .provider-info { flex: 1; }
+        
+        .provider-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .provider-type {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        .provider-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .provider-status.active { background: var(--accent-green-muted); color: var(--accent-green); }
+        .provider-status.inactive { background: var(--bg-tertiary); color: var(--text-muted); }
+        .provider-status.error { background: rgba(139, 75, 75, 0.2); color: var(--accent-red); }
+        
+        .provider-body { padding: 16px; }
+        
+        .provider-models {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .model-tag {
+            padding: 4px 10px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .provider-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .meta-item { }
+        
+        .meta-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        .meta-value {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .provider-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .provider-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+        
+        .provider-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .provider-btn.primary { background: var(--accent-green); border-color: var(--accent-green); color: white; }
+        .provider-btn.primary:hover { background: #3D6A4A; }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.visible { display: flex; }
+        
+        .modal {
+            width: 90%;
+            max-width: 600px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .modal-title { font-size: 18px; font-weight: 600; }
+        
+        .modal-close {
+            width: 32px; height: 32px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 20px;
+        }
+        
+        .modal-close:hover { background: var(--bg-hover); }
+        
+        .modal-body { padding: 24px; max-height: 60vh; overflow-y: auto; }
+        
+        .form-group { margin-bottom: 20px; }
+        
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .form-input:focus { outline: none; border-color: var(--accent-green); }
+        
+        .form-select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+        }
+        
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+        
+        .toast {
+            padding: 14px 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .toast.success { border-left: 3px solid var(--accent-green); }
+        .toast.error { border-left: 3px solid var(--accent-red); }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">LLM Providers</h1>
+                <p class="page-subtitle">Manage AI model providers and API keys</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="testAllProviders()">
+                    <span>⚡</span> Test All
+                </button>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <span>+</span> Add Provider
+                </button>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Active Providers</div>
+                <div class="stat-value" id="activeCount">12</div>
+                <div class="stat-change">of 42 configured</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Requests</div>
+                <div class="stat-value" id="totalRequests">1.2M</div>
+                <div class="stat-change">+15% this week</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Tokens</div>
+                <div class="stat-value" id="totalTokens">847K</div>
+                <div class="stat-change">~$42.50 cost</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Response</div>
+                <div class="stat-value" id="avgResponse">1.2s</div>
+                <div class="stat-change">-8% faster</div>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="filters-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search providers..." oninput="filterProviders()">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+            <button class="filter-btn" data-filter="active" onclick="setFilter('active')">Active</button>
+            <button class="filter-btn" data-filter="cloud" onclick="setFilter('cloud')">Cloud</button>
+            <button class="filter-btn" data-filter="local" onclick="setFilter('local')">Local</button>
+            <button class="filter-btn" data-filter="free" onclick="setFilter('free')">Free Tier</button>
+        </div>
+        
+        <!-- Providers Grid -->
+        <div class="providers-grid" id="providersGrid">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" id="providerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add Provider</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Provider Type</label>
+                    <select class="form-select" id="providerType">
+                        <option value="openrouter">OpenRouter</option>
+                        <option value="openai">OpenAI</option>
+                        <option value="anthropic">Anthropic</option>
+                        <option value="google">Google AI (Gemini)</option>
+                        <option value="mistral">Mistral AI</option>
+                        <option value="cohere">Cohere</option>
+                        <option value="groq">Groq</option>
+                        <option value="deepseek">DeepSeek</option>
+                        <option value="ollama">Ollama (Local)</option>
+                        <option value="vllm">vLLM (Local)</option>
+                        <option value="custom">Custom Endpoint</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Display Name</label>
+                    <input type="text" class="form-input" id="providerName" placeholder="My OpenRouter">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">API Key</label>
+                    <input type="password" class="form-input" id="providerApiKey" placeholder="sk-...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Base URL (Optional)</label>
+                    <input type="text" class="form-input" id="providerBaseUrl" placeholder="https://api.example.com/v1">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Default Model</label>
+                    <input type="text" class="form-input" id="providerDefaultModel" placeholder="gpt-4o">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Priority (1-100)</label>
+                    <input type="number" class="form-input" id="providerPriority" value="50" min="1" max="100">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProvider()">Save Provider</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Provider Data
+        const providers = [
+            { id: 'openrouter', name: 'OpenRouter', icon: '🔀', type: 'cloud', status: 'active', models: ['claude-3.5-sonnet', 'gpt-4o', 'gemini-pro'], requests: '234K', tokens: '156K', cost: '$12.40', priority: 90 },
+            { id: 'openai', name: 'OpenAI', icon: '🟢', type: 'cloud', status: 'active', models: ['gpt-4o', 'gpt-4-turbo', 'gpt-3.5-turbo'], requests: '189K', tokens: '234K', cost: '$18.90', priority: 85 },
+            { id: 'anthropic', name: 'Anthropic', icon: '🟣', type: 'cloud', status: 'active', models: ['claude-3.5-sonnet', 'claude-3-opus'], requests: '145K', tokens: '189K', cost: '$15.60', priority: 80 },
+            { id: 'google', name: 'Google AI', icon: '🔵', type: 'cloud', status: 'active', models: ['gemini-1.5-pro', 'gemini-1.5-flash'], requests: '98K', tokens: '87K', cost: '$4.20', priority: 70 },
+            { id: 'mistral', name: 'Mistral AI', icon: '🌀', type: 'cloud', status: 'inactive', models: ['mistral-large', 'mistral-medium'], requests: '0', tokens: '0', cost: '$0', priority: 60 },
+            { id: 'groq', name: 'Groq', icon: '⚡', type: 'cloud', status: 'active', models: ['llama-3.1-70b', 'mixtral-8x7b'], requests: '67K', tokens: '45K', cost: '$0.80', priority: 75 },
+            { id: 'deepseek', name: 'DeepSeek', icon: '🌊', type: 'cloud', status: 'active', models: ['deepseek-chat', 'deepseek-coder'], requests: '45K', tokens: '67K', cost: '$1.20', priority: 65 },
+            { id: 'ollama', name: 'Ollama (Local)', icon: '🦙', type: 'local', status: 'active', models: ['llama3.2:3b', 'gemma2:9b', 'deepseek-r1:67b'], requests: '12K', tokens: '89K', cost: '$0', priority: 50 },
+            { id: 'cohere', name: 'Cohere', icon: '🔷', type: 'cloud', status: 'inactive', models: ['command-r-plus', 'command-r'], requests: '0', tokens: '0', cost: '$0', priority: 55 },
+            { id: 'together', name: 'Together AI', icon: '🤝', type: 'cloud', status: 'inactive', models: ['llama-3-70b', 'mistral-7b'], requests: '0', tokens: '0', cost: '$0', priority: 45 },
+            { id: 'replicate', name: 'Replicate', icon: '🔄', type: 'cloud', status: 'inactive', models: ['llama-3-70b', 'mixtral'], requests: '0', tokens: '0', cost: '$0', priority: 40 },
+            { id: 'vllm', name: 'vLLM (Local)', icon: '🚀', type: 'local', status: 'inactive', models: ['custom'], requests: '0', tokens: '0', cost: '$0', priority: 35 },
+        ];
+        
+        let currentFilter = 'all';
+        
+        // Render Providers
+        function renderProviders() {
+            const grid = document.getElementById('providersGrid');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = providers.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(searchTerm) || 
+                                     p.models.some(m => m.toLowerCase().includes(searchTerm));
+                const matchesFilter = currentFilter === 'all' ||
+                                     (currentFilter === 'active' && p.status === 'active') ||
+                                     (currentFilter === 'cloud' && p.type === 'cloud') ||
+                                     (currentFilter === 'local' && p.type === 'local') ||
+                                     (currentFilter === 'free' && p.cost === '$0');
+                return matchesSearch && matchesFilter;
+            });
+            
+            grid.innerHTML = filtered.map(p => `
+                <div class="provider-card ${p.status === 'active' ? 'active' : ''}">
+                    <div class="provider-header">
+                        <div class="provider-icon">${p.icon}</div>
+                        <div class="provider-info">
+                            <div class="provider-name">${p.name}</div>
+                            <div class="provider-type">${p.type}</div>
+                        </div>
+                        <span class="provider-status ${p.status}">${p.status}</span>
+                    </div>
+                    <div class="provider-body">
+                        <div class="provider-models">
+                            ${p.models.slice(0, 3).map(m => `<span class="model-tag">${m}</span>`).join('')}
+                            ${p.models.length > 3 ? `<span class="model-tag">+${p.models.length - 3}</span>` : ''}
+                        </div>
+                        <div class="provider-meta">
+                            <div class="meta-item">
+                                <div class="meta-label">Requests</div>
+                                <div class="meta-value">${p.requests}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Tokens</div>
+                                <div class="meta-value">${p.tokens}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Cost</div>
+                                <div class="meta-value">${p.cost}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Priority</div>
+                                <div class="meta-value">${p.priority}</div>
+                            </div>
+                        </div>
+                        <div class="provider-actions">
+                            <button class="provider-btn" onclick="testProvider('${p.id}')">Test</button>
+                            <button class="provider-btn" onclick="editProvider('${p.id}')">Edit</button>
+                            <button class="provider-btn ${p.status === 'active' ? '' : 'primary'}" onclick="toggleProvider('${p.id}')">
+                                ${p.status === 'active' ? 'Disable' : 'Enable'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update stats
+            const active = providers.filter(p => p.status === 'active').length;
+            document.getElementById('activeCount').textContent = active;
+        }
+        
+        // Filter Functions
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+            renderProviders();
+        }
+        
+        function filterProviders() {
+            renderProviders();
+        }
+        
+        // Modal Functions
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Add Provider';
+            document.getElementById('providerModal').classList.add('visible');
+        }
+        
+        function editProvider(id) {
+            const provider = providers.find(p => p.id === id);
+            if (provider) {
+                document.getElementById('modalTitle').textContent = 'Edit Provider';
+                document.getElementById('providerModal').classList.add('visible');
+                // Populate form...
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('providerModal').classList.remove('visible');
+        }
+        
+        // Provider Actions
+        async function toggleProvider(id) {
+            const provider = providers.find(p => p.id === id);
+            if (provider) {
+                provider.status = provider.status === 'active' ? 'inactive' : 'active';
+                renderProviders();
+                showToast(`Provider ${provider.name} ${provider.status}`, 'success');
+            }
+        }
+        
+        async function testProvider(id) {
+            showToast(`Testing ${id}...`, 'success');
+            // Simulate test
+            setTimeout(() => {
+                showToast(`${id} test successful!`, 'success');
+            }, 1500);
+        }
+        
+        async function testAllProviders() {
+            showToast('Testing all active providers...', 'success');
+        }
+        
+        async function saveProvider() {
+            const type = document.getElementById('providerType').value;
+            const name = document.getElementById('providerName').value;
+            const apiKey = document.getElementById('providerApiKey').value;
+            
+            if (!name) {
+                showToast('Please enter a name', 'error');
+                return;
+            }
+            
+            showToast('Provider saved successfully!', 'success');
+            closeModal();
+            renderProviders();
+        }
+        
+        // Toast
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProviders();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTIENT OS | Agents</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        :root {
+            --bg-canvas: #0F0F0F;
+            --bg-primary: #1A1D21;
+            --bg-secondary: #1E2227;
+            --bg-tertiary: #252A30;
+            --bg-hover: #2A2F36;
+            --text-primary: #E8E9EB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --border-subtle: #2A2F36;
+            --border-default: #374151;
+            --accent-green: #4B7C59;
+            --accent-green-muted: rgba(75, 124, 89, 0.15);
+            --accent-orange: #B86D28;
+            --accent-blue: #4A6B8A;
+            --accent-red: #8B4B4B;
+            --accent-purple: #6B5B95;
+            --accent-cyan: #4A8B8B;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-canvas);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .page-container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .page-title { font-size: 28px; font-weight: 700; }
+        .page-subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+        
+        .header-actions { display: flex; gap: 12px; }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary { background: var(--accent-green); color: white; }
+        .btn-primary:hover { background: #3D6A4A; }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .btn-danger { background: var(--accent-red); color: white; }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Agent Grid */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+        
+        .agent-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .agent-card:hover { border-color: var(--border-default); }
+        .agent-card.running { border-color: var(--accent-green); }
+        .agent-card.paused { border-color: var(--accent-orange); }
+        
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .agent-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .agent-info { flex: 1; }
+        
+        .agent-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .agent-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .agent-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .agent-status.running { background: var(--accent-green-muted); color: var(--accent-green); }
+        .agent-status.paused { background: rgba(184, 109, 40, 0.2); color: var(--accent-orange); }
+        .agent-status.idle { background: var(--bg-tertiary); color: var(--text-muted); }
+        
+        .agent-body { padding: 16px; }
+        
+        .agent-task {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .task-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 4px;
+        }
+        
+        .task-text {
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+        
+        .agent-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .metric-item {
+            text-align: center;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+        }
+        
+        .metric-value {
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+        
+        .metric-label {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-green);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .agent-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .tool-tag {
+            padding: 3px 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .agent-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .agent-btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+        
+        .agent-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .agent-btn.primary { background: var(--accent-green); border-color: var(--accent-green); color: white; }
+        .agent-btn.danger { color: var(--accent-red); }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.visible { display: flex; }
+        
+        .modal {
+            width: 90%;
+            max-width: 640px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .modal-title { font-size: 18px; font-weight: 600; }
+        .modal-close {
+            width: 32px; height: 32px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 20px;
+        }
+        
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .form-group { margin-bottom: 16px; }
+        
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-green);
+        }
+        
+        .form-textarea { min-height: 100px; resize: vertical; }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .checkbox-item:hover { background: var(--bg-hover); }
+        .checkbox-item.checked { border-color: var(--accent-green); background: var(--accent-green-muted); }
+        
+        .checkbox-item input { display: none; }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+        }
+        
+        /* Agent Templates */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .template-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .template-card:hover { border-color: var(--border-default); }
+        .template-card.selected { border-color: var(--accent-green); background: var(--accent-green-muted); }
+        
+        .template-icon { font-size: 24px; margin-bottom: 8px; }
+        .template-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .template-desc { font-size: 11px; color: var(--text-muted); }
+        
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+        
+        .toast {
+            padding: 14px 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .toast.success { border-left: 3px solid var(--accent-green); }
+        .toast.error { border-left: 3px solid var(--accent-red); }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Agents</h1>
+                <p class="page-subtitle">Create and manage autonomous AI agents</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="pauseAllAgents()">
+                    <span>⏸️</span> Pause All
+                </button>
+                <button class="btn btn-primary" onclick="openSpawnModal()">
+                    <span>+</span> Spawn Agent
+                </button>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Active Agents</div>
+                <div class="stat-value" id="activeAgents">4</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Tasks Completed</div>
+                <div class="stat-value">247</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Tokens Used</div>
+                <div class="stat-value">1.2M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Duration</div>
+                <div class="stat-value">4.2m</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Success Rate</div>
+                <div class="stat-value">94%</div>
+            </div>
+        </div>
+        
+        <!-- Agents Grid -->
+        <div class="agents-grid" id="agentsGrid">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+    
+    <!-- Spawn Agent Modal -->
+    <div class="modal-overlay" id="spawnModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Spawn New Agent</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Step 1: Template Selection -->
+                <div id="step1">
+                    <h4 style="margin-bottom: 16px; font-size: 14px; color: var(--text-secondary);">Choose a template or create custom</h4>
+                    <div class="templates-grid">
+                        <div class="template-card selected" data-template="researcher" onclick="selectTemplate(this)">
+                            <div class="template-icon">🔬</div>
+                            <div class="template-name">Researcher</div>
+                            <div class="template-desc">Searches, analyzes, and summarizes information</div>
+                        </div>
+                        <div class="template-card" data-template="coder" onclick="selectTemplate(this)">
+                            <div class="template-icon">👨‍💻</div>
+                            <div class="template-name">Coder</div>
+                            <div class="template-desc">Writes, reviews, and debugs code</div>
+                        </div>
+                        <div class="template-card" data-template="analyst" onclick="selectTemplate(this)">
+                            <div class="template-icon">📊</div>
+                            <div class="template-name">Data Analyst</div>
+                            <div class="template-desc">Processes and visualizes data</div>
+                        </div>
+                        <div class="template-card" data-template="writer" onclick="selectTemplate(this)">
+                            <div class="template-icon">✍️</div>
+                            <div class="template-name">Writer</div>
+                            <div class="template-desc">Creates content and documentation</div>
+                        </div>
+                        <div class="template-card" data-template="browser" onclick="selectTemplate(this)">
+                            <div class="template-icon">🌐</div>
+                            <div class="template-name">Browser Agent</div>
+                            <div class="template-desc">Navigates and interacts with websites</div>
+                        </div>
+                        <div class="template-card" data-template="custom" onclick="selectTemplate(this)">
+                            <div class="template-icon">⚡</div>
+                            <div class="template-name">Custom</div>
+                            <div class="template-desc">Configure everything yourself</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Configuration -->
+                <div id="step2" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Agent Name</label>
+                            <input type="text" class="form-input" id="agentName" placeholder="Agent Alpha">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">LLM Provider</label>
+                            <select class="form-select" id="agentProvider">
+                                <option value="openrouter">OpenRouter</option>
+                                <option value="openai">OpenAI</option>
+                                <option value="anthropic">Anthropic</option>
+                                <option value="ollama">Ollama (Local)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Model</label>
+                        <select class="form-select" id="agentModel">
+                            <option value="claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="llama-3.1-70b">Llama 3.1 70B</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">System Prompt</label>
+                        <textarea class="form-textarea" id="agentPrompt" placeholder="You are a helpful AI assistant that..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Initial Task</label>
+                        <textarea class="form-textarea" id="agentTask" placeholder="What should this agent do first?"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Temperature</label>
+                            <input type="number" class="form-input" id="agentTemp" value="0.7" min="0" max="2" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Max Tokens</label>
+                            <input type="number" class="form-input" id="agentMaxTokens" value="4096">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tools & Skills</label>
+                        <div class="checkbox-group" id="toolsGroup">
+                            <label class="checkbox-item checked">
+                                <input type="checkbox" checked> Web Search
+                            </label>
+                            <label class="checkbox-item checked">
+                                <input type="checkbox" checked> File Operations
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Code Execution
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Browser Control
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Email Access
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Database Access
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-secondary" id="backBtn" onclick="goToStep1()" style="display: none;">← Back</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="goToStep2()">Next →</button>
+                <button class="btn btn-primary" id="spawnBtn" onclick="spawnAgent()" style="display: none;">🚀 Spawn Agent</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Agent Data
+        let agents = [
+            { id: 'alpha', name: 'Alpha', icon: '🧠', role: 'Research Agent', status: 'running', task: 'Analyzing competitor pricing strategies', progress: 67, tokens: '124K', duration: '8m', actions: 45, tools: ['search', 'files', 'browser'] },
+            { id: 'beta', name: 'Beta', icon: '👨‍💻', role: 'Code Agent', status: 'running', task: 'Implementing REST API endpoints', progress: 45, tokens: '89K', duration: '12m', actions: 32, tools: ['code', 'files', 'database'] },
+            { id: 'gamma', name: 'Gamma', icon: '📊', role: 'Data Agent', status: 'paused', task: 'Processing sales dataset', progress: 23, tokens: '45K', duration: '5m', actions: 18, tools: ['files', 'database', 'code'] },
+            { id: 'delta', name: 'Delta', icon: '✍️', role: 'Writer Agent', status: 'running', task: 'Drafting documentation', progress: 89, tokens: '67K', duration: '15m', actions: 28, tools: ['files', 'search'] },
+        ];
+        
+        let selectedTemplate = 'researcher';
+        
+        function renderAgents() {
+            const grid = document.getElementById('agentsGrid');
+            grid.innerHTML = agents.map(a => `
+                <div class="agent-card ${a.status}">
+                    <div class="agent-header">
+                        <div class="agent-avatar">${a.icon}</div>
+                        <div class="agent-info">
+                            <div class="agent-name">${a.name}</div>
+                            <div class="agent-role">${a.role}</div>
+                        </div>
+                        <span class="agent-status ${a.status}">${a.status}</span>
+                    </div>
+                    <div class="agent-body">
+                        <div class="agent-task">
+                            <div class="task-label">Current Task</div>
+                            <div class="task-text">${a.task}</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${a.progress}%"></div>
+                        </div>
+                        <div class="agent-metrics">
+                            <div class="metric-item">
+                                <div class="metric-value">${a.progress}%</div>
+                                <div class="metric-label">Progress</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">${a.tokens}</div>
+                                <div class="metric-label">Tokens</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">${a.duration}</div>
+                                <div class="metric-label">Duration</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">${a.actions}</div>
+                                <div class="metric-label">Actions</div>
+                            </div>
+                        </div>
+                        <div class="agent-tools">
+                            ${a.tools.map(t => `<span class="tool-tag">${t}</span>`).join('')}
+                        </div>
+                        <div class="agent-actions">
+                            <button class="agent-btn" onclick="viewAgent('${a.id}')">View</button>
+                            <button class="agent-btn primary" onclick="toggleAgent('${a.id}')">${a.status === 'running' ? 'Pause' : 'Resume'}</button>
+                            <button class="agent-btn danger" onclick="killAgent('${a.id}')">Kill</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update stats
+            const running = agents.filter(a => a.status === 'running').length;
+            document.getElementById('activeAgents').textContent = running;
+        }
+        
+        function selectTemplate(el) {
+            document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedTemplate = el.dataset.template;
+        }
+        
+        function goToStep2() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            document.getElementById('backBtn').style.display = 'inline-flex';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('spawnBtn').style.display = 'inline-flex';
+            
+            // Pre-fill based on template
+            const templates = {
+                researcher: { name: 'Researcher', prompt: 'You are a research agent that searches, analyzes, and summarizes information from various sources.' },
+                coder: { name: 'Coder', prompt: 'You are a code agent that writes, reviews, and debugs code. Follow best practices and write clean, maintainable code.' },
+                analyst: { name: 'Analyst', prompt: 'You are a data analyst agent that processes, analyzes, and visualizes data to extract insights.' },
+                writer: { name: 'Writer', prompt: 'You are a writing agent that creates high-quality content, documentation, and copy.' },
+                browser: { name: 'Browser', prompt: 'You are a browser agent that navigates websites and performs tasks on behalf of the user.' },
+                custom: { name: 'Custom Agent', prompt: '' }
+            };
+            
+            const t = templates[selectedTemplate];
+            document.getElementById('agentName').value = t.name + ' ' + (agents.length + 1);
+            document.getElementById('agentPrompt').value = t.prompt;
+        }
+        
+        function goToStep1() {
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'inline-flex';
+            document.getElementById('spawnBtn').style.display = 'none';
+        }
+        
+        function openSpawnModal() {
+            goToStep1();
+            document.getElementById('spawnModal').classList.add('visible');
+        }
+        
+        function closeModal() {
+            document.getElementById('spawnModal').classList.remove('visible');
+        }
+        
+        function spawnAgent() {
+            const name = document.getElementById('agentName').value || 'Agent ' + (agents.length + 1);
+            const icons = ['🤖', '🧠', '🔬', '⚡', '🌟', '🚀'];
+            
+            const newAgent = {
+                id: 'agent-' + Date.now(),
+                name: name,
+                icon: icons[Math.floor(Math.random() * icons.length)],
+                role: selectedTemplate.charAt(0).toUpperCase() + selectedTemplate.slice(1) + ' Agent',
+                status: 'running',
+                task: document.getElementById('agentTask').value || 'Awaiting instructions...',
+                progress: 0,
+                tokens: '0',
+                duration: '0m',
+                actions: 0,
+                tools: ['search', 'files']
+            };
+            
+            agents.push(newAgent);
+            renderAgents();
+            closeModal();
+            showToast(`Agent "${name}" spawned successfully!`, 'success');
+        }
+        
+        function viewAgent(id) {
+            showToast(`Opening agent ${id} details...`, 'success');
+        }
+        
+        function toggleAgent(id) {
+            const agent = agents.find(a => a.id === id);
+            if (agent) {
+                agent.status = agent.status === 'running' ? 'paused' : 'running';
+                renderAgents();
+                showToast(`Agent ${agent.name} ${agent.status}`, 'success');
+            }
+        }
+        
+        function killAgent(id) {
+            agents = agents.filter(a => a.id !== id);
+            renderAgents();
+            showToast('Agent terminated', 'success');
+        }
+        
+        function pauseAllAgents() {
+            agents.forEach(a => a.status = 'paused');
+            renderAgents();
+            showToast('All agents paused', 'success');
+        }
+        
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Tool checkbox toggle
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('checked');
+                item.querySelector('input').checked = !item.querySelector('input').checked;
+            });
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAgents();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

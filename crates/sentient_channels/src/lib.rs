@@ -32,6 +32,7 @@ pub mod chime;
 pub mod zoom;
 pub mod webex;
 pub mod mattermost;
+pub mod voice_handler;
 
 use async_trait::async_trait;
 use std::sync::Arc;

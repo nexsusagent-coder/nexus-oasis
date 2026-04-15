@@ -24,6 +24,11 @@ sentient_gateway = { path = "../sentient_gateway" }
 sentient_memory = { path = "../sentient_memory" }
 sentient_guardrails = { path = "../sentient_guardrails" }
 sentient_sandbox = { path = "../sentient_sandbox" }
+sentient-setup = { path = "../sentient_setup" }
+sentient_digest = { path = "../sentient_digest" }
+sentient_voice = { path = "../sentient_voice" }
+
+reqwest = { version = "0.12", features = ["json"] }
 
 tokio.workspace = true
 serde.workspace = true

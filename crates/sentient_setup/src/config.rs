@@ -9,7 +9,18 @@ use anyhow::Result;
 /// Ana yapılandırma
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SetupConfig {
+    /// Asistan ismi (kullanıcı seçer, örn: "Jarvis", "Ayşe", "Atlas")
+    #[serde(default = "default_assistant_name")]
+    pub assistant_name: String,
+    /// Asistan kişilik tarzı (friendly, professional, technical, casual)
+    #[serde(default = "default_personality")]
+    pub personality: String,
+    /// Asistan dili (tr, en, de, fr, es, ja, zh, ru)
+    #[serde(default = "default_language")]
     pub language: String,
+    /// Wake word özelleştirme (true = "Hey {assistant_name}" ile uyandır)
+    #[serde(default)]
+    pub voice_enabled: bool,
     pub config_path: String,
     pub llm: LlmConfig,
     pub api_keys: ApiKeyConfig,
@@ -25,10 +36,17 @@ pub struct SetupConfig {
     pub routing_mode: RoutingModeConfig,
 }
 
+fn default_assistant_name() -> String { "SENTIENT".to_string() }
+fn default_personality() -> String { "professional".to_string() }
+fn default_language() -> String { "tr".to_string() }
+
 impl Default for SetupConfig {
     fn default() -> Self {
         Self {
-            language: "tr".to_string(),
+            assistant_name: default_assistant_name(),
+            personality: default_personality(),
+            language: default_language(),
+            voice_enabled: false,
             config_path: dirs::config_dir()
                 .unwrap_or_else(|| PathBuf::from(".sentient"))
                 .join("config.toml")
@@ -74,10 +92,18 @@ impl SetupConfig {
         let mut env_content = String::new();
         
         env_content.push_str("# ═══════════════════════════════════════════════════════════════════\n");
-        env_content.push_str("#  SENTIENT NEXUS OS v1.1.0 - Universal Omni-Gateway\n");
+        env_content.push_str("#  SENTIENT OS - Personal AI\n");
         env_content.push_str("# ═══════════════════════════════════════════════════════════════════\n");
         env_content.push_str("#  ⚠️  Bu dosyayı ASLA public yapmayın! .gitignore'a ekleyin!\n");
         env_content.push_str("# ═══════════════════════════════════════════════════════════════════\n\n");
+        
+        // Asistan Kimliği
+        env_content.push_str("# ═══ ASSISTANT IDENTITY ═══\n");
+        env_content.push_str(&format!("ASSISTANT_NAME={}\n", self.assistant_name));
+        env_content.push_str(&format!("ASSISTANT_PERSONALITY={}\n", self.personality));
+        env_content.push_str(&format!("ASSISTANT_LANGUAGE={}\n", self.language));
+        env_content.push_str(&format!("VOICE_ENABLED={}\n", self.voice_enabled));
+        env_content.push_str("\n");
         
         // LLM API Keys
         env_content.push_str("# ═══ LLM PROVIDERS ═══\n");

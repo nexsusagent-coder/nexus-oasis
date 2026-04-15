@@ -2,43 +2,27 @@
 name = "sentient_research"
 version.workspace = true
 edition.workspace = true
-authors.workspace = true
-license.workspace = true
-description = "L5: RESEARCH - MindSearch & AutoResearch Asimilasyonu (PyO3 Native Bridge)"
+description = "Deep Research Agent for SENTIENT - comprehensive research and analysis"
 
 [dependencies]
-# Workspace
 sentient_common = { path = "../sentient_common" }
-sentient_vgate = { path = "../sentient_vgate" }
-sentient_guardrails = { path = "../sentient_guardrails" }
-sentient_memory = { path = "../sentient_memory" }
+sentient_core = { path = "../sentient_core" }
+sentient_connectors = { path = "../sentient_connectors" }
 
-# Async & Concurrency
 tokio = { workspace = true }
-async-trait = { workspace = true }
-futures = { workspace = true }
-
-# Serialization
 serde = { workspace = true }
 serde_json = { workspace = true }
-
-# PyO3 Bridge (Python Native Modules)
-pyo3 = { workspace = true }
-
-# HTTP Client
-reqwest = { workspace = true }
-
-# Logging
+async-trait = "0.1"
+anyhow = "1"
 log = { workspace = true }
-tracing = { workspace = true }
-
-# Utils
-uuid = { workspace = true }
 chrono = { workspace = true }
-thiserror = { workspace = true }
+uuid = { workspace = true }
+reqwest = { version = "0.12", features = ["json"] }
 url = "2"
+scraper = "0.19"
 regex = { workspace = true }
-urlencoding = "2"
+base64 = "0.22"
+urlencoding = "2.1"
 
 [dev-dependencies]
 tokio-test = "0.4"

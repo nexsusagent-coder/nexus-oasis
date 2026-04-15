@@ -77,7 +77,7 @@ pub struct AgentConfig {
 impl Default for AgentConfig {
     fn default() -> Self {
         Self {
-            model: "qwen/qwen3-1.7b:free".into(),
+            model: "google/gemma-3-27b-it".into(), // Ücretsiz, mevcut model
             vgate_url: "http://127.0.0.1:1071".into(),
             max_iterations: 50,
             timeout_secs: 300,
@@ -111,12 +111,21 @@ impl Agent {
         use crate::tools::*;
         
         toolbox.register(LlmQueryTool);
+        toolbox.register(LlmReasonTool);
         toolbox.register(WebSearchTool);
         toolbox.register(BrowserNavigateTool);
+        toolbox.register(BrowserClickTool);
+        toolbox.register(BrowserTypeTool);
+        toolbox.register(BrowserExtractTool);
         toolbox.register(SandboxExecuteTool);
+        toolbox.register(SandboxInstallTool);
+        toolbox.register(SandboxTestTool);
         toolbox.register(MemoryStoreTool);
         toolbox.register(MemoryRecallTool);
+        toolbox.register(MemorySearchTool);
         toolbox.register(CalculatorTool);
+        toolbox.register(FileReadTool);
+        toolbox.register(FileWriteTool);
     }
     
     /// ─── ANA DÖNGÜ ───

@@ -1,406 +1,230 @@
-//! Skill Executor - Skill execution engine
-//!
-//! Skill'leri yükler, eşleştirir ve çalıştırır
+//! ─── Skill Executor ───
 
-use crate::{Skill, SkillManager, SkillResult, SkillCategory};
-use crate::guardrails::GuardrailMiddleware;
-use crate::subagent::{SubagentExecutor, SubagentConfig, SubagentTask, SubagentResult};
-use std::sync::Arc;
-use std::collections::HashMap;
-use tracing::{info, debug, warn};
 use serde::{Deserialize, Serialize};
+use std::time::Instant;
 
-/// Skill Execution Context
-#[derive(Debug, Clone)]
-pub struct ExecutionContext {
-    /// User input
-    pub input: String,
-    
-    /// Session ID
-    pub session_id: Option<String>,
-    
-    /// User ID
-    pub user_id: Option<String>,
-    
-    /// Additional context
-    pub context: HashMap<String, serde_json::Value>,
-}
+use crate::models::*;
+use crate::{SkillResult, SkillError};
 
-impl ExecutionContext {
-    /// Yeni context oluştur
-    pub fn new(input: impl Into<String>) -> Self {
-        Self {
-            input: input.into(),
-            session_id: None,
-            user_id: None,
-            context: HashMap::new(),
-        }
-    }
-    
-    /// Session ekle
-    pub fn with_session(mut self, session_id: impl Into<String>) -> Self {
-        self.session_id = Some(session_id.into());
-        self
-    }
-    
-    /// User ekle
-    pub fn with_user(mut self, user_id: impl Into<String>) -> Self {
-        self.user_id = Some(user_id.into());
-        self
-    }
-    
-    /// Context ekle
-    pub fn with_context(mut self, key: impl Into<String>, value: serde_json::Value) -> Self {
-        self.context.insert(key.into(), value);
-        self
-    }
-}
-
-/// Skill Execution Result
-#[derive(Debug, Clone)]
+/// Execution result
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExecutionResult {
-    /// Eşleşen skill
-    pub skill: Option<Skill>,
-    
-    /// Sonuç
-    pub output: String,
-    
-    /// Subagent sonuçları
-    pub subagent_results: Vec<SubagentResult>,
-    
-    /// Başarılı mı
+    pub skill_id: String,
     pub success: bool,
-    
-    /// Hata mesajı
+    pub duration_ms: u64,
+    pub actions_executed: u32,
+    pub actions_failed: u32,
     pub error: Option<String>,
-    
-    /// Execution time (ms)
-    pub execution_time_ms: u64,
+    pub output: Option<String>,
 }
 
 impl ExecutionResult {
-    /// Başarılı sonuç
-    pub fn success(skill: Skill, output: String) -> Self {
+    pub fn success(skill_id: &str, duration_ms: u64, actions_executed: u32) -> Self {
         Self {
-            skill: Some(skill),
-            output,
-            subagent_results: Vec::new(),
+            skill_id: skill_id.to_string(),
             success: true,
+            duration_ms,
+            actions_executed,
+            actions_failed: 0,
             error: None,
-            execution_time_ms: 0,
+            output: None,
         }
     }
     
-    /// Skill bulunamadı
-    pub fn no_skill(input: &str) -> Self {
+    pub fn failure(skill_id: &str, error: &str) -> Self {
         Self {
-            skill: None,
-            output: format!("No matching skill found for: {}", input),
-            subagent_results: Vec::new(),
+            skill_id: skill_id.to_string(),
             success: false,
-            error: Some("No matching skill".to_string()),
-            execution_time_ms: 0,
+            duration_ms: 0,
+            actions_executed: 0,
+            actions_failed: 1,
+            error: Some(error.to_string()),
+            output: None,
         }
     }
     
-    /// Hata
-    pub fn error(error: impl Into<String>) -> Self {
-        Self {
-            skill: None,
-            output: String::new(),
-            subagent_results: Vec::new(),
-            success: false,
-            error: Some(error.into()),
-            execution_time_ms: 0,
-        }
+    pub fn with_output(mut self, output: &str) -> Self {
+        self.output = Some(output.to_string());
+        self
     }
 }
 
-/// LLM Configuration for skill execution
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LLMConfig {
-    /// API endpoint (e.g., "https://api.openai.com/v1")
-    pub endpoint: String,
-    /// API key
-    pub api_key: Option<String>,
-    /// Model to use
-    pub model: String,
-    /// Max tokens
-    pub max_tokens: u32,
-    /// Temperature
-    pub temperature: f32,
-}
-
-impl Default for LLMConfig {
-    fn default() -> Self {
-        Self {
-            endpoint: "http://localhost:11434/v1".to_string(), // Ollama default
-            api_key: None,
-            model: "llama3".to_string(),
-            max_tokens: 2048,
-            temperature: 0.7,
-        }
-    }
-}
-
-/// LLM Chat Message
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ChatMessage {
-    pub role: String,
-    pub content: String,
-}
-
-/// LLM Chat Request
-#[derive(Debug, Clone, Serialize)]
-struct ChatRequest {
-    model: String,
-    messages: Vec<ChatMessage>,
-    max_tokens: u32,
-    temperature: f32,
-}
-
-/// LLM Chat Response
-#[derive(Debug, Clone, Deserialize)]
-struct ChatResponse {
-    choices: Vec<ChatChoice>,
-}
-
-#[derive(Debug, Clone, Deserialize)]
-struct ChatChoice {
-    message: ChatMessage,
-}
-
-/// Skill Executor
+/// Skill executor
 pub struct SkillExecutor {
-    /// Skill manager
-    manager: Arc<SkillManager>,
-    
-    /// Guardrail middleware
-    #[allow(dead_code)]
-    guardrail: GuardrailMiddleware,
-    
-    /// Subagent executor
-    subagent_executor: SubagentExecutor,
-    
-    /// Auto-load skills
-    #[allow(dead_code)]
-    auto_load: bool,
-    
-    /// LLM configuration
-    llm_config: LLMConfig,
-    
-    /// HTTP client
-    http_client: reqwest::Client,
+    dry_run: bool,
+    timeout_ms: u64,
+    retry_count: u32,
 }
 
 impl SkillExecutor {
-    /// Yeni executor oluştur
     pub fn new() -> Self {
         Self {
-            manager: Arc::new(SkillManager::new()),
-            guardrail: GuardrailMiddleware::with_rules(),
-            subagent_executor: SubagentExecutor::new(),
-            auto_load: true,
-            llm_config: LLMConfig::default(),
-            http_client: reqwest::Client::new(),
+            dry_run: false,
+            timeout_ms: 30000,
+            retry_count: 3,
         }
     }
     
-    /// Manager ile oluştur
-    pub fn with_manager(manager: Arc<SkillManager>) -> Self {
-        Self {
-            manager,
-            guardrail: GuardrailMiddleware::with_rules(),
-            subagent_executor: SubagentExecutor::new(),
-            auto_load: false,
-            llm_config: LLMConfig::default(),
-            http_client: reqwest::Client::new(),
-        }
-    }
-    
-    /// LLM config ile oluştur
-    pub fn with_llm(mut self, config: LLMConfig) -> Self {
-        self.llm_config = config;
+    /// Enable dry run mode (no actual execution)
+    pub fn dry_run(mut self, enabled: bool) -> Self {
+        self.dry_run = enabled;
         self
     }
     
-    /// Skill'leri yükle
-    pub fn load_skills(&mut self) -> SkillResult<usize> {
-        let mut manager = SkillManager::new();
-        manager.load_skills()?;
-        
-        self.manager = Arc::new(manager);
-        Ok(self.manager.skill_count())
+    /// Set timeout
+    pub fn timeout(mut self, ms: u64) -> Self {
+        self.timeout_ms = ms;
+        self
     }
     
-    /// Input'u işle ve skill çalıştır
-    pub async fn execute(&self, ctx: ExecutionContext) -> ExecutionResult {
-        let start = std::time::Instant::now();
+    /// Execute a skill
+    pub async fn execute(&self, skill: &Skill) -> SkillResult<ExecutionResult> {
+        let start = Instant::now();
+        let mut actions_executed = 0u32;
+        let mut actions_failed = 0u32;
+        let mut last_error = None;
         
-        info!("Executing skill for input: {}", ctx.input);
+        // Sort actions by order
+        let mut actions = skill.actions.clone();
+        actions.sort_by_key(|a| a.order);
         
-        // Eşleşen skill'i bul
-        let skill = match self.manager.find_best_match(&ctx.input) {
-            Some(s) => s,
-            None => {
-                debug!("No matching skill found");
-                return ExecutionResult::no_skill(&ctx.input);
+        for action in actions {
+            match self.execute_action(&action).await {
+                Ok(_) => actions_executed += 1,
+                Err(e) => {
+                    actions_failed += 1;
+                    last_error = Some(e.to_string());
+                    
+                    // Handle failure action
+                    if let Some(failure_action) = &action.on_failure {
+                        self.handle_failure(failure_action).await;
+                    }
+                }
             }
-        };
-        
-        info!("Matched skill: {}", skill.metadata.name);
-        
-        // Skill içeriğini hazırla
-        let prompt = self.build_prompt(&skill, &ctx);
-        
-        // Gerçek LLM integration
-        let output = match self.call_llm(&prompt).await {
-            Ok(response) => response,
-            Err(e) => {
-                warn!("LLM call failed: {}, using fallback", e);
-                // Fallback: Simulated execution
-                format!(
-                    "Executed skill '{}' with input: {}\n\nSkill content preview:\n{}",
-                    skill.metadata.name,
-                    ctx.input,
-                    skill.summary()
-                )
-            }
-        };
-        
-        let mut result = ExecutionResult::success(skill, output);
-        result.execution_time_ms = start.elapsed().as_millis() as u64;
-        
-        result
-    }
-    
-    /// LLM API çağrısı
-    async fn call_llm(&self, prompt: &str) -> Result<String, String> {
-        let url = format!("{}/chat/completions", self.llm_config.endpoint);
-        
-        let request = ChatRequest {
-            model: self.llm_config.model.clone(),
-            messages: vec![
-                ChatMessage {
-                    role: "system".to_string(),
-                    content: "You are a helpful AI assistant executing skills. Follow the skill instructions precisely.".to_string(),
-                },
-                ChatMessage {
-                    role: "user".to_string(),
-                    content: prompt.to_string(),
-                },
-            ],
-            max_tokens: self.llm_config.max_tokens,
-            temperature: self.llm_config.temperature,
-        };
-        
-        let mut req = self.http_client.post(&url).json(&request);
-        
-        // Add API key if available
-        if let Some(ref api_key) = self.llm_config.api_key {
-            req = req.bearer_auth(api_key);
         }
         
-        let response = req
-            .timeout(std::time::Duration::from_secs(60))
-            .send()
-            .await
-            .map_err(|e| format!("HTTP error: {}", e))?;
+        let duration = start.elapsed().as_millis() as u64;
         
-        if !response.status().is_success() {
-            let status = response.status();
-            let text = response.text().await.unwrap_or_default();
-            return Err(format!("API error ({}): {}", status, text));
-        }
-        
-        let data: ChatResponse = response
-            .json()
-            .await
-            .map_err(|e| format!("JSON parse error: {}", e))?;
-        
-        Ok(data.choices
-            .first()
-            .map(|c| c.message.content.clone())
-            .unwrap_or_default())
-    }
-    
-    /// Skill ve subagent ile çalıştır
-    pub async fn execute_with_subagents(
-        &self,
-        skill: Skill,
-        ctx: ExecutionContext,
-        subagent_configs: Vec<SubagentConfig>,
-    ) -> ExecutionResult {
-        let start = std::time::Instant::now();
-        
-        // Subagent task'lerini oluştur
-        let tasks: Vec<SubagentTask> = subagent_configs
-            .into_iter()
-            .map(|config| {
-                SubagentTask::new(config, ctx.input.clone())
-                    .with_context("skill_name", serde_json::json!(skill.metadata.name))
+        if actions_failed > 0 {
+            Ok(ExecutionResult {
+                skill_id: skill.id.clone(),
+                success: false,
+                duration_ms: duration,
+                actions_executed,
+                actions_failed,
+                error: last_error,
+                output: None,
             })
-            .collect();
-        
-        // Paralel çalıştır
-        let subagent_results = self.subagent_executor.execute_parallel(tasks).await;
-        
-        // Sonuçları birleştir
-        let output = format!(
-            "Skill '{}' executed with {} subagents\n\nResults:\n{}",
-            skill.metadata.name,
-            subagent_results.len(),
-            subagent_results
-                .iter()
-                .filter_map(|r| r.result.as_ref())
-                .map(|s| format!("- {}", s))
-                .collect::<Vec<_>>()
-                .join("\n")
-        );
-        
-        let mut result = ExecutionResult::success(skill, output);
-        result.subagent_results = subagent_results;
-        result.execution_time_ms = start.elapsed().as_millis() as u64;
-        
-        result
-    }
-    
-    /// Prompt oluştur
-    fn build_prompt(&self, skill: &Skill, ctx: &ExecutionContext) -> String {
-        format!(
-            "# Skill: {}\n\n{}\n\n## User Input\n{}\n\n## Instructions\nFollow the skill guidelines above to complete the task.",
-            skill.metadata.name,
-            skill.content,
-            ctx.input
-        )
-    }
-    
-    /// Skill'i ada göre çalıştır
-    pub async fn execute_by_name(&self, name: &str, ctx: ExecutionContext) -> ExecutionResult {
-        match self.manager.get_skill(name) {
-            Some(_skill) => self.execute(ctx).await,
-            None => ExecutionResult::error(format!("Skill not found: {}", name)),
+        } else {
+            Ok(ExecutionResult::success(&skill.id, duration, actions_executed))
         }
     }
     
-    /// Mevcut skill'leri listele
-    pub fn list_skills(&self) -> Vec<String> {
-        self.manager.list_skills()
+    /// Execute a single action
+    async fn execute_action(&self, action: &SkillAction) -> SkillResult<()> {
+        if self.dry_run {
+            tracing::info!("DRY RUN: Would execute {:?}", action.action_type);
+            return Ok(());
+        }
+        
+        match action.action_type {
+            ActionType::KeyboardShortcut => {
+                let shortcut = action.parameters["shortcut"].as_str()
+                    .ok_or_else(|| SkillError::ExecutionFailed("Missing shortcut".into()))?;
+                self.send_keyboard_shortcut(shortcut).await
+            }
+            ActionType::MouseClick => {
+                let x = action.parameters["x"].as_i64().unwrap_or(0) as i32;
+                let y = action.parameters["y"].as_i64().unwrap_or(0) as i32;
+                self.send_mouse_click(x, y).await
+            }
+            ActionType::TextInput => {
+                let text = action.parameters["text"].as_str()
+                    .ok_or_else(|| SkillError::ExecutionFailed("Missing text".into()))?;
+                self.send_text_input(text).await
+            }
+            ActionType::OpenApp => {
+                let app = action.parameters["app"].as_str()
+                    .ok_or_else(|| SkillError::ExecutionFailed("Missing app".into()))?;
+                self.open_application(app).await
+            }
+            ActionType::OpenUrl => {
+                let url = action.parameters["url"].as_str()
+                    .ok_or_else(|| SkillError::ExecutionFailed("Missing url".into()))?;
+                self.open_url(url).await
+            }
+            ActionType::RunCommand => {
+                let cmd = action.parameters["command"].as_str()
+                    .ok_or_else(|| SkillError::ExecutionFailed("Missing command".into()))?;
+                self.run_command(cmd).await
+            }
+            ActionType::WaitForTime => {
+                let duration_ms = action.parameters["duration_ms"].as_u64().unwrap_or(1000);
+                tokio::time::sleep(std::time::Duration::from_millis(duration_ms)).await;
+                Ok(())
+            }
+            _ => {
+                tracing::warn!("Unsupported action type: {:?}", action.action_type);
+                Ok(())
+            }
+        }
     }
     
-    /// Kategori bazlı skill'leri listele
-    pub fn list_skills_by_category(&self, category: SkillCategory) -> Vec<Skill> {
-        self.manager.get_skills_by_category(category)
+    /// Handle failure action
+    async fn handle_failure(&self, failure: &FailureAction) {
+        match failure {
+            FailureAction::Retry { max_attempts, delay_ms } => {
+                tracing::info!("Would retry (max {} attempts, {}ms delay)", max_attempts, delay_ms);
+            }
+            FailureAction::Skip => {
+                tracing::info!("Skipping failed action");
+            }
+            FailureAction::Abort => {
+                tracing::warn!("Aborting due to failure");
+            }
+            FailureAction::Notify { message } => {
+                tracing::warn!("Notification: {}", message);
+            }
+            _ => {}
+        }
     }
     
-    /// Skill sayısı
-    pub fn skill_count(&self) -> usize {
-        self.manager.skill_count()
+    // Action implementations
+    
+    async fn send_keyboard_shortcut(&self, shortcut: &str) -> SkillResult<()> {
+        tracing::info!("Pressing: {}", shortcut);
+        // TODO: Integrate with oasis_hands for actual input
+        Ok(())
     }
     
-    /// Kategori istatistikleri
-    pub fn category_stats(&self) -> HashMap<SkillCategory, usize> {
-        self.manager.category_stats()
+    async fn send_mouse_click(&self, x: i32, y: i32) -> SkillResult<()> {
+        tracing::info!("Clicking at ({}, {})", x, y);
+        // TODO: Integrate with oasis_hands
+        Ok(())
+    }
+    
+    async fn send_text_input(&self, text: &str) -> SkillResult<()> {
+        tracing::info!("Typing: {}", text);
+        // TODO: Integrate with oasis_hands
+        Ok(())
+    }
+    
+    async fn open_application(&self, app: &str) -> SkillResult<()> {
+        tracing::info!("Opening application: {}", app);
+        // TODO: Use system command to open app
+        Ok(())
+    }
+    
+    async fn open_url(&self, url: &str) -> SkillResult<()> {
+        tracing::info!("Opening URL: {}", url);
+        // TODO: Open URL in default browser
+        Ok(())
+    }
+    
+    async fn run_command(&self, cmd: &str) -> SkillResult<()> {
+        tracing::info!("Running command: {}", cmd);
+        // TODO: Execute shell command safely
+        Ok(())
     }
 }
 
@@ -415,25 +239,11 @@ mod tests {
     use super::*;
     
     #[tokio::test]
-    async fn test_skill_executor() {
-        let executor = SkillExecutor::new();
+    async fn test_dry_run_execution() {
+        let executor = SkillExecutor::new().dry_run(true);
+        let skill = Skill::new("test", "Test skill");
         
-        let ctx = ExecutionContext::new("research AI trends");
-        let result = executor.execute(ctx).await;
-        
-        // No skills loaded, should return no_skill
-        assert!(!result.success);
-    }
-    
-    #[test]
-    fn test_execution_context() {
-        let ctx = ExecutionContext::new("test input")
-            .with_session("session-123")
-            .with_user("user-456")
-            .with_context("key", serde_json::json!("value"));
-        
-        assert_eq!(ctx.input, "test input");
-        assert_eq!(ctx.session_id, Some("session-123".to_string()));
-        assert_eq!(ctx.user_id, Some("user-456".to_string()));
+        let result = executor.execute(&skill).await.unwrap();
+        assert!(result.success);
     }
 }

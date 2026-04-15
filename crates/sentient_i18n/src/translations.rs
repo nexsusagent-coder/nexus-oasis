@@ -11,6 +11,13 @@ pub fn english() -> HashMap<String, String> {
     m.insert("app.tagline".to_string(), "Your Intelligent Assistant".to_string());
     m.insert("app.version".to_string(), "Version {version}".to_string());
     
+    // Assistant Identity (Sprint 1)
+    m.insert("assistant.greeting".to_string(), "{name} is ready!".to_string());
+    m.insert("assistant.listening".to_string(), "{name} is listening...".to_string());
+    m.insert("assistant.thinking".to_string(), "{name} is thinking...".to_string());
+    m.insert("assistant.wake_word".to_string(), "Say 'Hey {name}' to activate".to_string());
+    m.insert("assistant.ready".to_string(), "{name} is ready to help!".to_string());
+    
     // Greetings
     m.insert("greeting.hello".to_string(), "Hello, {name}!".to_string());
     m.insert("greeting.welcome".to_string(), "Welcome to SENTIENT!".to_string());
@@ -78,6 +85,13 @@ pub fn turkish() -> HashMap<String, String> {
     m.insert("app.name".to_string(), "SENTIENT AI".to_string());
     m.insert("app.tagline".to_string(), "Akıllı Asistanınız".to_string());
     m.insert("app.version".to_string(), "Sürüm {version}".to_string());
+    
+    // Assistant Identity (Sprint 1)
+    m.insert("assistant.greeting".to_string(), "{name} hazır!".to_string());
+    m.insert("assistant.listening".to_string(), "{name} dinliyor...".to_string());
+    m.insert("assistant.thinking".to_string(), "{name} düşünüyor...".to_string());
+    m.insert("assistant.wake_word".to_string(), "Etkinleştirmek için 'Hey {name}' deyin".to_string());
+    m.insert("assistant.ready".to_string(), "{name} yardıma hazır!".to_string());
     
     // Greetings
     m.insert("greeting.hello".to_string(), "Merhaba, {name}!".to_string());
@@ -290,6 +304,93 @@ pub fn russian() -> HashMap<String, String> {
     m.insert("voice.listening".to_string(), "Слушаю...".to_string());
     m.insert("settings.title".to_string(), "Настройки".to_string());
     m.insert("settings.language".to_string(), "Язык".to_string());
+    
+    m
+}
+
+/// Arabic translations
+pub fn arabic() -> HashMap<String, String> {
+    let mut m = HashMap::new();
+    
+    m.insert("app.name".to_string(), "SENTIENT AI".to_string());
+    m.insert("app.tagline".to_string(), "مساعدك الذكي".to_string());
+    m.insert("greeting.hello".to_string(), "مرحباً، {name}!".to_string());
+    m.insert("greeting.welcome".to_string(), "مرحباً بك في SENTIENT!".to_string());
+    m.insert("greeting.goodbye".to_string(), "وداعاً!".to_string());
+    m.insert("common.yes".to_string(), "نعم".to_string());
+    m.insert("common.no".to_string(), "لا".to_string());
+    m.insert("common.ok".to_string(), "موافق".to_string());
+    m.insert("common.cancel".to_string(), "إلغاء".to_string());
+    m.insert("common.save".to_string(), "حفظ".to_string());
+    m.insert("common.delete".to_string(), "حذف".to_string());
+    m.insert("common.loading".to_string(), "جاري التحميل...".to_string());
+    m.insert("error.general".to_string(), "حدث خطأ. يرجى المحاولة مرة أخرى.".to_string());
+    m.insert("message.placeholder".to_string(), "اكتب رسالتك...".to_string());
+    m.insert("message.send".to_string(), "إرسال".to_string());
+    m.insert("voice.listening".to_string(), "جاري الاستماع...".to_string());
+    m.insert("settings.title".to_string(), "الإعدادات".to_string());
+    m.insert("settings.language".to_string(), "اللغة".to_string());
+    m.insert("assistant.greeting".to_string(), "{name} جاهز!".to_string());
+    m.insert("assistant.listening".to_string(), "{name} يستمع...".to_string());
+    m.insert("assistant.thinking".to_string(), "{name} يفكر...".to_string());
+    
+    m
+}
+
+/// Korean translations
+pub fn korean() -> HashMap<String, String> {
+    let mut m = HashMap::new();
+    
+    m.insert("app.name".to_string(), "SENTIENT AI".to_string());
+    m.insert("app.tagline".to_string(), "당신의 지능형 도우미".to_string());
+    m.insert("greeting.hello".to_string(), "안녕하세요, {name}!".to_string());
+    m.insert("greeting.welcome".to_string(), "SENTIENT에 오신 것을 환영합니다!".to_string());
+    m.insert("greeting.goodbye".to_string(), "안녕히 가세요!".to_string());
+    m.insert("common.yes".to_string(), "예".to_string());
+    m.insert("common.no".to_string(), "아니오".to_string());
+    m.insert("common.ok".to_string(), "확인".to_string());
+    m.insert("common.cancel".to_string(), "취소".to_string());
+    m.insert("common.save".to_string(), "저장".to_string());
+    m.insert("common.delete".to_string(), "삭제".to_string());
+    m.insert("common.loading".to_string(), "로딩 중...".to_string());
+    m.insert("error.general".to_string(), "오류가 발생했습니다. 다시 시도해 주세요.".to_string());
+    m.insert("message.placeholder".to_string(), "메시지를 입력하세요...".to_string());
+    m.insert("message.send".to_string(), "보내기".to_string());
+    m.insert("voice.listening".to_string(), "듣고 있습니다...".to_string());
+    m.insert("settings.title".to_string(), "설정".to_string());
+    m.insert("settings.language".to_string(), "언어".to_string());
+    m.insert("assistant.greeting".to_string(), "{name}이(가) 준비되었습니다!".to_string());
+    m.insert("assistant.listening".to_string(), "{name}이(가) 듣고 있습니다...".to_string());
+    m.insert("assistant.thinking".to_string(), "{name}이(가) 생각하고 있습니다...".to_string());
+    
+    m
+}
+
+/// Portuguese translations
+pub fn portuguese() -> HashMap<String, String> {
+    let mut m = HashMap::new();
+    
+    m.insert("app.name".to_string(), "SENTIENT AI".to_string());
+    m.insert("app.tagline".to_string(), "Seu Assistente Inteligente".to_string());
+    m.insert("greeting.hello".to_string(), "Olá, {name}!".to_string());
+    m.insert("greeting.welcome".to_string(), "Bem-vindo ao SENTIENT!".to_string());
+    m.insert("greeting.goodbye".to_string(), "Adeus!".to_string());
+    m.insert("common.yes".to_string(), "Sim".to_string());
+    m.insert("common.no".to_string(), "Não".to_string());
+    m.insert("common.ok".to_string(), "OK".to_string());
+    m.insert("common.cancel".to_string(), "Cancelar".to_string());
+    m.insert("common.save".to_string(), "Salvar".to_string());
+    m.insert("common.delete".to_string(), "Excluir".to_string());
+    m.insert("common.loading".to_string(), "Carregando...".to_string());
+    m.insert("error.general".to_string(), "Ocorreu um erro. Por favor, tente novamente.".to_string());
+    m.insert("message.placeholder".to_string(), "Digite sua mensagem...".to_string());
+    m.insert("message.send".to_string(), "Enviar".to_string());
+    m.insert("voice.listening".to_string(), "Ouvindo...".to_string());
+    m.insert("settings.title".to_string(), "Configurações".to_string());
+    m.insert("settings.language".to_string(), "Idioma".to_string());
+    m.insert("assistant.greeting".to_string(), "{name} está pronto!".to_string());
+    m.insert("assistant.listening".to_string(), "{name} está ouvindo...".to_string());
+    m.insert("assistant.thinking".to_string(), "{name} está pensando...".to_string());
     
     m
 }

@@ -1,0 +1,22 @@
+[package]
+name = "sentient_social"
+version = "0.1.0"
+edition = "2021"
+description = "Social Media Automation - Reddit, Instagram, Anti-bot bypass"
+authors = ["SENTIENT OS Team"]
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+reqwest = { version = "0.12", features = ["json"] }
+url = "2.5"
+rand = "0.8"
+
+[dev-dependencies]
+tokio-test = "0.4"

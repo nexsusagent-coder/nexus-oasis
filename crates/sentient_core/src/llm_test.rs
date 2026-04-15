@@ -59,8 +59,8 @@ impl LlmTestSuite {
             provider: Provider::OpenRouter,
             base_url: "https://openrouter.ai/api/v1".into(),
             test_models: vec![
-                "qwen/qwen3-1.7b:free".into(),
-                "google/gemma-3-1b-it:free".into(),
+                "openai/gpt-4o-mini".into(),
+                "openrouter/free".into(),
             ],
         }
     }
@@ -216,7 +216,7 @@ impl SimpleChat {
             Provider::OpenRouter,
             "https://openrouter.ai/api/v1".into(),
             api_key,
-            model.unwrap_or_else(|| "qwen/qwen3-1.7b:free".into()),
+            model.unwrap_or_else(|| "google/gemma-4-26b-a4b-it:free".into()),
         )
     }
     
@@ -348,7 +348,7 @@ mod tests {
     #[test]
     fn test_simple_chat_creation() {
         let chat = SimpleChat::openrouter("sk-or-test-key".into(), None);
-        assert_eq!(chat.model, "qwen/qwen3-1.7b:free");
+        assert_eq!(chat.model, "google/gemma-4-26b-a4b-it:free");
     }
     
     #[test]

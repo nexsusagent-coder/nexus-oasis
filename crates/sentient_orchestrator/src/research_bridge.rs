@@ -163,7 +163,7 @@ impl ResearchBridge {
         
         // AutoResearch ile plan oluştur
         let mut research = self.research.write().await;
-        let _plan = research.research(topic).await
+        let _plan = research.research_str(topic).await
             .map_err(|e| SENTIENTError::Research(format!("Plan hatası: {}", e)))?;
         
         // Araştırma yap

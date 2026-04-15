@@ -1,0 +1,47 @@
+[package]
+name = "sentient_connectors"
+version.workspace = true
+edition.workspace = true
+description = "SENTIENT Data Source Connectors - Gmail, Calendar, Weather, RSS, GitHub, etc."
+authors = ["SENTIENT Core Team"]
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+
+# Async & HTTP
+tokio.workspace = true
+async-trait = "0.1"
+reqwest = { version = "0.12", features = ["json"] }
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# OAuth2
+base64 = "0.22"
+sha2 = "0.10"
+hmac = "0.12"
+url = "2.5"
+urlencoding = "2.1"
+
+# Time
+chrono.workspace = true
+
+# Logging
+log.workspace = true
+
+# RSS/Atom
+feed-rs = "2"
+
+# Error handling
+thiserror.workspace = true
+anyhow.workspace = true
+
+[features]
+default = ["github"]
+gmail = []
+calendar = []
+weather = []
+rss = []
+github = []
+all = ["gmail", "calendar", "weather", "rss", "github"]

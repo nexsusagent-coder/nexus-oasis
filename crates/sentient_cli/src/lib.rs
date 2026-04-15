@@ -10,6 +10,7 @@
 pub mod repl;
 pub mod commands;
 pub mod ui;
+pub mod gui;
 
 // Re-export from repl module
 pub use repl::{

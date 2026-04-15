@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTIENT OS | Setup Wizard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        :root {
+            --bg-canvas: #0F0F0F;
+            --bg-primary: #1A1D21;
+            --bg-secondary: #1E2227;
+            --bg-tertiary: #252A30;
+            --bg-hover: #2A2F36;
+            --bg-active: #2F353D;
+            --text-primary: #E8E9EB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --text-disabled: #4B5563;
+            --border-subtle: #2A2F36;
+            --border-default: #374151;
+            --accent-green: #4B7C59;
+            --accent-green-muted: rgba(75, 124, 89, 0.15);
+            --accent-orange: #B86D28;
+            --accent-blue: #4A6B8A;
+            --accent-red: #8B4B4B;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-canvas);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .setup-container {
+            width: 100%;
+            max-width: 720px;
+            padding: 40px;
+        }
+        
+        .setup-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .setup-header {
+            padding: 32px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+        
+        .setup-logo {
+            width: 72px;
+            height: 72px;
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .setup-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .setup-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* Progress Steps */
+        .setup-progress {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            padding: 24px 40px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-default);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active .step-number {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+        
+        .progress-step.completed .step-number {
+            background: var(--accent-green-muted);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+        
+        .step-line {
+            width: 60px;
+            height: 2px;
+            background: var(--border-default);
+            margin: 0 8px;
+        }
+        
+        .progress-step.completed + .progress-step .step-line,
+        .step-line.completed {
+            background: var(--accent-green);
+        }
+        
+        /* Setup Content */
+        .setup-content {
+            padding: 40px;
+            min-height: 400px;
+        }
+        
+        .setup-step {
+            display: none;
+        }
+        
+        .setup-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .step-description {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.15s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            background: var(--bg-tertiary);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-disabled);
+        }
+        
+        .form-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        
+        .form-error {
+            font-size: 11px;
+            color: var(--accent-red);
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .form-input.error {
+            border-color: var(--accent-red);
+        }
+        
+        /* Provider Cards */
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .provider-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .provider-card:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+        }
+        
+        .provider-card.selected {
+            border-color: var(--accent-green);
+            background: var(--accent-green-muted);
+        }
+        
+        .provider-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .provider-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .provider-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .provider-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .provider-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 8px;
+            background: var(--accent-orange);
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+        }
+        
+        /* Language Selection */
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .language-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .language-card:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+        }
+        
+        .language-card.selected {
+            border-color: var(--accent-green);
+            background: var(--accent-green-muted);
+        }
+        
+        .language-flag {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .language-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .toggle-label {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        
+        .toggle-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-tertiary);
+            border-radius: 26px;
+            transition: 0.3s;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--accent-green);
+        }
+        
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+            background: white;
+        }
+        
+        /* Setup Footer */
+        .setup-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 24px 40px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-subtle);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3D6A4A;
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Success Screen */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-green-muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 24px;
+        }
+        
+        .success-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        
+        .success-message {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .success-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-item {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-top: 4px;
+        }
+        
+        /* Loading */
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Hidden */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <div class="setup-card">
+            <div class="setup-header">
+                <div class="setup-logo">🧠</div>
+                <h1 class="setup-title">SENTIENT OS Setup</h1>
+                <p class="setup-subtitle">The Operating System That Thinks</p>
+            </div>
+            
+            <!-- Progress Steps -->
+            <div class="setup-progress">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-number">4</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-number">5</div>
+                </div>
+            </div>
+            
+            <div class="setup-content">
+                <!-- Step 1: Welcome -->
+                <div class="setup-step active" data-step="1">
+                    <h2 class="step-title">Welcome to SENTIENT OS</h2>
+                    <p class="step-description">Let's set up your AI operating system. This will take about 2 minutes.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" id="userName" placeholder="Enter your name or nickname">
+                        <p class="form-hint">This is how SENTIENT will address you</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Select Your Language</label>
+                        <div class="language-grid">
+                            <div class="language-card selected" data-lang="en" onclick="selectLanguage(this)">
+                                <div class="language-flag">🇺🇸</div>
+                                <div class="language-name">English</div>
+                            </div>
+                            <div class="language-card" data-lang="tr" onclick="selectLanguage(this)">
+                                <div class="language-flag">🇹🇷</div>
+                                <div class="language-name">Türkçe</div>
+                            </div>
+                            <div class="language-card" data-lang="de" onclick="selectLanguage(this)">
+                                <div class="language-flag">🇩🇪</div>
+                                <div class="language-name">Deutsch</div>
+                            </div>
+                            <div class="language-card" data-lang="fr" onclick="selectLanguage(this)">
+                                <div class="language-flag">🇫🇷</div>
+                                <div class="language-name">Français</div>
+                            </div>
+                            <div class="language-card" data-lang="es" onclick="selectLanguage(this)">
+                                <div class="language-flag">🇪🇸</div>
+                                <div class="language-name">Español</div>
+                            </div>
+                            <div class="language-card" data-lang="ja" onclick="selectLanguage(this)">
+                                <div class="language-flag">🇯🇵</div>
+                                <div class="language-name">日本語</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2: LLM Provider -->
+                <div class="setup-step" data-step="2">
+                    <h2 class="step-title">Choose Your LLM Provider</h2>
+                    <p class="step-description">Select how you want to connect to AI language models.</p>
+                    
+                    <div class="provider-grid">
+                        <div class="provider-card" data-provider="openrouter" onclick="selectProvider(this)">
+                            <span class="provider-badge">Recommended</span>
+                            <div class="provider-icon">🔀</div>
+                            <div class="provider-name">OpenRouter</div>
+                            <div class="provider-desc">Access 200+ models with one API key</div>
+                        </div>
+                        
+                        <div class="provider-card" data-provider="openai" onclick="selectProvider(this)">
+                            <div class="provider-icon">🟢</div>
+                            <div class="provider-name">OpenAI</div>
+                            <div class="provider-desc">GPT-4, GPT-4o, GPT-3.5 Turbo</div>
+                        </div>
+                        
+                        <div class="provider-card" data-provider="anthropic" onclick="selectProvider(this)">
+                            <div class="provider-icon">🟣</div>
+                            <div class="provider-name">Anthropic</div>
+                            <div class="provider-desc">Claude 3.5 Sonnet, Claude 3 Opus</div>
+                        </div>
+                        
+                        <div class="provider-card" data-provider="ollama" onclick="selectProvider(this)">
+                            <span class="provider-badge" style="background: var(--accent-green);">Free</span>
+                            <div class="provider-icon">🦙</div>
+                            <div class="provider-name">Ollama (Local)</div>
+                            <div class="provider-desc">Run models locally, no API costs</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="apiKeyGroup" style="display: none;">
+                        <label class="form-label" id="apiKeyLabel">API Key</label>
+                        <input type="password" class="form-input" id="apiKey" placeholder="sk-...">
+                        <p class="form-hint" id="apiKeyHint">Your API key is stored locally and encrypted</p>
+                    </div>
+                    
+                    <div id="ollamaInfo" style="display: none;">
+                        <div class="toggle-group">
+                            <div>
+                                <div class="toggle-label">Ollama is running</div>
+                                <div class="toggle-desc">Make sure Ollama is installed and running</div>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="ollamaRunning">
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                        <p class="form-hint">Install: curl -fsSL https://ollama.com/install.sh | sh</p>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Features -->
+                <div class="setup-step" data-step="3">
+                    <h2 class="step-title">Enable Features</h2>
+                    <p class="step-description">Choose which features you want to enable.</p>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Voice Control</div>
+                            <div class="toggle-desc">Control SENTIENT with your voice (JARVIS mode)</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableVoice" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Proactive Assistant</div>
+                            <div class="toggle-desc">SENTIENT will suggest actions proactively</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableProactive" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Memory & Learning</div>
+                            <div class="toggle-desc">Remember conversations and learn preferences</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableMemory" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Desktop Control</div>
+                            <div class="toggle-desc">Allow SENTIENT to control your computer</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableDesktop">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Analytics & Telemetry</div>
+                            <div class="toggle-desc">Help improve SENTIENT (anonymous)</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableAnalytics">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Security -->
+                <div class="setup-step" data-step="4">
+                    <h2 class="step-title">Security Settings</h2>
+                    <p class="step-description">Configure security preferences for your AI assistant.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Create a Password (Optional)</label>
+                        <input type="password" class="form-input" id="setupPassword" placeholder="Leave empty for no password">
+                        <p class="form-hint">Protect your SENTIENT instance with a password</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-input" id="setupPasswordConfirm" placeholder="Confirm password">
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Multi-Factor Authentication</div>
+                            <div class="toggle-desc">Require 2FA for dashboard access</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableMFA">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Constitution Mode</div>
+                            <div class="toggle-desc">Block dangerous commands automatically</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableConstitution" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div>
+                            <div class="toggle-label">Sandbox Mode</div>
+                            <div class="toggle-desc">Run code in isolated containers</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="enableSandbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Step 5: Complete -->
+                <div class="setup-step" data-step="5">
+                    <div class="success-icon">✓</div>
+                    <h2 class="success-title">Setup Complete!</h2>
+                    <p class="success-message">Your SENTIENT OS is ready to use.</p>
+                    
+                    <div class="success-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Providers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5,587</div>
+                            <div class="stat-label">Skills</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">20+</div>
+                            <div class="stat-label">Channels</div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+                            What would you like to do first?
+                        </p>
+                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                            <button class="btn btn-secondary" onclick="goToChat()">
+                                <span>💬</span> Start Chatting
+                            </button>
+                            <button class="btn btn-secondary" onclick="goToVoice()">
+                                <span>🎙️</span> Try Voice
+                            </button>
+                            <button class="btn btn-secondary" onclick="goToDashboard()">
+                                <span>📊</span> Open Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setup-footer">
+                <button class="btn btn-secondary" id="backBtn" onclick="prevStep()" disabled>
+                    ← Back
+                </button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Setup State
+        const setupState = {
+            currentStep: 1,
+            totalSteps: 5,
+            data: {
+                userName: '',
+                language: 'en',
+                provider: '',
+                apiKey: '',
+                features: {
+                    voice: true,
+                    proactive: true,
+                    memory: true,
+                    desktop: false,
+                    analytics: false
+                },
+                security: {
+                    password: '',
+                    mfa: false,
+                    constitution: true,
+                    sandbox: true
+                }
+            }
+        };
+        
+        // Language Selection
+        function selectLanguage(el) {
+            document.querySelectorAll('.language-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            setupState.data.language = el.dataset.lang;
+        }
+        
+        // Provider Selection
+        function selectProvider(el) {
+            document.querySelectorAll('.provider-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            setupState.data.provider = el.dataset.provider;
+            
+            // Show/hide API key input
+            const apiKeyGroup = document.getElementById('apiKeyGroup');
+            const ollamaInfo = document.getElementById('ollamaInfo');
+            
+            if (el.dataset.provider === 'ollama') {
+                apiKeyGroup.style.display = 'none';
+                ollamaInfo.style.display = 'block';
+            } else {
+                apiKeyGroup.style.display = 'block';
+                ollamaInfo.style.display = 'none';
+                
+                const labels = {
+                    openrouter: { label: 'OpenRouter API Key', hint: 'Get your key from openrouter.ai/keys' },
+                    openai: { label: 'OpenAI API Key', hint: 'Get your key from platform.openai.com/api-keys' },
+                    anthropic: { label: 'Anthropic API Key', hint: 'Get your key from console.anthropic.com' }
+                };
+                
+                const config = labels[el.dataset.provider];
+                document.getElementById('apiKeyLabel').textContent = config.label;
+                document.getElementById('apiKeyHint').textContent = config.hint;
+            }
+        }
+        
+        // Navigation
+        function updateProgress() {
+            document.querySelectorAll('.progress-step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                
+                if (stepNum === setupState.currentStep) {
+                    step.classList.add('active');
+                } else if (stepNum < setupState.currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+            
+            document.querySelectorAll('.step-line').forEach((line, idx) => {
+                if (idx < setupState.currentStep - 1) {
+                    line.classList.add('completed');
+                } else {
+                    line.classList.remove('completed');
+                }
+            });
+        }
+        
+        function showStep(step) {
+            document.querySelectorAll('.setup-step').forEach(s => s.classList.remove('active'));
+            document.querySelector(`.setup-step[data-step="${step}"]`).classList.add('active');
+            
+            // Update buttons
+            document.getElementById('backBtn').disabled = step === 1;
+            
+            if (step === setupState.totalSteps) {
+                document.getElementById('nextBtn').textContent = 'Go to Dashboard';
+                document.getElementById('nextBtn').onclick = goToDashboard;
+            } else {
+                document.getElementById('nextBtn').innerHTML = 'Continue →';
+                document.getElementById('nextBtn').onclick = nextStep;
+            }
+        }
+        
+        function nextStep() {
+            if (validateStep(setupState.currentStep)) {
+                saveStepData(setupState.currentStep);
+                
+                if (setupState.currentStep < setupState.totalSteps) {
+                    setupState.currentStep++;
+                    showStep(setupState.currentStep);
+                    updateProgress();
+                }
+            }
+        }
+        
+        function prevStep() {
+            if (setupState.currentStep > 1) {
+                setupState.currentStep--;
+                showStep(setupState.currentStep);
+                updateProgress();
+            }
+        }
+        
+        // Validation
+        function validateStep(step) {
+            switch (step) {
+                case 1:
+                    const name = document.getElementById('userName').value.trim();
+                    if (!name) {
+                        document.getElementById('userName').classList.add('error');
+                        return false;
+                    }
+                    return true;
+                    
+                case 2:
+                    if (!setupState.data.provider) {
+                        alert('Please select a provider');
+                        return false;
+                    }
+                    if (setupState.data.provider !== 'ollama') {
+                        const key = document.getElementById('apiKey').value.trim();
+                        if (!key) {
+                            document.getElementById('apiKey').classList.add('error');
+                            return false;
+                        }
+                    }
+                    return true;
+                    
+                case 4:
+                    const pass = document.getElementById('setupPassword').value;
+                    const confirm = document.getElementById('setupPasswordConfirm').value;
+                    if (pass && pass !== confirm) {
+                        document.getElementById('setupPasswordConfirm').classList.add('error');
+                        alert('Passwords do not match');
+                        return false;
+                    }
+                    return true;
+                    
+                default:
+                    return true;
+            }
+        }
+        
+        // Save Data
+        function saveStepData(step) {
+            switch (step) {
+                case 1:
+                    setupState.data.userName = document.getElementById('userName').value.trim();
+                    break;
+                    
+                case 2:
+                    setupState.data.apiKey = document.getElementById('apiKey').value.trim();
+                    break;
+                    
+                case 3:
+                    setupState.data.features = {
+                        voice: document.getElementById('enableVoice').checked,
+                        proactive: document.getElementById('enableProactive').checked,
+                        memory: document.getElementById('enableMemory').checked,
+                        desktop: document.getElementById('enableDesktop').checked,
+                        analytics: document.getElementById('enableAnalytics').checked
+                    };
+                    break;
+                    
+                case 4:
+                    setupState.data.security = {
+                        password: document.getElementById('setupPassword').value,
+                        mfa: document.getElementById('enableMFA').checked,
+                        constitution: document.getElementById('enableConstitution').checked,
+                        sandbox: document.getElementById('enableSandbox').checked
+                    };
+                    
+                    // Save configuration
+                    saveConfiguration();
+                    break;
+            }
+        }
+        
+        // Save Configuration to Backend
+        async function saveConfiguration() {
+            try {
+                const response = await fetch('/api/setup/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(setupState.data)
+                });
+                
+                const result = await response.json();
+                console.log('Setup saved:', result);
+            } catch (error) {
+                console.error('Failed to save setup:', error);
+            }
+        }
+        
+        // Navigation Functions
+        function goToDashboard() {
+            window.location.href = '/';
+        }
+        
+        function goToChat() {
+            window.location.href = '/?view=chat';
+        }
+        
+        function goToVoice() {
+            window.location.href = '/voice.html';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

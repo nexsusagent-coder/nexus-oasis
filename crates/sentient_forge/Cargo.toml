@@ -13,6 +13,7 @@ log.workspace = true
 thiserror.workspace = true
 chrono.workspace = true
 uuid.workspace = true
+async-trait = "0.1"
 
 # Code generation
 handlebars = "6"  # Template engine

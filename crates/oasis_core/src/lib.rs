@@ -14,12 +14,17 @@ pub mod contracts;
 pub mod runtime;
 pub mod state;
 pub mod monitor;
+pub mod creusot;
 
 // Re-exports
 pub use contracts::*;
 pub use runtime::*;
 pub use state::*;
 pub use monitor::*;
+pub use creusot::{
+    CreusotVerifier, CreusotConfig, CreusotError, CreusotResult,
+    VerificationResult, ProofResult, Prover,
+};
 
 use sentient_common::error::SENTIENTError;
 use serde::{Deserialize, Serialize};

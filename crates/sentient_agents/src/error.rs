@@ -24,6 +24,12 @@ pub enum AgentError {
     
     #[error("Framework error: {0}")]
     FrameworkError(String),
+    
+    #[error("Maximum agent capacity reached")]
+    CapacityReached,
+    
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
 }
 
 pub type AgentResult<T> = Result<T, AgentError>;

@@ -9,6 +9,7 @@ sentient_common = { path = "../sentient_common" }
 sentient_orchestrator = { path = "../sentient_orchestrator" }
 sentient_vgate = { path = "../sentient_vgate" }
 sentient_storage = { path = "../sentient_storage" }
+sentient_voice = { path = "../sentient_voice" }
 
 # Async runtime
 tokio = { version = "1.40", features = ["full"] }
@@ -41,9 +42,16 @@ hmac = "0.12"
 sha2 = "0.10"
 hex = "0.4"
 base64 = "0.22"
+rand = "0.8"
+urlencoding = "2.1"
+serde_yaml = "0.9"
+regex = "1.10"
 
 # HTTP client (V-GATE communication)
 reqwest = { version = "0.12", features = ["json"] }
+
+# Async trait
+async-trait = "0.1"
 
 # UUID and time
 uuid = { version = "1.10", features = ["v4", "serde"] }

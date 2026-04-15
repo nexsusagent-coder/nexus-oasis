@@ -12,7 +12,9 @@ pub mod metrics;
 pub mod logging;
 pub mod health;
 pub mod spans;
+pub mod telemetry;
 
 pub use tracing_setup::*;
 pub use metrics::*;
 pub use health::*;
+pub use telemetry::*;

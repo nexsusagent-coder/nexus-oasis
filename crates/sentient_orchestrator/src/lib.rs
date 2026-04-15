@@ -29,6 +29,8 @@ pub mod tools;
 pub mod state;
 pub mod execution;
 pub mod task_queue;
+pub mod persistent_state;
+pub mod workflow_engine;
 
 /// ─── MEMORY BRIDGE MODÜLÜ ───
 /// L7: Memory-Orchestrator entegrasyonu
@@ -45,6 +47,10 @@ pub mod skills;
 /// ─── SWARM MODÜLÜ ───
 /// Çoklu ajan orkestrasyon sistemi
 pub mod swarm;
+
+/// ─── COORDINATION MODÜLÜ ───
+/// Multi-agent koordinasyon sistemi
+pub mod coordination;
 
 /// ─── SELF-HEALING MODÜLÜ ───
 /// 11. Adım: Hata alan kodun otonom düzeltilmesi

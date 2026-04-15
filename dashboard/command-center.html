@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTIENT OS | Command Center</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Marked.js for Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    
+    <style>
+        /* ════════════════════════════════════════════════════════════════════════════
+           SENTIENT OS COMMAND CENTER - BILLION DOLLAR ENTERPRISE UI
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        :root {
+            /* Dark Theme - Enterprise Matte */
+            --bg-void: #08090A;
+            --bg-canvas: #0D0E10;
+            --bg-base: #12141A;
+            --bg-surface: #181B22;
+            --bg-elevated: #1E2229;
+            --bg-hover: #252A33;
+            --bg-active: #2B313B;
+            --bg-selected: #323844;
+            
+            /* Text Hierarchy */
+            --text-primary: #F0F1F3;
+            --text-secondary: #A8ADBB;
+            --text-tertiary: #6B7280;
+            --text-muted: #4B5563;
+            --text-disabled: #374151;
+            
+            /* Borders */
+            --border-thin: #1F2328;
+            --border-default: #2A2F38;
+            --border-strong: #3B4251;
+            
+            /* Accent Colors - Refined */
+            --accent-primary: #3B82F6;
+            --accent-primary-muted: rgba(59, 130, 246, 0.12);
+            --accent-success: #10B981;
+            --accent-success-muted: rgba(16, 185, 129, 0.12);
+            --accent-warning: #F59E0B;
+            --accent-warning-muted: rgba(245, 158, 11, 0.12);
+            --accent-danger: #EF4444;
+            --accent-danger-muted: rgba(239, 68, 68, 0.12);
+            --accent-purple: #8B5CF6;
+            --accent-purple-muted: rgba(139, 92, 246, 0.12);
+            --accent-cyan: #06B6D4;
+            --accent-cyan-muted: rgba(6, 182, 212, 0.12);
+            --accent-pink: #EC4899;
+            --accent-pink-muted: rgba(236, 72, 153, 0.12);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.1);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        *::-webkit-scrollbar { width: 6px; height: 6px; }
+        *::-webkit-scrollbar-track { background: transparent; }
+        *::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
+        *::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           COMMAND CENTER LAYOUT
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .command-center {
+            display: grid;
+            grid-template-columns: 72px 280px 1fr;
+            grid-template-rows: 64px 1fr;
+            min-height: 100vh;
+            background: var(--bg-void);
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           TOP HEADER BAR
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .header-bar {
+            grid-column: 1 / -1;
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border-thin);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo-text span {
+            color: var(--accent-primary);
+        }
+        
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            max-width: 600px;
+        }
+        
+        .search-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 8px;
+            padding: 8px 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .search-box:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-primary-muted);
+        }
+        
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .search-box input:focus { outline: none; }
+        .search-box input::placeholder { color: var(--text-muted); }
+        
+        .search-kbd {
+            padding: 2px 6px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--accent-success-muted);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent-success);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+        
+        .header-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        
+        .header-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .header-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-danger);
+            border-radius: 50%;
+            font-size: 9px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 12px 4px 4px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .user-menu:hover {
+            background: var(--bg-hover);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           LEFT QUICK ACCESS BAR
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .quick-bar {
+            background: var(--bg-base);
+            border-right: 1px solid var(--border-thin);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            gap: 4px;
+        }
+        
+        .quick-btn {
+            width: 48px;
+            height: 48px;
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        
+        .quick-btn:hover {
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+        }
+        
+        .quick-btn.active {
+            background: var(--accent-primary-muted);
+            color: var(--accent-primary);
+        }
+        
+        .quick-btn.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 24px;
+            background: var(--accent-primary);
+            border-radius: 0 3px 3px 0;
+        }
+        
+        .quick-divider {
+            width: 32px;
+            height: 1px;
+            background: var(--border-thin);
+            margin: 8px 0;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           LEFT SIDEBAR - NAVIGATION
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .sidebar {
+            background: var(--bg-base);
+            border-right: 1px solid var(--border-thin);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-thin);
+        }
+        
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        
+        .workspace-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .workspace-selector:hover {
+            background: var(--bg-hover);
+        }
+        
+        .workspace-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-primary-muted);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-primary);
+        }
+        
+        .workspace-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .workspace-name {
+            font-size: 13px;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .workspace-plan {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+        
+        .nav-group {
+            margin-bottom: 20px;
+        }
+        
+        .nav-group-title {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-disabled);
+            padding: 0 8px;
+            margin-bottom: 6px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-bottom: 2px;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+        
+        .nav-item.active {
+            background: var(--accent-primary-muted);
+            color: var(--accent-primary);
+        }
+        
+        .nav-item i {
+            width: 18px;
+            height: 18px;
+            opacity: 0.8;
+        }
+        
+        .nav-item span {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .nav-item .badge {
+            margin-left: auto;
+            padding: 2px 8px;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+        }
+        
+        .nav-item .badge.success {
+            background: var(--accent-success-muted);
+            color: var(--accent-success);
+        }
+        
+        .nav-item .badge.warning {
+            background: var(--accent-warning-muted);
+            color: var(--accent-warning);
+        }
+        
+        .sidebar-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border-thin);
+        }
+        
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        
+        .quick-stat {
+            background: var(--bg-surface);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .quick-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+        
+        .quick-stat-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           MAIN CONTENT AREA
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .main-content {
+            background: var(--bg-canvas);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .content-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-thin);
+            background: var(--bg-base);
+        }
+        
+        .content-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .content-title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .content-subtitle {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+        
+        .content-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563EB;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            color: var(--text-secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .btn-success {
+            background: var(--accent-success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--accent-danger);
+            color: white;
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+        
+        .btn-ghost:hover {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+        
+        .content-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 0 24px;
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border-thin);
+        }
+        
+        .content-tab {
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s ease;
+        }
+        
+        .content-tab:hover {
+            color: var(--text-secondary);
+        }
+        
+        .content-tab.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+        
+        .content-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           METRICS OVERVIEW
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .metric-card {
+            background: var(--bg-base);
+            border: 1px solid var(--border-thin);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+        
+        .metric-card.primary::before { background: var(--accent-primary); }
+        .metric-card.success::before { background: var(--accent-success); }
+        .metric-card.warning::before { background: var(--accent-warning); }
+        .metric-card.purple::before { background: var(--accent-purple); }
+        
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .metric-card.primary .metric-icon { background: var(--accent-primary-muted); color: var(--accent-primary); }
+        .metric-card.success .metric-icon { background: var(--accent-success-muted); color: var(--accent-success); }
+        .metric-card.warning .metric-icon { background: var(--accent-warning-muted); color: var(--accent-warning); }
+        .metric-card.purple .metric-icon { background: var(--accent-purple-muted); color: var(--accent-purple); }
+        
+        .metric-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .metric-trend.up { color: var(--accent-success); }
+        .metric-trend.down { color: var(--accent-danger); }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.1;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+        
+        .metric-progress {
+            margin-top: 12px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-elevated);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-fill.primary { background: var(--accent-primary); }
+        .progress-fill.success { background: var(--accent-success); }
+        .progress-fill.warning { background: var(--accent-warning); }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           GRID LAYOUTS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .card {
+            background: var(--bg-base);
+            border: 1px solid var(--border-thin);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-thin);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 16px 20px;
+        }
+        
+        .card-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border-thin);
+            background: var(--bg-surface);
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           AGENT CARDS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        
+        .agent-card {
+            background: var(--bg-base);
+            border: 1px solid var(--border-thin);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .agent-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .agent-card.active {
+            border-color: var(--accent-success);
+            background: var(--accent-success-muted);
+        }
+        
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .agent-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .agent-avatar.researcher { background: linear-gradient(135deg, #3B82F6, #8B5CF6); }
+        .agent-avatar.coder { background: linear-gradient(135deg, #10B981, #06B6D4); }
+        .agent-avatar.analyst { background: linear-gradient(135deg, #F59E0B, #EF4444); }
+        .agent-avatar.writer { background: linear-gradient(135deg, #8B5CF6, #EC4899); }
+        .agent-avatar.browser { background: linear-gradient(135deg, #06B6D4, #3B82F6); }
+        
+        .agent-info {
+            flex: 1;
+        }
+        
+        .agent-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .agent-type {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .agent-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .agent-status.online { background: var(--accent-success); box-shadow: 0 0 8px var(--accent-success); }
+        .agent-status.busy { background: var(--accent-warning); }
+        .agent-status.offline { background: var(--text-muted); }
+        
+        .agent-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .agent-stats {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .agent-stat {
+            text-align: center;
+        }
+        
+        .agent-stat-value {
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .agent-stat-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+        
+        .agent-progress {
+            margin-top: 12px;
+        }
+        
+        .agent-progress-bar {
+            height: 4px;
+            background: var(--bg-elevated);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .agent-progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .agent-progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           CHANNEL CARDS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .channel-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .channel-card:hover {
+            background: var(--bg-hover);
+        }
+        
+        .channel-card.active {
+            border-color: var(--accent-success);
+            background: var(--accent-success-muted);
+        }
+        
+        .channel-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .channel-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .channel-status {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .channel-toggle {
+            margin-top: 12px;
+        }
+        
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle.active {
+            background: var(--accent-success);
+        }
+        
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           LLM PROVIDER CARDS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        
+        .provider-card {
+            background: var(--bg-base);
+            border: 1px solid var(--border-thin);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .provider-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .provider-logo {
+            width: 44px;
+            height: 44px;
+            background: var(--bg-surface);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .provider-info {
+            flex: 1;
+        }
+        
+        .provider-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .provider-model {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .provider-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .provider-stat {
+            background: var(--bg-surface);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .provider-stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .provider-stat-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        
+        .provider-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .provider-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           SKILL CARDS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+        }
+        
+        .skill-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .skill-card:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-default);
+        }
+        
+        .skill-card.active {
+            border-color: var(--accent-primary);
+            background: var(--accent-primary-muted);
+        }
+        
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .skill-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-elevated);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .skill-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .skill-category {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        .skill-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .skill-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .skill-badge {
+            padding: 3px 8px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        
+        .skill-badge.success { background: var(--accent-success-muted); color: var(--accent-success); }
+        .skill-badge.warning { background: var(--accent-warning-muted); color: var(--accent-warning); }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           CHAT INTERFACE
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: var(--bg-base);
+            border-radius: 12px;
+            border: 1px solid var(--border-thin);
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-thin);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .chat-model {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .chat-message {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+        
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .chat-message.user .chat-avatar {
+            background: var(--accent-primary-muted);
+            color: var(--accent-primary);
+        }
+        
+        .chat-message.assistant .chat-avatar {
+            background: var(--accent-success-muted);
+            color: var(--accent-success);
+        }
+        
+        .chat-bubble {
+            max-width: 80%;
+            padding: 14px 18px;
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border-thin);
+        }
+        
+        .chat-message.user .chat-bubble {
+            background: var(--bg-elevated);
+        }
+        
+        .chat-text {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .chat-text pre {
+            background: var(--bg-void);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .chat-text code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+        
+        .chat-input-area {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-thin);
+            background: var(--bg-surface);
+        }
+        
+        .chat-input-wrapper {
+            display: flex;
+            gap: 10px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-thin);
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+        
+        .chat-input-wrapper:focus-within {
+            border-color: var(--accent-primary);
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+        }
+        
+        .chat-input:focus { outline: none; }
+        .chat-input::placeholder { color: var(--text-muted); }
+        
+        .chat-send-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-primary);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+        
+        .chat-send-btn:hover {
+            background: #2563EB;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           DATA TABLES
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-thin);
+        }
+        
+        .data-table th {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: var(--bg-surface);
+        }
+        
+        .data-table td {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .data-table tr:hover td {
+            background: var(--bg-surface);
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           CHARTS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           MODALS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-overlay.visible {
+            display: flex;
+        }
+        
+        .modal {
+            width: 90%;
+            max-width: 600px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-thin);
+            border-radius: 16px;
+            overflow: hidden;
+            animation: modalIn 0.2s ease;
+        }
+        
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-thin);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+        
+        .modal-body {
+            padding: 24px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-thin);
+            background: var(--bg-surface);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           FORMS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.15s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-primary-muted);
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+        
+        .form-help {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           TOAST NOTIFICATIONS
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .toast {
+            padding: 14px 18px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-thin);
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: toastIn 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .toast.success { border-left: 3px solid var(--accent-success); }
+        .toast.error { border-left: 3px solid var(--accent-danger); }
+        .toast.warning { border-left: 3px solid var(--accent-warning); }
+        .toast.info { border-left: 3px solid var(--accent-primary); }
+        
+        @keyframes toastIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           DESKTOP REMOTE CONTROL
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .desktop-preview {
+            background: var(--bg-void);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16/9;
+        }
+        
+        .desktop-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .desktop-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+        
+        .desktop-preview:hover .desktop-overlay {
+            opacity: 1;
+        }
+        
+        .desktop-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           SECURITY PANEL
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .security-card {
+            background: var(--bg-base);
+            border: 1px solid var(--border-thin);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .security-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+        
+        .security-card.constitution::before { background: var(--accent-danger); }
+        .security-card.vgate::before { background: var(--accent-success); }
+        .security-card.sandbox::before { background: var(--accent-primary); }
+        .security-card.behavior::before { background: var(--accent-purple); }
+        .security-card.mouse::before { background: var(--accent-warning); }
+        .security-card.keyboard::before { background: var(--accent-cyan); }
+        
+        .security-card-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        
+        .security-card-value {
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 4px;
+        }
+        
+        .security-card-status {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .threat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .threat-badge.low { background: var(--accent-success-muted); color: var(--accent-success); }
+        .threat-badge.medium { background: var(--accent-warning-muted); color: var(--accent-warning); }
+        .threat-badge.high { background: var(--accent-danger-muted); color: var(--accent-danger); }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           MEMORY VIEWER
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        
+        .memory-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-thin);
+            border-radius: 10px;
+            padding: 16px;
+        }
+        
+        .memory-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .memory-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-elevated);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .memory-type {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .memory-content {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        
+        .memory-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           ACTIVITY TIMELINE
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-thin);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            background: var(--bg-surface);
+            border: 2px solid var(--accent-primary);
+            border-radius: 50%;
+        }
+        
+        .timeline-item.success::before { border-color: var(--accent-success); }
+        .timeline-item.warning::before { border-color: var(--accent-warning); }
+        .timeline-item.error::before { border-color: var(--accent-danger); }
+        
+        .timeline-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        
+        .timeline-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* ════════════════════════════════════════════════════════════════════════════
+           RESPONSIVE
+           ════════════════════════════════════════════════════════════════════════════ */
+        
+        @media (max-width: 1200px) {
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .security-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .command-center { grid-template-columns: 1fr; }
+            .quick-bar, .sidebar { display: none; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .security-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="command-center">
+        <!-- Header Bar -->
+        <header class="header-bar">
+            <div class="header-left">
+                <div class="logo">
+                    <div class="logo-icon">🧠</div>
+                    <div class="logo-text">SENTIENT <span>OS</span></div>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="search-box">
+                    <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                    <input type="text" placeholder="Search everything... (⌘K)">
+                    <span class="search-kbd">⌘K</span>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    All Systems Operational
+                </div>
+                
+                <button class="header-btn" title="Notifications">
+                    <i data-lucide="bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                
+                <button class="header-btn" title="Settings">
+                    <i data-lucide="settings"></i>
+                </button>
+                
+                <div class="user-menu">
+                    <div class="user-avatar">A</div>
+                    <span class="user-name">Admin</span>
+                    <i data-lucide="chevron-down" style="width: 14px; height: 14px; color: var(--text-muted);"></i>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Quick Access Bar -->
+        <nav class="quick-bar">
+            <button class="quick-btn active" onclick="switchView('dashboard')" title="Dashboard">
+                <i data-lucide="layout-dashboard"></i>
+            </button>
+            <button class="quick-btn" onclick="switchView('agents')" title="Agents">
+                <i data-lucide="bot"></i>
+            </button>
+            <button class="quick-btn" onclick="switchView('chat')" title="Chat">
+                <i data-lucide="message-square"></i>
+            </button>
+            <button class="quick-btn" onclick="switchView('memory')" title="Memory">
+                <i data-lucide="brain"></i>
+            </button>
+            <div class="quick-divider"></div>
+            <button class="quick-btn" onclick="switchView('files')" title="Files">
+                <i data-lucide="folder"></i>
+            </button>
+            <button class="quick-btn" onclick="switchView('desktop')" title="Desktop">
+                <i data-lucide="monitor"></i>
+            </button>
+            <div class="quick-divider"></div>
+            <button class="quick-btn" onclick="switchView('security')" title="Security">
+                <i data-lucide="shield"></i>
+            </button>
+            <button class="quick-btn" onclick="switchView('settings')" title="Settings">
+                <i data-lucide="settings-2"></i>
+            </button>
+        </nav>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Workspace</div>
+                <div class="workspace-selector">
+                    <div class="workspace-icon">
+                        <i data-lucide="building-2" style="width: 16px; height: 16px;"></i>
+                    </div>
+                    <div class="workspace-info">
+                        <div class="workspace-name">Production</div>
+                        <div class="workspace-plan">Enterprise Plan</div>
+                    </div>
+                    <i data-lucide="chevron-down" style="width: 14px; height: 14px; color: var(--text-muted);"></i>
+                </div>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="nav-group">
+                    <div class="nav-group-title">Overview</div>
+                    <div class="nav-item active" onclick="switchNav('dashboard')">
+                        <i data-lucide="layout-grid"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('analytics')">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>Analytics</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('activity')">
+                        <i data-lucide="activity"></i>
+                        <span>Activity</span>
+                        <span class="badge success">Live</span>
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">AI Infrastructure</div>
+                    <div class="nav-item" onclick="switchNav('agents')">
+                        <i data-lucide="bot"></i>
+                        <span>Agents</span>
+                        <span class="badge" id="agentCount">8</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('providers')">
+                        <i data-lucide="cpu"></i>
+                        <span>LLM Providers</span>
+                        <span class="badge">42</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('skills')">
+                        <i data-lucide="puzzle"></i>
+                        <span>Skills</span>
+                        <span class="badge">156</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('memory')">
+                        <i data-lucide="brain"></i>
+                        <span>Memory</span>
+                        <span class="badge">2.4GB</span>
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">Communication</div>
+                    <div class="nav-item" onclick="switchNav('channels')">
+                        <i data-lucide="radio"></i>
+                        <span>Channels</span>
+                        <span class="badge success">14</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('voice')">
+                        <i data-lucide="mic"></i>
+                        <span>Voice</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('webhooks')">
+                        <i data-lucide="webhook"></i>
+                        <span>Webhooks</span>
+                        <span class="badge">24</span>
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">Security</div>
+                    <div class="nav-item" onclick="switchNav('security')">
+                        <i data-lucide="shield-check"></i>
+                        <span>Security Center</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('permissions')">
+                        <i data-lucide="lock"></i>
+                        <span>Permissions</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('audit')">
+                        <i data-lucide="file-text"></i>
+                        <span>Audit Logs</span>
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">System</div>
+                    <div class="nav-item" onclick="switchNav('gateways')">
+                        <i data-lucide="radio-tower"></i>
+                        <span>Gateways</span>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('files')">
+                        <i data-lucide="folder-open"></i>
+                        <span>File Browser</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('desktop')">
+                        <i data-lucide="monitor"></i>
+                        <span>Desktop Control</span>
+                    </div>
+                    <div class="nav-item" onclick="switchNav('logs')">
+                        <i data-lucide="scroll-text"></i>
+                        <span>System Logs</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="quickTokens">2.4M</div>
+                        <div class="quick-stat-label">Tokens</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="quickCost">$47</div>
+                        <div class="quick-stat-label">Cost</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="quickLatency">124ms</div>
+                        <div class="quick-stat-label">Latency</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value" id="quickUptime">99.9%</div>
+                        <div class="quick-stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Dashboard View -->
+            <div id="dashboardView">
+                <div class="content-header">
+                    <div class="content-title-row">
+                        <div>
+                            <h1 class="content-title">Command Center</h1>
+                            <p class="content-subtitle">Real-time system overview and control</p>
+                        </div>
+                        <div class="content-actions">
+                            <button class="btn btn-secondary">
+                                <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                                Refresh
+                            </button>
+                            <button class="btn btn-primary">
+                                <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                                Spawn Agent
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Metrics Grid -->
+                <div class="content-body">
+                    <div class="metrics-grid">
+                        <div class="metric-card primary">
+                            <div class="metric-header">
+                                <div class="metric-icon">
+                                    <i data-lucide="activity" style="width: 20px; height: 20px;"></i>
+                                </div>
+                                <div class="metric-trend up">
+                                    <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                                    +12%
+                                </div>
+                            </div>
+                            <div class="metric-value" id="metricHealth">98.7%</div>
+                            <div class="metric-label">System Health</div>
+                            <div class="metric-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill primary" style="width: 98.7%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card success">
+                            <div class="metric-header">
+                                <div class="metric-icon">
+                                    <i data-lucide="zap" style="width: 20px; height: 20px;"></i>
+                                </div>
+                                <div class="metric-trend up">
+                                    <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                                    +8%
+                                </div>
+                            </div>
+                            <div class="metric-value" id="metricTasks">1,247</div>
+                            <div class="metric-label">Tasks Completed Today</div>
+                            <div class="metric-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill success" style="width: 74%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card warning">
+                            <div class="metric-header">
+                                <div class="metric-icon">
+                                    <i data-lucide="coins" style="width: 20px; height: 20px;"></i>
+                                </div>
+                                <div class="metric-trend down">
+                                    <i data-lucide="trending-down" style="width: 14px; height: 14px;"></i>
+                                    -23%
+                                </div>
+                            </div>
+                            <div class="metric-value" id="metricCost">$47.82</div>
+                            <div class="metric-label">Cost Today (74% budget)</div>
+                            <div class="metric-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill warning" style="width: 74%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card purple">
+                            <div class="metric-header">
+                                <div class="metric-icon">
+                                    <i data-lucide="bot" style="width: 20px; height: 20px;"></i>
+                                </div>
+                                <div class="metric-trend up">
+                                    <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                                    +2
+                                </div>
+                            </div>
+                            <div class="metric-value" id="metricAgents">8</div>
+                            <div class="metric-label">Active Agents</div>
+                            <div class="metric-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill primary" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Two Column Layout -->
+                    <div class="grid-2" style="margin-bottom: 24px;">
+                        <!-- Active Agents -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Active Agents</h3>
+                                <button class="btn btn-ghost" onclick="switchNav('agents')">
+                                    View All <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="agent-grid" style="grid-template-columns: 1fr;">
+                                    <div class="agent-card active">
+                                        <div class="agent-header">
+                                            <div class="agent-avatar researcher">R</div>
+                                            <div class="agent-info">
+                                                <div class="agent-name">Research Agent</div>
+                                                <div class="agent-type">Deep Research & Analysis</div>
+                                            </div>
+                                            <div class="agent-status online"></div>
+                                        </div>
+                                        <div class="agent-description">Analyzing market trends and competitor data</div>
+                                        <div class="agent-progress">
+                                            <div class="agent-progress-bar">
+                                                <div class="agent-progress-fill" style="width: 67%"></div>
+                                            </div>
+                                            <div class="agent-progress-text">
+                                                <span>67% complete</span>
+                                                <span>~4 min remaining</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="agent-card">
+                                        <div class="agent-header">
+                                            <div class="agent-avatar coder">C</div>
+                                            <div class="agent-info">
+                                                <div class="agent-name">Code Agent</div>
+                                                <div class="agent-type">Full Stack Development</div>
+                                            </div>
+                                            <div class="agent-status busy"></div>
+                                        </div>
+                                        <div class="agent-description">Implementing new API endpoints</div>
+                                        <div class="agent-progress">
+                                            <div class="agent-progress-bar">
+                                                <div class="agent-progress-fill" style="width: 34%"></div>
+                                            </div>
+                                            <div class="agent-progress-text">
+                                                <span>34% complete</span>
+                                                <span>~12 min remaining</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="agent-card">
+                                        <div class="agent-header">
+                                            <div class="agent-avatar browser">B</div>
+                                            <div class="agent-info">
+                                                <div class="agent-name">Browser Agent</div>
+                                                <div class="agent-type">Web Automation</div>
+                                            </div>
+                                            <div class="agent-status online"></div>
+                                        </div>
+                                        <div class="agent-description">Scraping competitor pricing data</div>
+                                        <div class="agent-stats">
+                                            <div class="agent-stat">
+                                                <div class="agent-stat-value">247</div>
+                                                <div class="agent-stat-label">Pages</div>
+                                            </div>
+                                            <div class="agent-stat">
+                                                <div class="agent-stat-value">98.2%</div>
+                                                <div class="agent-stat-label">Success</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Interface -->
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <div>
+                                    <div class="chat-title">Quick Chat</div>
+                                    <div class="chat-model">gpt-4-turbo</div>
+                                </div>
+                                <button class="btn btn-ghost">
+                                    <i data-lucide="maximize-2" style="width: 16px; height: 16px;"></i>
+                                </button>
+                            </div>
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="chat-message assistant">
+                                    <div class="chat-avatar">🤖</div>
+                                    <div class="chat-bubble">
+                                        <div class="chat-text">
+                                            Hello! I'm your SENTIENT assistant. How can I help you today? I can help with:
+                                            <br><br>
+                                            • **Research** - Deep analysis and information gathering<br>
+                                            • **Code** - Development and debugging<br>
+                                            • **Automation** - Task automation and workflows<br>
+                                            • **Analysis** - Data analysis and insights
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <div class="chat-input-wrapper">
+                                    <textarea class="chat-input" placeholder="Type your message... (Enter to send, Shift+Enter for new line)" rows="1"></textarea>
+                                    <button class="chat-send-btn" onclick="sendMessage()">
+                                        <i data-lucide="send" style="width: 18px; height: 18px;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Channels & Providers -->
+                    <div class="grid-2" style="margin-bottom: 24px;">
+                        <!-- Active Channels -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Active Channels</h3>
+                                <button class="btn btn-ghost" onclick="switchNav('channels')">
+                                    Configure <i data-lucide="settings" style="width: 14px; height: 14px;"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="channel-grid">
+                                    <div class="channel-card active">
+                                        <div class="channel-icon">📱</div>
+                                        <div class="channel-name">Telegram</div>
+                                        <div class="channel-status">Connected • 1.2K users</div>
+                                        <div class="channel-toggle">
+                                            <div class="toggle active" onclick="toggleChannel(this)"></div>
+                                        </div>
+                                    </div>
+                                    <div class="channel-card active">
+                                        <div class="channel-icon">💬</div>
+                                        <div class="channel-name">Discord</div>
+                                        <div class="channel-status">Connected • 847 users</div>
+                                        <div class="channel-toggle">
+                                            <div class="toggle active" onclick="toggleChannel(this)"></div>
+                                        </div>
+                                    </div>
+                                    <div class="channel-card active">
+                                        <div class="channel-icon">💼</div>
+                                        <div class="channel-name">Slack</div>
+                                        <div class="channel-status">Connected • 234 users</div>
+                                        <div class="channel-toggle">
+                                            <div class="toggle active" onclick="toggleChannel(this)"></div>
+                                        </div>
+                                    </div>
+                                    <div class="channel-card">
+                                        <div class="channel-icon">📧</div>
+                                        <div class="channel-name">Email</div>
+                                        <div class="channel-status">Disconnected</div>
+                                        <div class="channel-toggle">
+                                            <div class="toggle" onclick="toggleChannel(this)"></div>
+                                        </div>
+                                    </div>
+                                    <div class="channel-card active">
+                                        <div class="channel-icon">🌐</div>
+                                        <div class="channel-name">WhatsApp</div>
+                                        <div class="channel-status">Connected • 56 users</div>
+                                        <div class="channel-toggle">
+                                            <div class="toggle active" onclick="toggleChannel(this)"></div>
+                                        </div>
+                                    </div>
+                                    <div class="channel-card active">
+                                        <div class="channel-icon">🎤</div>
+                                        <div class="channel-name">Voice</div>
+                                        <div class="channel-status">Ready • 12 sessions</div>
+                                        <div class="channel-toggle">
+                                            <div class="toggle active" onclick="toggleChannel(this)"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- LLM Providers -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">LLM Providers</h3>
+                                <button class="btn btn-ghost" onclick="switchNav('providers')">
+                                    Manage <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="provider-grid" style="grid-template-columns: 1fr;">
+                                    <div class="provider-card">
+                                        <div class="provider-header">
+                                            <div class="provider-logo">🟢</div>
+                                            <div class="provider-info">
+                                                <div class="provider-name">OpenAI</div>
+                                                <div class="provider-model">gpt-4-turbo, gpt-3.5-turbo</div>
+                                            </div>
+                                        </div>
+                                        <div class="provider-stats">
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">1.2M</div>
+                                                <div class="provider-stat-label">Tokens</div>
+                                            </div>
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">$24</div>
+                                                <div class="provider-stat-label">Cost</div>
+                                            </div>
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">124ms</div>
+                                                <div class="provider-stat-label">Latency</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="provider-card">
+                                        <div class="provider-header">
+                                            <div class="provider-logo">🟣</div>
+                                            <div class="provider-info">
+                                                <div class="provider-name">Anthropic</div>
+                                                <div class="provider-model">claude-3-opus, claude-3-sonnet</div>
+                                            </div>
+                                        </div>
+                                        <div class="provider-stats">
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">847K</div>
+                                                <div class="provider-stat-label">Tokens</div>
+                                            </div>
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">$18</div>
+                                                <div class="provider-stat-label">Cost</div>
+                                            </div>
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">156ms</div>
+                                                <div class="provider-stat-label">Latency</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="provider-card">
+                                        <div class="provider-header">
+                                            <div class="provider-logo">🟠</div>
+                                            <div class="provider-info">
+                                                <div class="provider-name">Local (Ollama)</div>
+                                                <div class="provider-model">gemma3:27b, deepseek-r1:67b</div>
+                                            </div>
+                                        </div>
+                                        <div class="provider-stats">
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">324K</div>
+                                                <div class="provider-stat-label">Tokens</div>
+                                            </div>
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">$0</div>
+                                                <div class="provider-stat-label">Cost</div>
+                                            </div>
+                                            <div class="provider-stat">
+                                                <div class="provider-stat-value">890ms</div>
+                                                <div class="provider-stat-label">Latency</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Overview -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Security & Autonomy Center</h3>
+                            <button class="btn btn-ghost" onclick="switchNav('security')">
+                                Full Details <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="security-grid">
+                                <div class="security-card constitution">
+                                    <div class="security-card-title">Constitution Rules</div>
+                                    <div class="security-card-value" id="securityConstitution">47</div>
+                                    <div class="security-card-status">Active rules protecting system</div>
+                                    <div class="threat-badge low">LOW RISK</div>
+                                </div>
+                                
+                                <div class="security-card vgate">
+                                    <div class="security-card-title">V-Gate Encryption</div>
+                                    <div class="security-card-value" id="securityVgate">2.4M</div>
+                                    <div class="security-card-status">Packets encrypted today</div>
+                                    <div class="threat-badge low">SECURE</div>
+                                </div>
+                                
+                                <div class="security-card sandbox">
+                                    <div class="security-card-title">Sandbox Isolation</div>
+                                    <div class="security-card-value" id="securitySandbox">12</div>
+                                    <div class="security-card-status">Active containers</div>
+                                    <div class="threat-badge low">ISOLATED</div>
+                                </div>
+                                
+                                <div class="security-card behavior">
+                                    <div class="security-card-title">Behavior Analysis</div>
+                                    <div class="security-card-value" id="securityBehavior">98.2%</div>
+                                    <div class="security-card-status">Human-likeness score</div>
+                                    <div class="threat-badge low">NATURAL</div>
+                                </div>
+                                
+                                <div class="security-card mouse">
+                                    <div class="security-card-title">Mouse Simulation</div>
+                                    <div class="security-card-value" id="securityMouse">1,847</div>
+                                    <div class="security-card-status">Bezier curves generated</div>
+                                    <div class="threat-badge low">HUMAN-LIKE</div>
+                                </div>
+                                
+                                <div class="security-card keyboard">
+                                    <div class="security-card-title">Keyboard Simulation</div>
+                                    <div class="security-card-value" id="securityKeyboard">89.4%</div>
+                                    <div class="security-card-status">Typing accuracy score</div>
+                                    <div class="threat-badge low">NATURAL</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" id="modalAction">Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ════════════════════════════════════════════════════════════════════════════
+        //  INITIALIZATION
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initWebSocket();
+            startMetricsUpdate();
+        });
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  WEBSOCKET REAL-TIME UPDATES
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        let ws = null;
+        let reconnectAttempts = 0;
+        
+        function initWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+            
+            ws.onopen = () => {
+                console.log('WebSocket connected');
+                reconnectAttempts = 0;
+                showToast('Connected to real-time updates', 'success');
+            };
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+            
+            ws.onclose = () => {
+                console.log('WebSocket disconnected');
+                if (reconnectAttempts < 5) {
+                    setTimeout(() => {
+                        reconnectAttempts++;
+                        initWebSocket();
+                    }, 2000 * reconnectAttempts);
+                }
+            };
+            
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        }
+        
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'metrics':
+                    updateMetrics(data.payload);
+                    break;
+                case 'agent_status':
+                    updateAgentStatus(data.payload);
+                    break;
+                case 'security_alert':
+                    showSecurityAlert(data.payload);
+                    break;
+                case 'chat_message':
+                    addChatMessage(data.payload);
+                    break;
+                default:
+                    console.log('Unknown message type:', data.type);
+            }
+        }
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  METRICS UPDATE
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function startMetricsUpdate() {
+            // Simulate real-time updates
+            setInterval(() => {
+                updateMetrics({
+                    health: (97 + Math.random() * 2).toFixed(1),
+                    tokens: Math.floor(Math.random() * 10000),
+                    cost: (40 + Math.random() * 20).toFixed(2),
+                    agents: Math.floor(6 + Math.random() * 4)
+                });
+            }, 5000);
+        }
+        
+        function updateMetrics(data) {
+            if (data.health) document.getElementById('metricHealth').textContent = data.health + '%';
+            if (data.tokens) document.getElementById('quickTokens').textContent = formatNumber(data.tokens);
+            if (data.cost) document.getElementById('quickCost').textContent = '$' + data.cost;
+            if (data.agents) {
+                document.getElementById('metricAgents').textContent = data.agents;
+                document.getElementById('agentCount').textContent = data.agents;
+            }
+        }
+        
+        function updateAgentStatus(data) {
+            showToast(`Agent ${data.name} is now ${data.status}`, 'info');
+        }
+        
+        function showSecurityAlert(data) {
+            showToast(`Security Alert: ${data.message}`, 'warning');
+        }
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  NAVIGATION
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function switchView(view) {
+            document.querySelectorAll('.quick-btn').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            showToast(`${view.charAt(0).toUpperCase() + view.slice(1)} view activated`, 'info');
+        }
+        
+        function switchNav(view) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            showToast(`Navigated to ${view}`, 'info');
+        }
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  CHAT
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function sendMessage() {
+            const input = document.querySelector('.chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML += `
+                <div class="chat-message user">
+                    <div class="chat-avatar">👤</div>
+                    <div class="chat-bubble">
+                        <div class="chat-text">${escapeHtml(message)}</div>
+                    </div>
+                </div>
+            `;
+            
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Send to API
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                addChatMessage(data);
+            })
+            .catch(err => {
+                showToast('Failed to send message', 'error');
+            });
+        }
+        
+        function addChatMessage(data) {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML += `
+                <div class="chat-message assistant">
+                    <div class="chat-avatar">🤖</div>
+                    <div class="chat-bubble">
+                        <div class="chat-text">${marked.parse(data.response || data.message)}</div>
+                    </div>
+                </div>
+            `;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  CHANNEL TOGGLE
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function toggleChannel(element) {
+            element.classList.toggle('active');
+            const card = element.closest('.channel-card');
+            card.classList.toggle('active');
+            
+            const status = card.querySelector('.channel-status');
+            if (element.classList.contains('active')) {
+                status.textContent = 'Connected';
+                showToast('Channel connected', 'success');
+            } else {
+                status.textContent = 'Disconnected';
+                showToast('Channel disconnected', 'warning');
+            }
+        }
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  MODAL
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function openModal(title, content, action) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('modalAction').textContent = action;
+            document.getElementById('modalOverlay').classList.add('visible');
+        }
+        
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('visible');
+        }
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  TOAST NOTIFICATIONS
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : type === 'warning' ? 'alert-triangle' : 'info'}" style="width: 18px; height: 18px;"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  UTILITIES
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Cmd/Ctrl + K for search
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                document.querySelector('.search-box input').focus();
+            }
+            
+            // Escape to close modal
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  REAL-TIME UPDATES SIMULATION
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        // Simulate real-time metrics when WebSocket is not available
+        function startMetricsSimulation() {
+            setInterval(() => {
+                // Update health
+                const health = (97 + Math.random() * 2).toFixed(1);
+                document.getElementById('metricHealth').textContent = health + '%';
+                document.querySelector('.metric-card.primary .progress-fill').style.width = health + '%';
+                
+                // Update tasks
+                const tasks = Math.floor(1200 + Math.random() * 100);
+                document.getElementById('metricTasks').textContent = tasks.toLocaleString();
+                
+                // Update cost
+                const cost = (45 + Math.random() * 10).toFixed(2);
+                document.getElementById('metricCost').textContent = '$' + cost;
+                
+                // Quick stats
+                document.getElementById('quickTokens').textContent = formatNumber(Math.floor(Math.random() * 100000) + 2300000);
+                document.getElementById('quickLatency').textContent = Math.floor(100 + Math.random() * 50) + 'ms';
+            }, 5000);
+        }
+        
+        // Start simulation if WebSocket fails
+        setTimeout(() => {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                console.log('WebSocket not available, starting simulation');
+                startMetricsSimulation();
+            }
+        }, 3000);
+        
+        // ════════════════════════════════════════════════════════════════════════════
+        //  CHART INITIALIZATION (placeholder)
+        // ════════════════════════════════════════════════════════════════════════════
+        
+        function initCharts() {
+            // Charts will be initialized when Chart.js data is available
+            console.log('Charts ready for initialization');
+        }
+        
+        // Initialize on load
+        initCharts();
+    </script>
+</body>
+</html>

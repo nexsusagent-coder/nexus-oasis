@@ -1,0 +1,42 @@
+[package]
+name = "sentient_digest"
+version.workspace = true
+edition.workspace = true
+description = "SENTIENT Morning Digest - Daily personalized briefing system"
+authors = ["SENTIENT Core Team"]
+
+[dependencies]
+sentient_common = { path = "../sentient_common" }
+sentient_connectors = { path = "../sentient_connectors" }
+sentient_i18n = { path = "../sentient_i18n" }
+
+# Async
+tokio.workspace = true
+async-trait = "0.1"
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# Time
+chrono.workspace = true
+
+# Scheduling
+cron = "0.12"
+
+# Logging
+log.workspace = true
+
+# Text processing
+markdown = "1.0"
+
+# Error handling
+thiserror.workspace = true
+anyhow.workspace = true
+
+# Random
+rand = "0.8"
+
+[features]
+default = []
+tts = []  # Text-to-speech support

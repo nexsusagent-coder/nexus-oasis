@@ -12,6 +12,7 @@ serde_json = { workspace = true }
 tracing = { workspace = true }
 async-trait = "0.1"
 thiserror = "1.0"
+uuid = { workspace = true }
 
 [lib]
 name = "sentient_devtools"

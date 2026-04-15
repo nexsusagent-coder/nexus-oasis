@@ -122,6 +122,9 @@ pub fn date_format(language: Language) -> &'static str {
         Language::Japanese => "%Y年%m月%d日",
         Language::Chinese => "%Y年%m月%d日",
         Language::Russian => "%d.%m.%Y",
+        Language::Arabic => "%d/%m/%Y",
+        Language::Korean => "%Y년 %m월 %d일",
+        Language::Portuguese => "%d/%m/%Y",
     }
 }
 
@@ -136,6 +139,9 @@ pub fn time_format(language: Language) -> &'static str {
         Language::Japanese => "%H:%M",
         Language::Chinese => "%H:%M",
         Language::Russian => "%H:%M",
+        Language::Arabic => "%H:%M",
+        Language::Korean => "%H:%M",
+        Language::Portuguese => "%H:%M",
     }
 }
 
@@ -173,6 +179,18 @@ pub fn number_format(language: Language) -> NumberFormat {
         Language::Russian => NumberFormat {
             decimal_separator: ',',
             thousands_separator: ' ',
+        },
+        Language::Arabic => NumberFormat {
+            decimal_separator: '.',
+            thousands_separator: ',',
+        },
+        Language::Korean => NumberFormat {
+            decimal_separator: '.',
+            thousands_separator: ',',
+        },
+        Language::Portuguese => NumberFormat {
+            decimal_separator: ',',
+            thousands_separator: '.',
         },
     }
 }

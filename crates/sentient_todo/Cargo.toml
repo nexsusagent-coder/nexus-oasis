@@ -1,0 +1,19 @@
+[package]
+name = "sentient_todo"
+version = "0.1.0"
+edition = "2021"
+description = "Smart Todo System - Self-researching tasks with AI-powered decomposition"
+authors = ["SENTIENT OS Team"]
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"

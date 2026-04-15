@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTIENT OS | Permissions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        :root {
+            --bg-canvas: #0F0F0F;
+            --bg-primary: #1A1D21;
+            --bg-secondary: #1E2227;
+            --bg-tertiary: #252A30;
+            --bg-hover: #2A2F36;
+            --text-primary: #E8E9EB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --border-subtle: #2A2F36;
+            --border-default: #374151;
+            --accent-green: #4B7C59;
+            --accent-green-muted: rgba(75, 124, 89, 0.15);
+            --accent-orange: #B86D28;
+            --accent-blue: #4A6B8A;
+            --accent-red: #8B4B4B;
+            --accent-purple: #6B5B95;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-canvas);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .page-container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .page-title { font-size: 28px; font-weight: 700; }
+        .page-subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+        
+        .header-actions { display: flex; gap: 12px; }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary { background: var(--accent-green); color: white; }
+        .btn-primary:hover { background: #3D6A4A; }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-secondary); }
+        .btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .btn-danger { background: var(--accent-red); color: white; }
+        
+        /* Two Column Layout */
+        .permissions-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+        
+        /* Left Panel - Users & Roles */
+        .sidebar {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .sidebar-tab {
+            flex: 1;
+            padding: 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .sidebar-tab:hover { color: var(--text-secondary); }
+        .sidebar-tab.active { color: var(--text-primary); border-bottom-color: var(--accent-green); }
+        
+        .sidebar-content { padding: 16px; }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        
+        .search-input:focus { outline: none; border-color: var(--accent-green); }
+        
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-bottom: 4px;
+        }
+        
+        .list-item:hover { background: var(--bg-hover); }
+        .list-item.active { background: var(--accent-green-muted); }
+        
+        .item-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .item-info { flex: 1; min-width: 0; }
+        
+        .item-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .item-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .item-badge {
+            padding: 3px 8px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+        
+        /* Right Panel - Permissions Matrix */
+        .permissions-panel {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .panel-title { font-size: 16px; font-weight: 600; }
+        
+        .panel-content { padding: 20px; }
+        
+        /* Permission Sections */
+        .permission-section {
+            margin-bottom: 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title span { font-size: 16px; }
+        
+        .section-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 4px 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        
+        .action-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+        
+        /* Permission Grid */
+        .permission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+        }
+        
+        .permission-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            transition: all 0.15s ease;
+        }
+        
+        .permission-item:hover { background: var(--bg-hover); }
+        .permission-item.granted { border-color: var(--accent-green); background: var(--accent-green-muted); }
+        .permission-item.denied { border-color: var(--accent-red); background: rgba(139, 75, 75, 0.1); }
+        
+        .permission-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .permission-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .permission-name {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .permission-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        
+        /* Permission Toggle */
+        .permission-toggle {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .toggle-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .toggle-btn.allow {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+        
+        .toggle-btn.allow.active {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .toggle-btn.deny {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+        
+        .toggle-btn.deny.active {
+            background: var(--accent-red);
+            color: white;
+        }
+        
+        /* Constitution Rules */
+        .constitution-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        
+        .rule-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .rule-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .rule-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(139, 75, 75, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .rule-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .rule-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .rule-severity {
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .rule-severity.critical { background: rgba(139, 75, 75, 0.3); color: #FF6B6B; }
+        .rule-severity.high { background: rgba(184, 109, 40, 0.2); color: var(--accent-orange); }
+        .rule-severity.medium { background: rgba(74, 107, 138, 0.2); color: var(--accent-blue); }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.visible { display: flex; }
+        
+        .modal {
+            width: 90%;
+            max-width: 500px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .modal-title { font-size: 18px; font-weight: 600; }
+        .modal-close {
+            width: 32px; height: 32px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 20px;
+        }
+        
+        .modal-body { padding: 24px; }
+        
+        .form-group { margin-bottom: 16px; }
+        
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .form-input:focus, .form-select:focus { outline: none; border-color: var(--accent-green); }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+        }
+        
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+        
+        .toast {
+            padding: 14px 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .toast.success { border-left: 3px solid var(--accent-green); }
+        .toast.error { border-left: 3px solid var(--accent-red); }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Permissions</h1>
+                <p class="page-subtitle">Manage users, roles, and access control</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="exportPermissions()">
+                    <span>📥</span> Export
+                </button>
+                <button class="btn btn-primary" onclick="openAddUserModal()">
+                    <span>+</span> Add User
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Layout -->
+        <div class="permissions-layout">
+            <!-- Left Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-tabs">
+                    <div class="sidebar-tab active" onclick="switchSidebarTab('users')">Users</div>
+                    <div class="sidebar-tab" onclick="switchSidebarTab('roles')">Roles</div>
+                </div>
+                <div class="sidebar-content">
+                    <input type="text" class="search-input" placeholder="Search..." oninput="filterList(this.value)">
+                    
+                    <!-- Users List -->
+                    <div id="usersList">
+                        <div class="list-item active" onclick="selectUser('admin')">
+                            <div class="item-avatar">👤</div>
+                            <div class="item-info">
+                                <div class="item-name">Admin</div>
+                                <div class="item-meta">Super Admin</div>
+                            </div>
+                            <span class="item-badge">All Access</span>
+                        </div>
+                        <div class="list-item" onclick="selectUser('john')">
+                            <div class="item-avatar">👨</div>
+                            <div class="item-info">
+                                <div class="item-name">John Doe</div>
+                                <div class="item-meta">Developer</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="selectUser('jane')">
+                            <div class="item-avatar">👩</div>
+                            <div class="item-info">
+                                <div class="item-name">Jane Smith</div>
+                                <div class="item-meta">Researcher</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="selectUser('agent')">
+                            <div class="item-avatar">🤖</div>
+                            <div class="item-info">
+                                <div class="item-name">Agent Alpha</div>
+                                <div class="item-meta">AI Agent</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Roles List (hidden) -->
+                    <div id="rolesList" style="display: none;">
+                        <div class="list-item active" onclick="selectRole('admin')">
+                            <div class="item-avatar">👑</div>
+                            <div class="item-info">
+                                <div class="item-name">Super Admin</div>
+                                <div class="item-meta">Full system access</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="selectRole('developer')">
+                            <div class="item-avatar">👨‍💻</div>
+                            <div class="item-info">
+                                <div class="item-name">Developer</div>
+                                <div class="item-meta">Code & file access</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="selectRole('researcher')">
+                            <div class="item-avatar">🔬</div>
+                            <div class="item-info">
+                                <div class="item-name">Researcher</div>
+                                <div class="item-meta">Search & read access</div>
+                            </div>
+                        </div>
+                        <div class="list-item" onclick="selectRole('agent')">
+                            <div class="item-avatar">🤖</div>
+                            <div class="item-info">
+                                <div class="item-name">AI Agent</div>
+                                <div class="item-meta">Limited autonomous access</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="permissions-panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title" id="panelTitle">Admin - Super Admin</div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Last modified: Today</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="resetPermissions()">Reset</button>
+                </div>
+                
+                <div class="panel-content">
+                    <!-- File System Permissions -->
+                    <div class="permission-section">
+                        <div class="section-header">
+                            <div class="section-title"><span>📁</span> File System</div>
+                            <div class="section-actions">
+                                <button class="action-btn" onclick="setAllPermission('files', true)">Allow All</button>
+                                <button class="action-btn" onclick="setAllPermission('files', false)">Deny All</button>
+                            </div>
+                        </div>
+                        <div class="permission-grid" id="filesGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Network Permissions -->
+                    <div class="permission-section">
+                        <div class="section-header">
+                            <div class="section-title"><span>🌐</span> Network & Internet</div>
+                            <div class="section-actions">
+                                <button class="action-btn" onclick="setAllPermission('network', true)">Allow All</button>
+                                <button class="action-btn" onclick="setAllPermission('network', false)">Deny All</button>
+                            </div>
+                        </div>
+                        <div class="permission-grid" id="networkGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- System Permissions -->
+                    <div class="permission-section">
+                        <div class="section-header">
+                            <div class="section-title"><span>⚙️</span> System & Execution</div>
+                            <div class="section-actions">
+                                <button class="action-btn" onclick="setAllPermission('system', true)">Allow All</button>
+                                <button class="action-btn" onclick="setAllPermission('system', false)">Deny All</button>
+                            </div>
+                        </div>
+                        <div class="permission-grid" id="systemGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- AI & Automation Permissions -->
+                    <div class="permission-section">
+                        <div class="section-header">
+                            <div class="section-title"><span>🤖</span> AI & Automation</div>
+                            <div class="section-actions">
+                                <button class="action-btn" onclick="setAllPermission('ai', true)">Allow All</button>
+                                <button class="action-btn" onclick="setAllPermission('ai', false)">Deny All</button>
+                            </div>
+                        </div>
+                        <div class="permission-grid" id="aiGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Constitution Rules -->
+                    <div class="constitution-section">
+                        <div class="section-header">
+                            <div class="section-title"><span>🛡️</span> Constitution Rules (Always Enforced)</div>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <div class="rule-info">
+                                <div class="rule-icon">🚫</div>
+                                <div>
+                                    <div class="rule-name">System Destruction</div>
+                                    <div class="rule-desc">Block commands like rm -rf /</div>
+                                </div>
+                            </div>
+                            <span class="rule-severity critical">Critical</span>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <div class="rule-info">
+                                <div class="rule-icon">🔐</div>
+                                <div>
+                                    <div class="rule-name">Permission Escalation</div>
+                                    <div class="rule-desc">Block chmod 777, sudo misuse</div>
+                                </div>
+                            </div>
+                            <span class="rule-severity critical">Critical</span>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <div class="rule-info">
+                                <div class="rule-icon">📡</div>
+                                <div>
+                                    <div class="rule-name">Remote Code Execution</div>
+                                    <div class="rule-desc">Block curl | bash patterns</div>
+                                </div>
+                            </div>
+                            <span class="rule-severity high">High</span>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <div class="rule-info">
+                                <div class="rule-icon">💣</div>
+                                <div>
+                                    <div class="rule-name">Fork Bomb</div>
+                                    <div class="rule-desc">Block :(){ :|:& };: patterns</div>
+                                </div>
+                            </div>
+                            <span class="rule-severity high">High</span>
+                        </div>
+                        
+                        <div class="rule-item">
+                            <div class="rule-info">
+                                <div class="rule-icon">🔒</div>
+                                <div>
+                                    <div class="rule-name">Credential Exposure</div>
+                                    <div class="rule-desc">Block sending secrets to external URLs</div>
+                                </div>
+                            </div>
+                            <span class="rule-severity medium">Medium</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add User Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add User</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="newUsername" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Display Name</label>
+                    <input type="text" class="form-input" id="newDisplayName" placeholder="Enter display name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" id="newRole">
+                        <option value="developer">Developer</option>
+                        <option value="researcher">Researcher</option>
+                        <option value="agent">AI Agent</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Authentication Method</label>
+                    <select class="form-select" id="newAuthMethod">
+                        <option value="password">Password</option>
+                        <option value="api-key">API Key</option>
+                        <option value="oauth">OAuth</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveUser()">Create User</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Permission Data
+        const permissions = {
+            files: [
+                { id: 'files.read', name: 'Read Files', desc: 'Read file contents', icon: '📖', granted: true },
+                { id: 'files.write', name: 'Write Files', desc: 'Create and modify files', icon: '✏️', granted: true },
+                { id: 'files.delete', name: 'Delete Files', desc: 'Delete files and directories', icon: '🗑️', granted: false },
+                { id: 'files.execute', name: 'Execute Files', desc: 'Run executable files', icon: '▶️', granted: true },
+                { id: 'files.upload', name: 'Upload Files', desc: 'Upload files to server', icon: '📤', granted: true },
+                { id: 'files.download', name: 'Download Files', desc: 'Download files from server', icon: '📥', granted: true },
+            ],
+            network: [
+                { id: 'network.http', name: 'HTTP Requests', desc: 'Make HTTP/HTTPS requests', icon: '🌐', granted: true },
+                { id: 'network.websocket', name: 'WebSocket', desc: 'WebSocket connections', icon: '🔌', granted: true },
+                { id: 'network.dns', name: 'DNS Lookup', desc: 'Perform DNS queries', icon: '🔍', granted: true },
+                { id: 'network.ftp', name: 'FTP Access', desc: 'FTP file transfers', icon: '📁', granted: false },
+            ],
+            system: [
+                { id: 'system.shell', name: 'Shell Commands', desc: 'Execute shell commands', icon: '💻', granted: true },
+                { id: 'system.process', name: 'Process Control', desc: 'Start/stop processes', icon: '⚡', granted: true },
+                { id: 'system.docker', name: 'Docker Control', desc: 'Manage Docker containers', icon: '🐳', granted: true },
+                { id: 'system.service', name: 'Service Control', desc: 'Start/stop system services', icon: '🔧', granted: false },
+                { id: 'system.install', name: 'Install Software', desc: 'Install packages/programs', icon: '📦', granted: false },
+            ],
+            ai: [
+                { id: 'ai.llm', name: 'LLM Access', desc: 'Use language models', icon: '🧠', granted: true },
+                { id: 'ai.vision', name: 'Vision AI', desc: 'Image analysis and OCR', icon: '👁️', granted: true },
+                { id: 'ai.voice', name: 'Voice AI', desc: 'Speech recognition/synthesis', icon: '🎙️', granted: true },
+                { id: 'ai.embedding', name: 'Embeddings', desc: 'Generate vector embeddings', icon: '🔢', granted: true },
+                { id: 'ai.autonomous', name: 'Autonomous Actions', desc: 'Act without confirmation', icon: '🤖', granted: false },
+            ]
+        };
+        
+        let currentUser = 'admin';
+        
+        function renderPermissions() {
+            for (const [category, items] of Object.entries(permissions)) {
+                const grid = document.getElementById(`${category}Grid`);
+                grid.innerHTML = items.map(p => `
+                    <div class="permission-item ${p.granted ? 'granted' : ''}" data-id="${p.id}">
+                        <div class="permission-info">
+                            <div class="permission-icon">${p.icon}</div>
+                            <div>
+                                <div class="permission-name">${p.name}</div>
+                                <div class="permission-desc">${p.desc}</div>
+                            </div>
+                        </div>
+                        <div class="permission-toggle">
+                            <button class="toggle-btn allow ${p.granted ? 'active' : ''}" onclick="setPermission('${p.id}', true)">✓</button>
+                            <button class="toggle-btn deny ${!p.granted ? 'active' : ''}" onclick="setPermission('${p.id}', false)">✗</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function setPermission(id, granted) {
+            for (const [category, items] of Object.entries(permissions)) {
+                const item = items.find(p => p.id === id);
+                if (item) {
+                    item.granted = granted;
+                    break;
+                }
+            }
+            renderPermissions();
+            showToast(`Permission ${granted ? 'granted' : 'denied'}`, 'success');
+        }
+        
+        function setAllPermission(category, granted) {
+            permissions[category].forEach(p => p.granted = granted);
+            renderPermissions();
+            showToast(`All ${category} permissions ${granted ? 'granted' : 'denied'}`, 'success');
+        }
+        
+        function switchSidebarTab(tab) {
+            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('usersList').style.display = tab === 'users' ? 'block' : 'none';
+            document.getElementById('rolesList').style.display = tab === 'roles' ? 'block' : 'none';
+        }
+        
+        function selectUser(id) {
+            document.querySelectorAll('#usersList .list-item').forEach(i => i.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            currentUser = id;
+            
+            const names = { admin: 'Admin - Super Admin', john: 'John Doe - Developer', jane: 'Jane Smith - Researcher', agent: 'Agent Alpha - AI Agent' };
+            document.getElementById('panelTitle').textContent = names[id] || id;
+        }
+        
+        function selectRole(id) {
+            document.querySelectorAll('#rolesList .list-item').forEach(i => i.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+        
+        function filterList(query) {
+            const q = query.toLowerCase();
+            document.querySelectorAll('.list-item').forEach(item => {
+                const name = item.querySelector('.item-name').textContent.toLowerCase();
+                item.style.display = name.includes(q) ? 'flex' : 'none';
+            });
+        }
+        
+        function openAddUserModal() {
+            document.getElementById('userModal').classList.add('visible');
+        }
+        
+        function closeModal() {
+            document.getElementById('userModal').classList.remove('visible');
+        }
+        
+        function saveUser() {
+            const username = document.getElementById('newUsername').value;
+            if (!username) {
+                showToast('Please enter a username', 'error');
+                return;
+            }
+            showToast(`User "${username}" created successfully!`, 'success');
+            closeModal();
+        }
+        
+        function resetPermissions() {
+            showToast('Permissions reset to defaults', 'success');
+        }
+        
+        function exportPermissions() {
+            showToast('Permissions exported to JSON', 'success');
+        }
+        
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPermissions();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

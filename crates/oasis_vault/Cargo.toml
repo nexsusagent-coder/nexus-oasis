@@ -58,3 +58,6 @@ azure = []
 
 # Hardware security
 hardware_security = []
+
+[dev-dependencies]
+tempfile = "3.10"

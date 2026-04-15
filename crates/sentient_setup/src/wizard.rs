@@ -169,36 +169,50 @@ impl SetupWizard {
     // ═══════════════════════════════════════════════════════════════════════════════
     
     async fn quick_start_setup(&mut self) -> anyhow::Result<()> {
-        self.total_steps = 4;
+        self.total_steps = 6;
         
         // Set QuickStart defaults
         self.config.dashboard.port = 18789;
         self.config.dashboard.host = "127.0.0.1".to_string(); // Loopback only
         self.config.permissions.require_confirmation = true; // Token auth
         
-        // STEP 2: LLM Provider (100+)
+        // STEP 1: Asistan İsmi
         self.step = 1;
+        self.print_step("Asistan İsmi & Kişilik");
+        if self.configure_assistant_identity()? == StepResult::Skipped {
+            println!("  [SKIP] Varsayılan: SENTIENT (professional)");
+        }
+        
+        // STEP 2: Dil Seçimi
+        self.step = 2;
+        self.print_step("Dil Seçimi");
+        if self.select_language()? == StepResult::Skipped {
+            self.config.language = "tr".to_string();
+        }
+        
+        // STEP 3: LLM Provider (100+)
+        self.step = 3;
         self.print_step("LLM Provider Selection");
         if self.configure_llm_provider()? == StepResult::Skipped {
             println!("  [SKIP] LLM configuration skipped");
         }
         
-        // STEP 3: Communication Channels (20+)
-        self.step = 2;
+        // STEP 4: Communication Channels (20+)
+        self.step = 4;
         self.print_step("Communication Channels");
         if self.configure_communication_channels()? == StepResult::Skipped {
             println!("  [SKIP] Channel configuration skipped");
         }
         
-        // STEP 4: Tools (Web Search)
-        self.step = 3;
+        // STEP 5: Tools (Web Search)
+        self.step = 5;
         self.print_step("Tools");
         if self.configure_tools()? == StepResult::Skipped {
             println!("  [SKIP] Tools configuration skipped");
         }
         
-        // STEP 5: Save
-        self.step = 4;
+        // STEP 6: Save
+        self.step = 6;
         self.print_step("Saving Configuration");
         self.save_and_show_success()?;
         
@@ -210,45 +224,59 @@ impl SetupWizard {
     // ═══════════════════════════════════════════════════════════════════════════════
     
     async fn manual_setup(&mut self) -> anyhow::Result<()> {
-        self.total_steps = 6;
+        self.total_steps = 8;
+        
+        // STEP 1: Asistan İsmi & Kişilik
+        self.step = 1;
+        self.print_step("Asistan İsmi & Kişilik");
+        if self.configure_assistant_identity()? == StepResult::Skipped {
+            println!("  [SKIP] Varsayılan: SENTIENT (professional)");
+        }
         
         // STEP 2: Language Selection
-        self.step = 1;
+        self.step = 2;
         self.print_step("Language");
         if self.select_language()? == StepResult::Skipped {
             self.config.language = "en".to_string();
         }
         
         // STEP 3: LLM Provider (100+)
-        self.step = 2;
+        self.step = 3;
         self.print_step("LLM Provider");
         if self.configure_llm_provider()? == StepResult::Skipped {
             println!("  [SKIP] LLM configuration skipped");
         }
         
         // STEP 4: Communication Channels (20+)
-        self.step = 3;
+        self.step = 4;
         self.print_step("Communication Channels");
         if self.configure_communication_channels()? == StepResult::Skipped {
             println!("  [SKIP] Channel configuration skipped");
         }
         
         // STEP 5: Tools
-        self.step = 4;
+        self.step = 5;
         self.print_step("Tools");
         if self.configure_tools()? == StepResult::Skipped {
             println!("  [SKIP] Tools configuration skipped");
         }
         
         // STEP 6: Permissions
-        self.step = 5;
+        self.step = 6;
         self.print_step("Permissions");
         if self.configure_permissions()? == StepResult::Skipped {
             println!("  [SKIP] Permissions configuration skipped");
         }
         
-        // STEP 7: Save
-        self.step = 6;
+        // STEP 7: Voice / Wake Word
+        self.step = 7;
+        self.print_step("Sesli Asistan");
+        if self.configure_voice()? == StepResult::Skipped {
+            println!("  [SKIP] Sesli asistan devre dışı");
+        }
+        
+        // STEP 8: Save
+        self.step = 8;
         self.print_step("Saving");
         self.save_and_show_success()?;
         
@@ -1602,6 +1630,157 @@ impl SetupWizard {
     // Language Selection
     // ═══════════════════════════════════════════════════════════════════════════════
     
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Asistan İsmi & Kişilik Seçimi (Sprint 1 - Personal AI)
+    // ═══════════════════════════════════════════════════════════════════════════════
+    
+    fn configure_assistant_identity(&mut self) -> anyhow::Result<StepResult> {
+        println!();
+        println!("{}", style("Asistanınızın Kimliğini Belirleyin").bold().cyan());
+        println!("{}", style("Your AI, Your Name, Your Style").dim());
+        println!();
+        
+        // ── İsim Seçimi ──
+        println!("{}", style("1. Asistan İsmi").bold());
+        println!("   Asistanınıza bir isim verin. Bu isim tüm sistemde kullanılacak.");
+        println!("   Wake word, konuşmalar, bildirimler — her yerde bu isim görünecek.");
+        println!();
+        
+        let preset_names = vec![
+            "Jarvis",
+            "Atlas",
+            "Nova",
+            "Echo",
+            "Luna",
+            "Orion",
+            "Iris",
+            "Axel",
+            "Kai",
+            "Zara",
+            "__custom__",
+            "__skip__",
+        ];
+        
+        let preset_labels: Vec<String> = preset_names.iter().map(|n| {
+            match *n {
+                "__custom__" => "✏️  Özel isim yaz...".to_string(),
+                "__skip__" => "Atla (SENTIENT)".to_string(),
+                _ => n.to_string(),
+            }
+        }).collect();
+        
+        let label_refs: Vec<&str> = preset_labels.iter().map(|s| s.as_str()).collect();
+        
+        let selection = Select::new()
+            .with_prompt("Asistan ismi seçin")
+            .items(&label_refs)
+            .default(0)
+            .interact()?;
+        
+        let name = match preset_names[selection] {
+            "__skip__" => {
+                println!("  [SKIP] Varsayılan: SENTIENT");
+                self.config.assistant_name = "SENTIENT".to_string();
+                // Kişilik seçimine devam et
+                self.configure_personality()?;
+                return Ok(StepResult::Skipped);
+            }
+            "__custom__" => {
+                let custom: String = Input::new()
+                    .with_prompt("Asistan ismini yazın")
+                    .default("SENTIENT".to_string())
+                    .interact_text()?;
+                custom
+            }
+            other => other.to_string(),
+        };
+        
+        self.config.assistant_name = name.clone();
+        println!("[OK] Asistan ismi: {}", style(&name).green().bold());
+        
+        // ── Kişilik Seçimi ──
+        self.configure_personality()?;
+        
+        // ── Özet ──
+        println!();
+        println!("{}", style("── Asistan Kimliği ──").dim());
+        println!("  İsim:      {}", style(&self.config.assistant_name).yellow().bold());
+        println!("  Kişilik:   {}", style(&self.config.personality).yellow());
+        println!();
+        
+        Ok(StepResult::Completed)
+    }
+    
+    fn configure_personality(&mut self) -> anyhow::Result<()> {
+        println!();
+        println!("{}", style("2. Kişilik Tarzı").bold());
+        println!("   Asistanınız nasıl konuşsun?");
+        println!();
+        
+        let personalities = vec![
+            ("friendly",   "Samimi",      "İçten, sıcak, sohbet havasında"),
+            ("professional", "Profesyonel", "Ciddi, net, iş odaklı"),
+            ("technical",  "Teknik",      "Detaylı, kod odaklı, açıklayıcı"),
+            ("casual",     "Günlük",      "Rahat, eğlenceli, kısa cevaplar"),
+            ("creative",   "Yaratıcı",    "İlham verici, metaforik, cesur"),
+            ("mentor",     "Mentor",      "Öğretici, sabırlı, adım adım"),
+        ];
+        
+        let personality_labels: Vec<String> = personalities.iter()
+            .map(|(_, name, desc)| format!("{} — {}", name, desc))
+            .collect();
+        
+        let label_refs: Vec<&str> = personality_labels.iter().map(|s| s.as_str()).collect();
+        
+        let selection = Select::new()
+            .with_prompt("Kişilik tarzı seçin")
+            .items(&label_refs)
+            .default(0)
+            .interact()?;
+        
+        let (style_key, style_name, _) = personalities[selection];
+        self.config.personality = style_key.to_string();
+        println!("[OK] Kişilik: {} ({})", style_name, style_key);
+        
+        Ok(())
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // Sesli Asistan Yapılandırması (Sprint 1 - Personal AI)
+    // ═══════════════════════════════════════════════════════════════════════════════
+    
+    fn configure_voice(&mut self) -> anyhow::Result<StepResult> {
+        println!();
+        println!("{}", style("Sesli Asistan").bold().cyan());
+        println!("   Asistanınızı sesle uyandırın ve sesli yanıt alın");
+        println!();
+        
+        let enable = Confirm::new()
+            .with_prompt(format!(
+                "Sesli asistanı etkinleştir? (\"Hey {}\" ile uyandır)",
+                self.config.assistant_name
+            ))
+            .default(false)
+            .interact()?;
+        
+        if !enable {
+            self.config.voice_enabled = false;
+            println!("  [OK] Sesli asistan devre dışı");
+            return Ok(StepResult::Skipped);
+        }
+        
+        self.config.voice_enabled = true;
+        
+        println!();
+        println!("  Wake word: \"Hey {}\"", style(&self.config.assistant_name).green().bold());
+        println!("  STT: Whisper (yüklü değilse kurulacak)");
+        println!("  TTS: Sistem ses motoru");
+        println!();
+        println!("[OK] Sesli asistan etkinleştirildi!");
+        
+        Ok(StepResult::Completed)
+    }
+
     fn select_language(&mut self) -> anyhow::Result<StepResult> {
         let languages = vec![
             ("en", "English"),
@@ -1696,9 +1875,9 @@ impl SetupWizard {
         println!();
         println!("{}", style("╔════════════════════════════════════════════════════════════════════════════════╗").cyan());
         println!("{}", style("║                                                                                ║").cyan());
-        println!("{} {} {}", style("║").cyan(), style("   SENTIENT NEXUS OS - v7.0.0 SETUP WIZARD                              ").bold(), style("║").cyan());
+        println!("{} {} {}", style("║").cyan(), style("   SENTIENT OS - Personal AI Setup Wizard                               ").bold(), style("║").cyan());
         println!("{}", style("║                                                                                ║").cyan());
-        println!("{} {} {}", style("║").cyan(), style("   OpenClaw Standard: Professional Model Selection                       ").dim(), style("║").cyan());
+        println!("{} {} {}", style("║").cyan(), style("   Your AI, Your Name, Your Style                                         ").dim(), style("║").cyan());
         println!("{}", style("║                                                                                ║").cyan());
         println!("{}", style("║   Controls:                                                                    ║").cyan());
         println!("{}", style("║      Arrow Keys: Navigate     Space: Multi-Select     Enter: Confirm          ║").cyan());
@@ -1710,8 +1889,9 @@ impl SetupWizard {
     
     fn print_goodbye(&self) {
         println!();
+        let name = &self.config.assistant_name;
         println!("{}", style("╔════════════════════════════════════════════════════════════════════════════════╗").green());
-        println!("{}", style("║   Goodbye! SENTIENT awaits you...                                              ║").green());
+        println!("{} {}{} ║", style("║   ").green(), style(format!("{} sizi bekliyor...", name)).green().bold(), " ".repeat(56usize.saturating_sub(name.len())));
         println!("{}", style("║                                                                                ║").green());
         println!("{}", style("║   Documentation: https://docs.sentient-os.ai                                   ║").green());
         println!("{}", style("║   Discord: https://discord.gg/sentient                                         ║").green());
@@ -1751,6 +1931,17 @@ impl SetupWizard {
         println!("{}", style("╔════════════════════════════════════════════════════════════════════════════════╗").green());
         println!("{}", style("║                                                                                ║").green());
         println!("{}", style("║   SETUP COMPLETED SUCCESSFULLY                                                 ║").green());
+        println!("{}", style("║                                                                                ║").green());
+        
+        // Asistan ismi & kişilik
+        let name_display = &self.config.assistant_name;
+        let personality_display = &self.config.personality;
+        println!("{} {}{} ║", style("║   Assistant: ").green(), style(name_display).yellow().bold(), " ".repeat(56usize.saturating_sub(name_display.len())));
+        println!("{} {}{} ║", style("║   Personality: ").green(), style(personality_display).yellow(), " ".repeat(53usize.saturating_sub(personality_display.len())));
+        println!("{} {}{} ║", style("║   Language: ").green(), style(&self.config.language).yellow(), " ".repeat(56usize.saturating_sub(self.config.language.len())));
+        if self.config.voice_enabled {
+            println!("{} Hey {}{} ║", style("║   Wake Word: ").green(), style(name_display).yellow().bold(), " ".repeat(53usize.saturating_sub(name_display.len())));
+        }
         println!("{}", style("║                                                                                ║").green());
         
         // Model info

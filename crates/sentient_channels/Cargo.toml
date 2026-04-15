@@ -17,6 +17,9 @@ log.workspace = true
 chrono.workspace = true
 uuid.workspace = true
 
+# Voice integration
+sentient_voice = { path = "../sentient_voice" }
+
 # Telegram Bot API
 teloxide = { version = "0.13", default-features = false, features = ["rustls"] }
 

@@ -55,6 +55,7 @@ pub mod tools;
 pub mod orchestrator;
 pub mod healing;
 pub mod error;
+pub mod voice_control;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  RE-EXPORTS
@@ -69,6 +70,10 @@ pub use memory::{AdvancedMemory, MemoryType, Episode};
 pub use tools::{ToolChain, ChainStep, ChainResult};
 pub use orchestrator::{MultiAgentOrchestrator, AgentMessage};
 pub use healing::{SelfHealing, HealthStatus, RecoveryAction};
+pub use voice_control::{
+    VoiceControlEngine, VoiceControlConfig, VoiceControlState,
+    VoiceCommand, CommandResult, CommandParser, ScrollDirection,
+};
 
 pub use error::{AutonomousError, AutonomousResult};
 

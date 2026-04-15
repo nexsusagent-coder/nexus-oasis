@@ -9,6 +9,10 @@
 //!  - Speaker embedding extraction
 //!  - Overlap detection
 
+pub mod advanced;
+
+pub use advanced::*;
+
 use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
 use uuid::Uuid;

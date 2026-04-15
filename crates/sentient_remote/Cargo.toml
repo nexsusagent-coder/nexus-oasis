@@ -1,0 +1,25 @@
+[package]
+name = "sentient_remote"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "SENTIENT Remote Control - Mobile PWA, Telegram Mini App"
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+log.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tracing.workspace = true
+
+[features]
+default = []
+telegram = []
+pwa = []
+full = ["telegram", "pwa"]

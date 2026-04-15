@@ -396,6 +396,11 @@ impl FtsEngine {
     /// Tabloyu temizle
     pub async fn clear(&self) -> rusqlite::Result<()> {
         let conn = self.conn.write().await;
+        // table_name is a validated configuration value, not user input
+        // Validate table name to prevent SQL injection
+        if !self.table_name.chars().all(|c| c.is_alphanumeric() || c == '_') {
+            return Err(rusqlite::Error::InvalidParameterName(format!("Invalid table name: {}", self.table_name)));
+        }
         conn.execute(&format!("DELETE FROM {}", self.table_name), [])?;
         Ok(())
     }
@@ -403,6 +408,11 @@ impl FtsEngine {
     /// İstatistikler
     pub async fn stats(&self) -> rusqlite::Result<FtsStats> {
         let conn = self.conn.read().await;
+        
+        // Validate table name to prevent SQL injection
+        if !self.table_name.chars().all(|c| c.is_alphanumeric() || c == '_') {
+            return Err(rusqlite::Error::InvalidParameterName(format!("Invalid table name: {}", self.table_name)));
+        }
         
         let count: i64 = conn.query_row(
             &format!("SELECT COUNT(*) FROM {}", self.table_name),

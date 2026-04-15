@@ -707,6 +707,8 @@ pub enum VideoStyle {
     Documentary,
     Commercial,
     MusicVideo,
+    Animation,
+    Artistic,
 }
 
 impl VideoStyle {
@@ -727,6 +729,8 @@ impl VideoStyle {
             VideoStyle::Documentary => "documentary style, natural, authentic",
             VideoStyle::Commercial => "commercial quality, polished, professional",
             VideoStyle::MusicVideo => "music video style, dynamic, energetic",
+            VideoStyle::Animation => "animation style, smooth motion, animated",
+            VideoStyle::Artistic => "artistic style, creative, expressive",
         }
     }
 }

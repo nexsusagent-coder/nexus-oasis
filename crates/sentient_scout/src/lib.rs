@@ -7,6 +7,7 @@ pub mod platforms;
 pub mod extractors;
 pub mod anti_detect;
 pub mod proxy;
+pub mod distributed;
 mod config;
 mod errors;
 mod session;
