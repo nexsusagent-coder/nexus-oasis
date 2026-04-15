@@ -1,646 +1,938 @@
-# 📖 SENTIENT OS — Kullanım Kılavuzu
+# 📖 SENTIENT OS KULLANIM KILAVUZU
 
-> Her şeyin nasıl kurulacağı, nasıl kullanılacağı ve senkron çalışacağı
+> **Detaylı kullanım rehberi - Başlangıçtan ileri seviyeye**
 
 ---
 
-## 📋 İçindekiler
+## 📑 İçindekiler
 
-1. [Tek Komutla Kurulum](#1-tek-komutla-kurulum)
-2. [Detaylı Kurulum](#2-detaylı-kurulum)
+1. [Kurulum](#1-kurulum)
+2. [İlk Çalıştırma](#2-ilk-çalıştırma)
 3. [LLM Yapılandırması](#3-llm-yapılandırması)
-4. [Sesli Asistan (JARVIS Modu)](#4-sesli-asistan-jarvis-modu)
-5. [Kanal Entegrasyonları](#5-kanal-entegrasyonları)
-6. [Senkron Çalışma](#6-senkron-çalışma)
-7. [Smart Home](#7-smart-home)
-8. [Daily Digest](#8-daily-digest)
-9. [Agent & Swarm](#9-agent--swarm)
-10. [Skill Sistemi](#10-skill-sistemi)
-11. [API & Web Dashboard](#11-api--web-dashboard)
-12. [Enterprise Özellikleri](#12-enterprise-özellikleri)
+4. [CLI Komutları](#4-cli-komutları)
+5. [Sesli Asistan (Voice)](#5-sesli-asistan-voice)
+6. [Kanal Entegrasyonları](#6-kanal-entegrasyonları)
+7. [Skill Sistemi](#7-skill-sistemi)
+8. [Desktop Automation](#8-desktop-automation)
+9. [API Gateway](#9-api-gateway)
+10. [Dashboard](#10-dashboard)
+11. [Enterprise Özellikler](#11-enterprise-özellikler)
+12. [Geliştirici Araçları](#12-geliştirici-araçları)
 13. [Sorun Giderme](#13-sorun-giderme)
 
 ---
 
-## 1. Tek Komutla Kurulum
+## 1. Kurulum
+
+### 1.1 Otomatik Kurulum
 
 ```bash
 git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
 cd SENTIENT_CORE
-chmod +x install.sh
 ./install.sh
 ```
 
-Sihirbaz 5 adımda tam kurulum yapar. Bittiğinde `./target/release/sentient chat` ile sohbete başla.
+Kurulum adımları:
+1. **Sistem kontrolü** → Rust, bağımlılıklar
+2. **LLM seçimi** → API Key / Lokal / Atla
+3. **Ek özellikler** → Voice, Dashboard
+4. **Derleme** → Otomatik
 
----
-
-## 2. Detaylı Kurulum
-
-### Adım 1: Sistem Bağımlılıkları
+### 1.2 Hızlı Kurulum
 
 ```bash
-# Ubuntu/Debian
-sudo apt update && sudo apt install -y build-essential pkg-config libssl-dev curl git
+./quick-start.sh
+```
 
-# Rust kur (yoksa)
+Soru sormadan minimal kurulum. Ollama yoksa kurmaz.
+
+### 1.3 Manuel Kurulum
+
+```bash
+# Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source $HOME/.cargo/env
 
-# Docker kur (yoksa — servisler için gerekli)
-curl -fsSL https://get.docker.com | sh
-sudo usermod -aG docker $USER
-```
+# Derle
+cargo build --release --bin sentient
 
-### Adım 2: Projeyi Derle
-
-```bash
-git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
-cd SENTIENT_CORE
-
-# Release mode ile derle (~10 dk)
-cargo build --release --workspace
-
-# Binary hazır
-ls -lh target/release/sentient
-```
-
-### Adım 3: Yapılandırma
-
-```bash
-# Şablonu kopyala
+# Config
 cp .env.template .env
+# .env düzenle
 
-# Düzenle
-nano .env
+# Çalıştır
+./target/release/sentient chat
 ```
 
-### Adım 4: Docker Servisleri
+### 1.4 Docker ile Kurulum
 
 ```bash
-# Tüm servisleri başlat
+# Tüm servisler
 docker-compose up -d
 
-# Kontrol et
+# Servisleri gör
 docker-compose ps
+
+# Durdur
+docker-compose down
 ```
 
-### Adım 5: İlk Çalıştırma
+**Docker Servisleri:**
+
+| Servis | Port | Açıklama |
+|--------|------|----------|
+| PostgreSQL | 5432 | Ana veritabanı |
+| Redis | 6379 | Cache & Queue |
+| Qdrant | 6333 | Vektör veritabanı |
+| MinIO | 9000/9001 | Object storage |
+| Prometheus | 9090 | Metrik toplama |
+| Grafana | 3001 | Dashboard |
+| SearXNG | 8888 | Arama motoru |
+
+---
+
+## 2. İlk Çalıştırma
+
+### 2.1 Sistem Kontrolü
 
 ```bash
-# Yapılandırma sihirbazı
-./target/release/sentient init
-
-# Sistem kontrolü
 ./target/release/sentient doctor
+```
 
-# Başla!
+Çıktı:
+```
+🧠 SENTIENT OS Doctor v4.0.0
+
+✓ Rust: 1.75.0
+✓ Binary: target/release/sentient
+✓ Config: .env
+✓ Database: data/sentient_memory.db
+✓ LLM Provider: ollama (gemma3:27b)
+✓ Voice: enabled (whisper_cpp + piper)
+
+Sistem hazır!
+```
+
+### 2.2 Sohbet Başlatma
+
+```bash
 ./target/release/sentient chat
+```
+
+```
+🧠 SENTIENT OS v4.0.0
+Provider: ollama | Model: gemma3:27b
+Language: tr
+
+Sen: Merhaba, kendini tanıtır mısın?
+Asistan: Merhaba! Ben SENTIENT OS, düşünen işletim sistemi...
+
+Sen: /help
+Komutlar:
+  /clear    - Sohbeti temizle
+  /model    - Model değiştir
+  /save     - Sohbeti kaydet
+  /exit     - Çık
+
+Sen: /exit
+Güle güle!
+```
+
+### 2.3 Tek Soru Sorma
+
+```bash
+./target/release/sentient ask "Rust'ta ownership nedir?"
 ```
 
 ---
 
 ## 3. LLM Yapılandırması
 
-### Seçenek A: Lokal (Ücretsiz)
+### 3.1 API Key ile Kullanım
 
-Hiçbir API key gerekmez. Ollama bilgisayarında çalışır.
+#### OpenRouter (Önerilen)
+
+```bash
+# .env dosyasına
+OPENROUTER_API_KEY=sk-or-v1-xxxxx
+LLM_PROVIDER=openrouter
+LLM_MODEL=openai/gpt-4o-mini
+```
+
+```bash
+# Çalıştır
+OPENROUTER_API_KEY=sk-or-v1-xxxxx ./target/release/sentient chat
+```
+
+**Model Seçenekleri:**
+- `openai/gpt-4o-mini` - Hızlı, ucuz
+- `openai/gpt-4o` - Dengeli
+- `anthropic/claude-3.5-sonnet` - En iyi
+- `google/gemini-2.0-flash-exp` - Hızlı
+- `meta-llama/llama-3.3-70b-instruct` - Açık kaynak
+
+#### OpenAI
+
+```bash
+OPENAI_API_KEY=sk-proj-xxxxx ./target/release/sentient chat
+```
+
+#### Anthropic
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-xxxxx ./target/release/sentient chat
+```
+
+#### Google AI
+
+```bash
+GOOGLE_AI_API_KEY=xxxxx ./target/release/sentient chat
+```
+
+#### DeepSeek (En Ucuz)
+
+```bash
+DEEPSEEK_API_KEY=xxxxx ./target/release/sentient chat
+```
+
+#### Groq (En Hızlı)
+
+```bash
+GROQ_API_KEY=xxxxx ./target/release/sentient chat
+```
+
+### 3.2 Lokal LLM (Ollama)
 
 ```bash
 # Ollama kur
 curl -fsSL https://ollama.com/install.sh | sh
 
-# Model indir (seç birini)
-ollama pull gemma3:27b       # Önerilen — 16GB RAM
-ollama pull llama3.2:3b      # Hafif — 4GB RAM
-ollama pull deepseek-r1:7b   # Reasoning — 8GB RAM
-ollama pull qwen2.5:7b       # Türkçe iyi — 8GB RAM
+# Servis başlat
+ollama serve &
 
-# .env'e yaz
-echo "LLM_PROVIDER=ollama" >> .env
-echo "OLLAMA_HOST=http://localhost:11434" >> .env
+# Model indir
+ollama pull gemma3:27b       # Önerilen (16GB RAM)
+ollama pull llama3.2:3b      # Hafif (4GB RAM)
+ollama pull deepseek-r1:7b   # Reasoning (8GB RAM)
+ollama pull qwen2.5:7b       # Türkçe iyi
+ollama pull mistral:7b       # Dengeli
+
+# .env
+LLM_PROVIDER=ollama
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=gemma3:27b
+
+# Çalıştır
+./target/release/sentient chat
 ```
 
-### Seçenek B: API (Ücretli)
+### 3.3 Hibrit Mod
 
 ```bash
-# OpenRouter (önerilen — tek key ile 200+ model)
-# https://openrouter.ai/keys → Key al
-echo "OPENROUTER_API_KEY=sk-or-v1-..." >> .env
-
-# Veya doğrudan provider
-echo "OPENAI_API_KEY=sk-..." >> .env
-echo "ANTHROPIC_API_KEY=sk-ant-..." >> .env
-echo "GOOGLE_AI_API_KEY=..." >> .env
-echo "DEEPSEEK_API_KEY=..." >> .env
-echo "GROQ_API_KEY=..." >> .env
+# .env
+LLM_MODE=hybrid
+LLM_LOCAL_MODEL=gemma3:27b
+LLM_API_MODEL=openai/gpt-4o
+LLM_FALLBACK_THRESHOLD=0.7  # Zorluk eşiği
 ```
 
-### Seçenek C: Hibrit
+### 3.4 Tüm Provider'lar (42 Adet)
 
-Normalde lokal kullanır, zor sorularda API'ye başvurur:
+| Provider | Tür | Ücretsiz | Özellik |
+|----------|-----|----------|---------|
+| OpenAI | Direct | ❌ | GPT-4o, o1, o3 |
+| Anthropic | Direct | ❌ | Claude 4, 3.5 |
+| Google | Direct | Gemini Flash | Gemini 2.0 |
+| Mistral | Direct | ❌ | Mistral Large |
+| DeepSeek | Direct | ❌ | **EN UCUZ** |
+| Groq | Direct | ❌ | **EN HIZLI** |
+| xAI | Direct | ❌ | Grok 2 |
+| Cohere | Direct | ❌ | Command R+ |
+| Perplexity | Direct | ❌ | Sonar (web search) |
+| Together | Aggregator | ❌ | 100+ açık kaynak |
+| Fireworks | Direct | ❌ | Hızlı inference |
+| Replicate | Direct | ❌ | Cloud run |
+| Ollama | Local | ✅ | **ÜCRETSİZ** |
+| OpenRouter | Aggregator | ❌ | **200+ model** |
+| LiteLLM | Aggregator | ❌ | **100+ provider** |
+| Hugging Face | Aggregator | Bazıları | **200K+ model** |
+| Azure OpenAI | Cloud | ❌ | Enterprise |
+| AWS Bedrock | Cloud | ❌ | Claude, Llama |
+| Vertex AI | Cloud | ❌ | Gemini, Claude |
+| vLLM | Local | ✅ | High perf |
+| LM Studio | Local | ✅ | GUI |
+| + 22 provider daha | | | |
+
+---
+
+## 4. CLI Komutları
+
+### 4.1 Temel Komutlar
 
 ```bash
-echo "LLM_MODE=hybrid" >> .env
-echo "LLM_LOCAL_MODEL=gemma3:27b" >> .env
-echo "LLM_API_MODEL=openai/gpt-4o" >> .env
-echo "OPENROUTER_API_KEY=sk-or-v1-..." >> .env
+# Sohbet
+sentient chat
+
+# Tek soru
+sentient ask "Soru?"
+
+# Sistem durumu
+sentient status
+
+# Sorun giderme
+sentient doctor
+
+# Versiyon
+sentient --version
+
+# Yardım
+sentient --help
 ```
 
-### Model Değiştirme
+### 4.2 Model Komutları
 
 ```bash
-# Varsayılan model değiştir
-sentient model set gemma3:27b
-
-# Model listele
+# Model listesi
 sentient model list
 
-# Model test et
-sentient model test
+# Model değiştir
+sentient model set gemma3:27b
+
+# Model bilgisi
+sentient model info
+```
+
+### 4.3 Bellek Komutları
+
+```bash
+# Bellek listesi
+sentient memory list
+
+# Bellek ara
+sentient memory search "geçen hafta"
+
+# Bellek temizle
+sentient memory clear
+
+# Bellek dışa aktar
+sentient memory export memories.json
+```
+
+### 4.4 Skill Komutları
+
+```bash
+# Skill listesi
+sentient skill list
+
+# Skill ara
+sentient skill search "browser"
+
+# Skill çalıştır
+sentient skill run code-review --path ./src
+
+# Skill bilgisi
+sentient skill info web-scraper
+```
+
+### 4.5 Agent Komutları
+
+```bash
+# Agent listesi
+sentient agent list
+
+# Agent oluştur
+sentient agent create coder --model gpt-4o
+
+# Agent çalıştır
+sentient agent run coder --goal "API yaz"
+
+# Swarm oluştur
+sentient swarm create team --agents 5
+
+# Swarm çalıştır
+sentient swarm run team --goal "Proje analiz et"
+```
+
+### 4.6 Kanal Komutları
+
+```bash
+# Kanal listesi
+sentient channel list
+
+# Kanal başlat
+sentient channel start telegram
+
+# Kanal durdur
+sentient channel stop telegram
+
+# Kanal durumu
+sentient channel status
 ```
 
 ---
 
-## 4. Sesli Asistan (JARVIS Modu)
+## 5. Sesli Asistan (Voice)
 
-Bu, SENTIENT OS'un en güçlü özelliğidir. Tıpkı JARVIS gibi konuşarak her şeyi yaptırabilirsin.
-
-### Nasıl Çalışır
+### 5.1 Nasıl Çalışır
 
 ```
-┌──────────┐    ┌───────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-│ Mikrofon  │───▶│  Whisper   │───▶│   LLM    │───▶│  Piper   │───▶│Hoparlör  │
-│ (Wake     │    │  STT      │    │ (Brain)  │    │  TTS     │    │ (Cevap)  │
-│  Word)    │    │ (Dinle)   │    │          │    │ (Konuş)  │    │          │
-└──────────┘    └───────────┘    └──────────┘    └──────────┘    └──────────┘
+🎤 Mikrofon → Whisper STT → LLM → TTS → 🔊 Hoparlör
+     ↑                                    |
+     └──── Wake Word ("Hey Sentient") ────┘
 ```
 
-### Lokal Voice Kurulumu (Ücretsiz)
+### 5.2 Lokal Voice (Ücretsiz)
 
 ```bash
-# 1. Sistem bağımlılıkları
-sudo apt install -y portaudio19-dev libasound2-dev ffmpeg
-
-# 2. Whisper.cpp (STT — Konuşmadan metne)
+# Whisper.cpp kur
 git clone https://github.com/ggerganov/whisper.cpp
-cd whisper.cpp
-make
+cd whisper.cpp && make
 bash ./models/download-ggml-model.sh medium
-cd ..
 
-# 3. Piper TTS (Metinden konuşmaya)
+# Piper TTS kur
 wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_1.2.0_amd64.tar.gz
 tar -xzf piper_1.2.0_amd64.tar.gz
-sudo mv piper/piper /usr/local/bin/
 
-# Türkçe Piper modeli
-mkdir -p ~/.local/share/piper/models
+# Türkçe model
 cd ~/.local/share/piper/models
 wget https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx
 wget https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx.json
-cd -
 
-# 4. .env yapılandırması
-echo "VOICE_ENABLED=true" >> .env
-echo "VOICE_STT=whisper_cpp" >> .env
-echo "VOICE_TTS=piper" >> .env
-echo "WHISPER_MODEL=medium" >> .env
+# .env
+VOICE_ENABLED=true
+VOICE_STT=whisper_cpp
+VOICE_TTS=piper
+WHISPER_MODEL=medium
 ```
 
-### API Voice Kurulumu (Ücretli)
+### 5.3 API Voice (Ücretli)
 
 ```bash
-echo "VOICE_STT=openai_whisper" >> .env
-echo "VOICE_TTS=elevenlabs" >> .env
-echo "OPENAI_API_KEY=sk-..." >> .env       # Whisper için
-echo "ELEVENLABS_API_KEY=..." >> .env       # TTS için
+# .env
+VOICE_ENABLED=true
+VOICE_STT=openai_whisper
+VOICE_TTS=elevenlabs
+OPENAI_API_KEY=sk-...
+ELEVENLABS_API_KEY=...
 ```
 
-### Voice Komutları
+### 5.4 Voice Komutları
 
 ```bash
 # Temel sesli sohbet
 sentient voice
 
-# Uyandırma kelimesi ile ("Hey Sentient" de, dinlemeye başlar)
+# Uyandırma kelimesi ile
 sentient voice --wake-word "hey sentient"
 
-# Türkçe mod
+# Türkçe
 sentient voice --language tr
 
-# Kesintisiz dinleme (uyandırma kelimesi gerekmez)
+# Kesintisiz dinleme
 sentient voice --continuous
+
+# Belirli süre dinle
+sentient voice --timeout 30
 ```
 
-### Sesle Ne Yapabilirsin?
-
-| Komut | Örnek |
-|-------|-------|
-| Soru sor | "Rust'ta ownership nedir?" |
-| Kod yazdır | "Bir REST API yaz" |
-| Email gönder | "Ahmet'e toplantı hatırlatma maili gönder" |
-| Takvim ekle | "Yarın 14:00'e toplantı ekle" |
-| Işık kontrolü | "Salon ışığını aç" |
-| Isı ayarla | "Koridor ısısı 22 derece yap" |
-| Arama yap | "Quantum computing hakkında araştırma yap" |
-| Hatırlatıcı kur | "15 dakika sonra beni uyar" |
-| Özet al | "Bugünkü mail özetini ver" |
-| Çeviri yap | "Bu metni İngilizceye çevir" |
-
----
-
-## 5. Kanal Entegrasyonları
-
-SENTIENT aynı anda 24 platformda çalışabilir. Her platforma aynı yapay zeka motoru hizmet eder.
-
-### Telegram Bot
+### 5.5 Wake Word
 
 ```bash
-# 1. Bot oluştur: https://t.me/BotFather → /newbot
-# 2. Token al
-echo "TELEGRAM_BOT_TOKEN=123456:ABC-DEF..." >> .env
+# Porcupine (önerilen)
+sentient voice --wake-word "hey sentient" --wake-engine porcupine
 
-# 3. Başlat
-./target/release/sentient gateway
-```
+# Vosk
+sentient voice --wake-word "sentient" --wake-engine vosk
 
-### Discord Bot
-
-```bash
-# 1. Uygulama oluştur: https://discord.com/developers/applications
-# 2. Bot token al
-echo "DISCORD_BOT_TOKEN=MTIz..." >> .env
-echo "DISCORD_APPLICATION_ID=123456789" >> .env
-
-# 3. Başlat
-./target/release/sentient gateway
-```
-
-### Slack Bot
-
-```bash
-# 1. App oluştur: https://api.slack.com/apps
-# 2. Token al
-echo "SLACK_BOT_TOKEN=xoxb-..." >> .env
-echo "SLACK_APP_TOKEN=xapp-..." >> .env
-
-# 3. Başlat
-./target/release/sentient gateway
-```
-
-### Email
-
-```bash
-# Gmail ile (App Password gerekli)
-echo "SMTP_HOST=smtp.gmail.com" >> .env
-echo "SMTP_PORT=587" >> .env
-echo "SMTP_USER=your@gmail.com" >> .env
-echo "SMTP_PASSWORD=your-app-password" >> .env
+# Whisper (daha yavaş ama daha doğru)
+sentient voice --wake-word "hey sentient" --wake-engine whisper
 ```
 
 ---
 
-## 6. Senkron Çalışma
+## 6. Kanal Entegrasyonları
 
-Tüm modüller birbiriyle haberleşir. Bir şey söylediğinde hepsi aynı anda tepki verir.
-
-### Mimarisi
-
-```
-                    ┌─────────────┐
-                    │  Event Bus  │
-                    │ (Graph)     │
-                    └──────┬──────┘
-           ┌───────────────┼───────────────┐
-           │               │               │
-    ┌──────▼──────┐ ┌──────▼──────┐ ┌──────▼──────┐
-    │   Voice     │ │   Email     │ │  Calendar   │
-    │  (Dinle)   │ │  (Oku)     │ │  (Planla)  │
-    └──────┬──────┘ └──────┬──────┘ └──────┬──────┘
-           │               │               │
-           └───────────────┼───────────────┘
-                    ┌──────▼──────┐
-                    │  Orchestrator│
-                    │  (Karar)    │
-                    └──────┬──────┘
-           ┌───────────────┼───────────────┐
-           │               │               │
-    ┌──────▼──────┐ ┌──────▼──────┐ ┌──────▼──────┐
-    │  Channels   │ │ Smart Home  │ │   Skills    │
-    │ (Gönder)   │ │ (Kontrol)   │ │ (Çalıştır)  │
-    └─────────────┘ └─────────────┘ └─────────────┘
-```
-
-### Örnek Senkron Senaryosu
-
-1. **Sesle** "Hey Sentient, yarınki toplantıya hazırlık yap" dersin
-2. **Calendar** → yarınki toplantıyı bulur
-3. **Email** → toplantıyla ilgili emailleri arar
-4. **Research** → konu hakkında araştırma yapar
-5. **Digest** → sabah bültenine ekler
-6. **Channels** → Telegram/Discord'dan hatırlatma gönderir
-7. **Voice** → "Toplantı hazırlığı tamam, sana özet sunuyorum" der
-
-### 7/24 Arka Plan Servisi
+### 6.1 Telegram
 
 ```bash
-# Sentinel modu — her zaman hazır
-sentient serve
+# Bot oluştur: @BotFather
+TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
 
-# Bu modda:
-# - Email'ler otomatik okunur ve özetlenir
-# - Takvim etkinlikleri izlenir
-# - Kanal mesajlarına otomatik cevap verilir
-# - Smart home cihazları izlenir
-# - Sabah bülteni oluşturulur
-# - Wake word dinlenir
+# Başlat
+TELEGRAM_BOT_TOKEN=xxx ./target/release/sentient channel start telegram
 ```
+
+### 6.2 Discord
+
+```bash
+# Bot oluştur: https://discord.com/developers/applications
+DISCORD_BOT_TOKEN=xxx
+DISCORD_APPLICATION_ID=xxx
+
+# Başlat
+DISCORD_BOT_TOKEN=xxx ./target/release/sentient channel start discord
+```
+
+### 6.3 WhatsApp
+
+```bash
+# Meta Business API
+WHATSAPP_TOKEN=xxx
+WHATSAPP_PHONE_ID=xxx
+
+# Başlat
+WHATSAPP_TOKEN=xxx ./target/release/sentient channel start whatsapp
+```
+
+### 6.4 Slack
+
+```bash
+# https://api.slack.com/apps
+SLACK_BOT_TOKEN=xoxb-xxx
+SLACK_APP_TOKEN=xapp-xxx
+
+# Başlat
+SLACK_BOT_TOKEN=xxx ./target/release/sentient channel start slack
+```
+
+### 6.5 Email
+
+```bash
+# .env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your@gmail.com
+SMTP_PASSWORD=app-password
+
+# IMAP (gelen)
+IMAP_HOST=imap.gmail.com
+IMAP_PORT=993
+IMAP_USER=your@gmail.com
+IMAP_PASSWORD=app-password
+```
+
+### 6.6 Tüm Kanallar (24)
+
+| Kanal | Tür | Durum |
+|-------|-----|-------|
+| Telegram | Mesajlaşma | ✅ |
+| Discord | Mesajlaşma | ✅ |
+| WhatsApp | Mesajlaşma | ✅ |
+| Slack | İş | ✅ |
+| Email | İletişim | ✅ |
+| Microsoft Teams | İş | 🔄 |
+| Signal | Güvenli | 🔄 |
+| Matrix | Açık kaynak | 🔄 |
+| iMessage | Apple | 🔄 |
+| Instagram | Sosyal | 🔄 |
+| LinkedIn | Profesyonel | 🔄 |
+| Twitter/X | Sosyal | 🔄 |
+| Zoom | Video | 🔄 |
+| Webex | Video | 🔄 |
+| Google Chat | İş | 🔄 |
+| Mattermost | Açık kaynak | 🔄 |
+| Messenger | Sosyal | 🔄 |
+| Snapchat | Sosyal | 🔄 |
+| Viber | Mesajlaşma | 🔄 |
+| WeChat | Mesajlaşma | 🔄 |
+| Line | Mesajlaşma | 🔄 |
+| Chime | İş | 🔄 |
+| + 2 daha | | |
 
 ---
 
-## 7. Smart Home
+## 7. Skill Sistemi
 
-Türkçe doğal dil ile evinizi kontrol edin:
+### 7.1 Skill Kategorileri
 
-```bash
-# .env yapılandırması
-echo "HOME_ASSISTANT_URL=http://homeassistant.local:8123" >> .env
-echo "HOME_ASSISTANT_TOKEN=your-long-lived-token" >> .env
-```
+| Kategori | Skill Sayısı | Açıklama |
+|----------|--------------|----------|
+| Dev | 2,965+ | Coding, IDE, DevOps |
+| OSINT | 1,050+ | Search, Browser, Data |
+| Social | 238+ | Communication, Marketing |
+| Automation | 306+ | Productivity, Smart Home |
+| Media | 246+ | Image/Video, Speech |
+| Productivity | 214+ | Notes, PDF |
+| Security | 52+ | Security tools |
+| Mobile | 233+ | Transportation, Health |
+| Gaming | 108+ | Gaming, Personal Dev |
 
-### Desteklenen Komutlar
-
-| Sesli Komut | Eylem |
-|-------------|-------|
-| "Salon ışığını aç" | `light.living_room` → ON |
-| "Yatak odası lambasını kapat" | `light.bedroom` → OFF |
-| "Koridor ısısı 22 derece" | `climate.hallway` → 22°C |
-| "Kilitleri kilitle" | `lock.*` → LOCK |
-| "Perdeleri aç" | `cover.*` → OPEN |
-
-### Desteklenen Oda İsimleri
-
-Türkçe → Home Assistant mapping:
-
-| Türkçe | İngilizce (HA) |
-|--------|----------------|
-| Salon / Oturma | living_room |
-| Yatak odası | bedroom |
-| Mutfak | kitchen |
-| Banyo | bathroom |
-| Ofis | office |
-| Koridor | hallway |
-
----
-
-## 8. Daily Digest
-
-Her sabah otomatik bülten:
+### 7.2 Skill Kullanımı
 
 ```bash
-# Bülten oluştur
-sentient digest
+# Skill ara
+sentient skill search "web scraper"
 
-# Veya serviste otomatik (sentient serve)
-```
-
-Bültende:
-- 📧 Önemli emaillerin özeti
-- 📅 Bugünkü toplantılar
-- 🌅 Hava durumu
-- 📰 Önemli haberler
-- ✅ Yapılacaklar listesi
-
----
-
-## 9. Agent & Swarm
-
-### Tek Agent
-
-```bash
-# Agent oluştur
-sentient agent create coder --model gpt-4o
-
-# Goal ver
-sentient agent run coder --goal "REST API yaz: /users endpoint"
-
-# Durum kontrolü
-sentient agent list
-```
-
-### Swarm (Çoklu Ajan)
-
-```bash
-# 5 agent'lı swarm oluştur
-sentient swarm create team --agents 5 --strategy collective
-
-# Karmaşık görev ver
-sentient swarm run team --goal "E-ticaret sitesi yap: frontend, backend, database, tests, deployment"
-
-# Durum
-sentient swarm status team
-```
-
----
-
-## 10. Skill Sistemi
-
-### 5.587+ Hazır Skill
-
-```bash
-# Tüm skill'leri listele
-sentient skill list
-
-# Kategoriye göre
-sentient skill list --category code
-sentient skill list --category security
-
-# Ara
-sentient skill search "web scraping"
-
-# Çalıştır
-sentient skill run code-review --path ./src --language rust
-sentient skill run web-scraper --url "https://example.com"
-sentient skill run pentest --target "https://myapp.com"
-```
-
-### Özel Skill Oluştur
-
-```yaml
-# skills/my-skill/SKILL.yaml
-name: my-custom-skill
-version: 1.0.0
-description: Özel skill
-author: me@example.com
-
-inputs:
-  - name: input_file
-    type: string
-    required: true
-
-steps:
-  - name: analyze
-    action: code.analyze
-    inputs:
-      file: ${{ inputs.input_file }}
-```
-
-```bash
-# Skill yükle
-sentient skill load ./skills/my-skill
-
-# Test et
-sentient skill test my-custom-skill
-```
-
----
-
-## 11. API & Web Dashboard
-
-### REST API
-
-```bash
-# Gateway başlat
-sentient gateway
-
-# Status
-curl http://localhost:8080/api/v1/status
-
-# Sohbet
-curl -X POST http://localhost:8080/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Merhaba", "model": "gpt-4o"}'
+# Skill listele
+sentient skill list --category Dev
 
 # Skill çalıştır
-curl -X POST http://localhost:8080/api/v1/skills/run \
-  -H "Content-Type: application/json" \
-  -d '{"skill": "code-review", "params": {"path": "./src"}}'
+sentient skill run code-review --path ./src
+
+# Skill detay
+sentient skill info browser-navigate
 ```
 
-### Web Dashboard
+### 7.3 Popüler Skill'ler
+
+**Dev:**
+- `code-review` - Kod inceleme
+- `debug-helper` - Hata ayıklama
+- `git-workflow` - Git işlemleri
+- `web-researcher` - Web araştırma
+
+**OSINT:**
+- `browser-automation` - Tarayıcı otomasyonu
+- `web-scraper` - Web kazıma
+- `search-engine` - Arama motoru
+
+**Automation:**
+- `task-automation` - Görev otomasyonu
+- `calendar-sync` - Takvim senkronizasyonu
+- `smart-home` - Akıllı ev kontrolü
+
+**Media:**
+- `image-generation` - Görsel üretimi
+- `video-generation` - Video üretimi
+- `speech-to-text` - Sesten metne
+
+### 7.4 Skill Kaynakları
+
+| Kaynak | Skill Sayısı |
+|--------|--------------|
+| OpenClaw Skills | 5,143 |
+| Everything Claude Code | 181 |
+| DeerFlow Skills | 100+ |
+| Gstack | 37 |
+
+---
+
+## 8. Desktop Automation
+
+### 8.1 Özellikler
+
+| Özellik | Açıklama |
+|---------|----------|
+| Fare Kontrolü | İnsan gibi hareket (Bezier eğrileri) |
+| Klavye Kontrolü | Doğal yazma dinamiği |
+| Ekran Okuma | OCR, görüntü analizi |
+| GUI Kontrol | Tüm uygulamalar |
+| Safety | 50+ tehlikeli komut engeli |
+
+### 8.2 Kullanım
 
 ```bash
-sentient dashboard --port 8080
+# Desktop agent başlat
+sentient desktop
+
+# Belirli görev
+sentient desktop --goal "Firefox'ta YouTube'a git"
+
+# Güvenli mod
+sentient desktop --safe-mode
+
+# Sovereign policy aktif
+sentient desktop --sovereign
+```
+
+### 8.3 İzin Verilen/Uzak Durulan Komutlar
+
+**İzin Verilen:**
+- `libreoffice`, `firefox`, `vscode`
+- `gnome-terminal`, `nautilus`
+- `git`, `cargo`, `npm`
+
+**Yasaklı (50+ komut):**
+- `rm -rf`, `format`, `dd`
+- `chmod 777`, `curl | bash`
+- `sudo`, `su`, `chown`
+
+### 8.4 Browser Automation
+
+```bash
+# Browser agent
+sentient browser
+
+# URL'ye git
+sentient browser --url "https://github.com"
+
+# Headless mod
+sentient browser --headless
+
+# Stealth mod
+sentient browser --stealth
+```
+
+---
+
+## 9. API Gateway
+
+### 9.1 Başlatma
+
+```bash
+sentient gateway
+# http://localhost:8080
+```
+
+### 9.2 Endpoints
+
+```
+POST /chat              - Sohbet
+POST /ask               - Tek soru
+GET  /status            - Sistem durumu
+GET  /models            - Model listesi
+GET  /skills            - Skill listesi
+POST /skills/:id/run    - Skill çalıştır
+GET  /memory            - Bellek
+GET  /health            - Sağlık kontrolü
+WS   /ws                - WebSocket
+```
+
+### 9.3 Örnek İstekler
+
+```bash
+# Chat
+curl -X POST http://localhost:8080/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Merhaba"}'
+
+# Ask
+curl -X POST http://localhost:8080/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Rust nedir?"}'
+
+# Status
+curl http://localhost:8080/status
+
+# Models
+curl http://localhost:8080/models
+```
+
+### 9.4 WebSocket
+
+```javascript
+const ws = new WebSocket('ws://localhost:8080/ws');
+
+ws.onopen = () => {
+  ws.send(JSON.stringify({type: 'chat', message: 'Merhaba'}));
+};
+
+ws.onmessage = (event) => {
+  console.log(JSON.parse(event.data));
+};
+```
+
+---
+
+## 10. Dashboard
+
+### 10.1 Başlatma
+
+```bash
+sentient dashboard
 # http://localhost:8080/dashboard
 ```
 
-Dashboard özellikleri:
-- Real-time sistem metrikleri
-- Agent yönetimi
-- Skill kartları
-- Bellek görüntüleme
-- Canlı loglar
-- Entegre terminal
+### 10.2 Özellikler
+
+| Panel | Açıklama |
+|-------|----------|
+| Skills Hub | Yüklenmiş skill'ler |
+| Tool Monitor | Aktif araçlar |
+| V-GATE Panel | API bağlantı durumu |
+| Memory Viz | Bellek görselleştirme |
+| Chat | İnteraktif sohbet |
 
 ---
 
-## 12. Enterprise Özellikleri
+## 11. Enterprise Özellikler
 
-### SSO (Single Sign-On)
-
-```bash
-# Okta
-echo "SSO_PROVIDER=okta" >> .env
-echo "OKTA_DOMAIN=your-domain.okta.com" >> .env
-echo "OKTA_CLIENT_ID=..." >> .env
-echo "OKTA_CLIENT_SECRET=..." >> .env
-
-# Auth0
-echo "SSO_PROVIDER=auth0" >> .env
-echo "AUTH0_DOMAIN=your-tenant.auth0.com" >> .env
-
-# Azure AD
-echo "SSO_PROVIDER=azure_ad" >> .env
-echo "AZURE_TENANT_ID=..." >> .env
-```
-
-### RBAC
+### 11.1 RBAC (Rol Bazlı Erişim)
 
 ```bash
-# Rol ata
-sentient enterprise role assign admin --user user@example.com
+# Rol oluştur
+sentient role create admin --permissions "all"
 
-# İzin kontrolü
-sentient enterprise permission check admin --resource api/v1/agents
+# Kullanıcı rol ata
+sentient user assign admin user@example.com
+
+# İzin kontrol
+sentient auth check user@example.com "skill:run:code-review"
 ```
 
-### Multi-Tenant
+### 11.2 SSO (Single Sign-On)
+
+```bash
+# .env
+SSO_PROVIDER=okta  # veya auth0, azure
+SSO_CLIENT_ID=xxx
+SSO_CLIENT_SECRET=xxx
+SSO_DOMAIN=xxx.okta.com
+```
+
+### 11.3 Audit Logging
+
+```bash
+# Audit logları gör
+sentient audit list
+
+# Belirli kullanıcı
+sentient audit list --user admin@example.com
+
+# Belirli tarih
+sentient audit list --from 2024-01-01 --to 2024-01-31
+```
+
+### 11.4 Multi-Tenant
 
 ```bash
 # Tenant oluştur
-sentient enterprise tenant create acme-corp --quota 10000
+sentient tenant create company-a
 
-# Tenant durumu
-sentient enterprise tenant status acme-corp
+# Tenant yapılandır
+sentient tenant config company-a --llm openai --model gpt-4o
+
+# Tenant kullanıcı ekle
+sentient tenant user-add company-a user@company-a.com
+```
+
+---
+
+## 12. Geliştirici Araçları
+
+### 12.1 Test
+
+```bash
+# Tüm testler
+cargo test --workspace
+
+# Belirli crate
+cargo test -p sentient_core
+
+# Coverage
+cargo tarpaulin --workspace --out Html
+```
+
+### 12.2 Benchmark
+
+```bash
+# Benchmark çalıştır
+cargo bench
+
+# Sonuçlar
+cat benchmarks/results/latest.json
+```
+
+### 12.3 Debug
+
+```bash
+# Debug mod
+RUST_LOG=debug ./target/release/sentient chat
+
+# Trace mod
+RUST_LOG=trace ./target/release/sentient chat
+
+# Belirli modül
+RUST_LOG=sentient_llm=debug ./target/release/sentient chat
+```
+
+### 12.4 Profil
+
+```bash
+# CPU profil
+cargo flamegraph --bin sentient -- chat
+
+# Memory profil
+cargo valgrind --bin sentient -- chat
 ```
 
 ---
 
 ## 13. Sorun Giderme
 
-### sentient doctor
+### 13.1 Yaygın Sorunlar
+
+#### Ollama Bağlantı Hatası
 
 ```bash
-./target/release/sentient doctor
+# Ollama çalışıyor mu?
+curl http://localhost:11434/api/tags
+
+# Başlat
+ollama serve &
+
+# Model var mı?
+ollama list
 ```
 
-Tüm bileşenleri kontrol eder: config, LLM bağlantısı, bellek, dil ayarları.
-
-### Yaygın Sorunlar
-
-| Sorun | Çözüm |
-|-------|-------|
-| "LLM bağlantısı YOK" | `.env` → API key ekle veya Ollama başlat (`ollama serve`) |
-| "Ollama ulaşılamiyor" | `ollama serve &` ile servisi başlat |
-| "Bellek sistemi YOK" | İlk çalıştırmada otomatik oluşur |
-| "Voice çalışmıyor" | `sudo apt install portaudio19-dev libasound2-dev ffmpeg` |
-| "Docker hata" | `docker-compose down && docker-compose up -d` |
-| "Build hatası" | `cargo clean && cargo build --release` |
-| "Disk dolu" | `cargo clean` (target/ temizlenir, kod silinmez) |
-
-### Loglar
+#### API Key Hatası
 
 ```bash
-# Canlı log
-sentient logs --follow --level debug
+# Key doğru mu?
+echo $OPENAI_API_KEY
 
-# Docker logları
-docker-compose logs -f
+# .env yüklendi mi?
+source .env 2>/dev/null || true
+
+# Doğrudan kullan
+OPENAI_API_KEY=sk-xxx ./target/release/sentient chat
 ```
 
-### Build Profili
+#### Derleme Hatası
 
 ```bash
-# Normal build (küçük, hızlı)
+# Temizle
+cargo clean
+
+# Bağımlılıkları güncelle
+cargo update
+
+# Tekrar derle
 cargo build --release
-
-# Tam debug build (gerekirse)
-cargo build --profile dev-full
-
-# Test (release benzeri, küçük)
-cargo test -p sentient_core
 ```
 
+#### Memory Hatası
+
+```bash
+# DB kontrol
+ls -la data/sentient_memory.db
+
+# Yeniden oluştur
+rm data/sentient_memory.db
+./target/release/sentient init
+```
+
+### 13.2 Loglar
+
+```bash
+# Log dosyası
+tail -f data/logs/sentient.log
+
+# Sistem logları
+journalctl -u sentient -f
+```
+
+### 13.3 Destek
+
+| Kanal | Link |
+|-------|------|
+| GitHub Issues | [github.com/nexsusagent-coder/SENTIENT_CORE/issues](https://github.com/nexsusagent-coder/SENTIENT_CORE/issues) |
+| Email | sentient@sentient-os.ai |
+
 ---
 
-## 🔗 Hızlı Referans
+## 📚 Ek Kaynaklar
 
-| Ne yapmak istiyorsun? | Komut |
-|-----------------------|-------|
-| Sohbet | `sentient chat` |
-| Sesli asistan | `sentient voice` |
-| Tek soru | `sentient ask "soru"` |
-| 7/24 servisi | `sentient serve` |
-| Dashboard | `sentient dashboard` |
-| Kanal botu | `sentient gateway` |
-| Sistem kontrolü | `sentient doctor` |
-| Sabah bülteni | `sentient digest` |
-| Agent çalıştır | `sentient agent run <name>` |
-| Skill çalıştır | `sentient skill run <skill>` |
-| Bellek ara | `sentient memory search "sorgu"` |
-| Model değiştir | `sentient model set <model>` |
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Sistem mimarisi
+- [MODEL_PROVIDERS.md](MODEL_PROVIDERS.md) - LLM provider detayları
+- [SECURITY.md](SECURITY.md) - Güvenlik dokümantasyonu
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Production deployment
+- [docs/API.md](docs/API.md) - REST API dokümantasyonu
+- [SISTEM_DOKUMANTASYONU.md](SISTEM_DOKUMANTASYONU.md) - Tam sistem dokümantasyonu
 
 ---
 
-*SENTIENT OS — The Operating System That Thinks*
+<p align="center">
+  <b>SENTIENT OS</b> - The Operating System That Thinks<br>
+  Made with 🦀 by the SENTIENT Team
+</p>

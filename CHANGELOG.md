@@ -5,6 +5,61 @@ All notable changes to SENTIENT OS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-04-15
+
+### 🚀 Major Update - OpenClaw-Style Installation
+
+### Added
+
+#### New Installation System
+
+- **install.sh** - OpenClaw tarzı tek komutla kurulum
+  - İnteraktif LLM seçimi (API / Lokal / Atla)
+  - Ollama SADECE istenirse kuruluyor (zorunlu değil)
+  - Ek özellik seçimi (Voice, Dashboard)
+  - Otomatik derleme
+
+- **quick-start.sh** - Hızlı, soru sormadan kurulum
+  - Minimal bağımlılık
+  - Ollama varsa kullanır, yoksa atlar
+  - API key ile kullanıma hazır
+
+#### Documentation
+
+- **README.md** - Tamamen yenilendi
+  - Proje özeti (93 crate, 42 provider, 5587+ skill)
+  - Kurulum rehberi
+  - Özellikler tablosu
+  - Crate yapısı
+  - Skill sistemi
+  - Entegrasyonlar
+
+- **USAGE_GUIDE.md** - Detaylı kullanım kılavuzu
+  - 13 bölüm
+  - Tüm komutlar
+  - Tüm kanallar
+  - Troubleshooting
+
+### Changed
+
+- Ollama kurulumu ARTIK zorunlu değil
+- Kullanıcı tercihine göre LLM seçimi
+- Daha basit ve temiz kurulum süreci
+
+### Stats
+
+| Metric | Value |
+|--------|-------|
+| Rust Crates | 93 |
+| Rust Code | 152,877+ lines |
+| LLM Providers | 42 |
+| LLM Models | 355 native, 200K+ via aggregators |
+| Skills | 5,587+ |
+| Integrations | 72+ |
+| Channels | 24 |
+
+---
+
 ## [4.0.0] - 2025-04-10
 
 ### 🎉 Major Release - Enterprise Ready

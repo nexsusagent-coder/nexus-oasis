@@ -10,7 +10,7 @@ path = "lib.rs"
 [dependencies]
 sentient_core = { path = "../crates/sentient_core" }
 sentient_common = { path = "../crates/sentient_common" }
-sentient_python = { path = "../crates/sentient_python" }
+# sentient_python = { path = "../crates/sentient_python", optional = true }  # Optional
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.0", features = ["full"] }

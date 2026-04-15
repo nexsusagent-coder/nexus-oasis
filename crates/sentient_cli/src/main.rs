@@ -598,7 +598,6 @@ fn get_assistant_name() -> String {
 /// `sentient ask "soru"` — Tek soru sor, cevap al
 async fn run_ask(query: &str, model: Option<&str>) -> SENTIENTResult<()> {
     let name = get_assistant_name();
-    let model_str = model.unwrap_or("qwen/qwen3.6-plus:free");
 
     println!("{} {}",
         format!("{}:", name).bright_cyan().bold(),
@@ -606,18 +605,53 @@ async fn run_ask(query: &str, model: Option<&str>) -> SENTIENTResult<()> {
     );
     println!();
 
-    let system = SENTIENTSystem::init().await?;
-    match system.query_llm(model_str, query, None).await {
-        Ok(response) => {
-            println!("{}", response.bright_white());
-            println!();
+    // Ollama doğrudan kullan (V-GATE yerine)
+    let ollama_url = std::env::var("OLLAMA_HOST").unwrap_or_else(|_| "http://127.0.0.1:11434".to_string());
+    let ollama_model = std::env::var("OLLAMA_MODEL").unwrap_or_else(|_| "gemma2:2b".to_string());
+    let model_str = model.unwrap_or(&ollama_model);
+
+    // Ollama API çağrısı
+    let client = reqwest::Client::new();
+    let request_body = serde_json::json!({
+        "model": model_str,
+        "messages": [
+            {"role": "system", "content": "Sen SENTIENT adlı yardımcı bir yapay zeka asistanısın. Türkçe cevap ver."},
+            {"role": "user", "content": query}
+        ],
+        "stream": false
+    });
+
+    let response = client
+        .post(format!("{}/api/chat", ollama_url))
+        .json(&request_body)
+        .timeout(std::time::Duration::from_secs(60))
+        .send()
+        .await;
+
+    match response {
+        Ok(resp) => {
+            if resp.status().is_success() {
+                match resp.json::<serde_json::Value>().await {
+                    Ok(json) => {
+                        if let Some(content) = json["message"]["content"].as_str() {
+                            println!("{}", content.bright_white());
+                        } else {
+                            println!("{} Yanıt parse edilemedi", "❌".red());
+                        }
+                    }
+                    Err(e) => println!("{} JSON hatası: {}", "❌".red(), e),
+                }
+            } else {
+                println!("{} Ollama hatası: HTTP {}", "❌".red(), resp.status());
+            }
         }
         Err(e) => {
-            println!("{} {}", "❌".red(), e.to_sentient_message());
+            println!("{} Bağlantı hatası: {}", "❌".red(), e);
+            println!("  → Ollama çalıştığından emin olun: ollama serve &");
         }
     }
-
-    system.shutdown().await
+    println!();
+    Ok(())
 }
 
 /// `sentient chat` — Interaktif sohbet
@@ -758,7 +792,7 @@ async fn run_doctor() -> SENTIENTResult<()> {
     let has_openai = std::env::var("OPENAI_API_KEY").is_ok();
     let has_anthropic = std::env::var("ANTHROPIC_API_KEY").is_ok();
     let has_groq = std::env::var("GROQ_API_KEY").is_ok();
-    let has_ollama = reqwest_check("http://localhost:11434").await;
+    let has_ollama = reqwest_check("http://localhost:11434").await || reqwest_check("http://127.0.0.1:11434").await;
     if has_openai || has_anthropic || has_groq || has_ollama {
         let providers: Vec<&str> = [
             (has_openai, "OpenAI"),

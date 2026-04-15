@@ -15,7 +15,7 @@ members = [
     "crates/sentient_memory",
     "crates/sentient_vgate",
     "crates/sentient_guardrails",
-    "crates/sentient_python",
+#    "crates/sentient_python",  # Optional: PyO3 bridge - uncomment if needed
     "crates/sentient_common",
     "crates/sentient_graph",
     "crates/sentient_cli",
