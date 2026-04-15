@@ -222,3 +222,26 @@ clap = { version = "4", features = ["derive"] }
 # Guardrails / Regex
 regex = "1"
 lazy_static = "1"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  BUILD PROFILES — Disk kullanımını kontrol altında tutmak için
+# ═══════════════════════════════════════════════════════════════════════════════
+# Varsayılan debug build yerine hafif optimizasyonlu profil.
+# Bu sayede target/ 5-10x daha küçük olur.
+# Tam debug gerekirse: cargo build --profile dev-full
+
+[profile.dev]
+opt-level = 1          # Hafif optimizasyon → binary çok daha küçük
+debug = 1              # Satır numarası sadece (full debug = 2, ~3x büyütür)
+incremental = true
+
+[profile.test]
+opt-level = 1          # Test binary'leri de küçük olsun
+debug = 1
+incremental = true
+
+[profile.dev-full]
+inherits = "dev"
+opt-level = 0          # Optimizasyon yok (gerçek debug gerektiğinde)
+debug = 2              # Full debug info
+incremental = true
