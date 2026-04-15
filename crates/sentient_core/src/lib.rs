@@ -21,6 +21,7 @@ pub use sentient_common;
 pub use sentient_guardrails;
 pub use sentient_graph;
 pub use sentient_memory;
+#[cfg(feature = "python")]
 pub use sentient_python;
 pub use sentient_vgate;
 
@@ -37,6 +38,7 @@ use sentient_common::tracing::{self as sent_tracing, Span, SpanStatus};
 use sentient_graph::{EventGraph, NodeDef, NodeType};
 use sentient_guardrails::GuardrailEngine;
 use sentient_memory::MemoryCube;
+#[cfg(feature = "python")]
 use sentient_python::PythonBridge;
 use sentient_vgate::{LlmRequest, Message, VGateConfig, VGateEngine};
 use log;
@@ -49,6 +51,7 @@ pub struct SENTIENTSystem {
     pub memory: Arc<Mutex<MemoryCube>>,
     pub vgate: Arc<Mutex<VGateEngine>>,
     pub guardrails: Arc<Mutex<GuardrailEngine>>,
+    #[cfg(feature = "python")]
     pub python_bridge: Arc<Mutex<PythonBridge>>,
     pub event_log: Arc<Mutex<Vec<SENTIENTEvent>>>,
     pub graph: Arc<EventGraph>,
@@ -100,8 +103,12 @@ impl SENTIENTSystem {
         log::info!("✅  V-GATE: Vekil sunucu katmanı hazır.");
 
         // 4) Python Köprüsü (ASİMİLASYON)
+        #[cfg(feature = "python")]
         let python_bridge = Arc::new(Mutex::new(PythonBridge::new()));
+        #[cfg(feature = "python")]
         log::info!("✅  KÖPRÜ: PyO3 asimilasyon katmanı hazır.");
+        #[cfg(not(feature = "python"))]
+        log::info!("⚠️  KÖPRÜ: Python desteği devre dışı (embedded mod).");
 
         // 5) Olay günlüğü
         let event_log = Arc::new(Mutex::new(Vec::new()));
@@ -186,6 +193,7 @@ impl SENTIENTSystem {
             memory,
             vgate,
             guardrails,
+            #[cfg(feature = "python")]
             python_bridge,
             event_log,
             graph,
@@ -327,7 +335,10 @@ impl SENTIENTSystem {
         };
         let vgate_requests = self.vgate.lock().await.request_count().await;
         let event_count = self.event_log.lock().await.len();
+        #[cfg(feature = "python")]
         let tool_count = self.python_bridge.lock().await.list_tools().len();
+        #[cfg(not(feature = "python"))]
+        let tool_count = 0;
         let policy_count = self.guardrails.lock().await.list_policies().len();
         let graph_stats = self.graph.stats();
         let uptime = self.started_at.elapsed().as_secs();

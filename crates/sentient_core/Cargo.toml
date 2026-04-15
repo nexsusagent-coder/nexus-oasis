@@ -3,12 +3,16 @@ name = "sentient_core"
 version.workspace = true
 edition.workspace = true
 
+[features]
+default = ["python"]
+python = ["sentient_python"]
+
 [dependencies]
 sentient_common = { path = "../sentient_common" }
 sentient_memory = { path = "../sentient_memory" }
 sentient_vgate = { path = "../sentient_vgate" }
 sentient_guardrails = { path = "../sentient_guardrails" }
-sentient_python = { path = "../sentient_python" }
+sentient_python = { path = "../sentient_python", optional = true }
 sentient_graph = { path = "../sentient_graph" }
 
 tokio.workspace = true

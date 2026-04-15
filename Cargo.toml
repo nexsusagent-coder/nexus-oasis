@@ -196,8 +196,8 @@ tower-http = "0.6"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
-# PyO3 bridge
-pyo3 = { version = "0.25", features = ["auto-initialize"] }
+# PyO3 bridge (abi3 için crate bazlı feature)
+pyo3 = { version = "0.25" }
 
 # Async traits
 async-trait = "0.1"

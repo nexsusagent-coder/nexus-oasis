@@ -6,7 +6,9 @@ edition.workspace = true
 [dependencies]
 sentient_common = { path = "../sentient_common" }
 
-pyo3 = { workspace = true, features = ["auto-initialize"] }
+# PyO3: abi3 ile Python kütüphanesine link gerekmez
+# Sadece runtime'da Python 3.11+ gerekir
+pyo3 = { workspace = true, features = ["abi3", "abi3-py311"] }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
@@ -23,3 +25,5 @@ crate-type = ["rlib", "cdylib"]
 [features]
 default = []
 extension-module = ["pyo3/extension-module"]
+# auto-initialize için Python lib gerekir, varsayılan devre dışı
+auto-init = ["pyo3/auto-initialize"]

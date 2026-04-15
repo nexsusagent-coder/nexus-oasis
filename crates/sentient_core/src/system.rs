@@ -8,6 +8,7 @@ use sentient_common::events::{SENTIENTEvent, EventType};
 use sentient_graph::{EventGraph, NodeDef, NodeType};
 use sentient_guardrails::GuardrailEngine;
 use sentient_memory::MemoryCube;
+#[cfg(feature = "python")]
 use sentient_python::PythonBridge;
 use sentient_vgate::{VGateConfig, VGateEngine};
 
@@ -23,6 +24,7 @@ pub struct SENTIENTSystem {
     pub memory: Arc<RwLock<MemoryCube>>,
     pub vgate: Arc<Mutex<VGateEngine>>,
     pub guardrails: Arc<RwLock<GuardrailEngine>>,
+    #[cfg(feature = "python")]
     pub python_bridge: Arc<Mutex<PythonBridge>>,
     pub event_log: Arc<Mutex<Vec<SENTIENTEvent>>>,
     pub graph: Arc<EventGraph>,
@@ -60,8 +62,12 @@ impl SENTIENTSystem {
         log::info!("  ✅  V-GATE: Vekil sunucu katmanı hazır.");
 
         // 4) Python Köprüsü (ENTRASYON KATMANI)
+        #[cfg(feature = "python")]
         let python_bridge = Arc::new(Mutex::new(PythonBridge::new()));
+        #[cfg(feature = "python")]
         log::info!("  ✅  KÖPRÜ: PyO3 entegrasyon katmanı hazır.");
+        #[cfg(not(feature = "python"))]
+        log::info!("  ⚠️  KÖPRÜ: Python desteği devre dışı (embedded mod).");
 
         // 5) Event Graph (MERKEZİ SİNİR SİSTEMİ)
         let graph = Arc::new(EventGraph::new("sentient_main"));
@@ -95,6 +101,7 @@ impl SENTIENTSystem {
             memory,
             vgate,
             guardrails,
+            #[cfg(feature = "python")]
             python_bridge,
             event_log,
             graph,

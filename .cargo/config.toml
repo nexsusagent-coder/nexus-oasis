@@ -1,2 +1,39 @@
-[build]
+# ═══════════════════════════════════════════════════════════════════════════════
+#  SENTIENT Cargo Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Python desteği için:
+#   cargo build --features python
+#
+# Python olmadan (embedded mod):
+#   cargo build --no-default-features
+#
+# Windows'ta embedded Python ile:
+#   PYTHON_SYS_EXECUTABLE=path/to/python.exe cargo build --no-default-features
+#
+
+[alias]
+# Hızlı build komutları
+build-quick = "build --no-default-features --release"
+build-python = "build --features python --release"
+check-quick = "check --no-default-features"
+
+[target.x86_64-pc-windows-msvc]
+# Windows'ta Python linklenmesin - PyO3 abi3 kullanılacak
+rustflags = []
+
+[target.x86_64-pc-windows-gnu]
+rustflags = []
+
+[target.x86_64-unknown-linux-gnu]
+# Linux'ta Python 3.12 varsa kullan
 rustflags = ["-L", "/usr/lib/python3.12/config-3.12-x86_64-linux-gnu"]
+
+[target.aarch64-unknown-linux-gnu]
+rustflags = []
+
+[target.x86_64-apple-darwin]
+rustflags = []
+
+[target.aarch64-apple-darwin]
+rustflags = []
