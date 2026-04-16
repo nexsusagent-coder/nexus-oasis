@@ -128,6 +128,7 @@ function Show-Welcome {
     Write-Host ""
     Write-Host "  ${YELLOW}Enter${RESET} tuşuna basarak devam edin..."
     $null = Read-Host
+    return $true
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
