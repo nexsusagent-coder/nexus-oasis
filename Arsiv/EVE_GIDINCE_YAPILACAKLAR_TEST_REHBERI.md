@@ -60,7 +60,7 @@
 | sentient_guardrails | 3 | ✅ |
 | sentient_home | 13 | ✅ |
 | sentient_i18n | 16 | ✅ |
-| sentient_image | 12 | ✅ |
+| sentient_image | 17 | ✅ |
 | sentient_ingestor | 9 | ✅ |
 | sentient_lancedb | 0 | ✅ |
 | sentient_learning | 5 | ✅ |
@@ -95,7 +95,7 @@
 | sentient_todo | 5 | ✅ |
 | sentient_vector | 7 | ✅ |
 | sentient_vgate | 35 | ✅ |
-| sentient_video | 51 | ✅ |
+| sentient_video | 56 | ✅ |
 | sentient_voice | 0 | ✅ |
 | sentient_wake | 7 | ✅ |
 | sentient_workflow | 8 | ✅ |
@@ -746,8 +746,250 @@ EOF
 ---
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  BÖLÜM 13: CEVAHIR AI — COGNITIVE REASONING TESTİ (15 dk)
+#  BÖLÜM 12: GÖRSEL & VİDEO ÜRETİM TESTİ (30 dk)
 # ═══════════════════════════════════════════════════════════════════════════════
+
+> Kaynak kodu: `crates/sentient_image/` (2,557 satır) + `crates/sentient_video/` (5,140+ satır)
+
+## 🖼️ Görsel Üretim — 8 Provider, 16+ Model
+
+### Provider'lar
+
+| # | Provider | Modeller | API Key Gerekli? | Ücretsiz |
+|---|----------|---------|-------------------|----------|
+| 1 | **OpenAI** | DALL-E 3/2, GPT Image 1 | ✅ Evet | Hayır |
+| 2 | **Stability AI** | SDXL, SD 3.5/3.5 Turbo | ✅ Evet | 150 credit |
+| 3 | **Flux** (via Replicate) | Pro, 1.1 Pro, Dev, Schnell | ✅ Evet | 50 prediction |
+| 4 | **Ideogram** | v1, v2, v2 Turbo, v3 | ✅ Evet | ~80/ay |
+| 5 | **Replicate** | SDXL, Flux, Kandinsky, Playground | ✅ Evet | 50 prediction |
+| 6 | **Recraft** | V3 (vektör & marka) | ✅ Evet | Sınırlı |
+| 7 | **Playground** | v3 | ✅ Evet | Sınırlı |
+| 8 | **Google** | Imagen 3 | ✅ Evet | AI Studio |
+
+### Görsel Boyutları
+
+| Boyut | Piksel | Kullanım |
+|-------|--------|----------|
+| Small256 | 256×256 | İkon, avatar |
+| Medium512 | 512×512 | Küçük görsel |
+| Square1024 | 1024×1024 | Genel amaç |
+| Landscape1536 | 1536×1024 | Blog kapak |
+| Portrait1536 | 1024×1536 | Story, poster |
+| Landscape1792 | 1792×1024 | Banner, YouTube kapak |
+| Portrait1024 | 1024×1792 | Dikey poster |
+| HD1280 | 1280×720 | HD görsel |
+| FullHD1920 | 1920×1080 | Full HD |
+| Square2048 | 2048×2048 | Yüksek çözünürlük |
+
+### Görsel Düzenleme Operasyonları
+
+| Operasyon | Açıklama | Kullanım |
+|-----------|----------|----------|
+| Inpaint | Maskeli alan doldurma | Nesne değiştirme |
+| Outpaint | Sınırları genişletme | Panorama |
+| Background Removal | Arka plan silme | Ürün fotoğrafı |
+| Upscale | Çözünürlük artırma | 4x büyütme |
+| Style Transfer | Stil aktarma | Foto→Resim |
+| Crop + Filter | Kırpma + filtre | Renk ayarı |
+
+### 12 Stil Preset
+
+Oil Painting, Watercolor, Pencil Sketch, Comic Book, Anime, Pixel Art,
+Impressionist, Pop Art, Cyberpunk, Vintage, Neon, Minimalist
+
+### Görsel Üretim Test Komutları
+
+```bash
+# .env'e API key ekle (en az 1 tane)
+echo 'OPENAI_API_KEY=sk-...' >> .env
+echo 'STABILITY_API_KEY=sk-...' >> .env
+
+# DALL-E 3 ile görsel üret
+./target/release/sentient image generate \
+  --provider openai \
+  --model dall-e-3 \
+  --prompt "A futuristic city at sunset, cyberpunk style" \
+  --size 1024x1024 \
+  --quality hd \
+  --output ./test-image.png
+# BEKLENEN: Görsel dosyası oluşur
+
+# Stable Diffusion XL ile
+./target/release/sentient image generate \
+  --provider stability \
+  --model sdxl \
+  --prompt "A cat wearing sunglasses" \
+  --negative-prompt "blurry, low quality"
+
+# Ideogram ile (metin içeren logo)
+./target/release/sentient image generate \
+  --provider ideogram \
+  --model ideogram-v3 \
+  --prompt "A logo with text SENTIENT OS in neon letters"
+
+# Flux ile
+./target/release/sentient image generate \
+  --provider flux \
+  --model flux-1.1-pro \
+  --prompt "Mountain landscape at golden hour"
+
+# GPT Image 1 (2026)
+./target/release/sentient image generate \
+  --provider openai \
+  --model gpt-image-1 \
+  --prompt "Professional headshot photo"
+
+# SD 3.5 Turbo (hızlı)
+./target/release/sentient image generate \
+  --provider stability \
+  --model sd35-turbo \
+  --prompt "Abstract art, colorful"
+```
+
+### Görsel Üretim Test Matrisi
+
+| # | Provider | Model | Prompt | Beklenen | Sonuç |
+|---|----------|-------|--------|----------|-------|
+| 1 | OpenAI | dall-e-3 | "Cyberpunk city" | PNG dosyası | ☐ |
+| 2 | OpenAI | gpt-image-1 | "Headshot photo" | PNG dosyası | ☐ |
+| 3 | Stability | sdxl | "Cat sunglasses" | PNG dosyası | ☐ |
+| 4 | Stability | sd35-turbo | "Abstract art" | PNG dosyası | ☐ |
+| 5 | Ideogram | ideogram-v3 | "SENTIENT logo" | Metinli logo | ☐ |
+| 6 | Flux | flux-1.1-pro | "Mountain sunset" | PNG dosyası | ☐ |
+
+---
+
+## 🎬 Video Üretim — 8 Provider, 23 Model
+
+### Provider'lar
+
+| # | Provider | Modeller | Ücretsiz | Max Süre |
+|---|----------|---------|----------|----------|
+| 1 | **Runway** | Gen-2/3/4 Alpha | 50-125 credit | 18-30s |
+| 2 | **Pika** | 1.5/2.0/3.0 | 250/ay | 10-15s |
+| 3 | **Luma AI** | DM 1.0/2.0, Ray/Ray2 | 10-30/ay | 5-15s |
+| 4 | **Kling** | v1/1.5/v2.0/v2.1 Master | 30-66/gün | 10-20s |
+| 5 | **Haiper** | v2 | 150/ay | 6s |
+| 6 | **Stability** | SVD/XT | 150 toplam | 4-6s |
+| 7 | **OpenAI Sora** | 1.0/2.0 | ChatGPT Plus | 60-120s |
+| 8 | **Hailuo** | 01/01 Live/02 | 10-30/gün | 6-10s |
+
+### 🌟 2026 Yeni Modeller
+
+| Model | Provider | Özellik | Max Süre |
+|-------|----------|---------|----------|
+| **Sora 2.0** | OpenAI | 2 dakika video! | 120s |
+| **Runway Gen-4** | Runway | En yeni, en kaliteli | 30s |
+| **Kling v2.1 Master** | Kling | Sinematik, 20s | 20s |
+| **Luma Ray2** | Luma | Yüksek kalite | 15s |
+| **Pika 3.0** | Pika | En hızlı (30sn üretim) | 15s |
+| **Hailuo 02** | Hailuo | Asya yüzleri uzmanı | 10s |
+| **Google Veo 2** | Google | 60s, AI Studio | 60s |
+
+### Video Üretim Test Komutları
+
+```bash
+# .env'e API key ekle
+echo 'RUNWAY_API_KEY=...' >> .env
+echo 'PIKA_API_KEY=...' >> .env
+
+# Pika 3.0 ile text-to-video (en hızlı, en ucuz)
+./target/release/sentient video generate \
+  --provider pika \
+  --model pika-3 \
+  --prompt "A cat playing piano in a jazz club" \
+  --duration 5 \
+  --aspect-ratio 16:9
+# BEKLENEN: MP4 video URL
+
+# Kling v2 ile (en gerçekçi)
+./target/release/sientient video generate \
+  --provider kling \
+  --model kling-v2 \
+  --prompt "Woman walking through Tokyo at night" \
+  --duration 5
+
+# Runway Gen-3 Alpha ile (profesyonel)
+./target/release/sentient video generate \
+  --provider runway \
+  --model gen3a_turbo \
+  --prompt "Cinematic drone shot over mountains" \
+  --style cinematic
+
+# Sora ile (OpenAI)
+./target/release/sentient video generate \
+  --provider sora \
+  --model sora-1.0-turbo \
+  --prompt "A dog running on the beach" \
+  --duration 5
+
+# Image-to-Video (var olan görseli animasyona çevir)
+./target/release/sentient video generate \
+  --provider luma \
+  --model dream-machine \
+  --prompt "Animate with gentle motion" \
+  --image-url ./test-image.png
+
+# Sosyal medya story'si (9:16 dikey)
+./target/release/sentient video generate \
+  --provider pika \
+  --model pika-3 \
+  --prompt "Product showcase with neon lights" \
+  --aspect-ratio 9:16 \
+  --duration 5
+
+# Maliyet hesaplama
+./target/release/sentient video cost \
+  --model pika-3 --duration 5
+# BEKLENEN: $0.15 gibi bir tahmin
+
+# Model karşılaştırma
+./target/release/sentient video models --sort quality
+./target/release/sentient video models --sort speed
+./target/release/sentient video models --sort cost
+```
+
+### Video Template Kategorileri (46 hazır template)
+
+| Kategori | Örnek |
+|----------|-------|
+| Marketing | Ürün tanıtım, reklam |
+| Social | Instagram Reels, TikTok |
+| Education | Eğitim animasyonu |
+| Nature | Doğa görüntüleri |
+| Cinematic | Sinematik sahne |
+| Transition | Geçiş efekti |
+| Background | Arka plan video |
+| Animation | Logo animasyonu |
+| Food | Yemek videosu |
+| Tech | Teknoloji tanıtım |
+| Fitness | Spor videosu |
+| Fashion | Moda gösterisi |
+| Travel | Seyahat vlog |
+| RealEstate | Emlak turu |
+| Automotive | Araç tanıtım |
+
+### Video Üretim Test Matrisi
+
+| # | Provider | Model | Prompt | Beklenen | Sonuç |
+|---|----------|-------|--------|----------|-------|
+| 1 | Pika | pika-3 | "Cat piano" | 5s MP4 | ☐ |
+| 2 | Kling | kling-v2 | "Tokyo night" | 5s MP4 | ☐ |
+| 3 | Runway | gen3a_turbo | "Drone mountains" | 5s MP4 | ☐ |
+| 4 | Luma | dream-machine | Image-to-Video | Animasyon | ☐ |
+| 5 | Sora | sora-1.0-turbo | "Dog beach" | 5s MP4 | ☐ |
+| 6 | Hailuo | hailuo-01 | "Asian street food" | 6s MP4 | ☐ |
+
+### ⚠️ Önemli Notlar
+
+1. **API Key gerekli** — En az 1 provider'ın API key'i olmalı
+2. **Ücretsiz katman** — Pika (250/ay), Kling (66/gün), Haiper (150/ay) en iyi ücretsiz seçenekler
+3. **Üretim süresi** — 30sn (Pika) ile 5dk (Sora) arası
+4. **Maliyet** — Pika ~$0.02/sn, Sora ~$0.20/sn
+5. **Önerilen sıra** — Pika (hızlı test) → Kling (kalite) → Runway (profesyonel)
+6. **V-GATE** — Sora ve OpenAI provider'lar V-GATE proxy destekli
+
+---
 
 ## Cevahir AI Nedir?
 
@@ -1173,10 +1415,10 @@ journalctl -u ollama -f
 3:10  Email bağlantı testi
 3:20  Persona sistemi testi
 3:25  Sandbox kod çalıştırma testi
-3:35  Telegram bot kur + test
-3:45  Multi-agent crew testi
-3:50  Self-healing orchestrator testi
-3:55  Guardrails + V-GATE testi
+3:35  🖼️ Görsel üretim (DALL-E, Ideogram, Flux)
+3:45  🎬 Video üretim (Pika, Kling, Runway)
+3:50  🤖 Multi-agent crew testi
+3:55  🔒 Guardrails + V-GATE testi
 ```
 
 **Toplam: ~4 Saat**
@@ -1273,6 +1515,22 @@ journalctl -u ollama -f
 - [ ] Tehlikeli kod engelleme
 - [ ] Timeout testi
 
+### 🖼️ Görsel Üretim (15 dk, API key gerekli)
+- [ ] .env'e en az 1 API key ekle (OpenAI/Stability/Ideogram)
+- [ ] DALL-E 3 ile görsel üret
+- [ ] Ideogram v3 ile metinli logo üret
+- [ ] SD 3.5 Turbo ile hızlı görsel
+- [ ] Flux ile yüksek kaliteli görsel
+- [ ] 6 provider karşılaştırma testi
+
+### 🎬 Video Üretim (15 dk, API key gerekli)
+- [ ] Pika 3.0 ile text-to-video (en hızlı)
+- [ ] Kling v2 ile yüksek kalite video
+- [ ] Luma ile image-to-video
+- [ ] Model maliyet karşılaştırması
+- [ ] 9:16 dikey story video
+- [ ] 46 template kategorisi inceleme
+
 ### 🤖 Multi-Agent (20 dk)
 - [ ] CrewAI crew + Swarm testi
 
@@ -1324,11 +1582,13 @@ journalctl -u ollama -f
 | 18 | Email | ☐ | |
 | 19 | Persona | ☐ | |
 | 20 | Sandbox | ☐ | |
-| 21 | Multi-agent | ☐ | |
-| 22 | Guardrails + V-GATE | ☐ | |
-| 23 | Docker production | ☐ | |
+| 21 | Görsel üretim (6 provider) | ☐ | |
+| 22 | Video üretim (8 provider) | ☐ | |
+| 23 | Multi-agent | ☐ | |
+| 24 | Guardrails + V-GATE | ☐ | |
+| 25 | Docker production | ☐ | |
 
-### Toplam: ____/23 geçti
+### Toplam: ____/25 geçti
 
 ### Sorunlar:
 ```
