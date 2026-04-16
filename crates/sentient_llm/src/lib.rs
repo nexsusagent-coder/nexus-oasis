@@ -1,22 +1,50 @@
 //! ─── SENTIENT LLM ───
 //!
-//! Comprehensive LLM Model Hub - All providers, all models, unified API
+//! Comprehensive LLM Model Hub - ALL providers, ALL models, unified API
+//! 200+ models, 50+ providers, from GPT-2 (2019) to o4/Gemini 2.5 (2026)
 //!
-//! # Supported Providers
-//! - **OpenAI**: GPT-4o, GPT-4 Turbo, GPT-3.5, o1, o3
-//! - **Anthropic**: Claude 4, Claude 3.5, Claude 3
-//! - **Google**: Gemini 2.0, Gemini 1.5, Gemma
-//! - **Mistral**: Mistral Large, Medium, Small, Codestral, Mixtral
+//! # Supported Provider Categories
+//!
+//! ## Tier-1 AI Companies
+//! - **OpenAI**: GPT-4o, GPT-4 Turbo, GPT-3.5, o1, o3, o4-mini
+//! - **Anthropic**: Claude 4, Claude 3.5, Claude 3, Claude 2, Claude 1
+//! - **Google**: Gemini 2.5, Gemini 2.0, Gemini 1.5, Gemma 3
+//! - **Mistral**: Mistral Large 2, Small 3.1, Codestral, Pixtral
 //! - **DeepSeek**: DeepSeek V3, R1, Coder (cheapest!)
-//! - **xAI**: Grok 2, Grok Vision
-//! - **Cohere**: Command R+, Command R, Aya
-//! - **Perplexity**: Sonar (online with web search)
+//! - **xAI**: Grok 3, Grok 3 Mini (Reasoning), Grok 2
+//! - **Cohere**: Command A, Command R+, Aya Exa
+//! - **Perplexity**: Sonar, Sonar Pro, Deep Research
+//!
+//! ## Aggregator Platforms
+//! - **OpenRouter**: 200+ models via single API
 //! - **Groq**: LPU inference - fastest!
 //! - **Together**: 100+ open source models
 //! - **Fireworks**: Fast open source inference
-//! - **Replicate**: Run any model
-//! - **AI21**: Jamba 1.5
+//! - **Cerebras**: Wafer-scale fastest inference
+//! - **Cloudflare Workers AI**: Edge inference
+//! - **Chutes**: Free serverless AI inference
+//! - **SiliconFlow**: Chinese GPU cloud
+//!
+//! ## Enterprise / Cloud
+//! - **Azure OpenAI**, **AWS Bedrock**, **GCP Vertex AI**
+//! - **NVIDIA NIM**, **SambaNova**, **IBM WatsonX**
+//! - **DeepInfra**, **OCI GenAI**
+//!
+//! ## Chinese AI
+//! - **Qwen (Alibaba)**: Qwen3, QwQ, QVQ
+//! - **Baidu ERNIE**, **Zhipu GLM**, **Moonshot Kimi**
+//! - **MiniMax**, **StepFun**, **ByteDance Doubao**
+//!
+//! ## Regional AI
+//! - **GigaChat** (Russia), **Upstage** (Korea), **Aleph Alpha** (EU)
+//! - **Sarvam AI** (India), **Reka AI** (multimodal)
+//!
+//! ## Local / Self-Hosted
 //! - **Ollama**: Local LLM inference (FREE!)
+//! - **vLLM**: High-throughput serving
+//! - **LM Studio**: Desktop LLM
+//! - **Llamafile**: Single-file distribution
+//! - **Cevahir AI**: SENTIENT's own LLM engine
 //!
 //! # Example
 //! ```rust,ignore
@@ -24,10 +52,8 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     // Create hub with all providers
 //!     let hub = LlmHub::from_env().unwrap();
 //!
-//!     // Chat with any model
 //!     let response = hub.chat(ChatRequest {
 //!         model: "gpt-4o".into(),
 //!         messages: vec![Message::user("Hello!")],
@@ -67,12 +93,73 @@ pub use distributed::{
 };
 pub use router::{SmartRouter, ComplexityTier, RoutingDecision, ModelTier, RouterConfig, RouterStats};
 
-// Re-export providers
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RE-EXPORT: DIRECT PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
 pub use providers::{
     OpenAIProvider, AnthropicProvider, GoogleProvider, MistralProvider,
     DeepSeekProvider, XAIProvider, CohereProvider, PerplexityProvider,
     GroqProvider, TogetherProvider, FireworksProvider, ReplicateProvider,
     AI21Provider, OllamaProvider,
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RE-EXPORT: AGGREGATOR PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+pub use providers::{
+    OpenRouterProvider, GlhfProvider, NovitaProvider, HyperbolicProvider,
+    SiliconFlowProvider, CerebrasProvider, LiteLLMProvider, HuggingFaceProvider,
+    CloudflareAIProvider, ChutesProvider,
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RE-EXPORT: ENTERPRISE PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+pub use providers::{
+    NvidiaProvider, SambaNovaProvider, DeepInfraProvider,
+    AzureOpenAIProvider, BedrockProvider, VertexAIProvider,
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RE-EXPORT: LOCAL PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+pub use providers::{
+    VLLMProvider, LmStudioProvider, LlamafileProvider,
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RE-EXPORT: CHINESE AI PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+pub use providers::{
+    ZhipuProvider, MoonshotProvider, YiProvider,
+    BaiduErnieProvider, MiniMaxProvider,
+    QwenProvider, StepFunProvider,
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RE-EXPORT: REGIONAL PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+pub use providers::{
+    GigaChatProvider,      // Russia
+    UpstageProvider,       // Korea
+    AlephAlphaProvider,    // EU
+    SarvamProvider,        // India
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  RE-EXPORT: SPECIALIZED PROVIDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+pub use providers::{
+    StabilityProvider, WatsonXProvider, LeptonProvider,
+    RunPodProvider, ModalProvider, CharacterAIProvider,
+    RekaProvider, FriendliAIProvider, OctoAIProvider, VoyageProvider,
 };
 
 // Re-export embedding and reranking (cross-module)
@@ -89,6 +176,7 @@ pub mod reranking {
 /// Prelude for common imports
 pub mod prelude {
     pub use crate::{LlmHub, ChatRequest, ChatResponse, Message, Role, LlmProvider};
+    pub use crate::models;
 }
 
 #[cfg(test)]
@@ -98,13 +186,13 @@ mod tests {
     #[test]
     fn test_models_count() {
         let models = models::all_models();
-        assert!(models.len() >= 50, "Should have 50+ models, got {}", models.len());
+        assert!(models.len() >= 200, "Should have 200+ models, got {}", models.len());
     }
 
     #[test]
-    fn test_providers_count() {
-        let providers = provider::ProviderInfo::all();
-        assert_eq!(providers.len(), 13, "Should have 13 providers");
+    fn test_provider_count() {
+        let count = models::provider_count();
+        assert!(count >= 40, "Should have 40+ unique providers, got {}", count);
     }
 
     #[test]
@@ -118,14 +206,15 @@ mod tests {
     fn test_cheapest_provider() {
         let by_cost = models::by_cost();
         let cheapest = &by_cost[0];
-        // DeepSeek or free models should be at the top
+        // DeepSeek, Ollama or free models should be at the top
         assert!(cheapest.input_cost_per_1k <= 0.0001 || cheapest.provider == "Ollama");
     }
 
     #[test]
     fn test_reasoning_models() {
         let reasoning = models::reasoning_models();
-        assert!(reasoning.iter().any(|m| m.id.contains("o1") || m.id.contains("r1") || m.id.contains("reasoning")));
+        assert!(reasoning.len() >= 10, "Should have 10+ reasoning models");
+        assert!(reasoning.iter().any(|m| m.id.contains("o1") || m.id.contains("r1") || m.id.contains("qwq")));
     }
 
     #[test]
@@ -133,5 +222,36 @@ mod tests {
         let vision = models::vision_models();
         assert!(!vision.is_empty());
         assert!(vision.iter().all(|m| m.supports_vision));
+    }
+
+    #[test]
+    fn test_legacy_models() {
+        let legacy = models::legacy_models();
+        assert!(!legacy.is_empty());
+        assert!(legacy.iter().any(|m| m.id.contains("gpt-2") || m.id.contains("gpt-3")));
+    }
+
+    #[test]
+    fn test_cutting_edge() {
+        let cutting = models::cutting_edge_models();
+        assert!(!cutting.is_empty());
+    }
+
+    #[test]
+    fn test_chinese_models() {
+        let chinese = models::chinese_models();
+        assert!(chinese.len() >= 5);
+    }
+
+    #[test]
+    fn test_enterprise_models() {
+        let enterprise = models::enterprise_models();
+        assert!(enterprise.len() >= 5);
+    }
+
+    #[test]
+    fn test_local_models_all_free() {
+        let local = models::local_models();
+        assert!(local.iter().all(|m| m.input_cost_per_1k == 0.0));
     }
 }

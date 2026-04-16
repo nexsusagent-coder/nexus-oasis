@@ -178,6 +178,69 @@ impl LlmHub {
         if let Ok(p) = crate::providers::MiniMaxProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
+        if let Ok(p) = crate::providers::QwenProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::StepFunProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  RUSSIAN AI PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::GigaChatProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  KOREAN AI PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::UpstageProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  EUROPEAN AI PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::AlephAlphaProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  INDIAN AI PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::SarvamProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  ADDITIONAL AGGREGATOR PROVIDERS
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::CloudflareAIProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::ChutesProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::FriendliAIProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::OctoAIProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  HUGGING FACE & SPECIALIZED
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::HuggingFaceProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::RekaProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::VoyageProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
         if let Ok(p) = crate::providers::LeptonProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
@@ -190,21 +253,17 @@ impl LlmHub {
         if let Ok(p) = crate::providers::CharacterAIProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
-
-        // ═══════════════════════════════════════════════════════════
-        //  HUGGING FACE
-        // ═══════════════════════════════════════════════════════════
-        if let Ok(p) = crate::providers::HuggingFaceProvider::from_env() {
-            hub = hub.register(Arc::new(p));
-        }
-
-        // ═══════════════════════════════════════════════════════════
-        //  ADDITIONAL PROVIDERS
-        // ═══════════════════════════════════════════════════════════
         if let Ok(p) = crate::providers::StabilityProvider::from_env() {
             hub = hub.register(Arc::new(p));
         }
         if let Ok(p) = crate::providers::WatsonXProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        //  LOCAL PROVIDERS (no API key needed)
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::LlamafileProvider::new() {
             hub = hub.register(Arc::new(p));
         }
 
@@ -654,6 +713,70 @@ impl LlmHubBuilder {
 
     pub fn watsonx(mut self, api_key: impl Into<String>, project_id: impl Into<String>) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::WatsonXProvider::new(api_key, project_id)?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  NEW REGIONAL PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn qwen(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::QwenProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn stepfun(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::StepFunProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn gigachat(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::GigaChatProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn upstage(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::UpstageProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn aleph_alpha(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::AlephAlphaProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn sarvam(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::SarvamProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn reka(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::RekaProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn cloudflare(mut self, api_token: impl Into<String>, account_id: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::CloudflareAIProvider::new(api_token, account_id)?));
+        Ok(self)
+    }
+
+    pub fn chutes(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::ChutesProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn friendliai(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::FriendliAIProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn octoai(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::OctoAIProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn llamafile(mut self) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::LlamafileProvider::new()?));
         Ok(self)
     }
 
