@@ -40,7 +40,7 @@ url = "2"
 regex.workspace = true
 
 # Crypto for signature verification
-hmac = "0.12"
+hmac = "0.13"
 sha1 = "0.10"
 sha2 = "0.10"
 hex = "0.4"
