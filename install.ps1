@@ -155,22 +155,47 @@ function Install-FFmpeg {
         return $true
     }
 
-    # Scoop kontrolü
-    if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
-        Write-Info "Scoop kuruluyor..."
-        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-        Invoke-RestMethod get.scoop.sh | Invoke-Expression
+    # Yöntem 1: Winget ile (yönetici modunda çalışır)
+    Write-Info "FFmpeg kuruluyor (winget)..."
+    $ffmpegResult = winget install Gyan.FFmpeg --accept-source-agreements --accept-package-agreements 2>&1
+    
+    if ($LASTEXITCODE -eq 0) {
+        # PATH'e ekle
+        $ffmpegPath = "$env:ProgramFiles\ffmpeg\bin"
+        if (Test-Path $ffmpegPath) {
+            $env:Path += ";$ffmpegPath"
+        }
+        # Alternatif yol
+        $ffmpegPath2 = "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+        if (Test-Path $ffmpegPath2) {
+            $env:Path += ";$ffmpegPath2"
+        }
+        
+        if (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
+            Write-OK "FFmpeg başarıyla kuruldu"
+            return $true
+        }
     }
 
-    Write-Info "FFmpeg kuruluyor..."
-    scoop install ffmpeg
-
-    if (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
-        Write-OK "FFmpeg başarıyla kuruldu"
-        return $true
+    # Yöntem 2: Chocolatey ile
+    if (Get-Command choco -ErrorAction SilentlyContinue) {
+        Write-Info "FFmpeg kuruluyor (chocolatey)..."
+        choco install ffmpeg -y
+        if (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
+            Write-OK "FFmpeg başarıyla kuruldu"
+            return $true
+        }
     }
 
-    Write-Warn "FFmpeg kurulumu başarısız. Ses/video özellikleri çalışmayabilir."
+    # Yöntem 3: Manuel indirme
+    Write-Warn "FFmpeg otomatik kurulum başarısız. Manuel kurulum için:"
+    Write-Info "1. https://www.gyan.dev/ffmpeg/builds/ adresine git"
+    Write-Info "2. 'ffmpeg-release-essentials.zip' indir"
+    Write-Info "3. C:\ffmpeg dizinine çıkart"
+    Write-Info "4. C:\ffmpeg\bin'i PATH'e ekle"
+    Write-Info ""
+    Write-Info "FFmpeg olmadan ses/video özellikleri çalışmaz, ama sistem çalışır."
+    Write-Info "Devam ediliyor..."
     return $false
 }
 
