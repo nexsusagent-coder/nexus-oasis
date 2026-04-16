@@ -39,7 +39,7 @@ blake3 = "1.5"
 regex = "1.10"
 
 # Metrics
-prometheus = "0.13"
+prometheus = "0.14"
 
 # Creusot contracts support
 # Note: Creusot annotations are via proc-macros in comments
