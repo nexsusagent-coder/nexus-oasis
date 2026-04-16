@@ -92,10 +92,9 @@ struct IdeogramImage {
 /// Convert ImageSize to Ideogram aspect ratio
 fn size_to_aspect_ratio(size: &ImageSize) -> String {
     match size {
-        ImageSize::Square1024 | ImageSize::Small256 | ImageSize::Medium512 => "ASPECT_1_1".to_string(),
-        ImageSize::Landscape1792 => "ASPECT_16_9".to_string(),
-        ImageSize::Portrait1024 => "ASPECT_9_16".to_string(),
-        ImageSize::HD1280 => "ASPECT_16_9".to_string(),
+        ImageSize::Square1024 | ImageSize::Small256 | ImageSize::Medium512 | ImageSize::Square2048 => "ASPECT_1_1".to_string(),
+        ImageSize::Landscape1792 | ImageSize::HD1280 | ImageSize::FullHD1920 | ImageSize::Landscape1536 => "ASPECT_16_9".to_string(),
+        ImageSize::Portrait1024 | ImageSize::Portrait1536 => "ASPECT_9_16".to_string(),
     }
 }
 

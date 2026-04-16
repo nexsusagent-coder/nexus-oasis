@@ -81,6 +81,87 @@ impl ImageRequest {
         Self::new(prompt, "flux-pro")
     }
 
+    /// DALL-E 3 HD request
+    pub fn dalle3_hd(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "dall-e-3")
+            .with_quality(ImageQuality::HD)
+            .with_style(ImageStyle::Vivid)
+    }
+
+    /// GPT Image 1 (2026) — OpenAI's native image model
+    pub fn gpt_image_1(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "gpt-image-1")
+    }
+
+    /// Ideogram v2 request
+    pub fn ideogram_v2(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "ideogram-v2")
+    }
+
+    /// Ideogram v2 Turbo request (faster)
+    pub fn ideogram_v2_turbo(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "ideogram-v2-turbo")
+    }
+
+    /// Ideogram v3 (2026) — latest Ideogram
+    pub fn ideogram_v3(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "ideogram-v3")
+    }
+
+    /// Flux 1.1 Pro (2026) — improved Flux
+    pub fn flux_11_pro(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "flux-1.1-pro")
+            .with_steps(28)
+            .with_cfg_scale(3.5)
+    }
+
+    /// Flux Dev request (open weights)
+    pub fn flux_dev(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "flux-dev")
+            .with_steps(28)
+            .with_cfg_scale(3.5)
+    }
+
+    /// Flux Schnell request (fastest Flux)
+    pub fn flux_schnell(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "flux-schnell")
+            .with_steps(4)
+    }
+
+    /// Stable Diffusion 3.5 (2026)
+    pub fn sd35(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "stable-diffusion-3.5-large")
+            .with_steps(30)
+            .with_cfg_scale(7.0)
+    }
+
+    /// Stable Diffusion 3.5 Turbo (faster)
+    pub fn sd35_turbo(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "stable-diffusion-3.5-large-turbo")
+            .with_steps(12)
+            .with_cfg_scale(7.0)
+    }
+
+    /// Playground v3 (2026)
+    pub fn playground_v3(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "playground-v3")
+    }
+
+    /// Recraft V3 (2026) — vector & brand design
+    pub fn recraft_v3(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "recraft-v3")
+    }
+
+    /// Imagen 3 (Google, 2026)
+    pub fn imagen3(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "imagen-3")
+    }
+
+    /// Midjourney API (via Replicate)
+    pub fn midjourney(prompt: impl Into<String>) -> Self {
+        Self::new(prompt, "midjourney-v6.1")
+    }
+
     /// Set size
     pub fn with_size(mut self, size: ImageSize) -> Self {
         self.size = size;
@@ -151,6 +232,14 @@ pub enum ImageSize {
     Portrait1024,
     #[serde(rename = "1280x720")]
     HD1280,
+    #[serde(rename = "1920x1080")]
+    FullHD1920,
+    #[serde(rename = "2048x2048")]
+    Square2048,
+    #[serde(rename = "1536x1024")]
+    Landscape1536,
+    #[serde(rename = "1024x1536")]
+    Portrait1536,
 }
 
 impl ImageSize {
@@ -162,6 +251,10 @@ impl ImageSize {
             Self::Landscape1792 => (1792, 1024),
             Self::Portrait1024 => (1024, 1792),
             Self::HD1280 => (1280, 720),
+            Self::FullHD1920 => (1920, 1080),
+            Self::Square2048 => (2048, 2048),
+            Self::Landscape1536 => (1536, 1024),
+            Self::Portrait1536 => (1024, 1536),
         }
     }
 

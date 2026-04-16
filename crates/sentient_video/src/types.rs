@@ -543,6 +543,196 @@ impl VideoModel {
         }
     }
 
+    /// OpenAI Sora 2.0 (2026)
+    pub fn sora2() -> Self {
+        Self {
+            id: "sora-2.0".into(),
+            name: "OpenAI Sora 2.0".into(),
+            provider: "OpenAI".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 120.0, // 2 minute videos!
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square, AspectRatio::Cinematic2_39_1],
+            cost_per_second: 0.30,
+            free_tier: false,
+            free_tier_limit: None,
+            avg_generation_time: 180.0,
+            quality_rating: 5,
+            speed_rating: 3,
+        }
+    }
+
+    /// Runway Gen-4 Alpha (2026)
+    pub fn runway_gen4() -> Self {
+        Self {
+            id: "gen4_alpha".into(),
+            name: "Runway Gen-4 Alpha".into(),
+            provider: "Runway".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 30.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square],
+            cost_per_second: 0.15,
+            free_tier: true,
+            free_tier_limit: Some(50),
+            avg_generation_time: 60.0,
+            quality_rating: 5,
+            speed_rating: 4,
+        }
+    }
+
+    /// Kling AI v2.0 (2026)
+    pub fn kling_v2() -> Self {
+        Self {
+            id: "kling-v2".into(),
+            name: "Kling AI v2.0".into(),
+            provider: "Kling AI".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 15.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square],
+            cost_per_second: 0.04,
+            free_tier: true,
+            free_tier_limit: Some(66),
+            avg_generation_time: 120.0,
+            quality_rating: 5,
+            speed_rating: 3,
+        }
+    }
+
+    /// Kling AI v2.1 Master (2026)
+    pub fn kling_v2_master() -> Self {
+        Self {
+            id: "kling-v2-master".into(),
+            name: "Kling AI v2.1 Master".into(),
+            provider: "Kling AI".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 20.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square, AspectRatio::Cinematic2_39_1],
+            cost_per_second: 0.08,
+            free_tier: true,
+            free_tier_limit: Some(30),
+            avg_generation_time: 180.0,
+            quality_rating: 5,
+            speed_rating: 2,
+        }
+    }
+
+    /// Luma Dream Machine 2.0 (2026)
+    pub fn luma_dream_machine_2() -> Self {
+        Self {
+            id: "dream-machine-2".into(),
+            name: "Luma Dream Machine 2.0".into(),
+            provider: "Luma AI".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 10.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square],
+            cost_per_second: 0.06,
+            free_tier: true,
+            free_tier_limit: Some(30),
+            avg_generation_time: 60.0,
+            quality_rating: 5,
+            speed_rating: 4,
+        }
+    }
+
+    /// Luma Ray2 (2026)
+    pub fn luma_ray2() -> Self {
+        Self {
+            id: "ray2".into(),
+            name: "Luma Ray2".into(),
+            provider: "Luma AI".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 15.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square, AspectRatio::Cinematic2_39_1],
+            cost_per_second: 0.10,
+            free_tier: true,
+            free_tier_limit: Some(10),
+            avg_generation_time: 90.0,
+            quality_rating: 5,
+            speed_rating: 3,
+        }
+    }
+
+    /// Pika 3.0 (2026)
+    pub fn pika3() -> Self {
+        Self {
+            id: "pika-3".into(),
+            name: "Pika 3.0".into(),
+            provider: "Pika".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 15.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square],
+            cost_per_second: 0.05,
+            free_tier: true,
+            free_tier_limit: Some(250),
+            avg_generation_time: 30.0,
+            quality_rating: 4,
+            speed_rating: 5,
+        }
+    }
+
+    /// Hailuo 02 (2026)
+    pub fn hailuo_02() -> Self {
+        Self {
+            id: "hailuo-02".into(),
+            name: "Hailuo 02".into(),
+            provider: "Hailuo AI".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 10.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square],
+            cost_per_second: 0.05,
+            free_tier: true,
+            free_tier_limit: Some(30),
+            avg_generation_time: 75.0,
+            quality_rating: 5,
+            speed_rating: 3,
+        }
+    }
+
+    /// Veo 2 (Google DeepMind, 2026)
+    pub fn veo2() -> Self {
+        Self {
+            id: "veo-2".into(),
+            name: "Google Veo 2".into(),
+            provider: "Google".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 60.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16, AspectRatio::Square],
+            cost_per_second: 0.15,
+            free_tier: true,
+            free_tier_limit: Some(20), // Via Google AI Studio
+            avg_generation_time: 120.0,
+            quality_rating: 5,
+            speed_rating: 3,
+        }
+    }
+
+    /// Hailuo 01 Live
+    pub fn hailuo_01_live() -> Self {
+        Self {
+            id: "hailuo-01-live".into(),
+            name: "Hailuo 01 Live".into(),
+            provider: "Hailuo AI".into(),
+            text_to_video: true,
+            image_to_video: true,
+            max_duration: 10.0,
+            aspect_ratios: vec![AspectRatio::Landscape16x9, AspectRatio::Portrait9x16],
+            cost_per_second: 0.06,
+            free_tier: true,
+            free_tier_limit: Some(10),
+            avg_generation_time: 120.0,
+            quality_rating: 5,
+            speed_rating: 3,
+        }
+    }
+
     // ═══════════════════════════════════════════════════════════════════════════
     //  COST CALCULATION
     // ═══════════════════════════════════════════════════════════════════════════
@@ -555,17 +745,31 @@ impl VideoModel {
     /// Get all available models
     pub fn all() -> Vec<Self> {
         vec![
+            // 2026 latest
+            Self::sora2(),
+            Self::runway_gen4(),
+            Self::kling_v2_master(),
+            Self::kling_v2(),
+            Self::luma_ray2(),
+            Self::luma_dream_machine_2(),
+            Self::pika3(),
+            Self::hailuo_02(),
+            Self::veo2(),
+            // 2025 established
             Self::runway_gen3_alpha(),
             Self::runway_gen3(),
             Self::runway_gen2(),
             Self::pika2(),
             Self::pika1_5(),
             Self::luma_dream_machine(),
+            Self::luma_ray(),
             Self::kling_v1_5(),
             Self::kling_v1(),
             Self::haiper_v2(),
             Self::svd_xt(),
             Self::svd(),
+            Self::sora(),
+            Self::hailuo_01_live(),
         ]
     }
 

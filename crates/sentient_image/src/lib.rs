@@ -73,6 +73,12 @@ pub enum ImageProviderType {
     Ideogram,
     #[serde(rename = "replicate")]
     Replicate,
+    #[serde(rename = "recraft")]
+    Recraft,
+    #[serde(rename = "playground")]
+    Playground,
+    #[serde(rename = "google")]
+    Google,
 }
 
 /// Generated image data
