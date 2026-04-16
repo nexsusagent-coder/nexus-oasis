@@ -13,74 +13,60 @@
 #  KULLANIM:
 #    irm https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install.ps1 | iex
 #
-#  PARAMETRELER:
-#    -Mode <quick|standard|full|custom>   : Kurulum modu
-#    -Provider <name>                     : LLM provider
-#    -Model <name>                        : Model adı
-#    -ApiKey <key>                        : API key
-#    -SkipPrompts                         : Tüm soruları atla
-#    -Uninstall                           : Kaldır
+#  PARAMETRELER (Opsiyonel):
+#    -Quick        : Hızlı kurulum
+#    -Standard     : Standart kurulum (varsayılan)
+#    -Full         : Tam kurulum
+#    -Custom       : Özelleştirilmiş kurulum
+#    -Provider     : LLM provider (ollama, openrouter, openai, vs.)
+#    -Model        : Model adı
+#    -ApiKey       : API key
+#    -Uninstall    : Kaldır
 # ═══════════════════════════════════════════════════════════════════════════════
 
-[CmdletBinding()]
 param(
-    [string]$Mode = "",
-    [string]$Provider = "",
-    [string]$Model = "",
-    [string]$ApiKey = "",
-    [switch]$SkipPrompts,
-    [switch]$Uninstall,
-    [switch]$Silent
+    [switch]$Quick,
+    [switch]$Standard,
+    [switch]$Full,
+    [switch]$Custom,
+    [string]$Provider,
+    [string]$Model,
+    [string]$ApiKey,
+    [switch]$Uninstall
 )
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ANSI RENKLERİ VE YARDIMCI FONKSİYONLAR
+#  ANSI RENKLERİ
 # ═══════════════════════════════════════════════════════════════════════════════
 
 $ESC = [char]27
+$RED = "$ESC[91m"
+$GREEN = "$ESC[92m"
+$YELLOW = "$ESC[93m"
+$BLUE = "$ESC[94m"
+$MAGENTA = "$ESC[95m"
+$CYAN = "$ESC[96m"
+$WHITE = "$ESC[97m"
+$BOLD = "$ESC[1m"
+$DIM = "$ESC[2m"
+$RESET = "$ESC[0m"
 
-function Color { param($c) "$ESC[$c" }
-function Reset { Color "0m" }
+# ═══════════════════════════════════════════════════════════════════════════════
+#  LOG FONKSİYONLARI
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# Renk kodları
-$RED = Color "91m"
-$GREEN = Color "92m"
-$YELLOW = Color "93m"
-$BLUE = Color "94m"
-$MAGENTA = Color "95m"
-$CYAN = Color "96m"
-$WHITE = Color "97m"
-$BOLD = Color "1m"
-$DIM = Color "2m"
-$UNDERLINE = Color "4m"
-
-# Log fonksiyonları
 function Write-Step { param($msg) Write-Host "${CYAN}━━━${RESET} $msg" }
 function Write-Info { param($msg) Write-Host "  ${BLUE}ℹ${RESET}  $msg" }
 function Write-OK { param($msg) Write-Host "  ${GREEN}✓${RESET}  $msg" }
 function Write-Warn { param($msg) Write-Host "  ${YELLOW}⚠${RESET}  $msg" }
 function Write-Err { param($msg) Write-Host "  ${RED}✗${RESET}  $msg" }
-function Write-Menu { param($num, $text) Write-Host "    ${WHITE}[${CYAN}$num${WHITE}]${RESET} $text" }
-function Write-Separator { Write-Host "${DIM}  ═════════════════════════════════════════════════════════════${RESET}" }
-
-# Progress bar
-function Show-Progress {
-    param($Step, $Total, $Message)
-    $percent = [math]::Round(($Step / $Total) * 100)
-    $filled = [math]::Round($percent / 5)
-    $empty = 20 - $filled
-    $bar = "${GREEN}" + ("█" * $filled) + "${DIM}" + ("░" * $empty) + "${RESET}"
-    Write-Host "`r  $bar ${WHITE}$percent%${RESET} - $Message" -NoNewline
-}
-
-# Clear line
-function Clear-Line { Write-Host "`r$(' ' * 80)`r" -NoNewline }
+function Write-Sep { Write-Host "${DIM}  ═════════════════════════════════════════════════════════════${RESET}" }
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  GLOBAL YAPILANDIRMA
 # ═══════════════════════════════════════════════════════════════════════════════
 
-$script:Config = @{
+$Config = @{
     Mode = "standard"
     Provider = "ollama"
     Model = "gemma3:27b"
@@ -89,47 +75,21 @@ $script:Config = @{
     InstallDocker = $false
     InstallVoice = $false
     InstallDashboard = $false
-    InstallDevTools = $false
-    InstallPython = $true
-    InstallRust = $true
     DownloadModel = $true
-    StartServices = $true
-    AddToPath = $true
-    ApiKeys = @{}
     SystemRAM = 0
     SystemVRAM = 0
     HasNvidia = $false
     CpuCores = 0
     GpuName = ""
-    OsVersion = ""
-    RisCpu = $false
+    ApiKeys = @{}
 }
 
-$script:Steps = @(
-    @{Name = "Hoş Geldiniz"; Fn = "Show-Welcome" }
-    @{Name = "Lisans Sözleşmesi"; Fn = "Show-License" }
-    @{Name = "Sistem Analizi"; Fn = "Analyze-System" }
-    @{Name = "Kurulum Modu"; Fn = "Select-Mode" }
-    @{Name = "LLM Provider"; Fn = "Select-Provider" }
-    @{Name = "Model Seçimi"; Fn = "Select-Model" }
-    @{Name = "Bileşenler"; Fn = "Select-Components" }
-    @{Name = "Ön Koşullar"; Fn = "Install-Prerequisites" }
-    @{Name = "Kaynak İndirme"; Fn = "Download-Source" }
-    @{Name = "Derleme"; Fn = "Build-Project" }
-    @{Name = "Yapılandırma"; Fn = "Configure-Environment" }
-    @{Name = "Doğrulama"; Fn = "Validate-Installation" }
-)
-
-$script:CurrentStep = 0
-
 # ═══════════════════════════════════════════════════════════════════════════════
-#  BANNER VE HOŞGELDİNİZ
+#  BANNER
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Show-Banner {
     Clear-Host
-    
-    # Ana banner
     Write-Host ""
     Write-Host "${CYAN}╔═══════════════════════════════════════════════════════════════════════════╗${RESET}"
     Write-Host "${CYAN}║${RESET}                                                                           ${CYAN}║${RESET}"
@@ -148,6 +108,10 @@ function Show-Banner {
     Write-Host ""
 }
 
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ADIM 1: HOŞGELDİNİZ
+# ═══════════════════════════════════════════════════════════════════════════════
+
 function Show-Welcome {
     Show-Banner
     
@@ -159,46 +123,18 @@ function Show-Welcome {
     Write-Host "    ${CYAN}◆${RESET} Size en uygun kurulum modunu önerecek"
     Write-Host "    ${CYAN}◆${RESET} Donanımınıza göre model seçimi yapacak"
     Write-Host "    ${CYAN}◆${RESET} Gerekli tüm bağımlılıkları kuracak"
-    Write-Host "    ${CYAN}◆${RESET} İlk yapılandırmanızı otomatik oluşturacak"
     Write-Host ""
-    Write-Separator
+    Write-Sep
     Write-Host ""
-    
-    # Kurulum yollarını göster
-    Write-Host "${WHITE}  Kurulum Seçenekleri:${RESET}"
-    Write-Host ""
-    Write-Host "    ${GREEN}QUICK${RESET}    ${DIM}→${RESET} Hazır profil, hızlı kurulum (5 dk)"
-    Write-Host "             ${DIM}CLI + Ollama + Küçük model${RESET}"
-    Write-Host ""
-    Write-Host "    ${YELLOW}STANDARD${RESET} ${DIM}→${RESET} Dengeli kurulum (15 dk)"
-    Write-Host "             ${DIM}CLI + Tools + Orta boy model${RESET}"
-    Write-Host ""
-    Write-Host "    ${MAGENTA}FULL${RESET}     ${DIM}→${RESET} Tam kurulum (30 dk)"
-    Write-Host "             ${DIM}Docker + Voice + Dashboard + Büyük model${RESET}"
-    Write-Host ""
-    Write-Host "    ${BLUE}CUSTOM${RESET}    ${DIM}→${RESET} Özelleştirilmiş kurulum"
-    Write-Host "             ${DIM}Her bileşeni kendiniz seçin${RESET}"
-    Write-Host ""
-    Write-Separator
-    Write-Host ""
-    
-    if (-not $SkipPrompts) {
-        Write-Host "  ${YELLOW}Enter${RESET} tuşuna basarak devam edin..."
-        $null = Read-Host
-    }
-    
-    return $true
+    Write-Host "  ${YELLOW}Enter${RESET} tuşuna basarak devam edin..."
+    $null = Read-Host
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 1: LİSANS SÖZLEŞMESİ
+#  ADIM 2: LİSANS
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Show-License {
-    Show-Progress -Step 1 -Total 12 -Message "Lisans"
-    Start-Sleep -Milliseconds 300
-    Clear-Line
-    
     Write-Host ""
     Write-Host "${WHITE}  ┌─────────────────────────────────────────────────────────────────────┐${RESET}"
     Write-Host "${WHITE}  │${RESET} ${BOLD}LİSANS SÖZLEŞMESİ${RESET}                                                   ${WHITE}│${RESET}"
@@ -209,7 +145,6 @@ function Show-License {
     Write-Host "  ${CYAN}◆${RESET} ${WHITE}Kaynak Kod:${RESET} https://github.com/nexsusagent-coder/SENTIENT_CORE"
     Write-Host ""
     
-    # Lisans kutusu
     Write-Host "${DIM}  ┌───────────────────────────────────────────────────────────────────┐${RESET}"
     Write-Host "${DIM}  │${RESET}  ${WHITE}ÖNEMLİ NOKTALAR:${RESET}                                                 ${DIM}│${RESET}"
     Write-Host "${DIM}  │${RESET}                                                                   ${DIM}│${RESET}"
@@ -240,48 +175,27 @@ function Show-License {
     Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    if ($SkipPrompts) {
-        Write-OK "Lisans otomatik kabul edildi"
-        return $true
-    }
-    
     Write-Host "  Lisans sözleşmesini kabul ediyor musunuz?"
     Write-Host ""
-    Write-Host "    ${WHITE}[${GREEN}Y${WHITE}]${RESET} Evet, kabul ediyorum ve devam et"
-    Write-Host "    ${WHITE}[${RED}N${WHITE}]${RESET} Hayır, kurulumdan çık"
-    Write-Host "    ${WHITE}[${BLUE}R${WHITE}]${RESET} Lisansın tamamını oku"
+    Write-Host "    ${WHITE}[${GREEN}Y${WHITE}]${RESET} Evet, kabul ediyorum"
+    Write-Host "    ${WHITE}[${RED}N${WHITE}]${RESET} Hayır, çık"
     Write-Host ""
     
     while ($true) {
-        $choice = Read-Host "  Seçiminiz [Y/N/R]"
-        
-        switch -Regex ($choice) {
-            "^[Yy]$|^$" {
-                Write-OK "Lisans kabul edildi"
-                return $true
-            }
-            "^[Nn]$" {
-                Write-Err "Kurulum iptal edildi"
-                exit 0
-            }
-            "^[Rr]$" {
-                Write-Host ""
-                Write-Host "  ${CYAN}AGPL v3 Lisans Özeti:${RESET}"
-                Write-Host "  ${DIM}────────────────────────────────────────────────────────────${RESET}"
-                Write-Host "  Bu program özgür yazılımdır; dağıtabilir ve/veya değiştirebilirsiniz."
-                Write-Host "  GNU Affero General Public License koşulları altında yayımlanmıştır."
-                Write-Host "  Lisansın 3. sürümü veya (isteğe bağlı) daha yeni sürümü geçerlidir."
-                Write-Host ""
-                Write-Host "  Tam lisans metni için: https://www.gnu.org/licenses/agpl-3.0.html"
-                Write-Host "  ${DIM}────────────────────────────────────────────────────────────${RESET}"
-                Write-Host ""
-            }
+        $choice = Read-Host "  Seçiminiz [Y/N]"
+        if ($choice -eq "Y" -or $choice -eq "y" -or $choice -eq "") {
+            Write-OK "Lisans kabul edildi"
+            return $true
+        }
+        if ($choice -eq "N" -or $choice -eq "n") {
+            Write-Err "Kurulum iptal edildi"
+            exit 0
         }
     }
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 2: SİSTEM ANALİZİ
+#  ADIM 3: SİSTEM ANALİZİ
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Analyze-System {
@@ -293,70 +207,53 @@ function Analyze-System {
     
     # OS
     $osInfo = Get-CimInstance Win32_OperatingSystem
-    $script:Config.OsVersion = "$($osInfo.Caption) $($osInfo.Version)"
-    Write-Info "İşletim Sistemi: $($script:Config.OsVersion)"
+    Write-Info "İşletim Sistemi: $($osInfo.Caption)"
     
     # CPU
     $cpu = Get-CimInstance Win32_Processor
-    $script:Config.CpuCores = $cpu.NumberOfLogicalProcessors
-    Write-OK "CPU: $($cpu.Name) ($($script:Config.CpuCores) çekirdek)"
-    
-    # ARM kontrolü
-    if ($cpu.Name -match "ARM|Snapdragon|Apple") {
-        $script:Config.RisCpu = $true
-        Write-Warn "ARM mimarisi tespit edildi - bazı özellikler sınırlı olabilir"
-    }
+    $Config.CpuCores = $cpu.NumberOfLogicalProcessors
+    Write-OK "CPU: $($cpu.Name) ($($Config.CpuCores) çekirdek)"
     
     # RAM
     $ram = (Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB
-    $script:Config.SystemRAM = [math]::Round($ram, 1)
+    $Config.SystemRAM = [math]::Round($ram, 1)
     if ($ram -ge 32) {
-        Write-OK "RAM: $($script:Config.SystemRAM) GB ${GREEN}(Mükemmel)${RESET}"
+        Write-OK "RAM: $($Config.SystemRAM) GB ${GREEN}(Mükemmel)${RESET}"
     } elseif ($ram -ge 16) {
-        Write-OK "RAM: $($script:Config.SystemRAM) GB ${GREEN}(İyi)${RESET}"
+        Write-OK "RAM: $($Config.SystemRAM) GB ${GREEN}(İyi)${RESET}"
     } elseif ($ram -ge 8) {
-        Write-Warn "RAM: $($script:Config.SystemRAM) GB ${YELLOW}(Minimum)${RESET}"
+        Write-Warn "RAM: $($Config.SystemRAM) GB ${YELLOW}(Minimum)${RESET}"
     } else {
-        Write-Err "RAM: $($script:Config.SystemRAM) GB ${RED}(Yetersiz)${RESET}"
+        Write-Err "RAM: $($Config.SystemRAM) GB ${RED}(Yetersiz)${RESET}"
     }
     
     # GPU
     $gpus = Get-CimInstance Win32_VideoController
     $nvidiaGpu = $gpus | Where-Object { $_.Name -match "NVIDIA|GeForce|RTX|GTX|Quadro" }
-    $amdGpu = $gpus | Where-Object { $_.Name -match "AMD|Radeon|RX" }
-    $intelGpu = $gpus | Where-Object { $_.Name -match "Intel|Arc|UHD|Iris" }
     
     if ($nvidiaGpu) {
-        $script:Config.HasNvidia = $true
+        $Config.HasNvidia = $true
         $gpu = $nvidiaGpu[0]
-        $script:Config.GpuName = $gpu.Name
+        $Config.GpuName = $gpu.Name
         
-        # VRAM tahmini
         $vramBytes = $gpu.AdapterRAM
         if ($vramBytes) {
-            $vramGB = [math]::Round($vramBytes / 1GB, 0)
-            $script:Config.SystemVRAM = $vramGB
-            Write-OK "GPU: $($gpu.Name) ${GREEN}(${vramGB}GB VRAM)${RESET}"
+            $Config.SystemVRAM = [math]::Round($vramBytes / 1GB, 0)
+            Write-OK "GPU: $($gpu.Name) ${GREEN}($($Config.SystemVRAM)GB VRAM)${RESET}"
         } else {
-            # VRAM bilinmiyorsa model adından tahmin et
-            if ($gpu.Name -match "4090|3090") { $vramGB = 24 }
-            elseif ($gpu.Name -match "4080|3080") { $vramGB = 16 }
-            elseif ($gpu.Name -match "4070|3070|4060 Ti") { $vramGB = 12 }
-            elseif ($gpu.Name -match "4060|3060|2080") { $vramGB = 8 }
-            elseif ($gpu.Name -match "3050|2060|1660") { $vramGB = 6 }
-            else { $vramGB = 4 }
-            $script:Config.SystemVRAM = $vramGB
-            Write-OK "GPU: $($gpu.Name) ${YELLOW}(~${vramGB}GB VRAM)${RESET}"
+            # Model adından tahmin
+            if ($gpu.Name -match "4090|3090") { $Config.SystemVRAM = 24 }
+            elseif ($gpu.Name -match "4080|3080") { $Config.SystemVRAM = 16 }
+            elseif ($gpu.Name -match "4070|3070|4060 Ti") { $Config.SystemVRAM = 12 }
+            elseif ($gpu.Name -match "4060|3060|2080") { $Config.SystemVRAM = 8 }
+            else { $Config.SystemVRAM = 4 }
+            Write-OK "GPU: $($gpu.Name) ${YELLOW}(~$($Config.SystemVRAM)GB VRAM)${RESET}"
         }
-    } elseif ($amdGpu) {
-        Write-OK "GPU: $($amdGpu[0].Name) ${YELLOW}(ROCm desteği sınırlı)${RESET}"
-    } elseif ($intelGpu) {
-        Write-Warn "GPU: $($intelGpu[0].Name) ${YELLOW}(Intel Arc destekleniyor)${RESET}"
     } else {
         Write-Warn "GPU: NVIDIA GPU bulunamadı - CPU inference kullanılacak"
     }
     
-    # Disk alanı
+    # Disk
     $disk = (Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'").FreeSpace / 1GB
     Write-Info "Disk (C:): $([math]::Round($disk, 1)) GB boş"
     
@@ -365,51 +262,46 @@ function Analyze-System {
         return $false
     }
     
-    # Sistem profili
+    # Sistem profili ve model önerisi
     Write-Host ""
-    Write-Separator
+    Write-Sep
     Write-Host ""
     Write-Host "  ${WHITE}Sistem Profiliniz:${RESET}"
     Write-Host ""
     
-    $profile = ""
-    $recommendation = ""
-    
-    if ($script:Config.SystemRAM -ge 64 -and $script:Config.SystemVRAM -ge 24) {
-        $profile = "${GREEN}WORKSTATION${RESET}"
-        $recommendation = "Büyük modeller (70B+) için uygun"
-        $script:Config.Model = "llama3.3:70b"
-    } elseif ($script:Config.SystemRAM -ge 32 -and $script:Config.SystemVRAM -ge 16) {
-        $profile = "${GREEN}HIGH-END${RESET}"
-        $recommendation = "Orta-büyük modeller (27B-70B) için uygun"
-        $script:Config.Model = "gemma3:27b"
-    } elseif ($script:Config.SystemRAM -ge 16 -and $script:Config.SystemVRAM -ge 8) {
-        $profile = "${YELLOW}MID-RANGE${RESET}"
-        $recommendation = "Orta boy modeller (8B-27B) için uygun"
-        $script:Config.Model = "gemma3:12b"
-    } elseif ($script:Config.SystemRAM -ge 8) {
-        $profile = "${YELLOW}ENTRY-LEVEL${RESET}"
-        $recommendation = "Küçük modeller veya API kullanımı önerilir"
-        $script:Config.Model = "qwen3:30b-a3b"
+    if ($Config.SystemRAM -ge 64 -and $Config.SystemVRAM -ge 24) {
+        Write-Host "    ${CYAN}◆${RESET} Profil:    ${GREEN}WORKSTATION${RESET}"
+        Write-Host "    ${CYAN}◆${RESET} Öneri:     Büyük modeller (70B+) için uygun"
+        $Config.Model = "llama3.3:70b"
+    } elseif ($Config.SystemRAM -ge 32 -and $Config.SystemVRAM -ge 16) {
+        Write-Host "    ${CYAN}◆${RESET} Profil:    ${GREEN}HIGH-END${RESET}"
+        Write-Host "    ${CYAN}◆${RESET} Öneri:     Orta-büyük modeller (27B-70B) için uygun"
+        $Config.Model = "gemma3:27b"
+    } elseif ($Config.SystemRAM -ge 16 -and $Config.SystemVRAM -ge 8) {
+        Write-Host "    ${CYAN}◆${RESET} Profil:    ${YELLOW}MID-RANGE${RESET}"
+        Write-Host "    ${CYAN}◆${RESET} Öneri:     Orta boy modeller (8B-27B) için uygun"
+        $Config.Model = "gemma3:12b"
+    } elseif ($Config.SystemRAM -ge 8) {
+        Write-Host "    ${CYAN}◆${RESET} Profil:    ${YELLOW}ENTRY-LEVEL${RESET}"
+        Write-Host "    ${CYAN}◆${RESET} Öneri:     Küçük modeller veya API kullanımı önerilir"
+        $Config.Model = "qwen3:30b-a3b"
     } else {
-        $profile = "${RED}MINIMAL${RESET}"
-        $recommendation = "API modu önerilir (Cloud LLM)"
-        $script:Config.Provider = "openrouter"
-        $script:Config.InstallOllama = $false
-        $script:Config.DownloadModel = $false
+        Write-Host "    ${CYAN}◆${RESET} Profil:    ${RED}MINIMAL${RESET}"
+        Write-Host "    ${CYAN}◆${RESET} Öneri:     API modu önerilir (Cloud LLM)"
+        $Config.Provider = "openrouter"
+        $Config.InstallOllama = $false
+        $Config.DownloadModel = $false
     }
     
-    Write-Host "    ${CYAN}◆${RESET} Profil:    $profile"
-    Write-Host "    ${CYAN}◆${RESET} Öneri:     $recommendation"
-    Write-Host "    ${CYAN}◆${RESET} Model:     $($script:Config.Model)"
+    Write-Host "    ${CYAN}◆${RESET} Model:     $($Config.Model)"
     Write-Host ""
-    Write-Separator
+    Write-Sep
     
     return $true
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 3: KURULUM MODU SEÇİMİ
+#  ADIM 4: KURULUM MODU SEÇİMİ
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Select-Mode {
@@ -419,286 +311,152 @@ function Select-Mode {
     Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    # Parametre ile verildiyse - validasyon
-    if ($Mode -ne "") {
-        $validModes = @("quick", "standard", "full", "custom")
-        if ($validModes -contains $Mode.ToLower()) {
-            $script:Config.Mode = $Mode.ToLower()
-            Write-Info "Mod parametreden: $($Mode.ToUpper())"
-            Apply-ModeDefaults
-            return $true
-        } else {
-            Write-Warn "Geçersiz mod: $Mode - Geçerli değerler: quick, standard, full, custom"
-        }
-    }
-    
-    if ($SkipPrompts) {
-        $script:Config.Mode = "standard"
-        Apply-ModeDefaults
-        return $true
-    }
-    
-    Write-Host "  Kurulum modunu seçin:"
-    Write-Host ""
-    
-    # Quick
-    Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
-    Write-Host "  ${WHITE}│${RESET} ${GREEN}${BOLD}QUICK${RESET} ${DIM}- Hızlı Başlangıç${RESET}                                         ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}                                                                 ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: ~5 dakika${RESET}                                              ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• CLI + temel araçlar${RESET}                                      ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Ollama + küçük model (qwen3:30b-a3b)${RESET}                       ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Minimum yapılandırma${RESET}                                     ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Yeni başlayanlar için ideal${RESET}                                ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
-    Write-Host ""
-    
-    # Standard
-    Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
-    Write-Host "  ${WHITE}│${RESET} ${YELLOW}${BOLD}STANDARD${RESET} ${DIM}- Önerilen${RESET} ${GREEN}★${RESET}                                        ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}                                                                 ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: ~15 dakika${RESET}                                             ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• CLI + araçlar + Python entegrasyonu${RESET}                        ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Ollama + donanımınıza uygun model${RESET}                          ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Tam yapılandırma${RESET}                                          ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Çoğu kullanıcı için en iyi seçenek${RESET}                         ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
-    Write-Host ""
-    
-    # Full
-    Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
-    Write-Host "  ${WHITE}│${RESET} ${MAGENTA}${BOLD}FULL${RESET} ${DIM}- Tam Kurulum${RESET}                                            ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}                                                                 ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: ~30 dakika${RESET}                                             ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Tüm STANDARD özellikler +${RESET}                                  ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Docker servisleri (PostgreSQL, Redis, Qdrant...)${RESET}            ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Voice (Whisper + Piper)${RESET}                                   ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Dashboard (Web UI)${RESET}                                        ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Geliştiriciler ve power users için${RESET}                         ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
-    Write-Host ""
-    
-    # Custom
-    Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
-    Write-Host "  ${WHITE}│${RESET} ${BLUE}${BOLD}CUSTOM${RESET} ${DIM}- Özelleştirilmiş${RESET}                                        ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}                                                                 ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: Değişken${RESET}                                               ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Her bileşeni kendiniz seçin${RESET}                                ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Provider ve model seçimi${RESET}                                  ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Modül ekleme/çıkarma${RESET}                                      ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}│${RESET}   ${DIM}• Deneyimli kullanıcılar için${RESET}                                ${WHITE}│${RESET}"
-    Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
-    Write-Host ""
-    
-    Write-Host "  Seçiminiz: ${WHITE}[${GREEN}1${WHITE}]${RESET} Quick  ${WHITE}[${GREEN}2${WHITE}]${RESET} Standard  ${WHITE}[${GREEN}3${WHITE}]${RESET} Full  ${WHITE}[${GREEN}4${WHITE}]${RESET} Custom"
-    Write-Host ""
-    
-    while ($true) {
-        $choice = Read-Host "  [1-4]"
+    # Komut satırından mod belirlendiyse
+    if ($Quick) { $Config.Mode = "quick" }
+    elseif ($Full) { $Config.Mode = "full" }
+    elseif ($Custom) { $Config.Mode = "custom" }
+    elseif ($Standard) { $Config.Mode = "standard" }
+    else {
+        # İnteraktif seçim
+        Write-Host "  Kurulum modunu seçin:"
+        Write-Host ""
         
-        switch ($choice) {
-            "1" {
-                $script:Config.Mode = "quick"
-                break
+        # Quick
+        Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
+        Write-Host "  ${WHITE}│${RESET} ${GREEN}${BOLD}[1] QUICK${RESET} ${DIM}- Hızlı Başlangıç${RESET}                                    ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: ~5 dk • CLI + Ollama + Küçük model${RESET}                  ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Yeni başlayanlar için ideal${RESET}                                  ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
+        Write-Host ""
+        
+        # Standard
+        Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
+        Write-Host "  ${WHITE}│${RESET} ${YELLOW}${BOLD}[2] STANDARD${RESET} ${DIM}- Önerilen${RESET} ${GREEN}★${RESET}                                   ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: ~15 dk • CLI + Araçlar + Uygun model${RESET}               ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Çoğu kullanıcı için en iyi seçenek${RESET}                           ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
+        Write-Host ""
+        
+        # Full
+        Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
+        Write-Host "  ${WHITE}│${RESET} ${MAGENTA}${BOLD}[3] FULL${RESET} ${DIM}- Tam Kurulum${RESET}                                        ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: ~30 dk • Docker + Voice + Dashboard${RESET}                 ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Geliştiriciler ve power users için${RESET}                           ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
+        Write-Host ""
+        
+        # Custom
+        Write-Host "  ${WHITE}┌─────────────────────────────────────────────────────────────────┐${RESET}"
+        Write-Host "  ${WHITE}│${RESET} ${BLUE}${BOLD}[4] CUSTOM${RESET} ${DIM}- Özelleştirilmiş${RESET}                                      ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Süre: Değişken • Her bileşeni kendiniz seçin${RESET}                 ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}│${RESET}   ${DIM}Deneyimli kullanıcılar için${RESET}                                    ${WHITE}│${RESET}"
+        Write-Host "  ${WHITE}└─────────────────────────────────────────────────────────────────┘${RESET}"
+        Write-Host ""
+        
+        while ($true) {
+            $choice = Read-Host "  Seçiminiz [1-4]"
+            switch ($choice) {
+                "1" { $Config.Mode = "quick"; break }
+                "2" { $Config.Mode = "standard"; break }
+                "3" { $Config.Mode = "full"; break }
+                "4" { $Config.Mode = "custom"; break }
+                "" { $Config.Mode = "standard"; break }
             }
-            "2" {
-                $script:Config.Mode = "standard"
-                break
-            }
-            "3" {
-                $script:Config.Mode = "full"
-                break
-            }
-            "4" {
-                $script:Config.Mode = "custom"
-                break
-            }
-            "" {
-                $script:Config.Mode = "standard"
-                break
-            }
-            default {
-                continue
-            }
+            if ($Config.Mode) { break }
         }
-        break
     }
     
-    Write-OK "$($script:Config.Mode.ToUpper()) modu seçildi"
-    Apply-ModeDefaults
+    # Mod ayarlarını uygula
+    switch ($Config.Mode) {
+        "quick" {
+            $Config.InstallOllama = $true
+            $Config.InstallDocker = $false
+            $Config.InstallVoice = $false
+            $Config.InstallDashboard = $false
+            $Config.Model = "qwen3:30b-a3b"
+        }
+        "standard" {
+            $Config.InstallOllama = $true
+            $Config.InstallDocker = $false
+            $Config.InstallVoice = $false
+            $Config.InstallDashboard = $false
+        }
+        "full" {
+            $Config.InstallOllama = $true
+            $Config.InstallDocker = $true
+            $Config.InstallVoice = $true
+            $Config.InstallDashboard = $true
+        }
+    }
+    
+    Write-OK "$($Config.Mode.ToUpper()) modu seçildi"
     return $true
 }
 
-function Apply-ModeDefaults {
-    switch ($script:Config.Mode) {
-        "quick" {
-            $script:Config.InstallOllama = $true
-            $script:Config.InstallDocker = $false
-            $script:Config.InstallVoice = $false
-            $script:Config.InstallDashboard = $false
-            $script:Config.InstallDevTools = $false
-            $script:Config.Model = "qwen3:30b-a3b"
-        }
-        "standard" {
-            $script:Config.InstallOllama = $true
-            $script:Config.InstallDocker = $false
-            $script:Config.InstallVoice = $false
-            $script:Config.InstallDashboard = $false
-            $script:Config.InstallDevTools = $false
-            # Model sistem analizinden gelir
-        }
-        "full" {
-            $script:Config.InstallOllama = $true
-            $script:Config.InstallDocker = $true
-            $script:Config.InstallVoice = $true
-            $script:Config.InstallDashboard = $true
-            $script:Config.InstallDevTools = $true
-        }
-        "custom" {
-            # Custom modda seçimler sonraki adımlarda yapılır
-        }
-    }
-}
-
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 4: LLM PROVIDER SEÇİMİ
+#  ADIM 5: PROVIDER SEÇİMİ
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Select-Provider {
+    # Komut satırından provider belirlendiyse
+    if ($Provider -ne "") {
+        $Config.Provider = $Provider.ToLower()
+        Write-Info "Provider: $($Config.Provider.ToUpper())"
+        if ($ApiKey -ne "") {
+            $Config.ApiKeys[$Config.Provider] = $ApiKey
+        }
+        if ($Config.Provider -ne "ollama") {
+            $Config.InstallOllama = $false
+            $Config.DownloadModel = $false
+        }
+        return $true
+    }
+    
+    # Custom mod değilse varsayılan
+    if ($Config.Mode -ne "custom") {
+        Write-Info "Provider: OLLAMA (lokal)"
+        return $true
+    }
+    
     Write-Host ""
     Write-Host "${WHITE}  ┌─────────────────────────────────────────────────────────────────────┐${RESET}"
     Write-Host "${WHITE}  │${RESET} ${BOLD}LLM PROVIDER SEÇİMİ${RESET}                                                ${WHITE}│${RESET}"
     Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    # Parametre ile verildiyse - validasyon
-    if ($Provider -ne "") {
-        $validProviders = @("ollama", "openrouter", "openai", "anthropic", "deepseek", "groq", "google", "unify", "lmstudio", "vllm")
-        if ($validProviders -contains $Provider.ToLower()) {
-            $script:Config.Provider = $Provider.ToLower()
-            Write-Info "Provider parametreden: $($Provider.ToUpper())"
-            if ($ApiKey -ne "") {
-                $script:Config.ApiKeys[$Provider] = $ApiKey
-            }
-            # Cloud provider ise Ollama kurulumuna gerek yok
-            if ($validProviders -contains $Provider.ToLower() -and $Provider.ToLower() -ne "ollama") {
-                $script:Config.InstallOllama = $false
-                $script:Config.DownloadModel = $false
-            }
-            return $true
-        } else {
-            Write-Warn "Geçersiz provider: $Provider"
-        }
-    }
-    
-    if ($SkipPrompts -or $script:Config.Mode -ne "custom") {
-        Write-Info "Varsayılan provider: OLLAMA (lokal)"
-        return $true
-    }
-    
-    Write-Host "  AI modelinizi nasıl çalıştırmak istersiniz?"
-    Write-Host ""
-    
-    # Lokal
     Write-Host "  ${GREEN}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
     Write-Host "  ${GREEN}║${RESET}              ${WHITE}${BOLD}LOKAL MODELLER${RESET} ${DIM}(Ücretsiz)${RESET}                           ${GREEN}║${RESET}"
     Write-Host "  ${GREEN}╠═══════════════════════════════════════════════════════════════════╣${RESET}"
-    Write-Host "  ${GREEN}║${RESET}                                                                   ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}  ${WHITE}[1]${RESET} Ollama ${GREEN}★${RESET}        En popüler, 50K+ model             ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}      ${DIM}Kolay kullanım, otomatik GPU desteği${RESET}                        ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}                                                                   ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}  ${WHITE}[2]${RESET} LM Studio       GUI ile model yönetimi               ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}      ${DIM}Model indirme, parametre ayarı${RESET}                               ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}                                                                   ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${reset}  ${WHITE}[3]${RESET} vLLM            Yüksek performans server            ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}      ${DIM}Production-grade, batch inference${RESET}                           ${GREEN}║${RESET}"
-    Write-Host "  ${GREEN}║${RESET}                                                                   ${GREEN}║${RESET}"
+    Write-Host "  ${GREEN}║${RESET}  ${WHITE}[1]${RESET} Ollama        En popüler, 50K+ model               ${GREEN}║${RESET}"
+    Write-Host "  ${GREEN}║${RESET}  ${WHITE}[2]${RESET} LM Studio     GUI ile model yönetimi               ${GREEN}║${RESET}"
+    Write-Host "  ${GREEN}║${RESET}  ${WHITE}[3]${RESET} vLLM          Yüksek performans server            ${GREEN}║${RESET}"
     Write-Host "  ${GREEN}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
     Write-Host ""
     
-    # Cloud API
     Write-Host "  ${YELLOW}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
     Write-Host "  ${YELLOW}║${RESET}              ${WHITE}${BOLD}CLOUD API${RESET} ${DIM}(API Key Gerekli)${RESET}                          ${YELLOW}║${RESET}"
     Write-Host "  ${YELLOW}╠═══════════════════════════════════════════════════════════════════╣${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[4]${RESET} OpenRouter ${GREEN}★${RESET}    200+ model, \$5 ücretsiz kredi      ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}      ${DIM}openrouter.ai${RESET}                                               ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[5]${RESET} OpenAI          GPT-4o, o1, o3, o4-mini               ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}      ${DIM}platform.openai.com${RESET}                                         ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[6]${RESET} Anthropic       Claude 4 Sonnet, Opus 4.1             ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}      ${DIM}console.anthropic.com${RESET}                                       ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[7]${RESET} DeepSeek ${GREEN}★${RESET}      ${BOLD}EN UCUZ${RESET} - V3, R1 reasoning           ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}      ${DIM}platform.deepseek.com${RESET}                                        ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[8]${RESET} Google AI        Gemini Flash ${GREEN}(FREE tier!)${RESET}          ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}      ${DIM}aistudio.google.com${RESET}                                          ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[9]${RESET} Groq ${GREEN}★${RESET}          ${BOLD}EN HIZLI${RESET} - Llama 3.3 70B           ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}      ${DIM}console.groq.com${RESET}                                              ${YELLOW}║${RESET}"
-    Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
+    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[4]${RESET} OpenRouter   200+ model, \$5 ücretsiz                ${YELLOW}║${RESET}"
+    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[5]${RESET} OpenAI        GPT-4o, o1, o3                       ${YELLOW}║${RESET}"
+    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[6]${RESET} Anthropic     Claude 4 Sonnet, Opus 4.1           ${YELLOW}║${RESET}"
+    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[7]${RESET} DeepSeek      EN UCUZ - V3, R1                    ${YELLOW}║${RESET}"
+    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[8]${RESET} Google AI     Gemini Flash (FREE tier!)           ${YELLOW}║${RESET}"
+    Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[9]${RESET} Groq          EN HIZLI - Llama 3.3 70B            ${YELLOW}║${RESET}"
     Write-Host "  ${YELLOW}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
     Write-Host ""
     
-    # Gateway
-    Write-Host "  ${MAGENTA}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}              ${WHITE}${BOLD}AI GATEWAY / ROUTER${RESET}                                       ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}╠═══════════════════════════════════════════════════════════════════╣${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}                                                                   ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}  ${WHITE}[10]${RESET} Unify AI        Akıllı routing (kalite+maliyet)    ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}       ${DIM}unify.ai${RESET}                                                    ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}                                                                   ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}  ${WHITE}[11]${RESET} LiteLLM         Self-hosted proxy server          ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}       ${DIM}github.com/BerriAI/litellm${RESET}                                 ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}║${RESET}                                                                   ${MAGENTA}║${RESET}"
-    Write-Host "  ${MAGENTA}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    Write-Host ""
+    $choice = Read-Host "  Provider seçiniz [1-9]"
     
-    Write-Host "  ${WHITE}[0]${RESET} API Key olmadan devam et (daha sonra yapılandır)"
-    Write-Host ""
-    
-    while ($true) {
-        $choice = Read-Host "  Provider seçiniz [1-11]"
-        
-        $providerMap = @{
-            "1" = "ollama"
-            "2" = "lmstudio"
-            "3" = "vllm"
-            "4" = "openrouter"
-            "5" = "openai"
-            "6" = "anthropic"
-            "7" = "deepseek"
-            "8" = "google"
-            "9" = "groq"
-            "10" = "unify"
-            "11" = "litellm"
-            "0" = "none"
-        }
-        
-        if ($providerMap.ContainsKey($choice)) {
-            $script:Config.Provider = $providerMap[$choice]
-            break
-        }
+    $providers = @("ollama", "lmstudio", "vllm", "openrouter", "openai", "anthropic", "deepseek", "google", "groq")
+    $idx = [int]$choice - 1
+    if ($idx -ge 0 -and $idx -lt $providers.Count) {
+        $Config.Provider = $providers[$idx]
     }
     
-    # API Key gerektiren provider'lar
-    $needsApiKey = @("openrouter", "openai", "anthropic", "deepseek", "google", "groq", "unify")
-    
-    if ($needsApiKey -contains $script:Config.Provider) {
+    # API Key gerekli mi?
+    $needsKey = @("openrouter", "openai", "anthropic", "deepseek", "google", "groq")
+    if ($needsKey -contains $Config.Provider) {
         Write-Host ""
-        
-        $keyNames = @{
-            "openrouter" = "OPENROUTER_API_KEY"
-            "openai" = "OPENAI_API_KEY"
-            "anthropic" = "ANTHROPIC_API_KEY"
-            "deepseek" = "DEEPSEEK_API_KEY"
-            "google" = "GOOGLE_AI_API_KEY"
-            "groq" = "GROQ_API_KEY"
-            "unify" = "UNIFY_API_KEY"
-        }
-        
         $urls = @{
             "openrouter" = "https://openrouter.ai/keys"
             "openai" = "https://platform.openai.com/api-keys"
@@ -706,167 +464,97 @@ function Select-Provider {
             "deepseek" = "https://platform.deepseek.com/api_keys"
             "google" = "https://aistudio.google.com/apikey"
             "groq" = "https://console.groq.com/keys"
-            "unify" = "https://unify.ai/keys"
         }
-        
         Write-Host "  ${YELLOW}API Key Gerekli!${RESET}"
-        Write-Host "  Almak için: ${CYAN}$($urls[$script:Config.Provider])${RESET}"
+        Write-Host "  Almak için: ${CYAN}$($urls[$Config.Provider])${RESET}"
         Write-Host ""
-        
-        if ($ApiKey -ne "") {
-            $script:Config.ApiKeys[$script:Config.Provider] = $ApiKey
-            Write-OK "API Key parametreden alındı"
-        } else {
-            $key = Read-Host "  $($keyNames[$script:Config.Provider])"
-            if ($key -ne "") {
-                $script:Config.ApiKeys[$script:Config.Provider] = $key
-            } else {
-                Write-Warn "API Key girilmedi - .env dosyasından ekleyebilirsiniz"
-            }
+        $key = Read-Host "  API Key"
+        if ($key -ne "") {
+            $Config.ApiKeys[$Config.Provider] = $key
         }
-        
-        # Cloud provider ise Ollama kurulumuna gerek yok
-        $script:Config.InstallOllama = $false
-        $script:Config.DownloadModel = $false
+        $Config.InstallOllama = $false
+        $Config.DownloadModel = $false
     }
     
-    Write-OK "Provider: $($script:Config.Provider.ToUpper())"
+    Write-OK "Provider: $($Config.Provider.ToUpper())"
     return $true
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 5: MODEL SEÇİMİ
+#  ADIM 6: MODEL SEÇİMİ
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Select-Model {
-    # Cloud provider ise model seçimi atlanır
-    if ($script:Config.Provider -notin @("ollama", "lmstudio", "vllm")) {
-        Write-Info "Cloud provider seçildi - model .env'de yapılandırılacak"
-        return $true
-    }
-    
-    # Parametre ile verildiyse
     if ($Model -ne "") {
-        $script:Config.Model = $Model
-        Write-Info "Model parametreden: $Model"
+        $Config.Model = $Model
+        Write-Info "Model: $Model"
         return $true
     }
     
-    if ($SkipPrompts -or $script:Config.Mode -ne "custom") {
-        Write-Info "Önerilen model: $($script:Config.Model)"
+    if ($Config.Provider -notin @("ollama", "lmstudio", "vllm")) {
+        Write-Info "Cloud provider - model .env'de yapılandırılacak"
+        return $true
+    }
+    
+    if ($Config.Mode -ne "custom") {
+        Write-Info "Model: $($Config.Model)"
         return $true
     }
     
     Write-Host ""
     Write-Host "${WHITE}  ┌─────────────────────────────────────────────────────────────────────┐${RESET}"
-    Write-Host "${WHITE}  │${RESET} ${BOLD}MODEL SEÇİMİ${RESET} ${DIM}(VRAM: $($script:Config.SystemVRAM) GB)${RESET}                              ${WHITE}│${RESET}"
+    Write-Host "${WHITE}  │${RESET} ${BOLD}MODEL SEÇİMİ${RESET} ${DIM}(VRAM: $($Config.SystemVRAM) GB)${RESET}                              ${WHITE}│${RESET}"
     Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    $vram = $script:Config.SystemVRAM
+    $vram = $Config.SystemVRAM
     
-    # 24GB+ VRAM
     if ($vram -ge 24) {
-        Write-Host "  ${GREEN}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-        Write-Host "  ${GREEN}║${RESET}              ${WHITE}${BOLD}24GB+ VRAM - BÜYÜK MODELLER${RESET}                            ${GREEN}║${RESET}"
-        Write-Host "  ${GREEN}╠═══════════════════════════════════════════════════════════════════╣${RESET}"
-        Write-Host "  ${GREEN}║${RESET}                                                                   ${GREEN}║${RESET}"
-        Write-Host "  ${GREEN}║${RESET}  ${WHITE}[1]${RESET} llama3.3:70b       70B parametre, güçlü reasoning    ${GREEN}║${RESET}"
-        Write-Host "  ${GREEN}║${RESET}  ${WHITE}[2]${RESET} deepseek-r1:67b    67B, mükemmel matematik/kod       ${GREEN}║${RESET}"
-        Write-Host "  ${GREEN}║${RESET}  ${WHITE}[3]${RESET} llama4:scout       109B MoE, 10M context            ${GREEN}║${RESET}"
-        Write-Host "  ${GREEN}║${RESET}  ${WHITE}[4]${RESET} gemma3:27b ${GREEN}★${RESET}       27B, dengeli performans         ${GREEN}║${RESET}"
-        Write-Host "  ${GREEN}║${RESET}                                                                   ${GREEN}║${RESET}"
-        Write-Host "  ${GREEN}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    }
-    # 16GB VRAM
-    elseif ($vram -ge 16) {
-        Write-Host "  ${YELLOW}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}              ${WHITE}${BOLD}16GB VRAM - ORTA-BÜYÜK MODELLER${RESET}                        ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}╠═══════════════════════════════════════════════════════════════════╣${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[1]${RESET} gemma3:27b ${GREEN}★${RESET}       27B, dengeli performans         ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[2]${RESET} gemma3:12b         12B, hızlı inference             ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[3]${RESET} mistral-small3.1   24B, Avrupa yapımı               ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[4]${RESET} pixtral:12b        12B, multimodal (görüntü)        ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    }
-    # 8GB VRAM
-    elseif ($vram -ge 8) {
-        Write-Host "  ${YELLOW}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}              ${WHITE}${BOLD}8GB VRAM - ORTA MODELLER${RESET}                               ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}╠═══════════════════════════════════════════════════════════════════╣${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[1]${RESET} deepseek-r1:8b     8B, iyi reasoning               ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[2]${RESET} mistral-small3.1   24B quantized                   ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[3]${RESET} qwen2.5-coder:7b   7B, coding optimize             ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}  ${WHITE}[4]${RESET} gemma3:12b ${GREEN}★${RESET}       12B, dengeli                    ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}║${RESET}                                                                   ${YELLOW}║${RESET}"
-        Write-Host "  ${YELLOW}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    }
-    # 4GB veya daha az
-    else {
-        Write-Host "  ${RED}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-        Write-Host "  ${RED}║${RESET}              ${WHITE}${BOLD}DÜŞÜK VRAM - KÜÇÜK MODELLER${RESET}                               ${RED}║${RESET}"
-        Write-Host "  ${RED}╠═══════════════════════════════════════════════════════════════════╣${RESET}"
-        Write-Host "  ${RED}║${RESET}                                                                   ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}  ${WHITE}[1]${RESET} qwen3:30b-a3b ${GREEN}★${RESET}   30B MoE (3B aktif) - ÖNERİLEN  ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}  ${WHITE}[2]${RESET} phi4-mini          3.8B, Microsoft                 ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}  ${WHITE}[3]${RESET} llama3.2:3b       3B, Meta                        ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}  ${WHITE}[4]${RESET} llama3.2:1b       1.2B, çok hızlı                 ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}                                                                   ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}  ${YELLOW}⚠ Düşük VRAM: Cloud API kullanımı önerilir${RESET}                  ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}                                                                   ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}  ${WHITE}[5]${RESET} Cloud API kullan                                  ${RED}║${RESET}"
-        Write-Host "  ${RED}║${RESET}                                                                   ${RED}║${RESET}"
-        Write-Host "  ${RED}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
+        Write-Host "  ${GREEN}[1]${RESET} llama3.3:70b     70B, güçlü reasoning"
+        Write-Host "  ${GREEN}[2]${RESET} deepseek-r1:67b  67B, matematik/kod"
+        Write-Host "  ${GREEN}[3]${RESET} gemma3:27b       27B, dengeli"
+        $models = @("llama3.3:70b", "deepseek-r1:67b", "gemma3:27b")
+    } elseif ($vram -ge 16) {
+        Write-Host "  ${YELLOW}[1]${RESET} gemma3:27b       27B, dengeli"
+        Write-Host "  ${YELLOW}[2]${RESET} gemma3:12b       12B, hızlı"
+        Write-Host "  ${YELLOW}[3]${RESET} mistral-small    24B, Avrupa"
+        $models = @("gemma3:27b", "gemma3:12b", "mistral-small3.1")
+    } elseif ($vram -ge 8) {
+        Write-Host "  ${YELLOW}[1]${RESET} deepseek-r1:8b   8B, reasoning"
+        Write-Host "  ${YELLOW}[2]${RESET} qwen2.5-coder    7B, kod"
+        Write-Host "  ${YELLOW}[3]${RESET} gemma3:12b       12B, dengeli"
+        $models = @("deepseek-r1:8b", "qwen2.5-coder:7b", "gemma3:12b")
+    } else {
+        Write-Host "  ${RED}[1]${RESET} qwen3:30b-a3b   30B MoE (3B aktif) - ÖNERİLEN"
+        Write-Host "  ${RED}[2]${RESET} phi4-mini       3.8B, Microsoft"
+        Write-Host "  ${RED}[3]${RESET} llama3.2:3b     3B, Meta"
+        $models = @("qwen3:30b-a3b", "phi4-mini", "llama3.2:3b")
     }
     
-    Write-Host ""
-    Write-Host "  ${WHITE}[0]${RESET} Model indirmeden devam et"
+    Write-Host "  ${DIM}[0]${RESET} Model indirmeden devam et"
     Write-Host ""
     
     $choice = Read-Host "  Seçiminiz"
     
-    # Seçime göre model ata
-    switch ($choice) {
-        "0" {
-            $script:Config.DownloadModel = $false
-            Write-Info "Model indirme atlanıyor"
-        }
-        "5" {
-            # Cloud'a dön
-            return Select-Provider
-        }
-        default {
-            # VRAM'a göre seçenekleri map'le
-            if ($vram -ge 24) {
-                $models = @("llama3.3:70b", "deepseek-r1:67b", "llama4:scout", "gemma3:27b")
-            } elseif ($vram -ge 16) {
-                $models = @("gemma3:27b", "gemma3:12b", "mistral-small3.1", "pixtral:12b")
-            } elseif ($vram -ge 8) {
-                $models = @("deepseek-r1:8b", "mistral-small3.1", "qwen2.5-coder:7b", "gemma3:12b")
-            } else {
-                $models = @("qwen3:30b-a3b", "phi4-mini", "llama3.2:3b", "llama3.2:1b")
-            }
-            
-            $idx = [int]$choice - 1
-            if ($idx -ge 0 -and $idx -lt $models.Count) {
-                $script:Config.Model = $models[$idx]
-            }
+    if ($choice -eq "0") {
+        $Config.DownloadModel = $false
+    } else {
+        $idx = [int]$choice - 1
+        if ($idx -ge 0 -and $idx -lt $models.Count) {
+            $Config.Model = $models[$idx]
         }
     }
     
-    Write-OK "Model: $($script:Config.Model)"
+    Write-OK "Model: $($Config.Model)"
     return $true
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 6: BİLEŞEN SEÇİMİ
+#  ADIM 7: BİLEŞEN SEÇİMİ (CUSTOM)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Select-Components {
-    if ($script:Config.Mode -ne "custom") {
+    if ($Config.Mode -ne "custom") {
         return $true
     }
     
@@ -877,96 +565,33 @@ function Select-Components {
     Write-Host ""
     
     # Ollama
-    Write-Host "  ${WHITE}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${CYAN}🤖 OLLAMA${RESET} ${DIM}(Lokal LLM Runtime)${RESET}                                ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Lokal AI modelleri çalıştırmak için gereklidir.${RESET}                 ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Cloud API kullanacaksanız kurmanıza gerek yok.${RESET}                 ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    if ($script:Config.InstallOllama) {
-        Write-Host "  ${WHITE}║${RESET}  ${GREEN}✓ Kurulacak${RESET}                                                    ${WHITE}║${RESET}"
-    } else {
-        Write-Host "  ${WHITE}║${RESET}  ${RED}✗ Kurulmayacak${RESET}                                                  ${WHITE}║${RESET}"
-    }
-    Write-Host "  ${WHITE}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    
-    $ollama = Read-Host "  Kurulsun mu? [Y/n]"
-    $script:Config.InstallOllama = ($ollama -ne "n" -and $ollama -ne "N")
-    
-    Write-Host ""
+    $choice = Read-Host "  Ollama kurulsun mu? [Y/n]"
+    $Config.InstallOllama = ($choice -ne "n" -and $choice -ne "N")
     
     # Docker
-    Write-Host "  ${WHITE}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${CYAN}🐳 DOCKER SERVİSLERİ${RESET}                                              ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}PostgreSQL, Redis, Qdrant, MinIO, Prometheus, Grafana${RESET}        ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Production ortamı için önerilir.${RESET}                               ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    if ($script:Config.InstallDocker) {
-        Write-Host "  ${WHITE}║${RESET}  ${GREEN}✓ Kurulacak${RESET}                                                    ${WHITE}║${RESET}"
-    } else {
-        Write-Host "  ${WHITE}║${RESET}  ${YELLOW}○ Kurulmayacak${RESET}                                                  ${WHITE}║${RESET}"
-    }
-    Write-Host "  ${WHITE}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    
-    $docker = Read-Host "  Kurulsun mu? [y/N]"
-    $script:Config.InstallDocker = ($docker -eq "y" -or $docker -eq "Y")
-    
-    Write-Host ""
+    $choice = Read-Host "  Docker servisleri kurulsun mu? [y/N]"
+    $Config.InstallDocker = ($choice -eq "y" -or $choice -eq "Y")
     
     # Voice
-    Write-Host "  ${WHITE}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${CYAN}🎤 VOICE${RESET} ${DIM}(Sesli Asistan)${RESET}                                        ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Whisper.cpp ile Speech-to-Text${RESET}                                 ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Piper ile Text-to-Speech${RESET}                                      ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Wake word desteği${RESET}                                             ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    if ($script:Config.InstallVoice) {
-        Write-Host "  ${WHITE}║${RESET}  ${GREEN}✓ Kurulacak${RESET}                                                    ${WHITE}║${RESET}"
-    } else {
-        Write-Host "  ${WHITE}║${RESET}  ${YELLOW}○ Kurulmayacak${RESET}                                                  ${WHITE}║${RESET}"
-    }
-    Write-Host "  ${WHITE}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    
-    $voice = Read-Host "  Kurulsun mu? [y/N]"
-    $script:Config.InstallVoice = ($voice -eq "y" -or $voice -eq "Y")
-    
-    Write-Host ""
+    $choice = Read-Host "  Voice (sesli asistan) kurulsun mu? [y/N]"
+    $Config.InstallVoice = ($choice -eq "y" -or $choice -eq "Y")
     
     # Dashboard
-    Write-Host "  ${WHITE}╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${CYAN}📊 DASHBOARD${RESET} ${DIM}(Web Arayüzü)${RESET}                                      ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Tauri tabanlı masaüstü uygulaması${RESET}                               ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}WebSocket ile gerçek zamanlı iletişim${RESET}                           ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}  ${DIM}Skill ve tool yönetimi${RESET}                                        ${WHITE}║${RESET}"
-    Write-Host "  ${WHITE}║${RESET}                                                                   ${WHITE}║${RESET}"
-    if ($script:Config.InstallDashboard) {
-        Write-Host "  ${WHITE}║${RESET}  ${GREEN}✓ Kurulacak${RESET}                                                    ${WHITE}║${RESET}"
-    } else {
-        Write-Host "  ${WHITE}║${RESET}  ${YELLOW}○ Kurulmayacak${RESET}                                                  ${WHITE}║${RESET}"
-    }
-    Write-Host "  ${WHITE}╚═══════════════════════════════════════════════════════════════════╝${RESET}"
-    
-    $dashboard = Read-Host "  Kurulsun mu? [y/N]"
-    $script:Config.InstallDashboard = ($dashboard -eq "y" -or $dashboard -eq "Y")
+    $choice = Read-Host "  Dashboard (Web UI) kurulsun mu? [y/N]"
+    $Config.InstallDashboard = ($choice -eq "y" -or $choice -eq "Y")
     
     Write-Host ""
-    Write-Separator
-    Write-Host ""
-    Write-Host "  ${WHITE}Seçilen Bileşenler:${RESET}"
-    if ($script:Config.InstallOllama) { Write-OK "Ollama (Lokal LLM)" }
-    if ($script:Config.InstallDocker) { Write-OK "Docker Servisleri" }
-    if ($script:Config.InstallVoice) { Write-OK "Voice (Sesli Asistan)" }
-    if ($script:Config.InstallDashboard) { Write-OK "Dashboard (Web UI)" }
-    if ($script:Config.Provider -ne "ollama") { Write-OK "$($script:Config.Provider.ToUpper()) API" }
+    Write-Host "  ${WHITE}Seçilenler:${RESET}"
+    if ($Config.InstallOllama) { Write-OK "Ollama" }
+    if ($Config.InstallDocker) { Write-OK "Docker Servisleri" }
+    if ($Config.InstallVoice) { Write-OK "Voice" }
+    if ($Config.InstallDashboard) { Write-OK "Dashboard" }
     
     return $true
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 7: ÖN KOŞULLAR KURULUMU
+#  ADIM 8: ÖN KOŞULLAR
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Install-Prerequisites {
@@ -982,7 +607,7 @@ function Install-Prerequisites {
         Write-OK "Git: $(git --version)"
     } else {
         Write-Info "Git kuruluyor..."
-        winget install Git.Git --accept-source-agreements --accept-package-agreements
+        winget install Git.Git --accept-source-agreements --accept-package-agreements 2>$null
         $env:Path += ";$env:ProgramFiles\Git\cmd"
         Write-OK "Git kuruldu"
     }
@@ -993,39 +618,17 @@ function Install-Prerequisites {
         Write-OK "Rust: $(rustc --version)"
     } else {
         Write-Info "Rust kuruluyor..."
-        winget install Rustlang.Rustup --accept-source-agreements --accept-package-agreements
+        winget install Rustlang.Rustup --accept-source-agreements --accept-package-agreements 2>$null
         $env:Path += ";$env:USERPROFILE\.cargo\bin"
         Write-OK "Rust kuruldu"
     }
     
-    # Python
-    if ($script:Config.InstallPython) {
-        Write-Step "Python kontrol ediliyor..."
-        if (Get-Command python -ErrorAction SilentlyContinue) {
-            Write-OK "Python: $(python --version 2>&1)"
-        } else {
-            Write-Info "Python kuruluyor..."
-            winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements
-            $pythonPath = "$env:LOCALAPPDATA\Programs\Python\Python312"
-            if (Test-Path $pythonPath) {
-                $env:Path += ";$pythonPath;$pythonPath\Scripts"
-            }
-            Write-OK "Python kuruldu"
-        }
-    }
-    
-    # Visual Studio Build Tools
+    # Build Tools
     Write-Step "Build Tools kontrol ediliyor..."
     $vsWhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-    $hasBuildTools = $false
-    if (Test-Path $vsWhere) {
-        $vsInstall = & $vsWhere -latest -property installationPath 2>$null
-        if ($vsInstall) { $hasBuildTools = $true }
-    }
-    
-    if (-not $hasBuildTools) {
-        Write-Info "Visual Studio Build Tools kuruluyor (5-10 dk)..."
-        winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --passive" --accept-source-agreements
+    if (-not (Test-Path $vsWhere)) {
+        Write-Info "Visual Studio Build Tools kuruluyor..."
+        winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --passive" --accept-source-agreements 2>$null
         Write-OK "Build Tools kuruldu"
     } else {
         Write-OK "Build Tools mevcut"
@@ -1037,49 +640,33 @@ function Install-Prerequisites {
         Write-OK "FFmpeg: mevcut"
     } else {
         Write-Info "FFmpeg kuruluyor..."
-        winget install Gyan.FFmpeg --accept-source-agreements --accept-package-agreements
-        $ffmpegPath = "$env:ProgramFiles\ffmpeg\bin"
-        if (Test-Path $ffmpegPath) {
-            $env:Path += ";$ffmpegPath"
-        }
+        winget install Gyan.FFmpeg --accept-source-agreements --accept-package-agreements 2>$null
         Write-OK "FFmpeg kuruldu"
     }
     
     # Ollama
-    if ($script:Config.InstallOllama) {
+    if ($Config.InstallOllama) {
         Write-Step "Ollama kontrol ediliyor..."
         if (Get-Command ollama -ErrorAction SilentlyContinue) {
             Write-OK "Ollama: mevcut"
-            
-            # Servis kontrol
-            $ollamaRunning = Get-Process -Name "ollama" -ErrorAction SilentlyContinue
-            if (-not $ollamaRunning) {
-                Write-Info "Ollama servisi başlatılıyor..."
-                Start-Process "ollama" -ArgumentList "serve" -WindowStyle Hidden
-                Start-Sleep -Seconds 3
-            }
         } else {
             Write-Info "Ollama kuruluyor..."
-            winget install Ollama.Ollama --accept-source-agreements --accept-package-agreements
-            $ollamaPath = "$env:LOCALAPPDATA\Programs\Ollama"
-            if (Test-Path $ollamaPath) {
-                $env:Path += ";$ollamaPath"
-            }
+            winget install Ollama.Ollama --accept-source-agreements --accept-package-agreements 2>$null
             Start-Process "ollama" -ArgumentList "serve" -WindowStyle Hidden
             Start-Sleep -Seconds 5
             Write-OK "Ollama kuruldu"
         }
     }
     
-    # Docker Desktop
-    if ($script:Config.InstallDocker) {
+    # Docker
+    if ($Config.InstallDocker) {
         Write-Step "Docker kontrol ediliyor..."
         if (Get-Command docker -ErrorAction SilentlyContinue) {
             Write-OK "Docker: mevcut"
         } else {
             Write-Info "Docker Desktop kuruluyor..."
-            winget install Docker.DockerDesktop --accept-source-agreements --accept-package-agreements
-            Write-Warn "Docker kurulumu tamamlandı - bilgisayarı yeniden başlatmanız gerekebilir"
+            winget install Docker.DockerDesktop --accept-source-agreements --accept-package-agreements 2>$null
+            Write-Warn "Docker kurulumu tamamlandı - yeniden başlatma gerekebilir"
         }
     }
     
@@ -1089,7 +676,7 @@ function Install-Prerequisites {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 8: KAYNAK İNDİRME
+#  ADIM 9: KAYNAK İNDİRME
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Download-Source {
@@ -1099,7 +686,7 @@ function Download-Source {
     Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    $installDir = $script:Config.InstallDir
+    $installDir = $Config.InstallDir
     
     if (Test-Path "$installDir\Cargo.toml") {
         Write-Info "Mevcut kurulum bulundu, güncelleniyor..."
@@ -1117,7 +704,7 @@ function Download-Source {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 9: DERLEME
+#  ADIM 10: DERLEME
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Build-Project {
@@ -1128,18 +715,14 @@ function Build-Project {
     Write-Host ""
     
     Write-Info "Bu işlem 5-15 dakika sürebilir..."
-    Write-Info "İlk derleme uzun sürer, lütfen bekleyin..."
     Write-Host ""
     
-    # Python path
     $python = Get-Command python -ErrorAction SilentlyContinue
     if ($python) {
         $env:PYTHON_SYS_EXECUTABLE = $python.Source
     }
     
-    # Build
-    $buildLog = "$env:TEMP\sentient-build.log"
-    cargo build --release 2>&1 | Tee-Object -FilePath $buildLog
+    cargo build --release 2>&1
     
     if (Test-Path "target\release\sentient.exe") {
         $size = (Get-Item "target\release\sentient.exe").Length / 1MB
@@ -1149,12 +732,11 @@ function Build-Project {
     }
     
     Write-Err "Derleme başarısız!"
-    Write-Info "Log: $buildLog"
     return $false
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 10: YAPILANDIRMA
+#  ADIM 11: YAPILANDIRMA
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Configure-Environment {
@@ -1164,115 +746,34 @@ function Configure-Environment {
     Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    # .env dosyası
     if (-not (Test-Path ".env")) {
-        $envContent = @"
-# ════════════════════════════════════════════════════════════════
-#  SENTIENT OS - Yapılandırma Dosyası
-#  Oluşturulma: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-# ════════════════════════════════════════════════════════════════
-
-# LLM PROVIDER: $($script:Config.Provider)
-"@
+        $envContent = "# SENTIENT OS - Yapılandırma`n# Oluşturulma: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')`n`n"
         
-        switch ($script:Config.Provider) {
+        switch ($Config.Provider) {
             "ollama" {
-                $envContent += @"
-
-
-# Ollama (Lokal - Ücretsiz)
-OLLAMA_HOST=http://localhost:11434
-OPENAI_API_BASE=http://localhost:11434/v1
-OPENAI_API_KEY=ollama
-DEFAULT_MODEL=ollama/$($script:Config.Model)
-"@
+                $envContent += "OLLAMA_HOST=http://localhost:11434`nDEFAULT_MODEL=ollama/$($Config.Model)`n"
             }
             "openrouter" {
-                $key = $script:Config.ApiKeys["openrouter"]
-                $envContent += @"
-
-
-# OpenRouter (200+ Model)
-OPENROUTER_API_KEY=$key
-DEFAULT_MODEL=openrouter/auto
-"@
+                $envContent += "OPENROUTER_API_KEY=$($Config.ApiKeys['openrouter'])`nDEFAULT_MODEL=openrouter/auto`n"
             }
             "openai" {
-                $key = $script:Config.ApiKeys["openai"]
-                $envContent += @"
-
-
-# OpenAI
-OPENAI_API_KEY=$key
-DEFAULT_MODEL=openai/gpt-4o
-"@
+                $envContent += "OPENAI_API_KEY=$($Config.ApiKeys['openai'])`nDEFAULT_MODEL=openai/gpt-4o`n"
             }
             "anthropic" {
-                $key = $script:Config.ApiKeys["anthropic"]
-                $envContent += @"
-
-
-# Anthropic
-ANTHROPIC_API_KEY=$key
-DEFAULT_MODEL=anthropic/claude-4-sonnet
-"@
+                $envContent += "ANTHROPIC_API_KEY=$($Config.ApiKeys['anthropic'])`nDEFAULT_MODEL=anthropic/claude-4-sonnet`n"
             }
             "deepseek" {
-                $key = $script:Config.ApiKeys["deepseek"]
-                $envContent += @"
-
-
-# DeepSeek (EN UCUZ)
-DEEPSEEK_API_KEY=$key
-DEFAULT_MODEL=deepseek/deepseek-chat
-"@
+                $envContent += "DEEPSEEK_API_KEY=$($Config.ApiKeys['deepseek'])`nDEFAULT_MODEL=deepseek/deepseek-chat`n"
             }
             "groq" {
-                $key = $script:Config.ApiKeys["groq"]
-                $envContent += @"
-
-
-# Groq (EN HIZLI)
-GROQ_API_KEY=$key
-DEFAULT_MODEL=groq/llama-3.3-70b-versatile
-"@
+                $envContent += "GROQ_API_KEY=$($Config.ApiKeys['groq'])`nDEFAULT_MODEL=groq/llama-3.3-70b-versatile`n"
             }
             "google" {
-                $key = $script:Config.ApiKeys["google"]
-                $envContent += @"
-
-
-# Google AI (Gemini)
-GOOGLE_AI_API_KEY=$key
-DEFAULT_MODEL=google/gemini-2.0-flash
-"@
-            }
-            default {
-                $envContent += @"
-
-
-# Provider yapılandırması gerekli
-# Diğer provider'lar için .env.template dosyasına bakın
-"@
+                $envContent += "GOOGLE_AI_API_KEY=$($Config.ApiKeys['google'])`nDEFAULT_MODEL=google/gemini-2.0-flash`n"
             }
         }
         
-        $envContent += @"
-
-
-# ════════════════════════════════════════════════════════════════
-#  OPSİYONEL YAPILANDIRMA
-# ════════════════════════════════════════════════════════════════
-
-# Voice
-VOICE_ENABLED=$($script:Config.InstallVoice)
-
-# Dashboard
-DASHBOARD_ENABLED=$($script:Config.InstallDashboard)
-
-# Logging
-RUST_LOG=info
-"@
+        $envContent += "`nVOICE_ENABLED=$($Config.InstallVoice)`nDASHBOARD_ENABLED=$($Config.InstallDashboard)`nRUST_LOG=info`n"
         
         Set-Content -Path ".env" -Value $envContent -Encoding UTF8
         Write-OK ".env dosyası oluşturuldu"
@@ -1281,133 +782,67 @@ RUST_LOG=info
     }
     
     # Model indir
-    if ($script:Config.DownloadModel -and $script:Config.Provider -eq "ollama") {
+    if ($Config.DownloadModel -and $Config.Provider -eq "ollama") {
         Write-Host ""
-        Write-Step "$($script:Config.Model) modeli indiriliyor..."
-        ollama pull $script:Config.Model
-        Write-OK "Model hazır: $($script:Config.Model)"
+        Write-Step "$($Config.Model) modeli indiriliyor..."
+        ollama pull $Config.Model
+        Write-OK "Model hazır: $($Config.Model)"
     }
     
     return $true
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 11: DOĞRULAMA
-# ═══════════════════════════════════════════════════════════════════════════════
-
-function Validate-Installation {
-    Write-Host ""
-    Write-Host "${WHITE}  ┌─────────────────────────────────────────────────────────────────────┐${RESET}"
-    Write-Host "${WHITE}  │${RESET} ${BOLD}KURULUM DOĞRULANIYOR...${RESET}                                          ${WHITE}│${RESET}"
-    Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
-    Write-Host ""
-    
-    $allOk = $true
-    
-    # Binary
-    if (Test-Path "target\release\sentient.exe") {
-        Write-OK "sentient.exe"
-    } else {
-        Write-Err "sentient.exe bulunamadı"
-        $allOk = $false
-    }
-    
-    # .env
-    if (Test-Path ".env") {
-        Write-OK ".env yapılandırması"
-    } else {
-        Write-Err ".env bulunamadı"
-        $allOk = $false
-    }
-    
-    # Ollama
-    if ($script:Config.InstallOllama) {
-        if (Get-Command ollama -ErrorAction SilentlyContinue) {
-            Write-OK "Ollama"
-        } else {
-            Write-Warn "Ollama (PATH'e eklenmeli)"
-        }
-    }
-    
-    return $allOk
-}
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  ADIM 12: TAMAMLANDI
+#  ADIM 12: TAMAMLAMA
 # ═══════════════════════════════════════════════════════════════════════════════
 
 function Show-Complete {
     Show-Banner
     
     Write-Host "${GREEN}  ╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-    Write-Host "${GREEN}  ║${RESET}                                                                   ${GREEN}║${RESET}"
     Write-Host "${GREEN}  ║${RESET}          ${WHITE}${BOLD}🎉 KURULUM BAŞARIYLA TAMAMLANDI! 🎉${RESET}                       ${GREEN}║${RESET}"
-    Write-Host "${GREEN}  ║${RESET}                                                                   ${GREEN}║${RESET}"
     Write-Host "${GREEN}  ╚═══════════════════════════════════════════════════════════════════╝${RESET}"
     Write-Host ""
     
-    Write-Separator
+    Write-Sep
     Write-Host ""
     Write-Host "  ${WHITE}KURULUM ÖZETİ${RESET}"
     Write-Host ""
-    Write-Host "    ${CYAN}Mod:${RESET}         $($script:Config.Mode.ToUpper())"
-    Write-Host "    ${CYAN}Provider:${RESET}    $($script:Config.Provider.ToUpper())"
-    Write-Host "    ${CYAN}Model:${RESET}       $($script:Config.Model)"
-    Write-Host "    ${CYAN}Dizin:${RESET}       $($script:Config.InstallDir)"
+    Write-Host "    ${CYAN}Mod:${RESET}         $($Config.Mode.ToUpper())"
+    Write-Host "    ${CYAN}Provider:${RESET}    $($Config.Provider.ToUpper())"
+    Write-Host "    ${CYAN}Model:${RESET}       $($Config.Model)"
+    Write-Host "    ${CYAN}Dizin:${RESET}       $($Config.InstallDir)"
     Write-Host ""
-    
-    Write-Host "    ${CYAN}Ollama:${RESET}      $(if($script:Config.InstallOllama){'✓'}else{'✗'})"
-    Write-Host "    ${CYAN}Docker:${RESET}      $(if($script:Config.InstallDocker){'✓'}else{'✗'})"
-    Write-Host "    ${CYAN}Voice:${RESET}       $(if($script:Config.InstallVoice){'✓'}else{'✗'})"
-    Write-Host "    ${CYAN}Dashboard:${RESET}   $(if($script:Config.InstallDashboard){'✓'}else{'✗'})"
+    Write-Host "    ${CYAN}Ollama:${RESET}      $(if($Config.InstallOllama){'✓'}else{'✗'})"
+    Write-Host "    ${CYAN}Docker:${RESET}      $(if($Config.InstallDocker){'✓'}else{'✗'})"
+    Write-Host "    ${CYAN}Voice:${RESET}       $(if($Config.InstallVoice){'✓'}else{'✗'})"
+    Write-Host "    ${CYAN}Dashboard:${RESET}   $(if($Config.InstallDashboard){'✓'}else{'✗'})"
     Write-Host ""
-    Write-Separator
+    Write-Sep
     Write-Host ""
     
     Write-Host "  ${WHITE}KULLANIM${RESET}"
     Write-Host ""
-    Write-Host "    ${DIM}# Versiyon kontrolü${RESET}"
     Write-Host "    ${GREEN}.\target\release\sentient.exe --version${RESET}"
-    Write-Host ""
-    Write-Host "    ${DIM}# Sohbet başlat${RESET}"
     Write-Host "    ${GREEN}.\target\release\sentient.exe chat${RESET}"
-    Write-Host ""
-    Write-Host "    ${DIM}# Web dashboard${RESET}"
     Write-Host "    ${GREEN}.\target\release\sentient.exe web${RESET}"
     Write-Host ""
-    
-    if ($script:Config.Provider -eq "ollama") {
-        Write-Host "    ${DIM}# Model yönetimi${RESET}"
-        Write-Host "    ${GREEN}ollama list${RESET}              ${DIM}# Yüklü modeller${RESET}"
-        Write-Host "    ${GREEN}ollama pull <model>${RESET}      ${DIM}# Model indir${RESET}"
-        Write-Host ""
-    }
-    
-    Write-Separator
-    Write-Host ""
-    Write-Host "  ${WHITE}SONRAKİ ADIMLAR${RESET}"
-    Write-Host ""
-    Write-Host "    1. API key ekleyin:    ${CYAN}notepad .env${RESET}"
-    Write-Host "    2. Farklı model indir: ${CYAN}ollama pull deepseek-r1:8b${RESET}"
-    Write-Host "    3. Dokümantasyon:      ${CYAN}README.md${RESET}"
-    Write-Host ""
-    
-    Write-Host "${MAGENTA}  ╔═══════════════════════════════════════════════════════════════════╗${RESET}"
-    Write-Host "${MAGENTA}  ║${RESET}                                                                   ${MAGENTA}║${RESET}"
-    Write-Host "${MAGENTA}  ║${RESET}        ${WHITE}SENTIENT OS${RESET} ${DIM}-${RESET} ${YELLOW}The Operating System That Thinks${RESET}              ${MAGENTA}║${RESET}"
-    Write-Host "${MAGENTA}  ║${RESET}                                                                   ${MAGENTA}║${RESET}"
-    Write-Host "${MAGENTA}  ╚═══════════════════════════════════════════════════════════════════╝${RESET}"
+    Write-Sep
     Write-Host ""
     
     # PATH'e ekle
-    if ($script:Config.AddToPath) {
-        $sentientPath = "$($script:Config.InstallDir)\target\release"
-        $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
-        if ($currentPath -notlike "*$sentientPath*") {
-            [Environment]::SetEnvironmentVariable("PATH", "$currentPath;$sentientPath", "User")
-            Write-OK "SENTIENT PATH'e eklendi"
-        }
+    $sentientPath = "$($Config.InstallDir)\target\release"
+    $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+    if ($currentPath -notlike "*$sentientPath*") {
+        [Environment]::SetEnvironmentVariable("PATH", "$currentPath;$sentientPath", "User")
+        Write-OK "SENTIENT PATH'e eklendi"
     }
+    
+    Write-Host ""
+    Write-Host "${MAGENTA}  ╔═══════════════════════════════════════════════════════════════════╗${RESET}"
+    Write-Host "${MAGENTA}  ║${NC}        ${WHITE}SENTIENT OS${NC} - ${YELLOW}The Operating System That Thinks${NC}              ${MAGENTA}║${NC}"
+    Write-Host "${MAGENTA}  ╚═══════════════════════════════════════════════════════════════════╝${RESET}"
+    Write-Host ""
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -1426,16 +861,13 @@ function Uninstall-Sentient {
         return
     }
     
-    $installDir = $script:Config.InstallDir
+    $installDir = $Config.InstallDir
     
-    # Dizini sil
     if (Test-Path $installDir) {
-        Write-Info "$installDir siliniyor..."
         Remove-Item -Path $installDir -Recurse -Force
         Write-OK "Dizin silindi"
     }
     
-    # PATH'ten kaldır
     $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
     $newPath = ($currentPath -split ';' | Where-Object { $_ -notlike "*sentient*" }) -join ';'
     [Environment]::SetEnvironmentVariable("PATH", $newPath, "User")
@@ -1446,38 +878,44 @@ function Uninstall-Sentient {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  ANA FONKSİYON
+#  ANA AKIŞ
 # ═══════════════════════════════════════════════════════════════════════════════
 
-function Main {
-    # Kaldırma modu
-    if ($Uninstall) {
-        Uninstall-Sentient
-        return
-    }
-    
-    # Adımları çalıştır
-    foreach ($step in $script:Steps) {
-        $script:CurrentStep++
-        $fn = $step.Fn
-        
-        Write-Host ""
-        Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
-        Write-Host "${WHITE}  ADIM $($script:CurrentStep)/$($script:Steps.Count): $($step.Name)${RESET}"
-        Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
-        
-        $result = & $fn
-        
-        if (-not $result) {
-            Write-Err "$($step.Name) başarısız!"
-            Write-Info "Kurulum durduruldu."
-            return
-        }
-    }
-    
-    # Tamamlandı
-    Show-Complete
+# Kaldırma modu
+if ($Uninstall) {
+    Uninstall-Sentient
+    exit 0
 }
 
-# Script'i çalıştır
-Main
+# Kurulum adımları
+$steps = @(
+    @{ Name = "Hoş Geldiniz"; Fn = "Show-Welcome" }
+    @{ Name = "Lisans"; Fn = "Show-License" }
+    @{ Name = "Sistem Analizi"; Fn = "Analyze-System" }
+    @{ Name = "Kurulum Modu"; Fn = "Select-Mode" }
+    @{ Name = "Provider"; Fn = "Select-Provider" }
+    @{ Name = "Model"; Fn = "Select-Model" }
+    @{ Name = "Bileşenler"; Fn = "Select-Components" }
+    @{ Name = "Ön Koşullar"; Fn = "Install-Prerequisites" }
+    @{ Name = "Kaynak"; Fn = "Download-Source" }
+    @{ Name = "Derleme"; Fn = "Build-Project" }
+    @{ Name = "Yapılandırma"; Fn = "Configure-Environment" }
+)
+
+$stepNum = 0
+foreach ($step in $steps) {
+    $stepNum++
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM $stepNum/$($steps.Count): $($step.Name)${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    
+    $result = & $step.Fn
+    
+    if (-not $result) {
+        Write-Err "$($step.Name) başarısız!"
+        exit 1
+    }
+}
+
+Show-Complete
