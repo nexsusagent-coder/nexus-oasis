@@ -5,10 +5,14 @@
 mod openai;
 mod stability;
 mod flux;
+mod ideogram;
+mod replicate;
 
 pub use openai::OpenAIProvider;
 pub use stability::StabilityProvider;
 pub use flux::FluxProvider;
+pub use ideogram::IdeogramProvider;
+pub use replicate::ReplicateProvider;
 
 use async_trait::async_trait;
 use crate::{ImageRequest, GeneratedImage, Result, ImageError, ImageProviderType};
@@ -41,6 +45,8 @@ pub fn create_provider(
         ImageProviderType::OpenAI => Ok(Box::new(OpenAIProvider::new(api_key))),
         ImageProviderType::StabilityAI => Ok(Box::new(StabilityProvider::new(api_key))),
         ImageProviderType::Flux => Ok(Box::new(FluxProvider::new(api_key))),
+        ImageProviderType::Ideogram => Ok(Box::new(IdeogramProvider::new(api_key))),
+        ImageProviderType::Replicate => Ok(Box::new(ReplicateProvider::new(api_key))),
         _ => Err(ImageError::ProviderNotAvailable(format!("{:?}", provider_type))),
     }
 }

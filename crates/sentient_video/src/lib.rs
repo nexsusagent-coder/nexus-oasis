@@ -200,6 +200,7 @@ pub use providers::{
     VideoProvider, VideoGenerator,
     RunwayProvider, PikaProvider, SVDProvider,
     LumaProvider, KlingProvider, HaiperProvider,
+    SoraProvider, HailuoProvider,
     ProviderInfo,
 };
 pub use template::{VideoTemplate, TemplateLibrary, TemplateCategory};
@@ -311,6 +312,28 @@ impl VideoClient {
     /// Alias for stability()
     pub fn svd(api_key: impl Into<String>) -> Self {
         Self::stability(api_key)
+    }
+
+    /// Create client with OpenAI Sora provider
+    /// 
+    /// Best for: High quality, natural motion, OpenAI ecosystem
+    /// - Sora 1.0: High quality, up to 20 seconds
+    /// - Sora 1.0 Turbo: Faster, shorter videos
+    pub fn sora(api_key: impl Into<String>) -> Self {
+        Self {
+            provider: Arc::new(SoraProvider::new(api_key)),
+        }
+    }
+
+    /// Create client with Hailuo AI (MiniMax) provider
+    /// 
+    /// Best for: Asian content, high realism, Chinese faces
+    /// - Hailuo 01: Main model, 6s videos
+    /// - Hailuo 01 Live: Higher quality, 10s videos
+    pub fn hailuo(api_key: impl Into<String>) -> Self {
+        Self {
+            provider: Arc::new(HailuoProvider::new(api_key)),
+        }
     }
 
     /// Create client with custom provider
@@ -487,7 +510,7 @@ mod tests {
     #[test]
     fn test_all_providers() {
         let providers = VideoClient::all_providers();
-        assert_eq!(providers.len(), 6);
+        assert_eq!(providers.len(), 8);
     }
 
     #[test]

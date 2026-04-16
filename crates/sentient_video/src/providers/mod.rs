@@ -8,6 +8,8 @@ mod svd;
 mod luma;
 mod kling;
 mod haiper;
+mod sora;
+mod hailuo;
 
 pub use runway::RunwayProvider;
 pub use pika::PikaProvider;
@@ -15,6 +17,8 @@ pub use svd::SVDProvider;
 pub use luma::LumaProvider;
 pub use kling::KlingProvider;
 pub use haiper::HaiperProvider;
+pub use sora::SoraProvider;
+pub use hailuo::HailuoProvider;
 
 use async_trait::async_trait;
 use reqwest::{Client, Response};
@@ -216,6 +220,38 @@ impl ProviderInfo {
         }
     }
 
+    /// Get Sora (OpenAI) info
+    pub fn sora() -> Self {
+        Self {
+            name: "OpenAI Sora".into(),
+            website: "https://openai.com/sora".into(),
+            docs: "https://platform.openai.com/docs/guides/video".into(),
+            free_tier: true,
+            free_tier_limit: Some("Included with ChatGPT Plus/Pro".into()),
+            pricing_url: "https://openai.com/pricing".into(),
+            supports_text_to_video: true,
+            supports_image_to_video: true,
+            max_duration_seconds: 20.0,
+            avg_generation_time_seconds: 120.0,
+        }
+    }
+
+    /// Get Hailuo AI (MiniMax) info
+    pub fn hailuo() -> Self {
+        Self {
+            name: "Hailuo AI".into(),
+            website: "https://hailuoai.com/".into(),
+            docs: "https://docs.hailuo.ai/".into(),
+            free_tier: true,
+            free_tier_limit: Some("20 videos/day".into()),
+            pricing_url: "https://hailuoai.com/pricing".into(),
+            supports_text_to_video: true,
+            supports_image_to_video: true,
+            max_duration_seconds: 6.0,
+            avg_generation_time_seconds: 90.0,
+        }
+    }
+
     /// Get all providers
     pub fn all() -> Vec<Self> {
         vec![
@@ -225,6 +261,8 @@ impl ProviderInfo {
             Self::kling(),
             Self::haiper(),
             Self::stability(),
+            Self::sora(),
+            Self::hailuo(),
         ]
     }
 
@@ -245,7 +283,7 @@ mod tests {
     #[test]
     fn test_all_providers_exist() {
         let providers = ProviderInfo::all();
-        assert_eq!(providers.len(), 6);
+        assert_eq!(providers.len(), 8);
     }
 
     #[test]
