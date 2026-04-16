@@ -20,8 +20,9 @@ SENTIENT OS LLM katmanı kapsamlı bir genişletmeden geçirildi. Mevcut ~50 mod
 | **Ücretsiz Model** | ~25 | 100+ | +300% |
 | **Reasoning Model** | 5 | 20+ | +300% |
 | **Vision Model** | ~15 | 40+ | +166% |
-| **Rust Dosyası** | 47 | 59 | +12 yeni |
+| **Rust Dosyası** | 47 | 66 | +19 yeni |
 | **Test** | 560+ | 575+ | Tümü PASSED ✅ |
+| **AI Gateway/Router** | 0 | 7 | Yeni kategori! |
 
 ---
 
@@ -146,6 +147,23 @@ test result: ok. 175 passed; 0 failed; 0 ignored
 ```
 
 Tüm testler başarılı ✅
+
+---
+
+## 🌐 AI Gateway / Router Sağlayıcıları (YENİ - 2025-2026)
+
+Bu sağlayıcılar birden fazla LLM API'sini tek bir gateway üzerinden yönetir:
+
+| Provider | Özellik | Ücretsiz Tier |
+|----------|---------|-------------|
+| **Unify AI** | ML tabanlı akıllı routing (quality/cost/speed) | ✅ $5 kredi |
+| **Portkey** | 250+ model gateway, failover, caching, observability | ✅ 10K req/mo |
+| **Helicone** | AI observability proxy, cost tracking | ✅ 50K req/mo |
+| **NotDiamond** | ML ile prompt bazlı model seçimi | ✅ |
+| **AI/ML API** | 100+ model, doğrudan erişimden daha ucuz | ✅ 100 req/gün |
+| **Glama** | Multi-model gateway + MCP desteği | ✅ |
+| **Requesty** | LLM router, A/B testing, analytics | ✅ |
+| **LiteLLM** | 100+ provider, self-hosted proxy, load balancing | Açık kaynak |
 
 ---
 

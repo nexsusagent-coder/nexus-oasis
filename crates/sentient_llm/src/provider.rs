@@ -767,6 +767,108 @@ impl ProviderInfo {
     }
 
     // ═══════════════════════════════════════════════════════════
+    //  AI GATEWAY / ROUTER PROVIDERS (2025-2026)
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn unify() -> Self {
+        Self {
+            name: "Unify AI".into(), id: "unify".into(),
+            description: "Intelligent model router - auto-pick best model by quality/cost/speed".into(),
+            base_url: "https://api.unify.ai/v1".into(),
+            docs_url: "https://unify.ai/docs".into(),
+            pricing_url: "https://unify.ai/pricing".into(),
+            free_tier: true, free_tier_limits: Some("Free tier + $5 credit".into()),
+            model_count: 8, supports_streaming: true, supports_tools: true, supports_vision: true,
+            api_key_env: "UNIFY_API_KEY".into(),
+            category: ProviderCategory::Aggregator, region: ProviderRegion::Europe, founded_year: Some(2023),
+        }
+    }
+
+    pub fn portkey() -> Self {
+        Self {
+            name: "Portkey".into(), id: "portkey".into(),
+            description: "AI Gateway + Router + Observability - 250+ models, failover & caching".into(),
+            base_url: "https://api.portkey.ai/v1".into(),
+            docs_url: "https://portkey.ai/docs".into(),
+            pricing_url: "https://portkey.ai/pricing".into(),
+            free_tier: true, free_tier_limits: Some("Free tier: 10K requests/mo".into()),
+            model_count: 8, supports_streaming: true, supports_tools: true, supports_vision: true,
+            api_key_env: "PORTKEY_API_KEY".into(),
+            category: ProviderCategory::Aggregator, region: ProviderRegion::NorthAmerica, founded_year: Some(2023),
+        }
+    }
+
+    pub fn helicone() -> Self {
+        Self {
+            name: "Helicone".into(), id: "helicone".into(),
+            description: "AI Observability Proxy - cost tracking, logging, rate limiting".into(),
+            base_url: "https://gateway.helicone.ai/v1".into(),
+            docs_url: "https://docs.helicone.ai".into(),
+            pricing_url: "https://helicone.ai/pricing".into(),
+            free_tier: true, free_tier_limits: Some("Free tier: 50K requests/mo".into()),
+            model_count: 4, supports_streaming: true, supports_tools: true, supports_vision: true,
+            api_key_env: "HELICONE_API_KEY".into(),
+            category: ProviderCategory::Aggregator, region: ProviderRegion::NorthAmerica, founded_year: Some(2022),
+        }
+    }
+
+    pub fn notdiamond() -> Self {
+        Self {
+            name: "NotDiamond".into(), id: "notdiamond".into(),
+            description: "ML-based model router - learns which model works best for each prompt".into(),
+            base_url: "https://api.notdiamond.ai/v1".into(),
+            docs_url: "https://notdiamond.ai/docs".into(),
+            pricing_url: "https://notdiamond.ai/pricing".into(),
+            free_tier: true, free_tier_limits: Some("Free tier available".into()),
+            model_count: 4, supports_streaming: true, supports_tools: true, supports_vision: true,
+            api_key_env: "NOTDIAMOND_API_KEY".into(),
+            category: ProviderCategory::Aggregator, region: ProviderRegion::NorthAmerica, founded_year: Some(2023),
+        }
+    }
+
+    pub fn aimlapi() -> Self {
+        Self {
+            name: "AI/ML API".into(), id: "aimlapi".into(),
+            description: "100+ models at lower cost - GPT-4 level models cheap".into(),
+            base_url: "https://api.aimlapi.com/v1".into(),
+            docs_url: "https://aimlapi.com/docs".into(),
+            pricing_url: "https://aimlapi.com/pricing".into(),
+            free_tier: true, free_tier_limits: Some("Free tier: 100 req/day".into()),
+            model_count: 8, supports_streaming: true, supports_tools: true, supports_vision: true,
+            api_key_env: "AIMLAPI_API_KEY".into(),
+            category: ProviderCategory::Aggregator, region: ProviderRegion::NorthAmerica, founded_year: Some(2023),
+        }
+    }
+
+    pub fn glama() -> Self {
+        Self {
+            name: "Glama".into(), id: "glama".into(),
+            description: "Multi-model AI gateway with MCP support".into(),
+            base_url: "https://api.glama.ai/v1".into(),
+            docs_url: "https://glama.ai/docs".into(),
+            pricing_url: "https://glama.ai/pricing".into(),
+            free_tier: true, free_tier_limits: Some("Free tier available".into()),
+            model_count: 4, supports_streaming: true, supports_tools: true, supports_vision: true,
+            api_key_env: "GLAMA_API_KEY".into(),
+            category: ProviderCategory::Aggregator, region: ProviderRegion::NorthAmerica, founded_year: Some(2024),
+        }
+    }
+
+    pub fn requesty() -> Self {
+        Self {
+            name: "Requesty".into(), id: "requesty".into(),
+            description: "LLM Router & Gateway - intelligent routing, A/B testing".into(),
+            base_url: "https://api.requesty.ai/v1".into(),
+            docs_url: "https://requesty.ai/docs".into(),
+            pricing_url: "https://requesty.ai/pricing".into(),
+            free_tier: true, free_tier_limits: Some("Free tier available".into()),
+            model_count: 4, supports_streaming: true, supports_tools: true, supports_vision: true,
+            api_key_env: "REQUESTY_API_KEY".into(),
+            category: ProviderCategory::Aggregator, region: ProviderRegion::NorthAmerica, founded_year: Some(2024),
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
     //  ALL PROVIDERS
     // ═══════════════════════════════════════════════════════════
 
@@ -785,6 +887,9 @@ impl ProviderInfo {
             Self::fireworks(), Self::cerebras(), Self::cloudflare(),
             Self::chutes(), Self::deepinfra(), Self::siliconflow(),
             Self::replicate(), Self::friendliai(), Self::octoai(),
+            // AI Gateway / Router (2025-2026)
+            Self::unify(), Self::portkey(), Self::helicone(),
+            Self::notdiamond(), Self::aimlapi(), Self::glama(), Self::requesty(),
             // Enterprise
             Self::azure(), Self::bedrock(), Self::vertex(),
             Self::nvidia(), Self::sambanova(), Self::watsonx(),

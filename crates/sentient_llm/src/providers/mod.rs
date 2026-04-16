@@ -51,6 +51,13 @@ mod litellm;
 mod huggingface;
 mod cloudflare;
 mod chutes;
+mod unify;
+mod portkey;
+mod helicone;
+mod notdiamond;
+mod aimlapi;
+mod gllm;
+mod requesty;
 
 pub use openrouter::OpenRouterProvider;
 pub use glhf::GlhfProvider;
@@ -62,6 +69,13 @@ pub use litellm::LiteLLMProvider;
 pub use huggingface::HuggingFaceProvider;
 pub use cloudflare::CloudflareAIProvider;
 pub use chutes::ChutesProvider;
+pub use unify::UnifyProvider;
+pub use portkey::PortkeyProvider;
+pub use helicone::HeliconeProvider;
+pub use notdiamond::NotDiamondProvider;
+pub use aimlapi::AiMlApiProvider;
+pub use gllm::GlamaProvider;
+pub use requesty::RequestyProvider;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  ENTERPRISE PROVIDERS

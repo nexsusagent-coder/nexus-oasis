@@ -230,6 +230,31 @@ impl LlmHub {
         }
 
         // ═══════════════════════════════════════════════════════════
+        //  AI GATEWAY / ROUTER PROVIDERS (2025-2026)
+        // ═══════════════════════════════════════════════════════════
+        if let Ok(p) = crate::providers::UnifyProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::PortkeyProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::HeliconeProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::NotDiamondProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::AiMlApiProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::GlamaProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+        if let Ok(p) = crate::providers::RequestyProvider::from_env() {
+            hub = hub.register(Arc::new(p));
+        }
+
+        // ═══════════════════════════════════════════════════════════
         //  HUGGING FACE & SPECIALIZED
         // ═══════════════════════════════════════════════════════════
         if let Ok(p) = crate::providers::HuggingFaceProvider::from_env() {
@@ -777,6 +802,45 @@ impl LlmHubBuilder {
 
     pub fn llamafile(mut self) -> LlmResult<Self> {
         self.hub = self.hub.register(Arc::new(crate::providers::LlamafileProvider::new()?));
+        Ok(self)
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  AI GATEWAY / ROUTER PROVIDERS
+    // ═══════════════════════════════════════════════════════════
+
+    pub fn unify(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::UnifyProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn portkey(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::PortkeyProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn helicone(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::HeliconeProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn notdiamond(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::NotDiamondProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn aimlapi(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::AiMlApiProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn glama(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::GlamaProvider::new(api_key)?));
+        Ok(self)
+    }
+
+    pub fn requesty(mut self, api_key: impl Into<String>) -> LlmResult<Self> {
+        self.hub = self.hub.register(Arc::new(crate::providers::RequestyProvider::new(api_key)?));
         Ok(self)
     }
 

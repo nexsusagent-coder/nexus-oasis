@@ -2057,6 +2057,139 @@ pub fn specialized_models() -> Vec<ModelInfo> {
             is_reasoning: true, free_tier: false,
         },
         // ═══════════════════════════════════════════════════════════
+        //  AI GATEWAY / ROUTER PROVIDERS (2025-2026)
+        // ═══════════════════════════════════════════════════════════
+
+        // Unify AI - akıllı yönlendirme
+        ModelInfo {
+            id: "router@q>0.9&c<0.001".into(), name: "Unify Smart Router".into(), provider: "Unify".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.001, output_cost_per_1k: 0.004,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: None, quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: true,
+        },
+        ModelInfo {
+            id: "router@speed".into(), name: "Unify Speed Router".into(), provider: "Unify".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.0005, output_cost_per_1k: 0.002,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: None, quality_rating: 4, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        ModelInfo {
+            id: "anthropic@claude-4-sonnet".into(), name: "Claude Sonnet 4 (Unify)".into(), provider: "Unify".into(),
+            context_window: 200_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.003, output_cost_per_1k: 0.015,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        ModelInfo {
+            id: "deepseek@deepseek-r1".into(), name: "DeepSeek R1 (Unify)".into(), provider: "Unify".into(),
+            context_window: 64_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.00055, output_cost_per_1k: 0.00219,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-11".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: true, free_tier: true,
+        },
+        // Portkey - gateway + observability
+        ModelInfo {
+            id: "portkey/gpt-4o".into(), name: "GPT-4o (Portkey)".into(), provider: "Portkey".into(),
+            context_window: 128_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0025, output_cost_per_1k: 0.01,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-04".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        ModelInfo {
+            id: "portkey/claude-4-sonnet".into(), name: "Claude Sonnet 4 (Portkey)".into(), provider: "Portkey".into(),
+            context_window: 200_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.003, output_cost_per_1k: 0.015,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // Helicone - observability proxy
+        ModelInfo {
+            id: "helicone/gpt-4o".into(), name: "GPT-4o (Helicone)".into(), provider: "Helicone".into(),
+            context_window: 128_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0025, output_cost_per_1k: 0.01,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-04".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // NotDiamond - ML-based routing
+        ModelInfo {
+            id: "notdiamond/auto".into(), name: "NotDiamond Auto Router".into(), provider: "NotDiamond".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.002, output_cost_per_1k: 0.008,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: None, quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // AI/ML API - cheaper access
+        ModelInfo {
+            id: "aimlapi/gpt-4o".into(), name: "GPT-4o (AI/ML API)".into(), provider: "AI/ML API".into(),
+            context_window: 128_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0015, output_cost_per_1k: 0.006,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-04".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        ModelInfo {
+            id: "aimlapi/deepseek-r1".into(), name: "DeepSeek R1 (AI/ML API)".into(), provider: "AI/ML API".into(),
+            context_window: 64_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.00035, output_cost_per_1k: 0.0014,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-11".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: true, free_tier: true,
+        },
+        // Glama - MCP gateway
+        ModelInfo {
+            id: "glama/gpt-4o".into(), name: "GPT-4o (Glama)".into(), provider: "Glama".into(),
+            context_window: 128_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0025, output_cost_per_1k: 0.01,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-04".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // Requesty - LLM router
+        ModelInfo {
+            id: "requesty/auto".into(), name: "Requesty Auto Router".into(), provider: "Requesty".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.002, output_cost_per_1k: 0.008,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: None, quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // LiteLLM - self-hosted proxy
+        ModelInfo {
+            id: "litellm/openai/gpt-4o".into(), name: "GPT-4o (LiteLLM)".into(), provider: "LiteLLM".into(),
+            context_window: 128_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0025, output_cost_per_1k: 0.01,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-04".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        ModelInfo {
+            id: "litellm/anthropic/claude-4-sonnet".into(), name: "Claude Sonnet 4 (LiteLLM)".into(), provider: "LiteLLM".into(),
+            context_window: 200_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.003, output_cost_per_1k: 0.015,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        ModelInfo {
+            id: "litellm/ollama/llama4:scout".into(), name: "Llama 4 Scout (LiteLLM→Ollama)".into(), provider: "LiteLLM".into(),
+            context_window: 10_485_760, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-04".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: false, free_tier: true,
+        },
+
+        // ═══════════════════════════════════════════════════════════
         //  2026 GÜNCEL - En Yeni Modeller (Nisan 2026)
         // ═══════════════════════════════════════════════════════════
 

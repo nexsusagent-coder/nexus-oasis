@@ -112,6 +112,8 @@ pub use providers::{
     OpenRouterProvider, GlhfProvider, NovitaProvider, HyperbolicProvider,
     SiliconFlowProvider, CerebrasProvider, LiteLLMProvider, HuggingFaceProvider,
     CloudflareAIProvider, ChutesProvider,
+    UnifyProvider, PortkeyProvider, HeliconeProvider,
+    NotDiamondProvider, AiMlApiProvider, GlamaProvider, RequestyProvider,
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
