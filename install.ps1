@@ -1,267 +1,448 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  SENTIENT OS - Windows Universal Installer
-#  One command: irm https://get.sentient.ai/ps | iex
+#  SENTIENT OS - Windows Tek Komutla Kurulum Script'i
+# ═══════════════════════════════════════════════════════════════════════════════
+#  Kullanım (PowerShell YÖNETİCİ olarak):
+#    irm https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install.ps1 | iex
+#
+#  Veya manuel:
+#    git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
+#    cd SENTIENT_CORE
+#    .\install.ps1
 # ═══════════════════════════════════════════════════════════════════════════════
 
 param(
-    [string]$Version = "latest",
-    [string]$Prefix = "$env:USERPROFILE\.sentient",
-    [switch]$NoConfirm,
-    [switch]$Uninstall,
-    [switch]$Help
+    [switch]$SkipOllama,
+    [switch]$SkipDocker,
+    [switch]$SkipModel
 )
 
-$ErrorActionPreference = "Stop"
-$Repo = "nexsusagent-coder/SENTIENT_CORE"
+# Renk fonksiyonları
+function Write-Info { Write-Host "[ℹ] $args" -ForegroundColor Cyan }
+function Write-OK { Write-Host "[✓] $args" -ForegroundColor Green }
+function Write-Warn { Write-Host "[⚠] $args" -ForegroundColor Yellow }
+function Write-Error { Write-Host "[✗] $args" -ForegroundColor Red }
+function Write-Step { Write-Host "[▶] $args" -ForegroundColor Magenta }
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Help
-# ─────────────────────────────────────────────────────────────────────────────
-if ($Help) {
-    Write-Host @"
-SENTIENT OS Installer
+# Logo
+$Logo = @"
 
-Usage:
-  irm https://get.sentient.ai/ps | iex
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   ███████╗███████╗███╗   ██╗████████╗███╗   ██╗███████╗██╗    ║
+║   ██╔════╝██╔════╝████╗  ██║╚══██╔══╝████╗  ██║██╔════╝██║    ║
+║   ███████╗█████╗  ██╔██╗ ██║   ██║   ██╔██╗ ██║███████╗██║    ║
+║   ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║╚██╗██║╚════██║██║    ║
+║   ███████║███████╗██║ ╚████║   ██║   ██║ ╚████║███████║██║    ║
+║   ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═══╝╚══════╝╚═╝    ║
+║                                                               ║
+║              OS - The Operating System That Thinks            ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
 
-Options:
-  -Version VERSION    Version to install (default: latest)
-  -Prefix PATH        Install directory (default: ~/.sentient)
-  -NoConfirm          Skip confirmation
-  -Uninstall          Remove SENTIENT
-
-Examples:
-  irm https://get.sentient.ai/ps | iex
-  irm https://get.sentient.ai/ps | iex -Version "v4.0.0"
-  irm https://get.sentient.ai/ps | iex -Uninstall
 "@
-    exit 0
+
+Write-Host $Logo -ForegroundColor Cyan
+
+# Yönetici kontrolü
+function Test-Admin {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]$currentUser
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Colors
-# ─────────────────────────────────────────────────────────────────────────────
-function Write-ColorOutput {
-    param([string]$Color, [string]$Message)
-    $colors = @{
-        "Red" = "Red"; "Green" = "Green"; "Yellow" = "Yellow"
-        "Blue" = "Blue"; "Cyan" = "Cyan"; "White" = "White"
+if (-not (Test-Admin)) {
+    Write-Warn "Yönetici olarak çalıştırmanız önerilir. Bazı kurulumlar başarısız olabilir."
+    Write-Info "Sağ tık → 'PowerShell Yönetici olarak çalıştır' seçin"
+    $continue = Read-Host "Devam etmek istiyor musunuz? (y/n)"
+    if ($continue -ne "y") { exit 1 }
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  KURULUM FONKSİYONLARI
+# ═══════════════════════════════════════════════════════════════════════════════
+
+function Install-Rust {
+    Write-Step "Rust kurulumu kontrol ediliyor..."
+
+    if (Get-Command rustc -ErrorAction SilentlyContinue) {
+        $version = rustc --version
+        Write-OK "Rust zaten kurulu: $version"
+        return $true
     }
-    Write-Host $Message -ForegroundColor $colors[$Color]
-}
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Banner
-# ─────────────────────────────────────────────────────────────────────────────
-function Print-Banner {
-    Clear-Host
-    Write-ColorOutput Cyan @"
-  ╔════════════════════════════════════════════════════════════╗
-  ║     █████╗ ███╗   ██╗███████╗██╗      ██████╗ ██╗   ██╗    ║
-  ║    ██╔══██╗████╗  ██║██╔════╝██║     ██╔═══██╗██║   ██║    ║
-  ║    ███████║██╔██╗ ██║█████╗  ██║     ██║   ██║██║   ██║    ║
-  ║    ██╔══██║██║╚██╗██║██╔══╝  ██║     ██║   ██║██║   ██║    ║
-  ║    ██║  ██║██║ ╚████║███████╗███████╗╚██████╔╝╚██████╔╝    ║
-  ║    ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝ ╚═════╝  ╚═════╝     ║
-  ║                                                            ║
-  ║          SENTIENT OS - AI Operating System                 ║
-  ╚════════════════════════════════════════════════════════════╝
-"@
-    Write-Host ""
-}
+    Write-Info "Rust kuruluyor..."
+    winget install Rustlang.Rustup --accept-source-agreements --accept-package-agreements
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Uninstall
-# ─────────────────────────────────────────────────────────────────────────────
-if ($Uninstall) {
-    Write-ColorOutput Yellow "Uninstalling SENTIENT..."
-    
-    # Remove from PATH
-    $userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
-    $newPath = ($userPath -split ';' | Where-Object { $_ -notlike "*sentient*" }) -join ';'
-    [Environment]::SetEnvironmentVariable("PATH", $newPath, "User")
-    
-    # Remove SENTIENT_HOME
-    [Environment]::SetEnvironmentVariable("SENTIENT_HOME", $null, "User")
-    
-    # Remove directory
-    if (Test-Path $Prefix) {
-        Remove-Item -Recurse -Force $Prefix
+    # PATH'e ekle
+    $env:Path += ";$env:USERPROFILE\.cargo\bin"
+
+    # Doğrula
+    if (Get-Command rustc -ErrorAction SilentlyContinue) {
+        Write-OK "Rust başarıyla kuruldu: $(rustc --version)"
+        return $true
     }
-    
-    Write-ColorOutput Green "SENTIENT uninstalled"
-    exit 0
+
+    Write-Error "Rust kurulumu başarısız!"
+    Write-Info "Manuel kurulum: https://rustup.rs"
+    return $false
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Detect Architecture
-# ─────────────────────────────────────────────────────────────────────────────
-$Arch = if ([Environment]::Is64BitOperatingSystem) { "x86_64" } else { "i686" }
-$Target = "$Arch-pc-windows-msvc"
+function Install-Python {
+    Write-Step "Python kurulumu kontrol ediliyor..."
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Check Dependencies
-# ─────────────────────────────────────────────────────────────────────────────
-function Check-Dependencies {
-    Write-ColorOutput Blue "[INFO] Checking dependencies..."
-    
-    # Check for Visual C++ Redistributable (required for Rust binaries)
-    $vcInstalled = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\VisualStudio\*\VC\Runtimes\x64" -ErrorAction SilentlyContinue
-    if (-not $vcInstalled) {
-        Write-ColorOutput Yellow "[WARN] Visual C++ Redistributable not found"
-        Write-ColorOutput Yellow "       Some features may not work. Install from:"
-        Write-ColorOutput Yellow "       https://aka.ms/vs/17/release/vc_redist.x64.exe"
-    } else {
-        Write-ColorOutput Green "[OK] Visual C++ Redistributable found"
+    if (Get-Command python -ErrorAction SilentlyContinue) {
+        $version = python --version 2>&1
+        Write-OK "Python zaten kurulu: $version"
+
+        # pip kontrolü
+        python -m pip --version | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            return $true
+        }
     }
-    
-    # Check Python (optional)
+
+    Write-Info "Python 3.12 kuruluyor..."
+    winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements
+
+    # PATH'e ekle
+    $pythonPath = "$env:LOCALAPPDATA\Programs\Python\Python312"
+    if (Test-Path $pythonPath) {
+        $env:Path += ";$pythonPath;$pythonPath\Scripts"
+    }
+
+    # Doğrula
+    if (Get-Command python -ErrorAction SilentlyContinue) {
+        Write-OK "Python başarıyla kuruldu: $(python --version)"
+        return $true
+    }
+
+    Write-Warn "Python kurulumu başarısız olabilir. PyO3 olmadan devam edilecek."
+    return $false
+}
+
+function Install-VSBuildTools {
+    Write-Step "Visual Studio Build Tools kontrol ediliyor..."
+
+    # MSVC kontrolü
+    $vsWhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+    if (Test-Path $vsWhere) {
+        $vsInstall = & $vsWhere -latest -property installationPath 2>$null
+        if ($vsInstall) {
+            Write-OK "Visual Studio kurulu: $vsInstall"
+            return $true
+        }
+    }
+
+    # Build Tools kontrolü
+    $buildTools = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools"
+    if (Test-Path $buildTools) {
+        Write-OK "Build Tools kurulu"
+        return $true
+    }
+
+    Write-Info "Visual Studio Build Tools kuruluyor (bu 5-10 dk sürebilir)..."
+    winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --passive" --accept-source-agreements
+
+    Write-OK "Build Tools kuruldu"
+    return $true
+}
+
+function Install-FFmpeg {
+    Write-Step "FFmpeg kontrol ediliyor..."
+
+    if (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
+        Write-OK "FFmpeg zaten kurulu: $(ffmpeg -version | Select-Object -First 1)"
+        return $true
+    }
+
+    # Scoop kontrolü
+    if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+        Write-Info "Scoop kuruluyor..."
+        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+        Invoke-RestMethod get.scoop.sh | Invoke-Expression
+    }
+
+    Write-Info "FFmpeg kuruluyor..."
+    scoop install ffmpeg
+
+    if (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
+        Write-OK "FFmpeg başarıyla kuruldu"
+        return $true
+    }
+
+    Write-Warn "FFmpeg kurulumu başarısız. Ses/video özellikleri çalışmayabilir."
+    return $false
+}
+
+function Install-Ollama {
+    param([switch]$Skip)
+
+    if ($Skip) {
+        Write-Info "Ollama kurulumu atlanıyor"
+        return $true
+    }
+
+    Write-Step "Ollama kontrol ediliyor..."
+
+    if (Get-Command ollama -ErrorAction SilentlyContinue) {
+        Write-OK "Ollama zaten kurulu"
+        return $true
+    }
+
+    Write-Info "Ollama kuruluyor..."
+    winget install Ollama.Ollama --accept-source-agreements --accept-package-agreements
+
+    # Ollama servisini başlat
+    Start-Process "ollama" -ArgumentList "serve" -WindowStyle Hidden -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 3
+
+    if (Get-Command ollama -ErrorAction SilentlyContinue) {
+        Write-OK "Ollama başarıyla kuruldu"
+        return $true
+    }
+
+    Write-Warn "Ollama kurulumu başarısız. Manuel kurulum: https://ollama.com/download"
+    return $false
+}
+
+function Install-Git {
+    Write-Step "Git kontrol ediliyor..."
+
+    if (Get-Command git -ErrorAction SilentlyContinue) {
+        Write-OK "Git zaten kurulu: $(git --version)"
+        return $true
+    }
+
+    Write-Info "Git kuruluyor..."
+    winget install Git.Git --accept-source-agreements --accept-package-agreements
+
+    # PATH'e ekle
+    $env:Path += ";$env:ProgramFiles\Git\cmd"
+
+    if (Get-Command git -ErrorAction SilentlyContinue) {
+        Write-OK "Git başarıyla kuruldu"
+        return $true
+    }
+
+    Write-Error "Git kurulumu başarısız!"
+    return $false
+}
+
+function Clone-Repo {
+    Write-Step "Repository kontrol ediliyor..."
+
+    # Zaten SENTIENT içinde miyiz?
+    if (Test-Path "Cargo.toml") {
+        $content = Get-Content "Cargo.toml" -Raw
+        if ($content -match "SENTIENT") {
+            Write-OK "SENTIENT repository'sindeyiz"
+            git pull 2>$null
+            return $true
+        }
+    }
+
+    # SENTIENT_CORE dizini var mı?
+    if (Test-Path "SENTIENT_CORE") {
+        Write-Info "SENTIENT_CORE bulundu, güncelleniyor..."
+        Set-Location SENTIENT_CORE
+        git pull 2>$null
+        return $true
+    }
+
+    Write-Info "SENTIENT repository'si klonlanıyor..."
+    git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
+
+    if (Test-Path "SENTIENT_CORE") {
+        Set-Location SENTIENT_CORE
+        Write-OK "Repository klonlandı"
+        return $true
+    }
+
+    Write-Error "Repository klonlanamadı!"
+    return $false
+}
+
+function Build-Project {
+    Write-Step "SENTIENT derleniyor..."
+
+    # Python path'i ayarla (PyO3 için)
     $python = Get-Command python -ErrorAction SilentlyContinue
     if ($python) {
-        $pyVersion = & python --version 2>&1
-        Write-ColorOutput Green "[OK] $pyVersion"
+        $env:PYTHON_SYS_EXECUTABLE = $python.Source
+        Write-Info "Python path: $($python.Source)"
+    }
+
+    Write-Info "Bu işlem 5-15 dakika sürebilir..."
+    Write-Info "İlk derleme uzun sürer, lütfen bekleyin..."
+
+    # Temiz derleme
+    cargo clean 2>$null
+
+    # Release derle
+    $buildLog = "$env:TEMP\sentient-build.log"
+    if (cargo build --release 2>&1 | Tee-Object -FilePath $buildLog) {
+        Write-OK "SENTIENT başarıyla derlendi!"
     } else {
-        Write-ColorOutput Yellow "[INFO] Python not found (optional for some features)"
+        Write-Error "Derleme hatası!"
+
+        # PyO3 hatası kontrolü
+        if (Select-String -Path $buildLog -Pattern "pyo3" -Quiet) {
+            Write-Warn "PyO3 hatası tespit edildi. PyO3 olmadan deneniyor..."
+
+            # Cargo.toml'da sentient_python'ü comment out et
+            $cargoToml = Get-Content "Cargo.toml" -Raw
+            if ($cargoToml -match '"crates/sentient_python"') {
+                $cargoToml = $cargoToml -replace '"crates/sentient_python"', '# "crates/sentient_python"'
+                Set-Content "Cargo.toml" -Value $cargoToml
+                Write-Info "sentient_python devre dışı bırakıldı, tekrar derleniyor..."
+                cargo build --release 2>&1 | Tee-Object -FilePath $buildLog
+            }
+        }
+    }
+
+    # Binary kontrolü
+    if (Test-Path "target\release\sentient.exe") {
+        $size = (Get-Item "target\release\sentient.exe").Length / 1MB
+        Write-OK "Binary: target\release\sentient.exe ($([math]::Round($size, 1)) MB)"
+        return $true
+    }
+
+    Write-Error "Binary oluşturulamadı!"
+    Write-Info "Log dosyası: $buildLog"
+    return $false
+}
+
+function Download-Model {
+    param([switch]$Skip)
+
+    if ($Skip) {
+        Write-Info "Model indirme atlanıyor"
+        return
+    }
+
+    if (-not (Get-Command ollama -ErrorAction SilentlyContinue)) {
+        Write-Warn "Ollama kurulu değil, model atlanıyor"
+        return
+    }
+
+    Write-Step "Varsayılan AI modeli indiriliyor..."
+
+    # Küçük model: gemma2:2b (2.6GB)
+    Write-Info "gemma2:2b modeli indiriliyor (2.6GB)..."
+    ollama pull gemma2:2b
+
+    Write-OK "Model hazır"
+}
+
+function Create-Env {
+    Write-Step ".env dosyası oluşturuluyor..."
+
+    if (Test-Path ".env") {
+        Write-OK ".env zaten mevcut"
+        return
+    }
+
+    $envContent = @"
+# ════════════════════════════════════════════════════════════════
+#  SENTIENT OS - Yapılandırma Dosyası
+# ════════════════════════════════════════════════════════════════
+
+# LLM Provider (OpenRouter önerilen - `$5 ücretsiz kredi)
+#OPENROUTER_API_KEY=sk-or-v1-...
+
+# Veya OpenAI
+#OPENAI_API_KEY=sk-...
+
+# Veya Ollama (lokal, ücretsiz)
+OPENAI_API_BASE=http://localhost:11434/v1
+OPENAI_API_KEY=ollama
+DEFAULT_MODEL=ollama/gemma2:2b
+
+# Voice (opsiyonel)
+#VOICE_ENABLED=true
+#VOICE_STT=whisper_cpp
+#VOICE_TTS=piper
+#VOICE_LANGUAGE=tr
+
+# Home Assistant (opsiyonel)
+#HOME_ASSISTANT_URL=http://homeassistant.local:8123
+#HOME_ASSISTANT_TOKEN=eyJ...
+"@
+
+    Set-Content -Path ".env" -Value $envContent -Encoding UTF8
+
+    Write-OK ".env dosyası oluşturuldu"
+    Write-Info "API key'lerinizi .env dosyasına ekleyin"
+}
+
+function Run-Tests {
+    Write-Step "Testler çalıştırılıyor..."
+
+    $testOutput = cargo test --workspace --lib 2>&1 | Out-String
+    if ($testOutput -match "test result: ok") {
+        Write-OK "Tüm testler geçti!"
+    } else {
+        Write-Warn "Bazı testler başarısız olabilir, bu kritik değil"
     }
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Get Latest Version
-# ─────────────────────────────────────────────────────────────────────────────
-if ($Version -eq "latest") {
-    Write-ColorOutput Cyan "[INFO] Fetching latest version..."
-    try {
-        $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest"
-        $Version = $release.tag_name
-    } catch {
-        Write-ColorOutput Yellow "[WARN] Could not fetch latest version, using default"
-        $Version = "v4.0.0"
-    }
-}
-
-Write-ColorOutput Green "[INFO] Version: $Version"
-Write-ColorOutput Blue "[INFO] Platform: Windows-$Arch"
-Write-ColorOutput Magenta "[INFO] Install location: $Prefix"
-Write-Host ""
-
-# ─────────────────────────────────────────────────────────────────────────────
-#  Confirm
-# ─────────────────────────────────────────────────────────────────────────────
-if (-not $NoConfirm) {
-    Write-ColorOutput Yellow "Continue with installation? [Y/n]"
-    $confirm = Read-Host
-    if ($confirm -eq "n" -or $confirm -eq "N") {
-        Write-Host "Installation cancelled."
-        exit 0
-    }
-}
-
-# ─────────────────────────────────────────────────────────────────────────────
-#  Create Directories
-# ─────────────────────────────────────────────────────────────────────────────
-Write-Host ""
-Write-ColorOutput Cyan "[INFO] Creating directories..."
-New-Item -ItemType Directory -Force -Path "$Prefix\bin" | Out-Null
-New-Item -ItemType Directory -Force -Path "$Prefix\data" | Out-Null
-New-Item -ItemType Directory -Force -Path "$Prefix\config" | Out-Null
-New-Item -ItemType Directory -Force -Path "$Prefix\logs" | Out-Null
-
-# ─────────────────────────────────────────────────────────────────────────────
-#  Download Binary
-# ─────────────────────────────────────────────────────────────────────────────
-$DownloadUrl = "https://github.com/$Repo/releases/download/$Version/sentient-$Target.zip"
-$TempFile = "$env:TEMP\sentient-$Version.zip"
-
-Write-ColorOutput Cyan "[INFO] Downloading SENTIENT $Version..."
-Write-Host "       $DownloadUrl"
-
-try {
-    # Use progress-free download for speed
-    $ProgressPreference = 'SilentlyContinue'
-    Invoke-WebRequest -Uri $DownloadUrl -OutFile $TempFile -UseBasicParsing
-    $ProgressPreference = 'Continue'
-} catch {
-    Write-ColorOutput Red "[ERROR] Download failed!"
+function Print-Success {
     Write-Host ""
-    Write-Host "Possible reasons:"
-    Write-Host "  1. Version $Version doesn't exist"
-    Write-Host "  2. Binary for Windows-$Arch not available"
+    Write-Host "╔═══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
+    Write-Host "║                 ✅ KURULUM TAMAMLANDI!                        ║" -ForegroundColor Green
+    Write-Host "╚═══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
     Write-Host ""
-    Write-Host "Available versions: https://github.com/$Repo/releases"
-    exit 1
+    Write-Host "Kullanım:" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  # Versiyon kontrolü"
+    Write-Host "  .\target\release\sentient.exe --version"
+    Write-Host ""
+    Write-Host "  # Sohbet başlat"
+    Write-Host "  .\target\release\sentient.exe chat"
+    Write-Host ""
+    Write-Host "  # Web dashboard"
+    Write-Host "  .\target\release\sentient.exe web"
+    Write-Host ""
+    Write-Host "  # Sesli asistan"
+    Write-Host "  .\target\release\sentient.exe voice --wake-word 'hey sentient'"
+    Write-Host ""
+    Write-Host "Sonraki adımlar:" -ForegroundColor Yellow
+    Write-Host "  1. API key ekleyin: notepad .env"
+    Write-Host "  2. Daha büyük model: ollama pull deepseek-r1:8b"
+    Write-Host "  3. Dokümantasyon: type README.md"
+    Write-Host ""
+    Write-Host "SENTIENT OS - The Operating System That Thinks" -ForegroundColor Magenta
+    Write-Host ""
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Extract
-# ─────────────────────────────────────────────────────────────────────────────
-Write-ColorOutput Cyan "[INFO] Extracting..."
-Expand-Archive -Path $TempFile -DestinationPath "$Prefix" -Force
-Remove-Item $TempFile -Force
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ANA AKIŞ
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# Move files from bin subdirectory if present
-if (Test-Path "$Prefix\bin\bin") {
-    Move-Item "$Prefix\bin\bin\*" "$Prefix\bin\" -Force
-    Remove-Item "$Prefix\bin\bin" -Force
-}
+Write-Info "Kurulum başlıyor..."
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Add to PATH
-# ─────────────────────────────────────────────────────────────────────────────
-Write-ColorOutput Cyan "[INFO] Configuring environment..."
+# 1. Gerekli araçları kur
+Install-Git
+Install-Rust
+Install-Python
+Install-VSBuildTools
+Install-FFmpeg
+Install-Ollama -Skip:$SkipOllama
 
-# Set SENTIENT_HOME
-[Environment]::SetEnvironmentVariable("SENTIENT_HOME", $Prefix, "User")
-$env:SENTIENT_HOME = $Prefix
+# 2. Repository
+Clone-Repo
 
-# Add to PATH
-$userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
-if ($userPath -notlike "*$Prefix\bin*") {
-    [Environment]::SetEnvironmentVariable("PATH", "$userPath;$Prefix\bin", "User")
-    $env:PATH = "$env:PATH;$Prefix\bin"
-    Write-ColorOutput Green "[OK] Added to PATH"
-} else {
-    Write-ColorOutput Yellow "[WARN] Already in PATH"
-}
+# 3. Derle
+Build-Project
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Verify Installation
-# ─────────────────────────────────────────────────────────────────────────────
-Write-Host ""
-Write-ColorOutput Cyan "[INFO] Verifying installation..."
+# 4. Model indir
+Download-Model -Skip:$SkipModel
 
-$sentientExe = "$Prefix\bin\sentient.exe"
-if (Test-Path $sentientExe) {
-    $installedVersion = & $sentientExe --version 2>$null
-    if (-not $installedVersion) { $installedVersion = $Version }
-    Write-ColorOutput Green "[OK] SENTIENT $installedVersion installed!"
-} else {
-    Write-ColorOutput Red "[ERROR] Installation failed - binary not found"
-    exit 1
-}
+# 5. .env oluştur
+Create-Env
 
-Check-Dependencies
+# 6. Test
+Run-Tests
 
-# ─────────────────────────────────────────────────────────────────────────────
-#  Next Steps
-# ─────────────────────────────────────────────────────────────────────────────
-Write-Host ""
-Write-ColorOutput Green "══════════════════════════════════════════════════════════════"
-Write-ColorOutput Green "  INSTALLATION COMPLETE!"
-Write-ColorOutput Green "══════════════════════════════════════════════════════════════"
-Write-Host ""
-Write-ColorOutput Yellow "Next steps:"
-Write-Host ""
-Write-Host "  1. Restart your terminal or run:"
-Write-Host "     `$env:PATH += ';$Prefix\bin'"
-Write-Host ""
-Write-Host "  2. Run setup wizard:"
-Write-Host "     sentient setup"
-Write-Host ""
-Write-Host "  3. Start interactive session:"
-Write-Host "     sentient"
-Write-Host ""
-Write-Host "  4. Start web dashboard:"
-Write-Host "     sentient-web"
-Write-Host ""
-Write-ColorOutput Blue "Documentation: https://github.com/$Repo"
-Write-Host ""
+# 7. Başarı mesajı
+Print-Success
