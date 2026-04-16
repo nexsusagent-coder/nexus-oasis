@@ -438,7 +438,7 @@ impl SandboxManager {
         &self,
         request: &ExecutionRequest,
         sandbox_dir: &Path,
-        config: &SandboxConfig,
+        _config: &SandboxConfig,
     ) -> Result<PathBuf, SandboxError> {
         let output_path = sandbox_dir.join("main");
         
@@ -477,7 +477,7 @@ impl SandboxManager {
     ) -> Result<ExecutionResult, SandboxError> {
         let interpreter = request.language.interpreter();
         
-        let (mut cmd, actual_executable) = if let Some(interp) = interpreter {
+        let (mut cmd, _actual_executable) = if let Some(interp) = interpreter {
             let mut c = tokio::process::Command::new(interp);
             c.arg(executable);
             (c, executable.to_path_buf())
