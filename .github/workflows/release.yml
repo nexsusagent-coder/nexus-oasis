@@ -1,5 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  SENTIENT OS - Release Pipeline
+#  SENTIENT OS - Release Pipeline v2.0
+#  Multi-platform builds with all binaries
 # ═══════════════════════════════════════════════════════════════════════════════
 
 name: Release
@@ -11,35 +12,52 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g., v4.1.0)'
+        description: 'Release version (e.g., v4.0.0)'
         required: true
         type: string
 
 permissions:
   contents: write
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
   # ────────────────────────────────────────────────────────────────────────────
-  #  Build Release Binaries
+  #  Build Matrix - All Platforms
   # ────────────────────────────────────────────────────────────────────────────
   build:
     name: Build ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
+          # Linux x86_64
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             archive: tar.gz
+            bin_ext: ''
+          # Linux ARM64
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+            archive: tar.gz
+            bin_ext: ''
+          # macOS Intel
           - target: x86_64-apple-darwin
             os: macos-latest
             archive: tar.gz
+            bin_ext: ''
+          # macOS Apple Silicon
           - target: aarch64-apple-darwin
             os: macos-latest
             archive: tar.gz
+            bin_ext: ''
+          # Windows x86_64
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             archive: zip
+            bin_ext: '.exe'
 
     steps:
       - name: Checkout
@@ -55,23 +73,44 @@ jobs:
         with:
           key: ${{ matrix.target }}
 
-      - name: Build
-        run: cargo build --workspace --release --target ${{ matrix.target }}
+      # Cross-compilation setup for ARM Linux
+      - name: Install cross-compiler (ARM64 Linux)
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+          echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
 
-      - name: Package (Unix)
+      - name: Build binaries
+        run: |
+          cargo build --release --target ${{ matrix.target }} `
+            --bin sentient --bin sentient-shell --bin sentient-setup --bin sentient-web `
+            --bin sentient-selfcoder --bin sentient-sync-daemon --bin sentient-ingest
+        shell: bash
+
+      - name: Prepare release directory
+        shell: bash
+        run: |
+          mkdir -p release/bin
+          for bin in sentient sentient-shell sentient-setup sentient-web sentient-selfcoder sentient-sync-daemon sentient-ingest; do
+            src="target/${{ matrix.target }}/release/${bin}${{ matrix.bin_ext }}"
+            if [ -f "$src" ]; then
+              cp "$src" release/bin/
+              echo "✓ Added: ${bin}${{ matrix.bin_ext }}"
+            else
+              echo "✗ Missing: ${bin}${{ matrix.bin_ext }}"
+            fi
+          done
+          ls -la release/bin/
+
+      - name: Create archive (Unix)
         if: matrix.os != 'windows-latest'
         run: |
-          mkdir -p release
-          cp target/${{ matrix.target }}/release/sentient-cli release/ 2>/dev/null || true
-          cp target/${{ matrix.target }}/release/dashboard release/ 2>/dev/null || true
           tar -czvf sentient-${{ matrix.target }}.tar.gz -C release .
-          
-      - name: Package (Windows)
+
+      - name: Create archive (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          mkdir release
-          copy target/${{ matrix.target }}/release/sentient-cli.exe release/ 2>nul || true
-          copy target/${{ matrix.target }}/release/dashboard.exe release/ 2>nul || true
           Compress-Archive -Path release/* -DestinationPath sentient-${{ matrix.target }}.zip
 
       - name: Upload artifact
@@ -79,16 +118,17 @@ jobs:
         with:
           name: sentient-${{ matrix.target }}
           path: sentient-${{ matrix.target }}.*
+          retention-days: 7
 
   # ────────────────────────────────────────────────────────────────────────────
-  #  Create Release
+  #  Create GitHub Release
   # ────────────────────────────────────────────────────────────────────────────
   release:
     name: Create Release
     runs-on: ubuntu-latest
     needs: build
     outputs:
-      release_id: ${{ steps.create_release.outputs.id }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
 
     steps:
       - name: Checkout
@@ -98,81 +138,116 @@ jobs:
         id: version
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "VERSION=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            VERSION="${{ inputs.version }}"
           else
-            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            VERSION="${GITHUB_REF#refs/tags/}"
           fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+          pattern: sentient-*
+          merge-multiple: false
 
-      - name: Display structure
-        run: ls -R artifacts
+      - name: Prepare release files
+        run: |
+          mkdir -p release-files
+          find artifacts -name "*.tar.gz" -exec cp {} release-files/ \;
+          find artifacts -name "*.zip" -exec cp {} release-files/ \;
+          ls -la release-files/
+
+      - name: Generate checksums
+        run: |
+          cd release-files
+          sha256sum * > checksums.txt
+          cat checksums.txt
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
           name: SENTIENT OS ${{ steps.version.outputs.VERSION }}
+          tag_name: ${{ steps.version.outputs.VERSION }}
           body: |
             ## 🧠 SENTIENT OS ${{ steps.version.outputs.VERSION }}
             
-            ### Kurulum
+            ### Hızlı Kurulum
             
+            **Linux/macOS:**
             ```bash
-            # Linux/macOS
-            tar -xzf sentient-*.tar.gz
-            ./sentient-cli setup
-            
-            # Windows
-            Expand-Archive sentient-*.zip
-            .\sentient-cli.exe setup
+            curl -fsSL https://get.sentient.ai | sh
             ```
             
-            ### Yenilikler
+            **Windows (PowerShell):**
+            ```powershell
+            irm https://get.sentient.ai/ps | iex
+            ```
             
-            - Detaylı changelog için bkz. [CHANGELOG.md](CHANGELOG.md)
+            ### Manuel Kurulum
             
-            ### Checksums
+            | Platform | Dosya |
+            |----------|-------|
+            | Linux x86_64 | `sentient-x86_64-unknown-linux-gnu.tar.gz` |
+            | Linux ARM64 | `sentient-aarch64-unknown-linux-gnu.tar.gz` |
+            | macOS Intel | `sentient-x86_64-apple-darwin.tar.gz` |
+            | macOS Apple Silicon | `sentient-aarch64-apple-darwin.tar.gz` |
+            | Windows x86_64 | `sentient-x86_64-pc-windows-msvc.zip` |
             
-            | Dosya | SHA256 |
-            |-------|--------|
-            | sentient-x86_64-unknown-linux-gnu.tar.gz | Otomatik |
-            | sentient-x86_64-apple-darwin.tar.gz | Otomatik |
-            | sentient-aarch64-apple-darwin.tar.gz | Otomatik |
-            | sentient-x86_64-pc-windows-msvc.zip | Otomatik |
+            ### Binary'ler
+            
+            - `sentient` - Ana CLI
+            - `sentient-shell` - Interactive shell
+            - `sentient-setup` - Kurulum sihirbazı
+            - `sentient-web` - Web dashboard
+            - `sentient-selfcoder` - Self-coding agent
+            - `sentient-sync-daemon` - Arka plan sync servisi
+            - `sentient-ingest` - Data ingestion tool
+            
+            ### Değişiklikler
+            
+            Detaylı changelog için: [CHANGELOG.md](CHANGELOG.md)
 
           draft: false
           prerelease: ${{ contains(steps.version.outputs.VERSION, 'beta') || contains(steps.version.outputs.VERSION, 'alpha') }}
           generate_release_notes: true
           files: |
-            artifacts/**/*
-
-      - name: Generate checksums
-        run: |
-          cd artifacts
-          find . -type f -exec sha256sum {} \; > ../checksums.txt
-          cat ../checksums.txt
+            release-files/*
 
   # ────────────────────────────────────────────────────────────────────────────
-  #  Update Homebrew (Optional)
+  #  Update Install Scripts
   # ────────────────────────────────────────────────────────────────────────────
-  homebrew:
-    name: Update Homebrew Tap
+  update-scripts:
+    name: Update Install Scripts
     runs-on: ubuntu-latest
     needs: release
     if: github.event_name == 'push'
+    
     steps:
-      - name: Checkout tap
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          repository: nexsusagent-coder/homebrew-sentient
-          token: ${{ secrets.HOMEBREW_TOKEN }}
-        continue-on-error: true
 
-      - name: Update formula
-        if: success()
+      - name: Get version
+        id: version
         run: |
-          echo "Homebrew tap update would go here"
+          VERSION="${GITHUB_REF#refs/tags/}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update version in scripts
+        run: |
+          # Update install.sh
+          sed -i 's/VERSION=".*"/VERSION="${{ steps.version.outputs.VERSION }}"/g' install.sh
+          sed -i 's/VERSION=".*"/VERSION="${{ steps.version.outputs.VERSION }}"/g' quick-install.sh
+          
+          # Update install.ps1
+          sed -i 's/$Version = "latest"/$Version = "${{ steps.version.outputs.VERSION }}"/g' install.ps1 || true
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add install.sh quick-install.sh install.ps1
+          git commit -m "chore: update version to ${{ steps.version.outputs.VERSION }}" || echo "No changes"
+          git push || echo "Nothing to push"
