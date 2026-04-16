@@ -24,12 +24,8 @@
 
 [CmdletBinding()]
 param(
-    [ValidateSet("quick", "standard", "full", "custom")]
     [string]$Mode = "",
-    
-    [ValidateSet("ollama", "openrouter", "openai", "anthropic", "deepseek", "groq", "google", "unify", "lmstudio", "vllm")]
     [string]$Provider = "",
-    
     [string]$Model = "",
     [string]$ApiKey = "",
     [switch]$SkipPrompts,
@@ -423,12 +419,17 @@ function Select-Mode {
     Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    # Parametre ile verildiyse
+    # Parametre ile verildiyse - validasyon
     if ($Mode -ne "") {
-        $script:Config.Mode = $Mode
-        Write-Info "Mod parametreden: $($Mode.ToUpper())"
-        Apply-ModeDefaults
-        return $true
+        $validModes = @("quick", "standard", "full", "custom")
+        if ($validModes -contains $Mode.ToLower()) {
+            $script:Config.Mode = $Mode.ToLower()
+            Write-Info "Mod parametreden: $($Mode.ToUpper())"
+            Apply-ModeDefaults
+            return $true
+        } else {
+            Write-Warn "Geçersiz mod: $Mode - Geçerli değerler: quick, standard, full, custom"
+        }
     }
     
     if ($SkipPrompts) {
@@ -570,14 +571,24 @@ function Select-Provider {
     Write-Host "${WHITE}  └─────────────────────────────────────────────────────────────────────┘${RESET}"
     Write-Host ""
     
-    # Parametre ile verildiyse
+    # Parametre ile verildiyse - validasyon
     if ($Provider -ne "") {
-        $script:Config.Provider = $Provider
-        Write-Info "Provider parametreden: $($Provider.ToUpper())"
-        if ($ApiKey -ne "") {
-            $script:Config.ApiKeys[$Provider] = $ApiKey
+        $validProviders = @("ollama", "openrouter", "openai", "anthropic", "deepseek", "groq", "google", "unify", "lmstudio", "vllm")
+        if ($validProviders -contains $Provider.ToLower()) {
+            $script:Config.Provider = $Provider.ToLower()
+            Write-Info "Provider parametreden: $($Provider.ToUpper())"
+            if ($ApiKey -ne "") {
+                $script:Config.ApiKeys[$Provider] = $ApiKey
+            }
+            # Cloud provider ise Ollama kurulumuna gerek yok
+            if ($validProviders -contains $Provider.ToLower() -and $Provider.ToLower() -ne "ollama") {
+                $script:Config.InstallOllama = $false
+                $script:Config.DownloadModel = $false
+            }
+            return $true
+        } else {
+            Write-Warn "Geçersiz provider: $Provider"
         }
-        return $true
     }
     
     if ($SkipPrompts -or $script:Config.Mode -ne "custom") {
