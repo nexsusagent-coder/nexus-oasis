@@ -7,11 +7,12 @@
 <h4 align="center">Düşünen İşletim Sistemi</h4>
 
 <p align="center">
-  <a href="#-kurulum">Kurulum</a> •
+  <a href="#-tek-komutla-kurulum">Kurulum</a> •
+  <a href="#-hızlı-başlangıç">Hızlı Başlangıç</a> •
+  <a href="#-llm-hub">LLM Hub</a> •
   <a href="#-özellikler">Özellikler</a> •
-  <a href="#-kullanım">Kullanım</a> •
-  <a href="#-entegrasyonlar">Entegrasyonlar</a> •
-  <a href="#-dokümantasyon">Dokümantasyon</a>
+  <a href="#-crate-yapısı">Mimari</a> •
+  <a href="#-kullanım-rehberi">Kullanım</a>
 </p>
 
 <p align="center">
@@ -19,7 +20,9 @@
   <img src="https://img.shields.io/badge/rust-2021-orange" alt="Rust">
   <img src="https://img.shields.io/badge/license-AGPL%20v3-green" alt="License">
   <img src="https://img.shields.io/badge/crates-93-purple" alt="Crates">
-  <img src="https://img.shields.io/badge/skills-5587+-yellow" alt="Skills">
+  <img src="https://img.shields.io/badge/models-245+-red" alt="Models">
+  <img src="https://img.shields.io/badge/providers-57+-yellow" alt="Providers">
+  <img src="https://img.shields.io/badge/skills-5587+-brightgreen" alt="Skills">
 </p>
 
 ---
@@ -29,93 +32,58 @@
 | Metrik | Değer | Açıklama |
 |--------|-------|----------|
 | **Rust Crate** | 93 | Tamamen Rust ile yazılmış |
+| **LLM Provider** | 57+ | OpenAI, Anthropic, Google, DeepSeek, Groq, Unify, Portkey... |
+| **LLM Model** | 245+ | GPT-2 (2019) → o4-mini/Grok 4 (2026) |
+| **AI Gateway** | 11 | OpenRouter, Unify, Portkey, Helicone, NotDiamond... |
+| **Skill** | 5,587+ | Dünyanın en büyük AI skill koleksiyonu |
+| **Entegrasyon** | 72+ proje | AutoGPT, CrewAI, LangChain, Ollama... |
+| **Kanal** | 24 platform | Telegram, Discord, WhatsApp, Slack... |
 | **Rust Kodu** | 152,877+ satır | Production-grade |
-| **LLM Provider** | 42 | OpenAI, Anthropic, Google, vs. |
-| **LLM Model** | 355 native | 200K+ aggregator ile |
-| **Skill** | 5,587+ | Dünyanın en büyük koleksiyonu |
-| **Entegrasyon** | 72+ proje | AutoGPT, LangChain, CrewAI, vs. |
-| **Kanal** | 24 platform | Telegram, Discord, WhatsApp, vs. |
-| **Örnek** | 19 proje | Hello-world'ten production'a |
 
 ---
 
-## 🚀 Kurulum
+## 🚀 Tek Komutla Kurulum
 
-### Tek Komutla
+### OpenClaw Tarzı — Tek Komut, Tam Kurulum
 
 ```bash
+# Yöntem 1: curl ile (önerilen)
+curl -fsSL https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install.sh | bash
+
+# Yöntem 2: git clone + install
 git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
 cd SENTIENT_CORE
 ./install.sh
 ```
 
-Kurulum sırasında:
-1. **LLM Seçimi** → API Key / Lokal (Ollama) / Atla
-2. **Ek Özellikler** → Voice, Dashboard (opsiyonel)
-3. **Derleme** → Otomatik
+### Kurulum Adımları (OpenClaw Standardı)
 
-### Hızlı Başlangıç (Soru Sormadan)
-
-```bash
-./quick-start.sh
+```
+1. ⚠️  Yasal Uyari (Yes/No)          → Kullanım koşulları
+2. 🔍 Sistem Tespiti                → OS, RAM, GPU, CPU
+3. 📦 Kurulum Modu                  → Quick / Full / Custom
+4. 🧠 LLM Provider Seçimi          → Lokal (ücretsiz) veya API
+5. 🧩 Ek Modüller                   → Voice, Browser, Desktop, Channels
+6. 🐳 Docker Servisleri             → PostgreSQL, Redis, Qdrant...
+7. ⚙️  Yapılandırma (.env)          → Otomatik oluşturma
+8. 🔨 Derleme                       → cargo build --release
+9. ✅ Doğrulama                     → health-check
 ```
 
-### Manuel Kurulum
+### Hızlı Kurulum (Sorusuz)
 
 ```bash
-# Rust (yoksa)
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-source $HOME/.cargo/env
+# Tüm soruları atla, varsayılanlarla kur
+./install.sh --yes --quick
 
-# Derle
-cargo build --release --bin sentient
+# Tam kurulum (tüm 93 crate + Docker)
+./install.sh --yes --full
 
-# Config
-cp .env.template .env
-# .env dosyasını düzenleyin
+# Özel dizine kur
+./install.sh --dir /opt/sentient
 
-# Çalıştır
-./target/release/sentient chat
-```
-
----
-
-## 🧠 LLM Seçenekleri
-
-### API Key ile (Önerilen - Hızlı)
-
-| Sağlayıcı | Modeller | Fiyat | Link |
-|-----------|----------|-------|------|
-| **OpenRouter** | 200+ model | $5 bonus | [openrouter.ai](https://openrouter.ai/keys) |
-| OpenAI | GPT-4o, o1, o3 | $$ | [platform.openai.com](https://platform.openai.com/api-keys) |
-| Anthropic | Claude 4, 3.5 | $$ | [console.anthropic.com](https://console.anthropic.com/) |
-| Google | Gemini 2.0 | $ | [aistudio.google.com](https://aistudio.google.com/apikey) |
-| DeepSeek | V3, R1 | **EN UCUZ** | [platform.deepseek.com](https://platform.deepseek.com/) |
-| Groq | Llama, Mixtral | **EN HIZLI** | [console.groq.com](https://console.groq.com/) |
-
-```bash
-# .env dosyasına
-OPENROUTER_API_KEY=sk-or-v1-...
-# veya
-OPENAI_API_KEY=sk-...
-# veya
-ANTHROPIC_API_KEY=sk-ant-...
-```
-
-### Lokal (Ücretsiz - Ollama)
-
-```bash
-# Ollama kur
-curl -fsSL https://ollama.com/install.sh | sh
-
-# Model indir
-ollama pull gemma3:27b      # Önerilen (16GB RAM)
-ollama pull llama3.2:3b     # Hafif (4GB RAM)
-ollama pull deepseek-r1:7b  # Reasoning (8GB RAM)
-
-# .env
-LLM_PROVIDER=ollama
-OLLAMA_MODEL=gemma3:27b
+# Kaldır
+./install.sh --uninstall
 ```
 
 ---
@@ -123,25 +91,124 @@ OLLAMA_MODEL=gemma3:27b
 ## ⚡ Hızlı Başlangıç
 
 ```bash
-# Sohbet
-./target/release/sentient chat
+# İnteraktif sohbet
+sentient chat
 
-# Tek soru
-./target/release/sentient ask "Rust'ta async nasıl çalışır?"
+# Tek soru sor
+sentient ask "Rust'ta async nasıl çalışır?"
 
 # Sesli asistan (JARVIS modu)
-./target/release/sentient voice
+sentient voice
 
-# Web API
-./target/release/sentient gateway
-# http://localhost:8080
+# Web API sunucusu
+sentient gateway
+# → http://localhost:8080
 
-# Dashboard
-./target/release/sentient dashboard
-# http://localhost:8080/dashboard
+# Web dashboard
+sentient dashboard
+# → http://localhost:8080/dashboard
 
 # Sistem durumu
-./target/release/sentient status
+sentient status
+
+# İlk kurulum sihirbazı
+sentient init
+
+# Sağlık kontrolü
+sentient doctor
+```
+
+---
+
+## 🧠 LLM Hub
+
+SENTIENT OS dünyanın en kapsamlı LLM hub'ına sahiptir. **57+ provider, 245+ model** desteği.
+
+### Doğrudan AI Şirketleri
+
+| Provider | Modeller | Fiyat | Ücretsiz |
+|----------|----------|-------|----------|
+| **OpenAI** | GPT-4o, o3, o4-mini (17 model) | $$ | ❌ |
+| **Anthropic** | Claude 4, 3.5, 3, 2, 1 (12 model) | $$ | ❌ |
+| **Google** | Gemini 2.5, 2.0, 1.5, Gemma 3 (14 model) | $ | ✅ Flash ücretsiz |
+| **Mistral** 🇫🇷 | Large 2, Small 3.1, Codestral, Pixtral (11 model) | $ | ✅ Bazı modeller |
+| **DeepSeek** 🇨🇳 | V3, R1, R2, V4, Coder (6 model) | **EN UCUZ** | ✅ Çoğu ücretsiz |
+| **xAI** | Grok 3, 3 Mini, Grok 4 (4 model) | $$ | ✅ Mini ücretsiz |
+| **Cohere** | Command A, R+, Aya Exa (6 model) | $ | ✅ |
+| **Perplexity** | Sonar, Deep Research (4 model) | $$ | ❌ |
+
+### AI Gateway / Router (11 Provider)
+
+| Gateway | İşlev | Ücretsiz Tier |
+|---------|-------|---------------|
+| **OpenRouter** | 300+ model marketplace | ✅ Bazı modeller |
+| **Unify AI** | ML-based akıllı routing (quality/cost/speed) | ✅ $5 kredi |
+| **Portkey** | Enterprise gateway, failover, caching | ✅ 10K req/mo |
+| **Helicone** | AI observability, cost tracking | ✅ 50K req/mo |
+| **NotDiamond** | ML ile prompt bazlı model seçimi | ✅ |
+| **AI/ML API** | 100+ model, doğrudan erişimden %40 ucuz | ✅ 100 req/gün |
+| **Glama** | Multi-model gateway + MCP desteği | ✅ |
+| **Requesty** | LLM router, A/B testing | ✅ |
+| **LiteLLM** | 100+ provider, self-hosted proxy | Açık kaynak |
+| **Cloudflare Workers AI** | Edge inference | ✅ |
+| **Chutes** | Tamamen ücretsiz inference! | ✅ Tamamen |
+
+### Lokal / Açık Kaynak (Ücretsiz!)
+
+| Model | VRAM | Ollama ID | Özellik |
+|-------|------|----------|---------|
+| **Llama 4 Scout** | 48GB | `llama4:scout` | 10M context, MoE 109B, Vision |
+| **Llama 4 Maverick** | 96GB | `llama4:maverick` | 1M context, MoE 400B, Vision |
+| **Qwen3 30B-A3B MoE** | **4GB!** | `qwen3:30b-a3b` | 3B aktif parametre, Reasoning |
+| **DeepSeek R2** | 96GB | `deepseek-r2` | Reasoning + Vision |
+| **Gemma 3 27B** | 16GB | `gemma3:27b` | Vision, 128K context |
+| **Phi-4 14B** | 8GB | `phi4:14b` | MIT lisans, Code |
+| **Mistral Small 3.1** | 16GB | `mistral-small3.1:24b` | Vision + Tools |
+| **Gemma 3 4B** | 4GB | `gemma3:4b` | Vision, en hafif |
+| **DeepSeek R1 Distill 8B** | 4GB | `deepseek-r1:8b` | En küçük reasoning |
+| **Qwen 2.5 Coder 14B** | 8GB | `qwen2.5-coder:14b` | Code specialist |
+
+### Çin AI Ekosistemi
+
+| Provider | Modeller |
+|----------|----------|
+| **Qwen (Alibaba)** | Qwen3, QwQ, QVQ, Qwen4 Max |
+| **Baidu ERNIE** | ERNIE 4.0, 3.5 |
+| **Zhipu GLM** | GLM-4 Plus, Flash |
+| **Moonshot (Kimi)** | V1 128K |
+| **StepFun** | Step-2, Step-1V |
+| **ByteDance** | Doubao 1.5 Pro |
+
+### Diğer Bölgesel AI
+
+| Bölge | Provider | Modeller |
+|-------|----------|----------|
+| 🇷🇺 Rusya | GigaChat | Pro, Max |
+| 🇰🇷 Kore | Upstage | Solar Pro 2 |
+| 🇪🇺 Avrupa | Aleph Alpha | Luminous, Pharia |
+| 🇮🇳 Hindistan | Sarvam AI | Sarvam-M |
+| 🇯🇵 Japonya | Rinna, CyberAgent | CALM 3 |
+| 🇦🇪 Arap | InceptionAI | JAIS 30B |
+
+### Rust ile Kullanım
+
+```rust
+use sentient_llm::{LlmHub, ChatRequest, Message};
+
+#[tokio::main]
+async fn main() {
+    // Tüm provider'ları otomatik algıla (.env dosyasından)
+    let hub = LlmHub::from_env().unwrap();
+
+    // Sohbet
+    let response = hub.chat(ChatRequest {
+        model: "gpt-4o".into(),
+        messages: vec![Message::user("Merhaba!")],
+        ..Default::default()
+    }).await.unwrap();
+
+    println!("{}", response.choices[0].message.content.as_text().unwrap());
+}
 ```
 
 ---
@@ -152,12 +219,12 @@ OLLAMA_MODEL=gemma3:27b
 
 | Özellik | Açıklama |
 |---------|----------|
-| **42+ LLM Provider** | OpenAI, Anthropic, Google, Mistral, DeepSeek, Groq... |
-| **355 Native Model** | GPT-4o, Claude 4, Gemini 2.0, Llama 3.2, DeepSeek R1... |
-| **200K+ Model Erişimi** | OpenRouter, LiteLLM, HuggingFace aggregator'ları ile |
-| **Smart Routing** | Otomatik provider seçimi, maliyet optimizasyonu |
-| **Streaming** | Gerçek zamanlı yanıt akışı |
-| **Circuit Breaker** | Hata toleransı, otomatik retry |
+| **57+ LLM Provider** | OpenAI, Anthropic, Google, Mistral, DeepSeek, Groq, Unify, Portkey... |
+| **245+ Model** | GPT-2 (2019) → o4-mini/Grok 4 (2026) |
+| **11 AI Gateway** | OpenRouter, Unify, Portkey, Helicone, NotDiamond... |
+| **Smart Routing** | Maliyet, hız veya kalite bazlı otomatik provider seçimi |
+| **Circuit Breaker** | Hata toleransı, otomatik retry ve failover |
+| **Cost Tracker** | Gerçek zamanlı maliyet takibi |
 
 ### 🎙️ Voice (JARVIS Seviyesi)
 
@@ -172,7 +239,6 @@ OLLAMA_MODEL=gemma3:27b
 | **STT** | Whisper.cpp | OpenAI Whisper |
 | **TTS** | Piper (Türkçe) | ElevenLabs |
 | **Wake Word** | Porcupine, Vosk | - |
-| **Duygu** | - | Hume AI |
 
 ### 🖥️ Desktop Automation (Computer Use)
 
@@ -192,10 +258,7 @@ OLLAMA_MODEL=gemma3:27b
 | WhatsApp | ✅ Aktif | Mesajlaşma |
 | Slack | ✅ Aktif | İş |
 | Email | ✅ Aktif | İletişim |
-| Microsoft Teams | 🔄 Beta | İş |
-| Signal | 🔄 Beta | Güvenli |
-| Matrix | 🔄 Beta | Açık kaynak |
-| + 16 platform daha | | |
+| + 19 platform daha | | |
 
 ### 🔐 Güvenlik (Enterprise Grade)
 
@@ -206,7 +269,6 @@ OLLAMA_MODEL=gemma3:27b
 | **Vault** | AES-256-GCM şifreleme, key rotation |
 | **TEE** | AMD SEV-SNP, Intel TDX desteği |
 | **ZK-MCP** | Zero-knowledge proof |
-| **RBAC** | Rol bazlı erişim kontrolü |
 | **Audit** | Tüm işlemler loglanır |
 
 ---
@@ -215,61 +277,63 @@ OLLAMA_MODEL=gemma3:27b
 
 ### 🧠 Core (7 Crate)
 
-| Crate | Satır | İşlev |
-|-------|-------|-------|
-| **sentient_core** | 2,326 | Ana motor |
-| **sentient_memory** | 6,182 | Agent bellek sistemi |
-| **sentient_graph** | 585 | Workflow graph |
-| **sentient_orchestrator** | 11,235 | Agent loop & routing |
-| **sentient_gateway** | 10,058 | API gateway |
-| **sentient_cevahir** | 1,630 | Türkçe LLM cognitive engine |
-| **oasis_brain** | 1,203 | Gemma 4 cognitive kernel |
+| Crate | İşlev |
+|-------|-------|
+| **sentient_core** | Ana motor, sistem yönetimi |
+| **sentient_memory** | Agent bellek sistemi (Hippocampus) |
+| **sentient_graph** | Event graph, workflow |
+| **sentient_orchestrator** | Agent loop & routing |
+| **sentient_gateway** | API gateway |
+| **sentient_cevahir** | Türkçe LLM cognitive engine |
+| **oasis_brain** | Gemma 4 cognitive kernel |
 
-### 🤖 LLM (5 Crate)
+### 🤖 LLM (7 Crate)
 
-| Crate | Satır | İşlev |
-|-------|-------|-------|
-| **sentient_llm** | 14,445 | 42 provider, 355 model |
-| **sentient_embed** | - | Embedding hub |
-| **sentient_rerank** | - | Reranking engine |
-| **sentient_local** | 1,157 | Lokal LLM |
-| **sentient_groq** | 1,233 | Groq LPU (en hızlı) |
-
-### 🎤 Voice (2 Crate)
-
-| Crate | Satır | İşlev |
-|-------|-------|-------|
-| **sentient_voice** | 2,634 | STT + TTS |
-| **sentient_wake** | 914 | Wake word detection |
+| Crate | İşlev |
+|-------|-------|
+| **sentient_llm** | 57+ provider, 245+ model hub |
+| **sentient_embed** | Multi-provider embedding hub |
+| **sentient_rerank** | Search result reranking |
+| **sentient_local** | Lokal LLM yönetimi |
+| **sentient_groq** | Groq LPU ultra-fast inference |
+| **sentient_vector** | Vector search |
+| **sentient_rag** | Native RAG engine |
 
 ### 🔒 Security (6 Crate)
 
-| Crate | Satır | İşlev |
-|-------|-------|-------|
-| **sentient_vgate** | 3,525 | V-GATE proxy |
-| **sentient_guardrails** | 307 | Input/output filtreleme |
-| **oasis_vault** | 2,417 | Secrets manager |
-| **sentient_tee** | 2,683 | TEE support |
-| **sentient_zk_mcp** | 2,062 | Zero-knowledge |
-| **sentient_anomaly** | 1,160 | Anomaly detection |
+| Crate | İşlev |
+|-------|-------|
+| **sentient_vgate** | V-GATE proxy (API key güvenliği) |
+| **sentient_guardrails** | Input/output filtreleme |
+| **oasis_vault** | Secrets manager (AES-256-GCM) |
+| **sentient_tee** | TEE support (AMD SEV-SNP) |
+| **sentient_zk_mcp** | Zero-knowledge proof |
+| **sentient_anomaly** | Anomaly detection |
 
-### 🖥️ Desktop (5 Crate)
+### 🖥️ Desktop & Browser (5 Crate)
 
-| Crate | Satır | İşlev |
-|-------|-------|-------|
-| **oasis_hands** | 36,741 | Desktop automation (EN BÜYÜK) |
-| **oasis_autonomous** | 6,773 | Tam otonom agent |
-| **oasis_browser** | 5,311 | Browser automation |
-| **oasis_manus** | 2,921 | Docker execution |
-| **sentient_desktop** | 1,021 | Computer Use |
+| Crate | İşlev |
+|-------|-------|
+| **oasis_hands** | Desktop automation (EN BÜYÜK - 36K+ satır) |
+| **oasis_autonomous** | Tam otonom agent |
+| **oasis_browser** | Browser automation |
+| **oasis_manus** | Docker execution sandbox |
+| **sentient_desktop** | Computer Use / GUI control |
 
-### 📱 Channels (1 Crate)
+### 🎤 Voice (2 Crate)
 
-| Crate | Satır | İşlev |
-|-------|-------|-------|
-| **sentient_channels** | 3,736 | 24 platform |
+| Crate | İşlev |
+|-------|-------|
+| **sentient_voice** | STT + TTS pipeline |
+| **sentient_wake** | Wake word detection |
 
-### 🔧 Tools & Utils (20+ Crate)
+### 📱 Channels & Communication (1 Crate)
+
+| Crate | İşlev |
+|-------|-------|
+| **sentient_channels** | 24 platform entegrasyonu |
+
+### 🔧 Tools & Utilities (60+ Crate)
 
 | Crate | İşlev |
 |-------|-------|
@@ -277,57 +341,248 @@ OLLAMA_MODEL=gemma3:27b
 | sentient_vision | Vision/multimodal |
 | sentient_mcp | Model Context Protocol |
 | sentient_sandbox | E2B sandbox |
-| sentient_skills | Skills system |
-| sentient_search | Web search (Tavily, Brave) |
-| sentient_image | Image generation |
+| sentient_skills | Skills system (5,587+) |
+| sentient_search | Web search (Tavily, Brave, SearXNG) |
+| sentient_image | Image generation (DALL-E, SD, Flux) |
 | sentient_video | Video generation |
 | sentient_finetuning | Fine-tuning (LoRA) |
-| sentient_benchmarks | Performance benchmarks |
+| sentient_quantize | Model quantization |
+| sentient_knowledge | Knowledge graph |
 | sentient_enterprise | RBAC, SSO, Audit |
 | sentient_compliance | SOC 2 compliance |
+| sentient_observability | OpenTelemetry, Prometheus |
 | sentient_i18n | 8 dil desteği |
 | sentient_backup | Backup & DR |
-| sentient_observability | OpenTelemetry |
-| ... | |
+| sentient_cluster | Kubernetes operator |
+| sentient_web | Web server |
+| sentient_workflow | Visual flow builder (n8n-style) |
+| sentient_daemon | Background always-on assistant |
+| sentient_proactive | Time/Event/Pattern triggers |
+| sentient_connectors | Gmail, Calendar, GitHub, Weather |
+| sentient_digest | Morning briefing system |
+| sentient_a2a | Agent-to-Agent protocol |
+| sentient_home | Smart Home (Home Assistant) |
+| sentient_social | Social media automation |
+| sentient_remote | Mobile PWA, Telegram Mini App |
+| sentient_learning | User behavior learning |
+| sentient_marketplace | Skills marketplace |
+| ... | ve 30+ crate daha |
 
 ---
 
-## 🎯 Skill Sistemi (5,587+ Skill)
+## 🎯 Kullanım Rehberi
 
-### Kategoriler
-
-| Kategori | Skill | Açıklama |
-|----------|-------|----------|
-| **Dev** | 2,965+ | Coding, IDE, DevOps, CLI |
-| **OSINT** | 1,050+ | Search, Browser, Data |
-| **Social** | 238+ | Communication, Marketing |
-| **Automation** | 306+ | Productivity, Calendar, Smart Home |
-| **Media** | 246+ | Image/Video, Streaming, Speech |
-| **Productivity** | 214+ | Notes, PDF, Apple Apps |
-| **Security** | 52+ | Security, Passwords |
-| **Mobile** | 233+ | Transportation, Health |
-| **Gaming** | 108+ | Gaming, Personal Dev |
-
-### Skill Kaynakları
-
-| Kaynak | Skill Sayısı |
-|--------|--------------|
-| OpenClaw Skills | 5,143 |
-| Everything Claude Code | 181 |
-| DeerFlow Skills | 100+ |
-| Gstack | 37 |
-
-### Skill Kullanımı
+### 1. İnteraktif Sohbet (REPL)
 
 ```bash
-# Skill ara
-./target/release/sentient skill search "browser automation"
+sentient chat
+# veya model belirterek
+sentient chat --model gpt-4o
+sentient chat --model ollama:qwen3:30b-a3b
+```
 
-# Skill çalıştır
-./target/release/sentient skill run code-review --path ./src
+### 2. API Sunucusu (Gateway)
 
-# Skill listele
-./target/release/sentient skill list
+```bash
+sentient gateway
+# POST http://localhost:8080/v1/chat/completions
+# OpenAI-compatible API
+```
+
+```bash
+curl http://localhost:8080/v1/chat/completions \
+  -H "Authorization: Bearer $JWT_SECRET" \
+  -d '{"model":"gpt-4o","messages":[{"role":"user","content":"Merhaba"}]}'
+```
+
+### 3. Sesli Asistan
+
+```bash
+sentient voice
+# "Hey Sentient" → mikrofon dinler → yanıt verir
+```
+
+### 4. Desktop Automation
+
+```bash
+sentient desktop
+# Bilgisayarı otonom kontrol eder
+```
+
+### 5. Skill Kullanımı
+
+```bash
+sentient skill search "browser automation"
+sentient skill run code-review --path ./src
+sentient skill list
+```
+
+### 6. Docker ile Tüm Servisler
+
+```bash
+docker-compose up -d
+# Servisler:
+# - PostgreSQL (5432)    → Veritabanı
+# - Redis (6379)         → Cache
+# - Qdrant (6333)        → Vector DB
+# - MinIO (9000/9001)    → Object Storage
+# - Prometheus (9090)    → Monitoring
+# - Grafana (3001)       → Dashboard
+# - Ollama (11434)       → Lokal LLM
+# - SearXNG (8888)       → Arama Motoru
+# - RabbitMQ (5672)      → Message Queue
+```
+
+### 7. Sağlık Kontrolü
+
+```bash
+sentient doctor
+# veya
+./scripts/health-check.sh
+```
+
+### 8. Sistem Durumu
+
+```bash
+sentient status
+```
+
+---
+
+## 📊 Sistem Gereksinimleri
+
+| Mod | RAM | Disk | GPU | Açıklama |
+|-----|-----|------|-----|----------|
+| **API Only** | 2 GB | 5 GB | Yok | API provider kullanımı |
+| **Local Small** | 8 GB | 10 GB | Opsiyonel | Ollama 3B-7B |
+| **Local Medium** | 16 GB | 20 GB | 8GB VRAM | Ollama 14B-27B (önerilen) |
+| **Local Large** | 64 GB | 50 GB | 24GB VRAM | Ollama 70B+ |
+| **Full Stack** | 32 GB | 30 GB | 8GB VRAM | Tüm servisler + Docker |
+| **Enterprise** | 64 GB+ | 100 GB+ | 24GB+ VRAM | Multi-tenant, RBAC |
+
+---
+
+## 🐳 Docker
+
+```bash
+# Tüm servisleri başlat
+docker-compose up -d
+
+# Sadece temel servisler
+./scripts/start.sh --minimal
+
+# Servisleri durdur
+./scripts/stop.sh
+```
+
+---
+
+## 🛠️ Geliştirme
+
+```bash
+# Tüm crate'leri derle
+cargo build --release
+
+# Sadece CLI binary
+cargo build --release --bin sentient
+
+# Test
+cargo test --workspace
+
+# Clippy
+cargo clippy --workspace
+
+# Format
+cargo fmt
+
+# Belirli crate derle
+cargo build --release -p sentient_llm
+cargo build --release -p sentient_voice
+```
+
+### Makefile Komutları
+
+```bash
+make build          # Derle
+make run            # REPL başlat
+make test           # Test çalıştır
+make docker-up      # Docker servisleri başlat
+make clean          # Temizle
+make skills         # Skill library güncelle
+make help           # Tüm komutlar
+```
+
+---
+
+## 🌍 Dil Desteği
+
+| Dil | Durum |
+|-----|-------|
+| 🇹🇷 Türkçe | ✅ Tam destek (Cevahir AI engine) |
+| 🇺🇸 English | ✅ Full support |
+| 🇩🇪 Deutsch | 🔄 Partial |
+| 🇫🇷 Français | 🔄 Partial |
+| 🇪🇸 Español | 🔄 Partial |
+| 🇯🇵 日本語 | 🔄 Partial |
+| 🇨🇳 中文 | 🔄 Partial |
+| 🇰🇷 한국어 | 🔄 Partial |
+
+---
+
+## 📁 Proje Yapısı
+
+```
+SENTIENT_CORE/
+├── crates/                  # 93 Rust crate
+│   ├── sentient_core/       # Ana motor
+│   ├── sentient_llm/        # LLM hub (57+ provider, 245+ model)
+│   ├── sentient_embed/      # Embedding hub
+│   ├── sentient_rerank/     # Reranking engine
+│   ├── sentient_voice/      # Ses modülü (STT + TTS)
+│   ├── sentient_channels/   # 24 platform
+│   ├── sentient_memory/     # Bellek sistemi
+│   ├── sentient_rag/        # RAG engine
+│   ├── sentient_vision/     # Vision/multimodal
+│   ├── sentient_mcp/        # MCP protocol
+│   ├── sentient_vgate/      # V-GATE proxy
+│   ├── sentient_guardrails/ # Güvenlik duvarı
+│   ├── sentient_cli/        # CLI arayüzü
+│   ├── sentient_setup/      # Setup wizard (TUI)
+│   ├── oasis_hands/         # Desktop automation (36K+ satır)
+│   ├── oasis_autonomous/    # Tam otonom agent
+│   ├── oasis_browser/       # Browser automation
+│   ├── sentient_cevahir/    # Türkçe LLM cognitive engine
+│   └── ...                  # 75+ crate daha
+├── integrations/            # 72+ entegre proje
+│   ├── agents/              # AutoGPT, CrewAI, LangChain, Goose...
+│   ├── framework/           # LlamaIndex, Phidata, Semantic Kernel...
+│   ├── tools/               # Firecrawl, Mem0, Crawl4AI...
+│   ├── browser/             # Browser-use, LightPanda...
+│   ├── memory/              # Qdrant, MemGPT...
+│   ├── sandbox/             # E2B, LocalStack...
+│   ├── cevahir_ai/          # Türkçe LLM engine
+│   └── security/            # NeMo-Guardrails...
+├── skills/                  # 5,587+ skill
+│   ├── Dev/                 # 2,965 skill
+│   ├── OSINT/               # 1,050 skill
+│   ├── Social/              # 238 skill
+│   ├── Automation/          # 306 skill
+│   ├── Media/               # 246 skill
+│   └── ...                  # 5 kategori daha
+├── scripts/                 # Yardımcı scriptler
+│   ├── start.sh             # Tüm servisleri başlat
+│   ├── stop.sh              # Servisleri durdur
+│   ├── health-check.sh      # Sağlık kontrolü
+│   ├── setup-ollama.sh      # Ollama kurulumu
+│   └── run_tests.sh         # Test çalıştırıcı
+├── data/                    # Veritabanları
+├── dashboard/               # Web dashboard
+├── config/                  # Konfigürasyon
+├── docker-compose.yml       # 9 Docker servisi
+├── install.sh               # ✨ Tek komutla kurulum (OpenClaw-style)
+├── Makefile                 # Build komutları
+├── .env.example             # Config şablonu
+└── Cargo.toml               # Workspace config (93 member)
 ```
 
 ---
@@ -345,7 +600,7 @@ OLLAMA_MODEL=gemma3:27b
 | MetaGPT | Multi-agent simulator |
 | AutoGen | Microsoft multi-agent |
 | OpenHands | AI developer |
-| Swarm | OpenAI agents |
+| Goose | AI coding agent |
 | Phidata | AI apps |
 | Semantic Kernel | Microsoft AI |
 
@@ -355,209 +610,18 @@ OLLAMA_MODEL=gemma3:27b
 |-------|----------|
 | Firecrawl | Web scraping |
 | Mem0 | Memory layer |
-| RAGFlow | RAG engine |
-| Crawl4AI | Web extraction |
+| CAG4AI | Web extraction |
 | Judge0 | Code execution |
+| RAGFlow | RAG engine |
 
-### Browser (5)
-
-| Proje | Açıklama |
-|-------|----------|
-| Browser-use | AI browser |
-| LightPanda | Minimal browser |
-| Agent-Browser | Headless browser |
-| Open-Computer-Use | GUI control |
-
-### Sandbox (3)
-
-| Proje | Açıklama |
-|-------|----------|
-| E2B | Secure sandbox |
-| Daytona | Dev environment |
-| LocalStack | AWS local |
-
-### Skills Libraries (6)
-
-| Proje | Skill |
-|-------|-------|
-| Claw3D | 5,143 skills |
-| Everything Claude Code | 181 commands/skills |
-| DeerFlow Skills | 100+ skills |
-| Awesome n8n Templates | 500+ templates |
-| Gstack | 37 skills |
-
-### Türkçe LLM (Cevahir AI)
+### Türkçe LLM — Cevahir AI
 
 | Modül | İşlev |
 |-------|-------|
-| model | Model yönetimi |
-| tokenizer | Tokenizasyon |
-| training | Eğitim sistemi |
-| chatting | Sohbet |
-| cognitive | Bilişsel motor |
-| education | Eğitim modülü |
-| + 13 modül daha | |
-
----
-
-## 📁 Proje Yapısı
-
-```
-SENTIENT_CORE/
-├── crates/                  # 93 Rust crate
-│   ├── sentient_core/       # Ana motor
-│   ├── sentient_llm/        # LLM hub (42 provider)
-│   ├── sentient_voice/      # Ses modülü
-│   ├── sentient_channels/   # 24 platform
-│   ├── sentient_memory/     # Bellek sistemi
-│   ├── sentient_rag/        # RAG engine
-│   ├── sentient_vision/     # Vision/multimodal
-│   ├── sentient_mcp/        # MCP protocol
-│   ├── oasis_hands/         # Desktop automation
-│   ├── oasis_autonomous/    # Tam otonom
-│   └── ...                  # 83 crate daha
-├── integrations/            # 72+ entegre proje
-│   ├── agents/              # AutoGPT, CrewAI, LangChain...
-│   ├── framework/           # LlamaIndex, Phidata...
-│   ├── skills/              # Claw3D, DeerFlow, ECC...
-│   ├── tools/               # Firecrawl, Mem0...
-│   ├── cevahir_ai/          # Türkçe LLM engine
-│   └── ...                  # 8 kategori daha
-├── skills/                  # 5,587+ native skill
-│   ├── Dev/                 # 2,965 skill
-│   ├── OSINT/               # 1,050 skill
-│   ├── Social/              # 238 skill
-│   └── ...                  # 7 kategori daha
-├── examples/                # 19 örnek proje
-│   ├── hello-world/         # Başlangıç
-│   ├── chatbot/             # Sohbet botu
-│   ├── multi-agent/         # Multi-agent
-│   ├── voice-agent/         # Sesli asistan
-│   └── ...                  # 15 örnek daha
-├── data/                    # Veritabanları
-│   ├── sentient_memory.db   # Bellek DB
-│   ├── sentient_skills.db   # Skill DB
-│   └── skills/              # 5,587 skill YAML
-├── dashboard/               # Web dashboard
-├── deploy/                  # Production deployment
-├── docs/                    # Dokümantasyon
-├── scripts/                 # Yardımcı scriptler
-├── config/                  # Konfigürasyon
-├── .env.template            # Config şablonu
-├── install.sh               # Tek komut kurulum
-├── quick-start.sh           # Hızlı başlangıç
-├── Makefile                 # Build komutları
-├── docker-compose.yml       # Docker servisleri
-└── Cargo.toml               # Workspace config
-```
-
----
-
-## 📚 Dokümantasyon
-
-| Dosya | Açıklama |
-|-------|----------|
-| [README.md](README.md) | Bu dosya |
-| [USAGE_GUIDE.md](USAGE_GUIDE.md) | Detaylı kullanım kılavuzu |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Sistem mimarisi |
-| [INSTALL.md](INSTALL.md) | Kurulum rehberi |
-| [SISTEM_DOKUMANTASYONU.md](SISTEM_DOKUMANTASYONU.md) | Tam sistem dokümantasyonu |
-| [MODEL_PROVIDERS.md](MODEL_PROVIDERS.md) | LLM provider detayları |
-| [SECURITY.md](SECURITY.md) | Güvenlik dokümantasyonu |
-| [DEPLOYMENT.md](DEPLOYMENT.md) | Production deployment |
-| [ENTERPRISE.md](ENTERPRISE.md) | Enterprise özellikler |
-
-### docs/ Klasörü
-
-| Dosya | Açıklama |
-|-------|----------|
-| [API.md](docs/API.md) | REST API dokümantasyonu |
-| [USER_MANUAL.md](docs/USER_MANUAL.md) | Kullanıcı kılavuzu |
-| [VOICE.md](docs/VOICE.md) | Ses sistemi |
-| [CHANNELS.md](docs/CHANNELS.md) | Kanal entegrasyonları |
-| [TESTING.md](docs/TESTING.md) | Test rehberi |
-
----
-
-## 🛠️ Geliştirme
-
-```bash
-# Repository'yi klonla
-git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
-cd SENTIENT_CORE
-
-# Derle
-cargo build --release
-
-# Test
-cargo test --workspace
-
-# Clippy
-cargo clippy --workspace
-
-# Format
-cargo fmt
-
-# Belirli crate derle
-cargo build --release -p sentient_voice
-```
-
-### Makefile Komutları
-
-```bash
-make build          # Derle
-make run            # Shell çalıştır
-make test           # Test
-make docker-up      # Docker servisleri başlat
-make skills         # Skill library güncelle
-make clean          # Temizle
-```
-
----
-
-## 🐳 Docker
-
-```bash
-# Tüm servisler
-docker-compose up -d
-
-# Servisler:
-# - PostgreSQL (5432)
-# - Redis (6379)
-# - Qdrant (6333)
-# - MinIO (9000/9001)
-# - Prometheus (9090)
-# - Grafana (3001)
-# - SearXNG (8888)
-```
-
----
-
-## 📊 Sistem Gereksinimleri
-
-| Mod | RAM | Disk | GPU | Açıklama |
-|-----|-----|------|-----|----------|
-| **API Only** | 2 GB | 5 GB | Yok | API provider kullanımı |
-| **Local Small** | 8 GB | 10 GB | Opsiyonel | Ollama 3B-7B |
-| **Local Medium** | 16 GB | 20 GB | 8GB VRAM | Ollama 27B (önerilen) |
-| **Local Large** | 64 GB | 50 GB | 24GB VRAM | Ollama 70B+ |
-| **Full Stack** | 32 GB | 30 GB | 8GB VRAM | Tüm servisler |
-| **Enterprise** | 64 GB+ | 100 GB+ | 24GB+ VRAM | Multi-tenant |
-
----
-
-## 🌍 Dil Desteği
-
-| Dil | Durum |
-|-----|-------|
-| Türkçe | ✅ Tam destek |
-| English | ✅ Full support |
-| Deutsch | 🔄 Partial |
-| Français | 🔄 Partial |
-| Español | 🔄 Partial |
-| 日本語 | 🔄 Partial |
-| 中文 | 🔄 Partial |
-| 한국어 | 🔄 Partial |
+| Neural Network (V-7) | RoPE, RMSNorm, SwiGLU, KV Cache, MoE, GQA |
+| Cognitive Strategies | Direct, Think, Debate, Tree of Thoughts |
+| Turkish BPE Tokenizer | 60K vocabulary, GPU batch processing |
+| Memory & RAG | Vector store, semantic cache |
 
 ---
 
@@ -565,7 +629,7 @@ docker-compose up -d
 
 **GNU AGPL v3.0** — Kullan, değiştir, paylaş.
 
-Ticari kullanım için: enterprise@sentient.ai
+Ticari kullanım için: enterprise@sentient-os.ai
 
 ---
 
@@ -584,7 +648,7 @@ Ticari kullanım için: enterprise@sentient.ai
 | Kanal | Link |
 |-------|------|
 | GitHub | [github.com/nexsusagent-coder/SENTIENT_CORE](https://github.com/nexsusagent-coder/SENTIENT_CORE) |
-| Ko-fi | [ko-fi.com/sentientos](https://ko-fi.com/sentientos) |
+| Ko-fi | [ko-fi.com/sentientos](https://ko-fi.com/sententos) |
 | Email | sentient@sentient-os.ai |
 
 ---
