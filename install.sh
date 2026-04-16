@@ -126,7 +126,8 @@ install_sentient() {
     
     export PYTHON_SYS_EXECUTABLE=$(which python3 2>/dev/null || which python 2>/dev/null || echo "")
     
-    cargo build --release 2>&1 | while read line; do
+    # Sadece CLI crate'ini derle (tüm workspace değil!)
+    cargo build --release -p sentient_cli 2>&1 | while read line; do
         if [[ "$line" =~ Compiling|Building|Finished ]]; then
             info "$line"
         fi

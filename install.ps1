@@ -141,7 +141,8 @@ function Install-Sentient {
     
     $env:PYTHON_SYS_EXECUTABLE = if (Test-Command python) { (Get-Command python).Source } else { "" }
     
-    cargo build --release 2>&1 | ForEach-Object {
+    # Sadece CLI crate'ini derle (tüm workspace değil!)
+    cargo build --release -p sentient_cli 2>&1 | ForEach-Object {
         if ($_ -match "Compiling|Building|Finished") {
             Write-Info $_
         }
