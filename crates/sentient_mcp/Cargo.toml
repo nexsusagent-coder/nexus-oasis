@@ -54,7 +54,7 @@ tower = { version = "0.4", optional = true }
 tower-service = { version = "0.3", optional = true }
 
 # WebSocket support (optional)
-tokio-tungstenite = { version = "0.21", optional = true }
+tokio-tungstenite = { version = "0.29", optional = true }
 
 [features]
 default = ["stdio", "tcp"]
