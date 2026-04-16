@@ -515,7 +515,8 @@ mod tests {
         let persona = Persona::default();
         let id = marketplace.publish(persona, MarketplaceCategory::Coding);
         
-        let results = marketplace.search("assistant", None);
+        // Default persona name is "SENTIENT" — search for it
+        let results = marketplace.search("SENTIENT", None);
         assert!(!results.is_empty());
         
         let trending = marketplace.trending(10);
