@@ -888,35 +888,77 @@ if ($Uninstall) {
     exit 0
 }
 
-# Kurulum adımları
-$steps = @(
-    @{ Name = "Hoş Geldiniz"; Fn = "Show-Welcome" }
-    @{ Name = "Lisans"; Fn = "Show-License" }
-    @{ Name = "Sistem Analizi"; Fn = "Analyze-System" }
-    @{ Name = "Kurulum Modu"; Fn = "Select-Mode" }
-    @{ Name = "Provider"; Fn = "Select-Provider" }
-    @{ Name = "Model"; Fn = "Select-Model" }
-    @{ Name = "Bileşenler"; Fn = "Select-Components" }
-    @{ Name = "Ön Koşullar"; Fn = "Install-Prerequisites" }
-    @{ Name = "Kaynak"; Fn = "Download-Source" }
-    @{ Name = "Derleme"; Fn = "Build-Project" }
-    @{ Name = "Yapılandırma"; Fn = "Configure-Environment" }
-)
-
-$stepNum = 0
-foreach ($step in $steps) {
-    $stepNum++
+# Kurulum adımları - sırayla çalıştır
+try {
     Write-Host ""
     Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
-    Write-Host "${WHITE}  ADIM $stepNum/$($steps.Count): $($step.Name)${RESET}"
+    Write-Host "${WHITE}  ADIM 1/11: Hoş Geldiniz${RESET}"
     Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Show-Welcome | Out-Null
     
-    $result = & $step.Fn
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 2/11: Lisans${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Show-License | Out-Null
     
-    if (-not $result) {
-        Write-Err "$($step.Name) başarısız!"
-        exit 1
-    }
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 3/11: Sistem Analizi${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Analyze-System | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 4/11: Kurulum Modu${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Select-Mode | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 5/11: Provider${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Select-Provider | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 6/11: Model${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Select-Model | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 7/11: Bileşenler${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Select-Components | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 8/11: Ön Koşullar${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Install-Prerequisites | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 9/11: Kaynak${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Download-Source | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 10/11: Derleme${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Build-Project | Out-Null
+    
+    Write-Host ""
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Write-Host "${WHITE}  ADIM 11/11: Yapılandırma${RESET}"
+    Write-Host "${DIM}  ─────────────────────────────────────────────────────────────────────${RESET}"
+    Configure-Environment | Out-Null
+    
+    Show-Complete
+    
+} catch {
+    Write-Err "Hata: $_"
+    exit 1
 }
-
-Show-Complete
