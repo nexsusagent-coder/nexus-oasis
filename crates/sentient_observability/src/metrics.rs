@@ -239,7 +239,8 @@ mod tests {
     fn test_counter_increment() {
         let before = MESSAGES_TOTAL.get();
         inc_counter(&MESSAGES_TOTAL);
-        assert_eq!(MESSAGES_TOTAL.get(), before + 1);
+        // Global counter may be incremented by other parallel tests
+        assert!(MESSAGES_TOTAL.get() > before);
     }
 
     #[test]

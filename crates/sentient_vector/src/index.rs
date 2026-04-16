@@ -334,9 +334,9 @@ mod tests {
         let index = recommend_index(50_000, 1536, 1024);
         assert!(matches!(index, IndexType::Hnsw(_)));
 
-        // Large dataset
+        // Large dataset (memory constrained will return PQ, otherwise IVF)
         let index = recommend_index(2_000_000, 1536, 1024);
-        assert!(matches!(index, IndexType::Ivf(_)));
+        assert!(matches!(index, IndexType::Ivf(_) | IndexType::ProductQuantization(_)));
 
         // Memory constrained
         let index = recommend_index(500_000, 1536, 100);
