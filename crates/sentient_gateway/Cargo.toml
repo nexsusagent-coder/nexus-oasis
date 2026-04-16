@@ -35,7 +35,7 @@ futures-util = "0.3"
 
 # Authentication
 jsonwebtoken = "9.3"
-bcrypt = "0.15"
+bcrypt = "0.19"
 
 # Cryptography (Webhook signature verification)
 hmac = "0.12"
