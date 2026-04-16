@@ -6,6 +6,10 @@ authors.workspace = true
 license.workspace = true
 description = "L6: EXECUTION - Agent-S3 Asimilasyonu (Masaüstü Kontrolü - Sovereign Hands)"
 
+[features]
+default = []
+pyo3 = ["dep:pyo3"]  # Python entegrasyonu (opsiyonel)
+
 [dependencies]
 # Workspace
 sentient_common = { path = "../sentient_common" }
@@ -22,8 +26,8 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 toml = "0.8"
 
-# PyO3 Bridge (Agent-S wrapper)
-pyo3 = { workspace = true }
+# PyO3 Bridge (Agent-S wrapper) - optional
+pyo3 = { workspace = true, optional = true }
 
 # GUI Control
 # enigo = "0.3"        # Mouse/keyboard control

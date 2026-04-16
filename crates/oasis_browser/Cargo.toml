@@ -9,6 +9,7 @@ description = "L4: EXECUTION - Browser-Use Asimilasyonu (Sovereign Sandbox)"
 [features]
 default = []
 lightpanda-ffi = []  # Lightpanda FFI desteği (Zig kütüphanesi gerekli)
+python = ["dep:pyo3"]  # Python entegrasyonu (opsiyonel)
 
 [dependencies]
 # Workspace
@@ -25,8 +26,8 @@ futures = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 
-# PyO3 Bridge (Browser-Use wrapper)
-pyo3 = { workspace = true }
+# PyO3 Bridge (Browser-Use wrapper) - optional
+pyo3 = { workspace = true, optional = true }
 
 # HTTP & Browser Control
 reqwest = { workspace = true }

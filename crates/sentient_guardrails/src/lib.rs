@@ -199,10 +199,10 @@ impl GuardrailEngine {
             }
         }
 
-        // Şiddete göre sayaç güncelle
+        // Şiddete göre sayaç güncelle (gelecek versiyonda kullanılacak)
         for v in &violations {
             // (immutable borrow - severity_counts ayrı mutable)
-            let sev = v.severity;
+            let _sev = v.severity;
             // NOT: self.severity_counts immutable borrow olduğu için
             // güncelleme dışarıda yapılacak
         }

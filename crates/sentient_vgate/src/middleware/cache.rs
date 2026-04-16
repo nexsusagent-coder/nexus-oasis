@@ -14,7 +14,8 @@ use std::hash::{Hash, Hasher};
 #[derive(Debug, Clone)]
 struct CacheEntry {
     response: String,
-    model: String,
+    #[allow(dead_code)]
+    model: String,  // Gelecekte model bazlı TTL için
     created_at: Instant,
     ttl: Duration,
     hit_count: u64,

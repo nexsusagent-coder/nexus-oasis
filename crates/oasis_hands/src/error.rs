@@ -98,7 +98,8 @@ pub enum HandsError {
     #[error("OASIS-HANDS: {0}")]
     Other(String),
     
-    /// PyO3 hatası (gizli)
+    /// PyO3 hatası (gizli) - sadece pyo3 feature ile
+    #[cfg(feature = "pyo3")]
     #[error("OASIS-HANDS: Python modülünde iç hata")]
     PythonError(#[from] pyo3::PyErr),
     
