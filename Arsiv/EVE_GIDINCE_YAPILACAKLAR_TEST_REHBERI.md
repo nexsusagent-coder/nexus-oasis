@@ -248,17 +248,220 @@ curl http://localhost:11434/api/tags     # Ollama
 #  BÖLÜM 2: JARVIS — SESLİ ASİSTAN TESTİ (30 dk)
 # ═══════════════════════════════════════════════════════════════════════════════
 
+> Kaynak kodu: `crates/sentient_voice/` — TTS (OpenAI/ElevenLabs/Piper), STT (OpenAI Whisper/Local),
+> Wake Word, VAD, AudioCapture, AudioPlayback
+
 ## Ön Koşullar
 
 | Gereksinim | Ne? | Kurulum |
-|-----------|-----|---------|
+|-----------|-----|----------|
 | 🎤 Mikrofon | Bilgisayarda dahili veya harici | Sistem ayarlarından test et |
 | 🔊 Hoparlör | Bilgisayarda | Sistem ayarlarından test et |
-| Whisper.cpp | Ses→Metin (STT) | Aşağıda |
-| Piper TTS | Metin→Ses | Aşağıda |
+| Whisper.cpp | Ses→Metin (STT) | Aşağıda (3 işletim sistemi) |
+| Piper TTS | Metin→Ses (lokal) | Aşağıda (3 işletim sistemi) |
 | Ollama | Lokal LLM | Bölüm 1'de kuruldu |
+| OpenAI API Key | Cloud TTS/STT (opsiyonel) | .env dosyasına |
 
-## Adım 1: Mikrofon Testi (2 dk)
+---
+
+## 🪟 WINDOWS KURULUMU (ÖZEL)
+
+> **Windows kullanıcıları için tam rehber.** Linux/macOS kullanıcıları aşağıdaki
+> "Linux/macOS Kurulumu" bölümüne atlayabilir.
+
+### Win-1: Ön Hazırlık (5 dk)
+
+```powershell
+# PowerShell'i YÖNETİCİ olarak aç (Win+X → Terminal (Admin))
+
+# 1. Scoop paket yöneticisi kur (yoksa)
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+
+# 2. Gerekli araçları kur
+scoop install git ffmpeg wget curl
+
+# 3. Rust kur (yoksa)
+winget install Rustlang.Rustup
+# Yeni PowerShell aç, doğrula:
+rustc --version    # Örn: rustc 1.94.1
+cargo --version
+
+# 4. Visual Studio Build Tools (C++ derleme için)
+# https://visualstudio.microsoft.com/visual-cpp-build-tools/
+# → "Desktop development with C++" işaretle
+# VEYA winget ile:
+winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools"
+
+# 5. SENTIENT_CORE'u klonla
+ cd C:\
+ mkdir Projects 2>$null; cd Projects
+git clone https://github.com/nexsusagent-coder/SENTIENT_CORE.git
+cd SENTIENT_CORE
+
+# 6. Derle
+cargo build --release
+# BEKLENEN: target/release/sentient.exe oluşur (20-30 dk ilk derleme)
+```
+
+### Win-2: Mikrofon Testi — Windows (3 dk)
+
+```powershell
+# Yöntem 1: Windows Ayarları ile
+# Ayarlar → Sistem → Ses → Giriş → Mikrofon seçili mi?
+# Seviye çubuğunda ses dalgalanıyor mu?
+
+# Yöntem 2: FFmpeg ile kayıt testi
+ffmpeg -f dshow -i audio="Mikrofonunuzun adı" -t 3 -acodec pcm_s16le test.wav
+# Mikrofon adını öğrenmek için:
+ffmpeg -list_devices true -f dshow -i dummy
+# Çıktıda "DirectShow audio devices" altında listelenir
+
+# Yöntem 3: Python ile (Python kuruluysa)
+pip install sounddevice
+python -c "import sounddevice as sd; print(sd.query_devices())"
+# → Mikrofon listelenir
+
+# Kayıt çal:
+ffplay test.wav
+# BEKLENEN: Kaydettiğiniz ses duyulmalı
+```
+
+### Win-3: Whisper.cpp Kur — Windows (5 dk)
+
+```powershell
+# Yöntem 1: Pre-built binary (EN KOLAY)
+# GitHub Releases'ten indir:
+wget https://github.com/ggerganov/whisper.cpp/releases/download/v1.7.4/whisper-1.7.4-bin-x64.zip
+Expand-Archive whisper-1.7.4-bin-x64.zip -DestinationPath C:\whisper-cpp
+C:\whisper-cpp\main.exe --help
+
+# Yöntem 2: Scoop ile
+scoop install whisper-cpp
+
+# Yöntem 3: Kaynaktan derle (CMake gerekli)
+git clone https://github.com/ggerganov/whisper.cpp C:\whisper-cpp-src
+cd C:\whisper-cpp-src
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+
+# Model indir (medium — Türkçe iyi, ~1.5 GB)
+cd C:\whisper-cpp   # veya kaynak dizin
+mkdir models
+curl -L -o models\ggml-medium.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin
+
+# Test — önce bir ses kaydı yap (Win-2'deki gibi)
+C:\whisper-cpp\main.exe -m models\ggml-medium.bin -f test.wav --language tr
+# BEKLENEN: Türkçe metin çevirisi görürsün
+# Örnek çıktı: [00:00:00.000 --> 00:00:03.000]  Merhaba, ben Sentient
+```
+
+### Win-4: Piper TTS Kur — Windows (5 dk)
+
+```powershell
+# 1. Binary indir
+wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_1.2.0-amd64.zip
+Expand-Archive piper_1.2.0-amd64.zip -DestinationPath C:\piper
+
+# 2. Türkçe ses modeli indir
+mkdir C:\piper\models
+cd C:\piper\models
+
+# Türkçe medium kalite
+curl -L -o tr_TR-medium.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx
+curl -L -o tr_TR-medium.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx.json
+
+# İngilizce (fallback — daha fazla ses seçeneği)
+curl -L -o en_US-lessac-medium.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx
+curl -L -o en_US-lessac-medium.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
+
+# 3. Test
+echo "Merhaba, ben Sentient" | C:\piper\piper.exe --model C:\piper\models\tr_TR-medium.onnx --output_file test-voice.wav
+ffplay test-voice.wav
+# BEKLENEN: Türkçe ses duyulmalı
+
+# Alternatif: Doğrudan hoparlöre çal
+echo "Merhaba" | C:\piper\piper.exe --model C:\piper\models\tr_TR-medium.onnx --output_raw | ffplay -ar 22050 -f s16le -i -
+```
+
+### Win-5: .env Yapılandır — Windows (2 dk)
+
+```powershell
+# SENTIENT_CORE dizininde
+cd C:\Projects\SENTIENT_CORE
+
+# .env dosyası oluştur/düzenle
+Add-Content -Path .env -Value @"
+# ═══ VOICE ═══
+VOICE_ENABLED=true
+VOICE_STT=whisper_cpp
+VOICE_TTS=piper
+VOICE_LANGUAGE=tr
+WHISPER_MODEL_PATH=C:\whisper-cpp\models\ggml-medium.bin
+PIPER_MODEL_PATH=C:\piper\models\tr_TR-medium.onnx
+
+# OpenAI (cloud TTS/STT istiyorsan — opsiyonel)
+OPENAI_API_KEY=sk-...
+"@
+```
+
+### Win-6: JARVIS Başlat — Windows (5 dk)
+
+```powershell
+cd C:\Projects\SENTIENT_CORE
+
+# Sesli mod başlat
+.\target\release\sentient.exe voice --wake-word "hey sentient" --language tr
+
+# BEKLENEN:
+# 🎤 Listening for wake word: "hey sentient"
+
+# EĞER HATA ALIRSAN (Windows Firewall uyarısı):
+# → "Erişime izin ver" de, hem Özel hem Genel ağ işaretle
+
+# Alternatif: Arka planda çalıştır
+Start-Process -FilePath ".\target\release\sentient.exe" -ArgumentList "voice --wake-word 'hey sentient' --language tr" -WindowStyle Hidden
+```
+
+### Win-7: Sesli Komut Testleri — Windows (10 dk)
+
+> Her komutu **yüksek sesle** söyle. "Hey Sentient" uyandırma kelimesi ile başla.
+
+| # | Komut | Beklenen Intent | Beklenen Aksiyon | Sonuç |
+|---|-------|----------------|-------------------|-------|
+| 1 | "Hey Sentient, rahatlatıcı müzik aç" | PlayMusic | YouTube'da arar | ☐ |
+| 2 | "Hey Sentient, sezen aksu şarkısını aç" | PlayMusic | YouTube'da arar | ☐ |
+| 3 | "Hey Sentient, dur" | Pause | YouTube pause | ☐ |
+| 4 | "Hey Sentient, devam et" | Resume | YouTube play | ☐ |
+| 5 | "Hey Sentient, google'da rust programlama ara" | WebSearch | Google arama | ☐ |
+| 6 | "Hey Sentient, saat kaç" | WhatTime | Saati söyler | ☐ |
+| 7 | "Hey Sentient, kapat" | Close | Tarayıcı kapatır | ☐ |
+| 8 | "Hey Sentient, salon ışığını aç" | ControlHome | HA komutu | ☐ |
+| 9 | "Hey Sentient, film modu" | ControlHome | Scene aktif | ☐ |
+| 10 | "Hey Sentient, github trendlere bak" | GitHubTrending | GitHub açar | ☐ |
+
+### Win-8: Windows'a Özel Sorun Giderme
+
+| Sorun | Çözüm |
+|-------|-------|
+| **"sentient.exe bulunamadı"** | `cargo build --release` tekrar çalıştır, `target\release\` altında olduğundan emin ol |
+| **Windows Firewall engelli** | Ayarlar → Güvenlik → Firewall → "Sentient'e izin ver" |
+| **Mikrofon erişimi reddedildi** | Ayarlar → Gizlilik → Mikrofon → "Masaüstü uygulamalarının erişmesine izin ver" ✅ |
+| **Whisper.cpp açılmıyor** | MSVCP140.dll hatası → Visual C++ Redistributable kur: `winget install Microsoft.VCRedist.2015+.x64` |
+| **Piper Türkçe model inmiyor** | Huggingface'den tarayıcı ile indir, `C:\piper\models\` içine koy |
+| **FFmpeg bulunamadı** | `scoop install ffmpeg` veya PATH'e ekle |
+| **Wake word algılamıyor** | Daha yüksek/berrak sesle söyle, mikrofon seviyesini %80+ yap |
+| **STT yanlış çeviriyor** | Whisper large model dene (4GB): `curl -L -o models\ggml-large-v3.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3.bin` |
+| **TTS ses gelmiyor** | `piper.exe` yolunu kontrol et, `ffplay` ile çalabildiğini test et |
+| **Browser açılmıyor** | Chrome/Edge/Firefox kurulu mu? Headless mod dene: `--browser headless` |
+| **WSL kullanıyorum** | WSL2'de ses desteklenmiyor — Windows native kullan veya PulseAudio köprüsü kur |
+| **Path sorunları** | Windows ters eğik çizgi `\` kullanır, .env'de `C:\piper\models\tr_TR-medium.onnx` |
+
+---
+
+## 🐧🍎 LINUX / macOS KURULUMU
+
+### Adım 1: Mikrofon Testi (2 dk)
 
 ```bash
 # Linux
@@ -276,7 +479,7 @@ play test.wav
 # Mikrofon izni verildi mi? (macOS)
 ```
 
-## Adım 2: Whisper.cpp Kur (5 dk)
+### Adım 2: Whisper.cpp Kur (5 dk)
 
 ```bash
 # Kaynaktan derle
@@ -292,31 +495,34 @@ bash ./models/download-ggml-model.sh medium
 # BEKLENEN: Türkçe metin çevirisi
 ```
 
-## Adım 3: Piper TTS Kur (5 dk, Linux)
+### Adım 3: Piper TTS Kur (5 dk)
 
 ```bash
-# Binary indir
-wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_1.2.0_amd64.tar.gz
-tar -xzf piper_1.2.0_amd64.tar.gz -C ~/.local/
+# Linux
+curl -L https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_1.2.0_amd64.tar.gz | tar xz -C ~/.local/
+
+# macOS
+curl -L https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_1.2.0-darwin.tar.gz | tar xz -C ~/.local/
 
 # Türkçe ses modeli indir
 mkdir -p ~/.local/share/piper/models
 cd ~/.local/share/piper/models
 
-wget -O tr_TR-medium.onnx \
+curl -L -o tr_TR-medium.onnx \
   https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx
 
-wget -O tr_TR-medium.onnx.json \
+curl -L -o tr_TR-medium.onnx.json \
   https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/medium/tr_TR-medium.onnx.json
 
 # Test:
 echo "Merhaba, ben Sentient" | \
   ~/.local/bin/piper --model tr_TR-medium.onnx --output-raw | \
-  aplay -r 22050 -f S16_LE
+  aplay -r 22050 -f S16_LE    # Linux
+  # play -r 22050 -f s16 -    # macOS (sox)
 # BEKLENEN: Türkçe ses duyulmalı
 ```
 
-## Adım 4: .env Yapılandır (2 dk)
+### Adım 4: .env Yapılandır (2 dk)
 
 ```bash
 cat >> ~/Projects/SENTIENT_CORE/.env << 'EOF'
@@ -327,10 +533,13 @@ VOICE_TTS=piper
 VOICE_LANGUAGE=tr
 WHISPER_MODEL_PATH=~/whisper.cpp/models/ggml-medium.bin
 PIPER_MODEL_PATH=~/.local/share/piper/models/tr_TR-medium.onnx
+
+# OpenAI (cloud TTS/STT — opsiyonel)
+OPENAI_API_KEY=sk-...
 EOF
 ```
 
-## Adım 5: JARVIS Başlat (5 dk)
+### Adım 5: JARVIS Başlat (5 dk)
 
 ```bash
 cd ~/Projects/SENTIENT_CORE
@@ -342,11 +551,9 @@ cd ~/Projects/SENTIENT_CORE
 # 🎤 Listening for wake word: "hey sentient"
 ```
 
-## Adım 6: Sesli Komut Testleri (10 dk)
+### Adım 6: Sesli Komut Testleri (10 dk)
 
-Her komutu **yüksek sesle** söyle. "Hey Sentient" uyandırma kelimesi ile başla.
-
-### Test Matrisi
+> Her komutu **yüksek sesle** söyle. "Hey Sentient" uyandırma kelimesi ile başla.
 
 | # | Komut | Beklenen Intent | Beklenen Aksiyon | Sonuç |
 |---|-------|----------------|-------------------|-------|
@@ -361,7 +568,7 @@ Her komutu **yüksek sesle** söyle. "Hey Sentient" uyandırma kelimesi ile baş
 | 9 | "Hey Sentient, film modu" | ControlHome | Scene aktif | ☐ |
 | 10 | "Hey Sentient, github trendlere bak" | GitHubTrending | GitHub açar | ☐ |
 
-### Hata Ayıklama
+### Linux/macOS Sorun Giderme
 
 | Sorun | Çözüm |
 |-------|-------|
@@ -370,6 +577,8 @@ Her komutu **yüksek sesle** söyle. "Hey Sentient" uyandırma kelimesi ile baş
 | TTS ses gelmiyor | Piper model yolunu kontrol et, aplay ile test et |
 | Browser açılmıyor | Firefox/Chromium kurulu mu? DISPLAY var mı? |
 | YouTube tıklamıyor | Browser automation izni var mı? Headless dene |
+| macOS mikrofon izni | Sistem Tercihleri → Güvenlik → Mikrofon → Terminal'i izin ver |
+| Linux PulseAudio | `pulseaudio --start` + `pavucontrol` ile seviye kontrolü |
 
 ---
 
