@@ -1,413 +1,223 @@
 # SENTIENT AI - Getting Started Guide
 
-Welcome to SENTIENT AI Operating System! This guide will help you get up and running quickly.
+> **5 dakikada çalışan AI asistan — tüm platformlar**
 
 ---
 
-## Prerequisites
+## Hızlı Başlangıç
 
-- **OS**: Linux, macOS, or Windows
-- **RAM**: 8GB minimum (16GB+ recommended)
-- **Disk**: 5GB+ free space
-- **API Key**: OpenAI, Anthropic, or other LLM provider
+### Linux / macOS
 
----
-
-## Installation
-
-### Option 1: Quick Install (Recommended)
-
-**Linux / macOS:**
 ```bash
-curl -sSL https://get.sentient.ai | bash
+curl -fsSL https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install.sh | bash
 ```
 
-**Windows (PowerShell):**
+### Windows (PowerShell)
+
 ```powershell
-irm https://get.sentient.ai/ps | iex
+irm https://raw.githubusercontent.com/nexsusagent-coder/SENTIENT_CORE/main/install.ps1 | iex
 ```
 
-### Option 2: npm
-
-```bash
-npm install -g @sentient/ai
-```
-
-### Option 3: Binary Download
-
-Download from [GitHub Releases](https://github.com/nexsusagent-coder/SENTIENT_CORE/releases):
-
-- `sentient-linux-x86_64.tar.gz`
-- `sentient-macos-arm64.tar.gz`
-- `sentient-windows-x86_64.zip`
-
-### Option 4: Build from Source
+### Build from Source
 
 ```bash
 git clone https://github.com/nexsusagent-coder/SENTIENT_CORE
 cd SENTIENT_CORE
 cargo build --release
-./target/release/sentient-cli setup
+./target/release/sentient setup
 ```
 
 ---
 
-## First-Time Setup
+## LLM Yapılandırması
 
-Run the interactive setup wizard:
-
-```bash
-sentient setup
-```
-
-This will guide you through:
-
-1. **API Key Configuration**
-   ```
-   Enter your OpenAI API key: sk-...
-   Enter your Anthropic API key (optional): sk-ant-...
-   ```
-
-2. **Model Selection**
-   ```
-   Select default model:
-   1. openai/gpt-4o
-   2. anthropic/claude-3-5-sonnet
-   3. google/gemini-2.0-flash
-   4. ollama/llama3.3 (local)
-   
-   Choice [1-4]: 1
-   ```
-
-3. **Channel Setup** (optional)
-   ```
-   Configure Telegram? [y/N]: y
-   Enter Telegram Bot Token: 123456:ABC...
-   
-   Configure Discord? [y/N]: n
-   ```
-
-4. **Voice Setup** (optional)
-   ```
-   Enable voice? [y/N]: y
-   Wake word: hey sentient
-   ```
-
----
-
-## Basic Usage
-
-### Interactive REPL
-
-Start an interactive chat session:
+### Seçenek A: Lokal (Ücretsiz, API Key Gerekmez)
 
 ```bash
-sentient repl
+# Ollama kur
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Model indir
+ollama pull gemma3:27b       # 16GB VRAM (önerilen)
+ollama pull qwen3:30b-a3b    # 4GB VRAM (hafif)
+ollama pull deepseek-r1:7b   # 8GB VRAM (reasoning)
+
+# .env
+LLM_PROVIDER=ollama
+OLLAMA_MODEL=gemma3:27b
+
+# Başlat
+sentient chat
 ```
 
-```
-SENTIENT v4.0.0 | Model: openai/gpt-4o
-Type /help for commands
-
-You: Hello, who are you?
-AI: I'm SENTIENT, an AI assistant powered by GPT-4o. How can I help you today?
-
-You: Write a haiku about coding
-AI: Keyboard clicks softly,
-    Logic flows through fingertips,
-    Bugs become features.
-
-You: /exit
-Goodbye!
-```
-
-### Single Query
-
-Ask a single question:
+### Seçenek B: API Key ile
 
 ```bash
-sentient ask "What is the capital of Turkey?"
-```
+# OpenRouter (önerilen — 200+ model, $5 ücretsiz kredi)
+# https://openrouter.ai/keys
+export OPENROUTER_API_KEY=sk-or-v1-xxxxx
 
-### File Analysis
+# Diğer provider'lar
+export OPENAI_API_KEY=sk-xxx
+export ANTHROPIC_API_KEY=sk-ant-xxx
+export DEEPSEEK_API_KEY=xxx
+export GROQ_API_KEY=gsk_xxx
 
-Analyze files:
-
-```bash
-sentient analyze README.md
-sentient analyze src/ --summary
-```
-
-### Code Generation
-
-Generate code:
-
-```bash
-sentient code "Create a REST API in Rust with Axum"
-sentient code "Write a Python script to scrape a website" --output scraper.py
+# Başlat
+sentient chat
 ```
 
 ---
 
-## Autonomous Agents
-
-### Run with Goal
-
-Let SENTIENT work autonomously:
+## Temel Komutlar
 
 ```bash
-sentient agent --goal "Build a REST API with user authentication"
-```
-
-### With Constraints
-
-Add constraints:
-
-```bash
-sentient agent \
-  --goal "Build a web scraper" \
-  --constraints "Use Python, respect robots.txt, add rate limiting" \
-  --max-steps 20
-```
-
-### Multi-Step Projects
-
-```bash
-sentient agent \
-  --goal "Create a complete web application" \
-  --plan "research,design,implement,test,document" \
-  --output ./my-app
+sentient chat "Merhaba"                        # Sohbet
+sentient ask "Rust'ta ownership nedir?"         # Tek soru
+sentient code "Python REST API yaz"            # Kod üret
+sentient voice                                 # Sesli asistan (JARVIS)
+sentient desktop --goal "YouTube'da müzik aç"  # Otonom agent
+sentient daemon start                          # 7/24 arka plan asistan
+sentient channel start telegram                # Telegram bot
+sentient gateway                               # REST API server (port 8080)
+sentient doctor                                # Sistem kontrolü
 ```
 
 ---
 
-## Channels
-
-### Telegram Bot
+## JARVIS Modu
 
 ```bash
-# Configure
-sentient channel add telegram --token "123456:ABC..."
+# Lokal (ücretsiz)
+sentient voice --wake-word "hey sentient" --language tr
 
-# Start bot
+# Kullanım:
+# "Hey Sentient, rahatlatıcı müzik aç"  → YouTube'da arar
+# "Salon ışığını kapat"                 → Home Assistant'a komut
+# "Google'da rust ara"                  → Web arama
+# "Saat kaç"                            → Saati söyler
+```
+
+Desteklenen 17 sesli komut intent'i: PlayMusic, PlayVideo, WebSearch, Pause, Resume, Close, WhatTime, Weather, ControlHome, SetReminder, GitHubTrending, ProjectAssign...
+
+---
+
+## Multi-Agent Orkestrasyonu
+
+```bash
+# CrewAI: Araştırmacı + Yazar + Editör
+sentient crew create report-team \
+  --agents "researcher:deepseek-r1,writer:gpt-4o,editor:claude-4-sonnet"
+sentient crew run report-team --goal "AI pazar analizi raporu yaz"
+
+# MetaGPT: Şirket modeli (PM + Architect + Engineer + QA)
+sentient crew run software-team --framework metagpt \
+  --goal "Sosyal medya uygulaması geliştir"
+```
+
+6 framework desteklenir: CrewAI, AutoGen, Swarm, MetaGPT, Agent-S, SENTIENT Native
+
+---
+
+## Kanal Entegrasyonları
+
+```bash
+# Telegram bot
+sentient channel add telegram --token "123456:ABC-..."
 sentient channel start telegram
 
-# Send test message
-sentient channel send telegram @mychat "Hello from SENTIENT!"
-```
-
-### Discord Bot
-
-```bash
-# Configure
-sentient channel add discord --token "Bot token"
-
-# Register slash commands
-sentient channel discord register
-
-# Start bot
+# Discord bot
+sentient channel add discord --token "Bot YOUR_TOKEN"
 sentient channel start discord
+
+# Çoklu kanal
+sentient daemon start --channels telegram,discord,slack
 ```
 
-### WhatsApp Business
+20+ platform: Telegram, Discord, WhatsApp, Slack, Email, Teams, Signal, Matrix, iMessage, Instagram, LinkedIn, Twitter/X, Line, WeChat, Messenger, Mattermost, Google Chat, Webex, Zoom, Chime
+
+---
+
+## 57+ LLM Provider
+
+| Tür | Provider'lar |
+|-----|-------------|
+| **Direct** | OpenAI, Anthropic, Google, Mistral, DeepSeek, xAI, Cohere, Groq, Perplexity, AI21, Reka, Cerebras, Fireworks, Replicate, StepFun, Aleph Alpha, Sarvam, Voyage, Upstage, GigaChat |
+| **Aggregator** | OpenRouter (200+), Together, HuggingFace (200K+), DeepInfra, GLHF, Novita, Hyperbolic, SiliconFlow, Lepton, Chutes |
+| **Enterprise** | Azure OpenAI, AWS Bedrock, Vertex AI, NVIDIA NIM, SambaNova, IBM WatsonX |
+| **Chinese** | Zhipu AI, Moonshot, Yi, Baidu ERNIE, MiniMax, Qwen Direct, Mod |
+| **Gateway** | Unify, Portkey, Helicone, NotDiamond, AI/ML API, Glama, Requesty, LiteLLM, Cloudflare |
+| **Local** | Ollama, vLLM, LM Studio, Llamafile |
+
+Detaylı liste: [MODEL_PROVIDERS.md](../MODEL_PROVIDERS.md)
+
+---
+
+## Akıllı Ev (Home Assistant)
 
 ```bash
-# Configure
-sentient channel add whatsapp \
-  --phone-id "123456789" \
-  --token "EAAB..."
+# .env
+HOME_ASSISTANT_URL=http://homeassistant.local:8123
+HOME_ASSISTANT_TOKEN=eyJ0eXAi...
 
-# Send message
-sentient channel send whatsapp +1234567890 "Hello!"
+# Sesli komutlar
+# "Salon ışığını kapat" → light.living_room turn_off
+# "Film modu"           → movie scene activate
+# "Klimayı 22 yap"      → climate set_temperature
 ```
 
 ---
 
-## Voice Commands
-
-### Enable Voice Mode
+## Güvenlik
 
 ```bash
-sentient voice enable
-sentient voice start
+# V-GATE: API key'ler sunucuda, istemcide YOK
+sentient vgate start
+
+# Guardrails: Prompt injection engelleme
+sentient guardrails test "Ignore all previous instructions"
+# → ❌ BLOCKED
+
+# Vault: Şifreli secret yönetimi
+sentient vault set OPENAI_API_KEY "sk-xxx"
 ```
 
-### Wake Word
-
-Say "Hey SENTIENT" to activate voice interaction.
-
-### Voice Chat
-
-```bash
-# Start voice session
-sentient voice chat
-
-# Transcribe file
-sentient voice transcribe recording.mp3
-
-# Synthesize speech
-sentient voice speak "Hello world!" --output hello.mp3
-```
+6 güvenlik crate'i: guardrails, vault, tee, zk_mcp, compliance, anomaly
 
 ---
 
-## Skills
+## Sistem Gereksinimleri
 
-### Search Skills
-
-```bash
-sentient skill search translator
-sentient skill search --category productivity
-```
-
-### Install Skills
-
-```bash
-sentient skill install translator-pro
-sentient skill install code-reviewer
-```
-
-### List Installed
-
-```bash
-sentient skill list
-```
-
-### Create Custom Skill
-
-```bash
-sentient skill create my-skill
-cd my-skill
-# Edit skill.yaml and index.js
-sentient skill publish
-```
+| Mod | RAM | VRAM | Disk |
+|-----|-----|------|------|
+| API-only | 8 GB | - | 20 GB |
+| Lokal küçük | 16 GB | 8 GB | 50 GB |
+| Lokal büyük | 32 GB | 24 GB | 100 GB |
 
 ---
 
-## API Server
+## Detaylı Dokümantasyon
 
-### Start Gateway
-
-```bash
-sentient gateway --port 8080
-```
-
-### HTTP Requests
-
-```bash
-# Chat
-curl http://localhost:8080/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"messages": [{"role": "user", "content": "Hello!"}]}'
-
-# Stream
-curl http://localhost:8080/v1/chat/stream \
-  -H "Content-Type: application/json" \
-  -d '{"messages": [{"role": "user", "content": "Tell me a story"}], "stream": true}'
-```
+| Dosya | Açıklama |
+|-------|----------|
+| [QUICKSTART.md](../QUICKSTART.md) | 5 dakika başlangıç |
+| [INSTALL.md](../INSTALL.md) | Kapsamlı kurulum (20 bölüm) |
+| [INSTALL_GUIDE.md](../INSTALL_GUIDE.md) | Universal kurulum (tüm platformlar) |
+| [USAGE_GUIDE.md](../USAGE_GUIDE.md) | Kapsamlı kullanım kılavuzu (20 bölüm) |
+| [USAGE_SCENARIOS.md](USAGE_SCENARIOS.md) | 15 gerçek dünya senaryosu |
+| [MODEL_PROVIDERS.md](../MODEL_PROVIDERS.md) | 57+ provider detayları |
+| [ARCHITECTURE.md](../ARCHITECTURE.md) | Sistem mimarisi (A1-A12) |
+| [SECURITY.md](../SECURITY.md) | Güvenlik politikası |
+| [API.md](API.md) | REST API referansı |
+| [CHANNELS.md](CHANNELS.md) | Kanal entegrasyonları |
+| [VOICE.md](VOICE.md) | Ses sistemi rehberi |
 
 ---
 
-## Configuration
+## Destek
 
-### Config File Location
-
-- Linux/macOS: `~/.config/sentient/config.toml`
-- Windows: `%APPDATA%\sentient\config.toml`
-
-### Example Config
-
-```toml
-[llm]
-default_provider = "openai"
-default_model = "gpt-4o"
-api_key = "sk-..."
-
-[llm.providers.openai]
-api_key = "sk-..."
-
-[llm.providers.anthropic]
-api_key = "sk-ant-..."
-
-[channels.telegram]
-enabled = true
-token = "123456:ABC..."
-
-[voice]
-enabled = true
-wake_word = "hey sentient"
-stt_provider = "whisper"
-tts_provider = "openai"
-
-[agent]
-max_steps = 50
-timeout = 300
-```
-
-### Environment Variables
-
-```bash
-export SENTIENT_OPENAI_KEY="sk-..."
-export SENTIENT_ANTHROPIC_KEY="sk-ant-..."
-export SENTIENT_DEFAULT_MODEL="anthropic/claude-3-5-sonnet"
-```
-
----
-
-## Tips & Tricks
-
-### Use Local Models
-
-```bash
-# Install Ollama first
-ollama pull llama3.3
-
-# Use with SENTIENT
-sentient repl --model ollama/llama3.3
-```
-
-### Custom System Prompt
-
-```bash
-sentient repl --system "You are a Rust expert. Be concise."
-```
-
-### Output Formats
-
-```bash
-# JSON output
-sentient ask "List planets" --format json
-
-# Markdown output
-sentient ask "Explain async/await" --format markdown
-
-# Code output
-sentient code "Sort array" --language python
-```
-
-### Debug Mode
-
-```bash
-SENTIENT_DEBUG=1 sentient repl
-```
-
----
-
-## Next Steps
-
-- [API Reference](API.md)
-- [Channels Guide](CHANNELS.md)
-- [Voice Guide](VOICE.md)
-- [Skills Development](SKILLS.md)
-- [Kubernetes Deployment](KUBERNETES.md)
-
----
-
-## Getting Help
-
-- **Documentation**: https://docs.sentient.ai
 - **GitHub Issues**: https://github.com/nexsusagent-coder/SENTIENT_CORE/issues
-- **Discord**: https://discord.gg/sentient
+- **Email**: sentient@sentient-os.ai
 
 ---
 

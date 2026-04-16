@@ -11,26 +11,32 @@ SENTIENT OS, kurumsal yapay zeka agent'larını çalıştırmak, yönetmek ve
 ölçeklendirmek için tasarlanmış Rust-tabanlı bir AI işletim sistemidir.
 
 **Tek Metrik:**
-- 173,000+ satır Rust kodu
-- 1,232+ test
-- 600+ LLM model desteği
-- 23 kanal entegrasyonu
+- 303,490 satır Rust kodu (93 crate)
+- 560+ test
+- 245+ native LLM model + 200K+ aggregator erişimi (57+ provider)
+- 20+ kanal entegrasyonu
+- 5,587+ skill
+- 72+ entegre proje
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  ENTERPRISE ÖZELLİKLERİ
 # ═══════════════════════════════════════════════════════════════════════════════
 
-## 🔐 Güvenlik & Compliance
+## 🔐 Güvenlik & Compliance (6 Güvenlik Crate'i)
 
-| Özellik | Açıklama |
-|---------|----------|
-| **SOC 2 Type II** | Compliance framework hazır |
-| **RBAC** | Role-based access control |
-| **SSO** | SAML 2.0, OIDC, LDAP |
-| **Secret Management** | HashiCorp Vault entegrasyonu |
-| **Audit Log** | Tüm işlemler kayıt altında |
-| **Data Encryption** | Rest ve transit encryption |
+| Özellik | Crate | Açıklama |
+|---------|-------|----------|
+| **SOC 2 Type II** | sentient_compliance (2,226 satır) | Compliance framework hazır |
+| **RBAC** | sentient_enterprise (2,461 satır) | Role-based access control |
+| **SSO** | sentient_enterprise | SAML 2.0, OIDC, LDAP |
+| **Secret Management** | oasis_vault (2,417 satır) | Şifreli secret yönetimi, crypto |
+| **Audit Log** | sentient_compliance | Tüm işlemler kayıt altında |
+| **Data Encryption** | oasis_vault | AES-256-GCM, rest ve transit |
+| **TEE** | sentient_tee (2,683 satır) | AMD SEV-SNP, Intel TDX |
+| **ZK Proofs** | sentient_zk_mcp (2,062 satır) | Zero-knowledge MCP |
+| **Anomaly Detection** | sentient_anomaly (1,160 satır) | İzinsiz giriş tespiti |
+| **Guardrails** | sentient_guardrails (307 satır) | Prompt injection, data exfiltration |
 
 ## 🏗️ Infrastructure
 
@@ -44,23 +50,33 @@ SENTIENT OS, kurumsal yapay zeka agent'larını çalıştırmak, yönetmek ve
 
 ## 🤖 AI Capabilities
 
-| Özellik | Açıklama |
-|---------|----------|
-| **600+ Models** | OpenAI, Claude, Gemini, Ollama, 40+ provider |
-| **RAG Engine** | Vector search, document processing |
-| **Multi-Agent** | Orchestration, collaboration |
-| **Skills Marketplace** | 5,587+ hazır yetenek |
-| **Voice** | STT, TTS, Wake Word, Diarization |
-| **Vision** | OCR, image understanding |
+| Özellik | Crate | Açıklama |
+|---------|-------|----------|
+| **245+ Native Models** | sentient_llm (14,445 satır) | 57+ provider, 200K+ aggregator erişimi |
+| **Smart Router** | sentient_llm::router | Zorluk bazlı otomatik model seçimi |
+| **RAG Engine** | sentient_rag (3,831 satır) | Vector search, document processing |
+| **Multi-Agent** | sentient_orchestrator (11,235 satır) | 6 framework: CrewAI, AutoGen, Swarm, MetaGPT |
+| **Desktop Automation** | oasis_hands (36,741 satır) | 43+ tool, human mimicry |
+| **Otonom Agent** | oasis_autonomous (6,773 satır) | Perceive→Decide→Act→Learn |
+| **Skills** | sentient_skills (2,136 satır) | 5,587+ hazır yetenek |
+| **Voice** | sentient_voice (2,634 satır) | STT, TTS, Wake Word, VAD |
+| **Vision** | sentient_vision (2,201 satır) | OCR, multimodal |
+| **Türkçe LLM** | sentient_cevahir (1,630 satır) | Cevahir AI V-7, cognitive strategies |
+| **Proactive** | sentient_proactive | Zamanlı, olaylı, pattern tetikleyiciler |
+| **Akıllı Ev** | sentient_home | Home Assistant entegrasyonu |
+| **MCP** | sentient_mcp (3,003 satır) | Claude Desktop, Cursor uyumlu |
 
 ## 🔌 Integrations
 
 | Kategori | Sayı |
 |----------|------|
-| **Messaging** | 23 kanal (Slack, Teams, Discord, WhatsApp...) |
-| **Databases** | 15+ (PostgreSQL, MongoDB, Redis...) |
-| **Cloud** | AWS, GCP, Azure |
-| **Tools** | Jira, GitHub, Notion, 50+ |
+| **Messaging** | 20+ kanal (Telegram, Discord, Slack, WhatsApp, Teams...) |
+| **Databases** | PostgreSQL, SQLite, Qdrant, ChromaDB, Redis |
+| **Cloud** | AWS Bedrock, Azure OpenAI, GCP Vertex AI |
+| **Connectors** | Gmail, Calendar, GitHub, Weather, RSS |
+| **Browser** | Browser-Use, Lightpanda, Playwright |
+| **Memory** | Mem0, ChromaDB, Qdrant, LanceDB |
+| **Sandbox** | Docker, E2B SDK, LocalStack |
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

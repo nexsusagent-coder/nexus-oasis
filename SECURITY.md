@@ -45,9 +45,9 @@ We follow responsible disclosure:
 
 ## Security Features
 
-SENTIENT OS includes several security features:
+SENTIENT OS includes multiple security layers:
 
-### 🔐 V-GATE Architecture
+### 🔐 V-GATE Architecture (sentient_vgate)
 
 ```
 ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
@@ -57,19 +57,35 @@ SENTIENT OS includes several security features:
                            │
                      API Key (Secure)
                      Stored on server
+                     NEVER in client code
 ```
 
-**API keys are NEVER in client code.**
+**V-GATE Features:**
+- Request routing & load balancing
+- Rate limiting
+- API key injection (server-side only)
+- Encrypted key storage
+- Key rotation support
 
-### 🛡️ Security Crates
+### 🛡️ Security Crates (93 crate'den 6'sı güvenlik)
 
-| Crate | Purpose |
-|-------|---------|
-| `sentient_guardrails` | Input/output filtering, prompt injection detection |
-| `sentient_vault` | Secret management (AWS, Azure, HashiCorp Vault) |
-| `sentient_tee` | Trusted Execution Environment (AMD SEV-SNP, Intel TDX) |
-| `sentient_zk_mcp` | Zero-knowledge proofs for MCP |
-| `sentient_compliance` | SOC 2 controls, audit logging |
+| Crate | Satır | Purpose |
+|-------|-------|---------|
+| `sentient_guardrails` | 307 | Input/output filtering, prompt injection detection, data exfiltration prevention |
+| `oasis_vault` | 2,417 | Encrypted secret management, crypto operations |
+| `sentient_tee` | 2,683 | Trusted Execution Environment (AMD SEV-SNP, Intel TDX) |
+| `sentient_zk_mcp` | 2,062 | Zero-knowledge proofs for MCP protocol |
+| `sentient_compliance` | 2,226 | SOC 2 Type II controls, audit logging |
+| `sentient_anomaly` | 1,160 | Anomaly detection, intrusion alerts |
+
+### 🏛️ Sovereign Constitution (oasis_autonomous)
+
+Desktop agent için 50+ yasaklı komut:
+```
+✗ YASAKLI: rm -rf, format, dd, chmod 777, curl | bash,
+           sudo, su, chown root, mkfs, shutdown, reboot
+✓ İZİN VERİLEN: libreoffice, firefox, vscode, git, cargo
+```
 
 ### 🔒 Secure by Design
 
@@ -131,8 +147,9 @@ SENTIENT OS includes several security features:
 
 | Date | Auditor | Scope | Result |
 |------|---------|-------|--------|
-| 2025-04 | Internal | Code review | ✅ Passed |
-| 2025-04 | cargo audit | Dependencies | ✅ No vulnerabilities |
+| 2026-04 | Internal | Code review | ✅ Passed |
+| 2026-04 | cargo audit | Dependencies | ✅ No vulnerabilities |
+| 2026-04 | cargo test | 189+ tests (LLM) | ✅ All passing |
 
 ## Contact
 
@@ -142,6 +159,6 @@ SENTIENT OS includes several security features:
 
 ---
 
-**Last Updated**: April 2025
+**Last Updated**: April 2026
 
-**Next Review**: July 2025
+**Next Review**: July 2026

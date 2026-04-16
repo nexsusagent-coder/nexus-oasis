@@ -1,258 +1,200 @@
-# 🤖 MODEL & PROVIDER REHBERİ
+# 🤖 SENTIENT OS - Model & Provider Rehberi
 
-SENTIENT OS, **10+ provider** ve **100+ model** desteği sunar.
+> **57+ Provider, 245+ Native Model, 200K+ Aggregator Erişimi**
 
 ---
 
-## 📊 Hızlı Başlangıç
+## 📑 İçindekiler
+
+1. [Hızlı Başlangıç](#1-hızlı-başlangıç)
+2. [Lokal Modeller (Ücretsiz)](#2-lokal-modeller-ücretsiz)
+3. [Direct Provider'lar](#3-direct-providerlar)
+4. [Aggregator Provider'lar](#4-aggregator-providerlar)
+5. [Enterprise Cloud Provider'lar](#5-enterprise-cloud-providerlar)
+6. [Çin AI Provider'ları](#6-çin-ai-providerları)
+7. [AI Gateway/Router Provider'ları](#7-ai-gatewayrouter-providerları)
+8. [Lokal Inference Provider'ları](#8-lokal-inference-providerları)
+9. [Model Seçim Rehberi](#9-model-seçim-rehberi)
+10. [Yapılandırma](#10-yapılandırma)
+
+---
+
+## 1. Hızlı Başlangıç
 
 ### Ücretsiz Seçenekler
 
 | Seçenek | Nasıl | Maliyet |
 |---------|-------|---------|
-| **Yerel Model** | Ollama kur + model indir | $0 |
-| **OpenRouter Free** | OPENROUTER_API_KEY | $0 (limitli) |
-| **Gemma 4 Free** | OpenRouter free tier | $0 |
+| **Ollama Lokal** | `ollama pull gemma3:27b` | $0 |
+| **OpenRouter Free** | API key ile free modeller | $0 |
+| **Gemini Flash** | Google AI free tier | $0 |
+| **Groq Free** | Groq free tier | $0 |
 
-### API Key Gerektirenler
+### API Key ile
 
-| Provider | Key Env | En İyi Model |
-|----------|---------|--------------|
-| OpenAI | `OPENAI_API_KEY` | GPT-4o |
-| Anthropic | `ANTHROPIC_API_KEY` | Claude 3.7 |
-| Google | `GOOGLE_API_KEY` | Gemini 2.0 |
-| Groq | `GROQ_API_KEY` | Llama 3.3 |
+| Provider | Key Env | En İyi Model | Fiyat |
+|----------|---------|-------------|-------|
+| OpenRouter | `OPENROUTER_API_KEY` | 200+ model | Değişken |
+| OpenAI | `OPENAI_API_KEY` | GPT-4o | $0.03/1K |
+| Anthropic | `ANTHROPIC_API_KEY` | Claude 4 Sonnet | $0.003/1K |
+| DeepSeek | `DEEPSEEK_API_KEY` | DeepSeek V3 | **EN UCUZ** |
+| Groq | `GROQ_API_KEY` | Llama 3.3 70B | **EN HIZLI** |
 
 ---
 
-## 🏠 YEREL MODELLER (Key Gerektirmez)
+## 2. Lokal Modeller (Ücretsiz)
 
-### Ollama Kurulumu
+### Ollama ile Kurulum
 
 ```bash
-# Linux/macOS
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Model indir
-ollama pull gemma4:31b
-ollama pull llama3.3:70b
-ollama pull qwen2.5:72b
-
-# Çalıştır
-ollama run gemma4:31b
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull gemma3:27b    # ÖNERİLEN
 ```
 
-### Önerilen Yerel Modeller
+### Önerilen Modeller (VRAM'a Göre)
 
-| Model | Parametre | Context | VRAM | İndirme |
-|-------|-----------|---------|------|---------|
-| **Gemma 4 31B** | 31B | 256K | 24GB | `ollama pull gemma4:31b` |
-| **Llama 3.3 70B** | 70B | 128K | 48GB | `ollama pull llama3.3:70b` |
-| **Qwen 2.5 72B** | 72B | 128K | 48GB | `ollama pull qwen2.5:72b` |
-| **DeepSeek R1 67B** | 67B | 128K | 40GB | `ollama pull deepseek-r1:67b` |
-| **Mistral 24B** | 24B | 128K | 16GB | `ollama pull mistral:24b` |
+| VRAM | Model | Parametre | Context | İndirme |
+|------|-------|-----------|---------|---------|
+| 4 GB | Qwen3 30B MoE | 30B (3B aktif) | 128K | `ollama pull qwen3:30b-a3b` |
+| 4 GB | Phi-4 Mini | 3.8B | 128K | `ollama pull phi4-mini` |
+| 4 GB | Llama 3.2 1B | 1.2B | 128K | `ollama pull llama3.2:1b` |
+| 8 GB | DeepSeek R1 Distill 8B | 8B | 128K | `ollama pull deepseek-r1:8b` |
+| 8 GB | Mistral Small 3.1 | 24B | 128K | `ollama pull mistral-small3.1` |
+| 8 GB | Qwen 2.5 Coder 7B | 7B | 128K | `ollama pull qwen2.5-coder:7b` |
+| 16 GB | Gemma 3 27B | 27B | 256K | `ollama pull gemma3:27b` |
+| 16 GB | Gemma 3 12B | 12B | 256K | `ollama pull gemma3:12b` |
+| 16 GB | Pixtral 12B | 12B | 128K | `ollama pull pixtral:12b` |
+| 24 GB | Llama 4 Scout | 109B (17B aktif) | 10M | `ollama pull llama4:scout` |
+| 48 GB | Llama 3.3 70B | 70B | 128K | `ollama pull llama3.3:70b` |
+| 48 GB | DeepSeek R1 67B | 67B | 128K | `ollama pull deepseek-r1:67b` |
 
-### Donanım Gereksinimleri
+### Diğer Lokal Yöntemler
 
-| VRAM | Önerilen Model |
-|------|----------------|
-| 8GB | Gemma 4 E2B, Phi-4 |
-| 16GB | Mistral 24B, Gemma 4 E4B |
-| 24GB | Gemma 4 31B |
-| 40GB+ | DeepSeek R1 67B |
-| 48GB+ | Llama 3.3 70B, Qwen 2.5 72B |
-
----
-
-## 🔑 API PROVIDER'LAR
-
-### OpenRouter (Önerilen)
-
-**Tek API key ile 100+ model erişimi.**
-
-```bash
-# .env
-OPENROUTER_API_KEY=sk-or-...
-```
-
-| Model | Context | Ücretsiz? | Özellik |
-|-------|---------|-----------|---------|
-| `google/gemma-4-31b-it:free` | 256K | ✅ | Varsayılan |
-| `google/gemma-4-26b-a4b-it:free` | 256K | ✅ | Hızlı |
-| `meta-llama/llama-3.3-70b-instruct:free` | 128K | ✅ | Genel |
-| `qwen/qwen3-235b-a22b-instruct:free` | 128K | ✅ | Advanced |
-| `deepseek/deepseek-r1:free` | 164K | ✅ | Reasoning |
-| `openai/gpt-4o` | 128K | ❌ | Multimodal |
-| `anthropic/claude-3.7-sonnet` | 200K | ❌ | Coding |
+| Yöntem | Açıklama | Kurulum |
+|--------|----------|---------|
+| vLLM | Yüksek performans server | `pip install vllm` |
+| LM Studio | GUI ile model yönetimi | [lmstudio.ai](https://lmstudio.ai) |
+| Llamafile | Tek dosya çalıştırma | [llamafile.com](https://llamafile.com) |
 
 ---
 
-### OpenAI
+## 3. Direct Provider'lar
 
-```bash
-# .env
-OPENAI_API_KEY=sk-...
-```
-
-| Model | Context | Fiyat (1K tokens) | Özellik |
-|-------|---------|-------------------|---------|
-| `gpt-4o` | 128K | $0.03-0.06 | Multimodal |
-| `gpt-4o-mini` | 128K | $0.00015-0.0006 | Hızlı |
-| `o3-mini` | 200K | Değişken | Reasoning |
-
----
-
-### Anthropic (Claude)
-
-```bash
-# .env
-ANTHROPIC_API_KEY=sk-ant-...
-```
-
-| Model | Context | Fiyat (1K tokens) | Özellik |
-|-------|---------|-------------------|---------|
-| `claude-3.7-sonnet` | 200K | $0.003-0.015 | Coding, Reasoning |
-| `claude-3.5-sonnet` | 200K | $0.003-0.015 | Genel |
-| `claude-3.5-haiku` | 200K | $0.00025-0.00125 | Hızlı |
+| # | Provider | Modeller | Key Env | Özellik |
+|---|----------|----------|---------|---------|
+| 1 | **OpenAI** | GPT-4o, o1, o3, o4-mini | `OPENAI_API_KEY` | Multimodal, reasoning |
+| 2 | **Anthropic** | Claude 4, 3.5 Sonnet, Opus 4.1 | `ANTHROPIC_API_KEY` | Coding, 200K context |
+| 3 | **Google AI** | Gemini 2.5 Pro/Flash, 2.0 | `GOOGLE_AI_API_KEY` | 1M+ context, free tier |
+| 4 | **Mistral** | Mistral Large 3, Codestral | `MISTRAL_API_KEY` | Avrupa, open weights |
+| 5 | **DeepSeek** | V3, R1, V4, R2 | `DEEPSEEK_API_KEY` | **EN UCUZ!** |
+| 6 | **xAI** | Grok 2, Grok 4 | `XAI_API_KEY` | X entegrasyonu |
+| 7 | **Cohere** | Command R+, Command R2 | `COHERE_API_KEY` | RAG optimize |
+| 8 | **Perplexity** | Sonar, Sonar Deep Research v2 | `PERPLEXITY_API_KEY` | Web search built-in |
+| 9 | **Groq** | Llama 3.3 70B, Gemma 2 | `GROQ_API_KEY` | **EN HIZLI!** LPU |
+| 10 | **AI21 Labs** | Jamba 1.5 | `AI21_API_KEY` | SSM mimari |
+| 11 | **Reka** | Reka Core, Edge, Flash | `REKA_API_KEY` | Multimodal |
+| 12 | **Cerebras** | Llama 3.3 70B | `CEREBRAS_API_KEY` | Wafer-scale chip |
+| 13 | **Fireworks** | Llama, Mixtral | `FIREWORKS_API_KEY` | Hızlı inference |
+| 14 | **Replicate** | Her model | `REPLICATE_API_KEY` | Cloud run |
+| 15 | **StepFun** | Step-2 16K | `STEPFUN_API_KEY` | Çin |
+| 16 | **Aleph Alpha** | Luminous | `ALEPH_ALPHA_API_KEY` | Almanya, GDPR |
+| 17 | **Sarvam** | Sarvam-2 | `SARVAM_API_KEY` | Hint dilleri |
+| 18 | **Voyage** | Voyage-3 | `VOYAGE_API_KEY` | Embedding |
+| 19 | **Upstage** | Solar Mini | `UPSTAGE_API_KEY` | Kore |
+| 20 | **GigaChat** | GigaChat Max | `GIGACHAT_API_KEY` | Rusya |
 
 ---
 
-### Google (Gemini)
+## 4. Aggregator Provider'lar
 
-```bash
-# .env
-GOOGLE_API_KEY=...
-```
-
-| Model | Context | Özellik |
-|-------|---------|---------|
-| `gemini-2.0-flash-exp` | **1M** | Çok uzun context |
-| `gemini-exp-1206` | **2M** | Extreme context |
-
----
-
-### Groq (Hızlı Inference)
-
-```bash
-# .env
-GROQ_API_KEY=...
-```
-
-| Model | Context | Özellik |
-|-------|---------|---------|
-| `llama-3.3-70b-versatile` | 128K | En hızlı |
-| `mixtral-8x7b-32768` | 32K | Çok hızlı |
+| # | Provider | Model Sayısı | Key Env | Özellik |
+|---|----------|-------------|---------|---------|
+| 1 | **OpenRouter** | 200+ | `OPENROUTER_API_KEY` | **EN BÜYÜK!** Free modeller |
+| 2 | **Together AI** | 100+ | `TOGETHER_API_KEY` | Açık model optimize |
+| 3 | **Hugging Face** | 200K+ | `HF_API_KEY` | Model hub |
+| 4 | **DeepInfra** | 50+ | `DEEPINFRA_API_KEY` | Ucuz inference |
+| 5 | **GLHF** | 13+ | `GLHF_API_KEY` | Gaming |
+| 6 | **Novita** | 12+ | `NOVITA_API_KEY` | Ucuz |
+| 7 | **Hyperbolic** | 13+ | `HYPERBOLIC_API_KEY` | Merkeziyetsiz |
+| 8 | **SiliconFlow** | 17+ | `SILICONFLOW_API_KEY` | Çin |
+| 9 | **Lepton AI** | 5+ | `LEPTON_API_KEY` | Serverless |
+| 10 | **Chutes** | 10+ | `CHUTES_API_KEY` | Ücretsiz modeller |
 
 ---
 
-### DeepSeek (Ucuz)
+## 5. Enterprise Cloud Provider'lar
 
-```bash
-# .env
-DEEPSEEK_API_KEY=...
-```
-
-| Model | Context | Fiyat | Özellik |
-|-------|---------|-------|---------|
-| `deepseek-r1` | 164K | ~$0.001/1K | Reasoning |
-| `deepseek-chat` | 64K | ~$0.0005/1K | Genel |
-
----
-
-### Mistral
-
-```bash
-# .env
-MISTRAL_API_KEY=...
-```
-
-| Model | Context | Özellik |
-|-------|---------|---------|
-| `mistral-large-2412` | 128K | En güçlü |
-| `mixtral-8x22b-instruct` | 64K | MoE |
-| `pixtral-large-2411` | 128K | Vision |
+| # | Provider | Modeller | Key Env | Özellik |
+|---|----------|----------|---------|---------|
+| 1 | **Azure OpenAI** | GPT-4o, o1 | `AZURE_OPENAI_KEY` | Enterprise SLA |
+| 2 | **AWS Bedrock** | Claude, Llama, Titan | `AWS_ACCESS_KEY_ID` | AWS native |
+| 3 | **Vertex AI** | Gemini, Claude, Llama | `GOOGLE_CLOUD_KEY` | GCP native |
+| 4 | **NVIDIA NIM** | Llama, Mistral | `NVIDIA_API_KEY` | Enterprise AI |
+| 5 | **SambaNova** | Llama, Mistral | `SAMBANOVA_API_KEY` | Reconfigurable |
+| 6 | **IBM WatsonX** | Granite 4.0, Llama | `IBM_API_KEY` | IBM Cloud |
 
 ---
 
-### Cohere
+## 6. Çin AI Provider'ları
 
-```bash
-# .env
-COHERE_API_KEY=...
-```
-
-| Model | Context | Özellik |
-|-------|---------|---------|
-| `command-r-plus` | 128K | RAG optimizasyonu |
-| `command-r` | 128K | RAG |
-
----
-
-### Together AI
-
-```bash
-# .env
-TOGETHER_API_KEY=...
-```
-
-Açık modeller için optimize edilmiş platform.
+| # | Provider | Modeller | Key Env | Özellik |
+|---|----------|----------|---------|---------|
+| 1 | **Zhipu AI** | GLM-4 | `ZHIPU_API_KEY` | Akademik |
+| 2 | **Moonshot** | Kimi (128K) | `MOONSHOT_API_KEY` | Uzun context |
+| 3 | **Yi (01.AI)** | Yi Lightning | `YI_API_KEY` | Hızlı |
+| 4 | **Baidu ERNIE** | ERNIE 4.0 | `BAIDU_API_KEY` | Arama entegrasyonu |
+| 5 | **MiniMax** | abab 6.5 | `MINIMAX_API_KEY` | Sosyal |
+| 6 | **Qwen Direct** | Qwen4 Max | `QWEN_API_KEY` | Alibaba |
+| 7 | **Mod** | DeepSeek uyumlu | `MOD_API_KEY` | Ucuz |
 
 ---
 
-### Replicate
+## 7. AI Gateway/Router Provider'ları
 
-```bash
-# .env
-REPLICATE_API_KEY=...
-```
-
-Her modeli API ile çalıştırma imkanı.
-
----
-
-## 🆓 ÜCRETSİZ MODELLER (OpenRouter)
-
-Bu modeller OpenRouter free tier ile **$0** maliyetle kullanılabilir:
-
-| Model | Context | Thinking | Vision |
-|-------|---------|----------|--------|
-| Gemma 4 31B | 256K | ✅ | ✅ |
-| Gemma 4 26B MoE | 256K | ✅ | ✅ |
-| Llama 3.3 70B | 128K | ❌ | ❌ |
-| Qwen3 235B MoE | 128K | ✅ | ❌ |
-| DeepSeek R1 | 164K | ✅ | ❌ |
-| Mistral Small 24B | 128K | ❌ | ❌ |
+| # | Provider | Özellik | Key Env |
+|---|----------|---------|---------|
+| 1 | **Unify AI** | ML bazlı routing: `router@q>0.9&c<0.001` | `UNIFY_API_KEY` |
+| 2 | **Portkey** | Failover, cache, cost tracking | `PORTKEY_API_KEY` |
+| 3 | **Helicone** | Observability proxy, analytics | `HELICONE_API_KEY` |
+| 4 | **NotDiamond** | ML model router, auto-optimize | `NOTDIAMOND_API_KEY` |
+| 5 | **AI/ML API** | %80 indirimli API | `AIMLAPI_API_KEY` |
+| 6 | **Glama** | MCP gateway, multi-provider | `GLLML_API_KEY` |
+| 7 | **Requesty** | A/B testing router | `REQUESTY_API_KEY` |
+| 8 | **LiteLLM** | Self-hosted, 100+ provider | `LITELLM_API_KEY` |
+| 9 | **Cloudflare Workers AI** | Edge inference | `CLOUDFLARE_API_KEY` |
 
 ---
 
-## 📊 MODEL KARŞILAŞTIRMA
+## 8. Lokal Inference Provider'ları
+
+| # | Provider | Tür | Açıklama |
+|---|----------|-----|----------|
+| 1 | **Ollama** | Server | En popüler, 50K+ model |
+| 2 | **vLLM** | Server | Yüksek performans, PagedAttention |
+| 3 | **LM Studio** | GUI | Drag & drop model yönetimi |
+| 4 | **Llamafile** | Single-file | `./model.llamafile` ile çalışır |
+
+---
+
+## 9. Model Seçim Rehberi
 
 ### En İyi Coding
 
-| Model | Provider | Ücret |
-|-------|----------|-------|
-| Claude 3.7 Sonnet | Anthropic | $ |
-| GPT-4o | OpenAI | $ |
-| Qwen 2.5 72B | Local | Free |
-| Gemma 4 31B | Local | Free |
+| Model | Provider | Fiyat | Context |
+|-------|----------|-------|---------|
+| Claude 4 Sonnet | Anthropic | $$$ | 200K |
+| GPT-4o | OpenAI | $$$ | 128K |
+| DeepSeek V3 | DeepSeek | $ | 64K |
+| Qwen 2.5 Coder | Lokal | Free | 128K |
 
 ### En İyi Reasoning
 
-| Model | Provider | Ücret |
-|-------|----------|-------|
-| DeepSeek R1 | DeepSeek/Local | $/Free |
-| o3-mini | OpenAI | $ |
-| Claude 3.7 Sonnet | Anthropic | $ |
-| Gemma 4 31B | Local | Free |
-
-### En İyi Multimodal (Vision)
-
-| Model | Provider | Ücret |
-|-------|----------|-------|
-| GPT-4o | OpenAI | $ |
-| Claude 3.7 Sonnet | Anthropic | $ |
-| Gemini 2.0 Flash | Google | $ |
-| Gemma 4 31B | Local | Free |
+| Model | Provider | Fiyat | Context |
+|-------|----------|-------|---------|
+| DeepSeek R1 | DeepSeek/Lokal | $/Free | 164K |
+| o4-mini | OpenAI | $$ | 200K |
+| Claude 4 Sonnet | Anthropic | $$$ | 200K |
+| Gemma 3 27B | Lokal | Free | 256K |
 
 ### En Uzun Context
 
@@ -260,127 +202,71 @@ Bu modeller OpenRouter free tier ile **$0** maliyetle kullanılabilir:
 |-------|---------|----------|
 | Gemini Exp | **2M** | Google |
 | Gemini 2.0 Flash | **1M** | Google |
-| Gemma 4 31B | **256K** | Local/Free |
-| Claude 3.7 | **200K** | Anthropic |
+| Llama 4 Scout | **10M** | Lokal/Ollama |
+| Gemma 3 27B | **256K** | Lokal |
 
 ### En Hızlı
 
-| Model | Provider | Hız |
-|-------|----------|-----|
-| Llama 3.3 70B | Groq | En hızlı |
-| Mixtral 8x7B | Groq | Çok hızlı |
-| GPT-4o-mini | OpenAI | Hızlı |
-| Claude 3.5 Haiku | Anthropic | Hızlı |
+| Model | Provider | Latency |
+|-------|----------|---------|
+| Llama 3.3 70B | Groq | ~50ms |
+| Gemma 2 9B | Groq | ~30ms |
+| GPT-4o-mini | OpenAI | ~200ms |
+| Gemini 2.0 Flash | Google | ~100ms |
+
+### En Ucuz
+
+| Model | Provider | Fiyat/1M tokens |
+|-------|----------|-----------------|
+| DeepSeek V3 | DeepSeek | $0.27/$1.10 |
+| DeepSeek R1 | DeepSeek | $0.55/$2.19 |
+| Gemini 2.0 Flash | Google | Free tier |
+| Qwen3 30B MoE | Ollama | Free |
 
 ---
 
-## ⚙️ YAPILANDIRMA
+## 10. Yapılandırma
 
 ### .env Dosyası
 
 ```bash
-# Provider seçimi (öncelik sırası)
-OPENROUTER_API_KEY=sk-or-...      # Önerilen
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-GOOGLE_API_KEY=...
-GROQ_API_KEY=...
-COHERE_API_KEY=...
-MISTRAL_API_KEY=...
-DEEPSEEK_API_KEY=...
-TOGETHER_API_KEY=...
-REPLICATE_API_KEY=...
+# ═══ ÖNERİLEN BAŞLANGIÇ ═══
+OPENROUTER_API_KEY=sk-or-v1-xxx     # 200+ model, $5 ücretsiz kredi
+OLLAMA_HOST=http://localhost:11434   # Lokal, ücretsiz
 
-# Yerel model (Ollama)
-OLLAMA_HOST=http://localhost:11434
+# ═══ DİĞER PROVIDER'LAR (Opsiyonel) ═══
+OPENAI_API_KEY=sk-xxx
+ANTHROPIC_API_KEY=sk-ant-xxx
+GOOGLE_AI_API_KEY=xxx
+DEEPSEEK_API_KEY=xxx
+GROQ_API_KEY=gsk_xxx
+MISTRAL_API_KEY=xxx
+COHERE_API_KEY=xxx
+PERPLEXITY_API_KEY=xxx
+XAI_API_KEY=xxx
 
-# Varsayılan model
-SENTIENT_MODEL=google/gemma-4-31b-it:free
+# ═══ GATEWAY ═══
+UNIFY_API_KEY=xxx          # Akıllı routing
+PORTKEY_API_KEY=xxx        # Enterprise gateway
 ```
 
-### Config Dosyası (config.toml)
-
-```toml
-[llm]
-provider = "openrouter"
-model = "google/gemma-4-31b-it:free"
-temperature = 0.7
-max_tokens = 16384
-
-[llm.fallback]
-provider = "local"
-model = "gemma4:31b"
-```
-
----
-
-## 🔄 MODEL DEĞİŞTİRME
-
-### CLI ile
+### CLI ile Model Değiştirme
 
 ```bash
 # Model listesi
-sentient models list
+sentient model list
 
 # Model değiştir
-sentient config set model openai/gpt-4o
+sentient model set openai/gpt-4o
+sentient model set ollama/gemma3:27b
+sentient model set deepseek/deepseek-r1
 
-# Provider değiştir
-sentient config set provider openai
-```
-
-### API ile
-
-```bash
-curl -X POST http://localhost:8080/api/config \
-  -H "Content-Type: application/json" \
-  -d '{"model": "anthropic/claude-3.7-sonnet"}'
+# Akıllı routing
+sentient model set "unify/router@q>0.9&c<0.001"
+sentient model set "openrouter/auto"
 ```
 
 ---
 
-## 💡 İPUÇLARI
-
-### 1. Ücretsiz Başlayın
-```bash
-# OpenRouter free tier ile
-export OPENROUTER_API_KEY=sk-or-...
-sentient --model google/gemma-4-31b-it:free
-```
-
-### 2. Yerel Model Kullanın
-```bash
-# Ollama kur
-ollama pull gemma4:31b
-
-# SENTIENT'i yerel modele ayarla
-sentient --provider local --model gemma4:31b
-```
-
-### 3. Fallback Ayarlayın
-```bash
-# API limit'e takılırsa yerel modele geç
-sentient config set fallback.provider local
-sentient config set fallback.model gemma4:31b
-```
-
-### 4. Görev Bazlı Model Seçin
-```bash
-# Coding için Claude
-sentient --task coding --model anthropic/claude-3.7-sonnet
-
-# Reasoning için DeepSeek R1
-sentient --task reasoning --model deepseek/deepseek-r1
-```
-
----
-
-## 📚 İLGİLİ DOKÜMANLAR
-
-- [WHY_SENTIENT.md](./WHY_SENTIENT.md) - Neden SENTIENT?
-- [INSTALL.md](./INSTALL.md) - Kurulum rehberi
-- [USER_MANUAL.md](./USER_MANUAL.md) - Kullanım kılavuzu
-
----
-
-*🧠 SENTIENT OS - The Operating System That Thinks*
+*🧠 SENTIENT OS - The Operating System That Thinks*  
+*93 Crate | 57+ Provider | 245+ Model | 200K+ Aggregator Erişimi*
