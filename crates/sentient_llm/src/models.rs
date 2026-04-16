@@ -1690,6 +1690,168 @@ pub fn specialized_models() -> Vec<ModelInfo> {
             training_cutoff: Some("2024-07".into()), quality_rating: 2, speed_rating: 5,
             is_reasoning: false, free_tier: true,
         },
+        // ── Llama 4 Scout (2025) - 10M context, MoE 109B ──
+        ModelInfo {
+            id: "llama4:scout".into(), name: "Llama 4 Scout 109B MoE (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 10_485_760, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-04".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Llama 4 Maverick (2025) - 1M context, MoE 400B ──
+        ModelInfo {
+            id: "llama4:maverick".into(), name: "Llama 4 Maverick 400B MoE (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 1_048_576, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-04".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Qwen3 MoE - çok hafif, 3B aktif parametre ──
+        ModelInfo {
+            id: "qwen3:30b-a3b".into(), name: "Qwen3 30B-A3B MoE (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 131_072, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-03".into()), quality_rating: 4, speed_rating: 5,
+            is_reasoning: true, free_tier: true,
+        },
+        // ── Gemma 3 4B - küçük ama güçlü ──
+        ModelInfo {
+            id: "gemma3:4b".into(), name: "Gemma 3 4B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 3, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Gemma 3 12B ──
+        ModelInfo {
+            id: "gemma3:12b".into(), name: "Gemma 3 12B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 4, speed_rating: 4,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Phi-4 Mini - 4GB VRAM ile çalışır ──
+        ModelInfo {
+            id: "phi4-mini:5b".into(), name: "Phi-4 Mini 5B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 4, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Mistral Small 3.1 24B - vision destekli ──
+        ModelInfo {
+            id: "mistral-small3.1:24b".into(), name: "Mistral Small 3.1 24B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Command R (Cohere) - açık kaynak ──
+        ModelInfo {
+            id: "command-r:35b".into(), name: "Command R 35B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-08".into()), quality_rating: 4, speed_rating: 4,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── DeepSeek R1 8B distill - en küçük reasoning ──
+        ModelInfo {
+            id: "deepseek-r1:8b".into(), name: "DeepSeek R1 Distill 8B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 131_072, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-11".into()), quality_rating: 3, speed_rating: 5,
+            is_reasoning: true, free_tier: true,
+        },
+        // ── DeepSeek R1 14B distill ──
+        ModelInfo {
+            id: "deepseek-r1:14b".into(), name: "DeepSeek R1 Distill 14B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 131_072, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-11".into()), quality_rating: 4, speed_rating: 4,
+            is_reasoning: true, free_tier: true,
+        },
+        // ── Qwen2.5 Coder 7B - küçük kod modeli ──
+        ModelInfo {
+            id: "qwen2.5-coder:7b".into(), name: "Qwen 2.5 Coder 7B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 131_072, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-11".into()), quality_rating: 4, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Qwen2.5 Coder 14B ──
+        ModelInfo {
+            id: "qwen2.5-coder:14b".into(), name: "Qwen 2.5 Coder 14B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 131_072, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-11".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Granite 3.3 8B (IBM) - açık kaynak ──
+        ModelInfo {
+            id: "granite3.3:8b".into(), name: "Granite 3.3 8B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2025-02".into()), quality_rating: 4, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── InternLM 3 8B - Çin açık kaynak ──
+        ModelInfo {
+            id: "internlm3:8b".into(), name: "InternLM 3 8B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 32_000, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-10".into()), quality_rating: 4, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Yi Coder 9B - Çin kod modeli ──
+        ModelInfo {
+            id: "yi-coder:9b".into(), name: "Yi Coder 9B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-09".into()), quality_rating: 4, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── DBRX Instruct (Databricks) - açık kaynak MoE ──
+        ModelInfo {
+            id: "dbrx:132b".into(), name: "DBRX 132B MoE (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 32_000, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-03".into()), quality_rating: 4, speed_rating: 3,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Llama 3.2 1B - en küçük Llama ──
+        ModelInfo {
+            id: "llama3.2:1b".into(), name: "Llama 3.2 1B (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 131_072, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-07".into()), quality_rating: 1, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── Pixtral 12B - Mistral'ın vision modeli ──
+        ModelInfo {
+            id: "pixtral:12b".into(), name: "Pixtral 12B Vision (Ollama)".into(), provider: "Ollama".into(),
+            context_window: 128_000, max_output_tokens: 4_096,
+            input_cost_per_1k: 0.0, output_cost_per_1k: 0.0,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2024-09".into()), quality_rating: 4, speed_rating: 4,
+            is_reasoning: false, free_tier: true,
+        },
         // Together AI additional models
         ModelInfo {
             id: "togethercomputer/StripedHyena-Nous-7B".into(), name: "StripedHyena 7B (Together)".into(), provider: "Together".into(),
@@ -1893,6 +2055,118 @@ pub fn specialized_models() -> Vec<ModelInfo> {
             supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
             training_cutoff: Some("2024-11".into()), quality_rating: 5, speed_rating: 4,
             is_reasoning: true, free_tier: false,
+        },
+        // ═══════════════════════════════════════════════════════════
+        //  2026 GÜNCEL - En Yeni Modeller (Nisan 2026)
+        // ═══════════════════════════════════════════════════════════
+
+        // ── OpenAI o4-mini (Mart 2026) ──
+        ModelInfo {
+            id: "o4-mini".into(), name: "o4 Mini (2026)".into(), provider: "OpenAI".into(),
+            context_window: 200_000, max_output_tokens: 100_000,
+            input_cost_per_1k: 0.0011, output_cost_per_1k: 0.0044,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: false,
+            training_cutoff: Some("2025-11".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: true, free_tier: false,
+        },
+        // ── Gemini 2.5 Pro (Mart 2026 güncelleme) ──
+        ModelInfo {
+            id: "gemini-2.5-pro-latest".into(), name: "Gemini 2.5 Pro (2026)".into(), provider: "Google".into(),
+            context_window: 1_048_576, max_output_tokens: 65_536,
+            input_cost_per_1k: 0.00125, output_cost_per_1k: 0.01,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-02".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: true, free_tier: false,
+        },
+        // ── Gemini 2.5 Flash (Mart 2026 güncelleme) ──
+        ModelInfo {
+            id: "gemini-2.5-flash-latest".into(), name: "Gemini 2.5 Flash (2026)".into(), provider: "Google".into(),
+            context_window: 1_048_576, max_output_tokens: 65_536,
+            input_cost_per_1k: 0.00015, output_cost_per_1k: 0.0006,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-02".into()), quality_rating: 5, speed_rating: 5,
+            is_reasoning: true, free_tier: true,
+        },
+        // ── Claude Opus 4.1 (Şubat 2026) ──
+        ModelInfo {
+            id: "claude-opus-4-1-20260215".into(), name: "Claude Opus 4.1 (2026)".into(), provider: "Anthropic".into(),
+            context_window: 200_000, max_output_tokens: 32_000,
+            input_cost_per_1k: 0.015, output_cost_per_1k: 0.075,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-01".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: true, free_tier: false,
+        },
+        // ── Grok 4 (Mart 2026) ──
+        ModelInfo {
+            id: "grok-4".into(), name: "Grok 4 (2026)".into(), provider: "xAI".into(),
+            context_window: 262_144, max_output_tokens: 32_768,
+            input_cost_per_1k: 0.005, output_cost_per_1k: 0.025,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-02".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // ── DeepSeek V4 (Şubat 2026) ──
+        ModelInfo {
+            id: "deepseek-v4".into(), name: "DeepSeek V4 (2026)".into(), provider: "DeepSeek".into(),
+            context_window: 256_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.0001, output_cost_per_1k: 0.0004,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-01".into()), quality_rating: 5, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
+        },
+        // ── DeepSeek R2 (Mart 2026) - güncel reasoning ──
+        ModelInfo {
+            id: "deepseek-r2".into(), name: "DeepSeek R2 (2026)".into(), provider: "DeepSeek".into(),
+            context_window: 256_000, max_output_tokens: 32_768,
+            input_cost_per_1k: 0.0008, output_cost_per_1k: 0.0032,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-02".into()), quality_rating: 5, speed_rating: 3,
+            is_reasoning: true, free_tier: true,
+        },
+        // ── Qwen4 Max (Mart 2026) ──
+        ModelInfo {
+            id: "qwen4-max".into(), name: "Qwen4 Max (2026)".into(), provider: "Qwen".into(),
+            context_window: 1_048_576, max_output_tokens: 32_768,
+            input_cost_per_1k: 0.002, output_cost_per_1k: 0.008,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-03".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: true, free_tier: false,
+        },
+        // ── Mistral Large 3 (2026) ──
+        ModelInfo {
+            id: "mistral-large-3".into(), name: "Mistral Large 3 (2026)".into(), provider: "Mistral".into(),
+            context_window: 256_000, max_output_tokens: 16_384,
+            input_cost_per_1k: 0.003, output_cost_per_1k: 0.009,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-02".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // ── Command R2 (Cohere 2026) ──
+        ModelInfo {
+            id: "command-r2".into(), name: "Command R2 (2026)".into(), provider: "Cohere".into(),
+            context_window: 256_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.003, output_cost_per_1k: 0.012,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-01".into()), quality_rating: 5, speed_rating: 4,
+            is_reasoning: false, free_tier: false,
+        },
+        // ── Sonar Deep Research v2 (Perplexity 2026) ──
+        ModelInfo {
+            id: "sonar-deep-research-v2".into(), name: "Sonar Deep Research v2 (2026)".into(), provider: "Perplexity".into(),
+            context_window: 200_000, max_output_tokens: 32_768,
+            input_cost_per_1k: 0.003, output_cost_per_1k: 0.015,
+            supports_vision: true, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-03".into()), quality_rating: 5, speed_rating: 1,
+            is_reasoning: true, free_tier: false,
+        },
+        // ── Granite 4.0 (IBM 2026) - açık kaynak ──
+        ModelInfo {
+            id: "ibm/granite-4.0-8b".into(), name: "Granite 4.0 8B (2026)".into(), provider: "WatsonX".into(),
+            context_window: 128_000, max_output_tokens: 8_192,
+            input_cost_per_1k: 0.0002, output_cost_per_1k: 0.0002,
+            supports_vision: false, supports_tools: true, supports_streaming: true, supports_json: true,
+            training_cutoff: Some("2026-01".into()), quality_rating: 4, speed_rating: 5,
+            is_reasoning: false, free_tier: true,
         },
     ]
 }
