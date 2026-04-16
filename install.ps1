@@ -13,7 +13,8 @@
 param(
     [switch]$SkipOllama,
     [switch]$SkipDocker,
-    [switch]$SkipModel
+    [switch]$SkipModel,
+    [switch]$SkipFFmpeg
 )
 
 # Renk fonksiyonları
@@ -148,6 +149,13 @@ function Install-VSBuildTools {
 }
 
 function Install-FFmpeg {
+    param([switch]$Skip)
+
+    if ($Skip) {
+        Write-Info "FFmpeg kurulumu atlanıyor"
+        return $true
+    }
+
     Write-Step "FFmpeg kontrol ediliyor..."
 
     if (Get-Command ffmpeg -ErrorAction SilentlyContinue) {
@@ -451,7 +459,7 @@ Install-Git
 Install-Rust
 Install-Python
 Install-VSBuildTools
-Install-FFmpeg
+Install-FFmpeg -Skip:$SkipFFmpeg
 Install-Ollama -Skip:$SkipOllama
 
 # 2. Repository
