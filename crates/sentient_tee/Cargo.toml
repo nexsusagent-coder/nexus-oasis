@@ -33,7 +33,7 @@ blake3 = "1.5"
 hex = "0.4"
 aes-gcm = "0.10"
 x25519-dalek = { version = "2", features = ["static_secrets"] }
-rand = "0.8"
+rand = "0.10"
 base64 = "0.22"
 
 # Networking

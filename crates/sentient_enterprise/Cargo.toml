@@ -21,7 +21,7 @@ log = "0.4"
 # Security
 jsonwebtoken = "9"
 argon2 = "0.5"
-rand = "0.8"
+rand = "0.10"
 uuid = { version = "1", features = ["v4", "serde"] }
 
 # Database - using rusqlite for consistency with other crates
