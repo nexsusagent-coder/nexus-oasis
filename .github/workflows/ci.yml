@@ -113,7 +113,7 @@ jobs:
         run: cargo build --workspace --release
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sentient-linux
           path: |
@@ -144,7 +144,7 @@ jobs:
         run: cargo build --workspace --release
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sentient-macos
           path: |
@@ -175,7 +175,7 @@ jobs:
         run: cargo build --workspace --release
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sentient-windows
           path: |
@@ -206,7 +206,7 @@ jobs:
         run: cargo doc --workspace --no-deps
 
       - name: Upload docs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: documentation
           path: target/doc
