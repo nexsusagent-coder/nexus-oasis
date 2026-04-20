@@ -28,7 +28,7 @@ log.workspace = true
 chrono.workspace = true
 
 # Metrics
-prometheus = "0.13"
+prometheus = "0.14"
 
 # Math
 statrs = "0.17"
